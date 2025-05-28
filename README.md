@@ -6,6 +6,7 @@ Generates an MP4 video file named `spotify_top_songs_2024_4k.mp4`.
 Mine is currently in the repo with this name, but will overwrite if you decide to run locally.
 
 [https://www.youtube.com/watch?v=psUn1NVpebw&t=2s]
+
 [![Youtube](https://img.youtube.com/vi/psUn1NVpebw/hqdefault.jpg)](https://www.youtube.com/watch?v=psUn1NVpebw&t=2s)
 
 ## Project Structure
