@@ -1,6 +1,4 @@
-https://www.youtube.com/watch?v=psUn1NVpebw&t=2s
-
-A Python project that takes your Last.fm listening history for 2024, processes it, and generates a dynamic bar chart "race" video of your top 10 songs throughout the year complete with album covert art. 
+Takes your Last.fm listening history for 2024, processes it, and generates a dynamic bar chart "race" video of your top 10 songs throughout the year complete with album covert art. 
 
 ## Demo Output
 
@@ -8,6 +6,7 @@ Generates an MP4 video file named `spotify_top_songs_2024_4k.mp4`.
 Mine is currently in the repo with this name, but will overwrite if you decide to run locally.
 
 [![Youtube](https://img.youtube.com/vi/psUn1NVpebw/hqdefault.jpg)](https://www.youtube.com/watch?v=psUn1NVpebw&t=2s)
+https://www.youtube.com/watch?v=psUn1NVpebw&t=2s
 
 ## Project Structure
 
