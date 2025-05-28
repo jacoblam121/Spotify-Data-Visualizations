@@ -34,10 +34,6 @@ DEBUG_CACHE = True
 # plt.rcParams['animation.ffmpeg_path'] = '/usr/local/bin/ffmpeg' # Example for macOS/Linux
 
 
-# --- Font Configuration (for UTF-8 characters) ---
-# IMPORTANT: User needs one of these fonts installed on their system.
-# 'DejaVu Sans' is widely available and has good Unicode coverage.
-# 'Noto Sans CJK JP/KR/SC/TC' are excellent for East Asian languages if your data includes them.
 PREFERRED_FONTS = [
     'DejaVu Sans', 
     'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans TC', # Noto CJK fonts
@@ -170,9 +166,6 @@ def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_r
         
     print(f"--- Pre-fetching complete (processed {len(albums_processed)} unique albums based on criteria) ---")
 
-
-# main_animator.py
-# ... (all previous imports, configurations, and other functions) ...
 
 def create_bar_chart_race_animation(race_df, song_album_map, n_bars=N_BARS,
                                     output_filename=OUTPUT_FILENAME, interval=ANIMATION_INTERVAL,
@@ -373,9 +366,6 @@ def main():
         print("Please install ffmpeg and ensure it is in your system's PATH,")
         print("or correctly set plt.rcParams['animation.ffmpeg_path'] at the top of this script.")
 
-    # --- IMPORTANT: Set PYTHONIOENCODING=utf-8 in your terminal before running this script ---
-    # Example for Command Prompt: set PYTHONIOENCODING=utf-8
-    # Example for PowerShell: $env:PYTHONIOENCODING="utf-8"
     print("\n--------------------------------------------------------------------------------")
     print("  TIP: If you see UnicodeEncodeError, set PYTHONIOENCODING=utf-8 in your terminal.")
     print("  E.g., `set PYTHONIOENCODING=utf-8` (cmd) or `$env:PYTHONIOENCODING='utf-8'` (powershell)")
@@ -390,13 +380,13 @@ def main():
     print("\n--- Data ready for High-Resolution Animation ---")
     
     # ---- For faster testing: Uncomment and adjust the slice as needed ----
-    print(f"WARNING: Running with a SUBSET of data for testing. Full render will take longer.")
-    test_race_df = race_df.head(500) # Process only the first 500 play events for testing
-    create_bar_chart_race_animation(test_race_df, song_album_map)
+    # print(f"WARNING: Running with a SUBSET of data for testing. Full render will take longer.")
+    # test_race_df = race_df.head(500) # Process only the first 500 play events for testing
+    # create_bar_chart_race_animation(test_race_df, song_album_map)
     # ---------------------------------------------
 
     # Full run (uncomment this line for the full animation after testing)
-    # create_bar_chart_race_animation(race_df, song_album_map)
+    create_bar_chart_race_animation(race_df, song_album_map)
 
 
 if __name__ == "__main__":

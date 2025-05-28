@@ -163,9 +163,6 @@ def get_dominant_color(image_path, palette_size=1):
         save_json_cache(dominant_color_cache, dominant_color_cache_file)
         return (128, 128, 128)
 
-# --- Unchanged functions: get_album_art_url, get_album_art_path, example usage ---
-# (You can keep the rest of the file as it was)
-
 def get_album_art_url(release_mbid):
     if not release_mbid: return None
     print(f"CAA API call for MBID: {release_mbid}")
