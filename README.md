@@ -30,7 +30,7 @@ spotify2024/
 *   Some album art not fetched properly (most notably 晴る - Yorushika in demo)
 *   Has "bandaid" solutions for the album cover art. It begins showing at 110 plays as that's when clipping stops for my scale, but this will be different depending on how many    plays your top song has. You can change this here in main_animator.py (if pil_image and values_for_actual_bars[i] >= 110:)
 *   Album cover art is also only fetched if more than 50 plays were found and not seen in January (part of another bandaid solution) Fetch threshold can be changed in `main_animator.py` (`def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_race, fetch_threshold=50):`), and checking the January part can be changed in the function (`for song_id in unique_song_ids_in_race:`). Technically this logic useless for me as there's no point in fetching album covers if they're not going to display at less than 110 plays but I'm too lazy to get rid of this. 
-*   If I fix this, it'll probably be for EOY 2025 so I can run this again but for 2025 lmao
+*   If I fix this, it'll probably be for EOY 2025 so I can run this again for 2025 lmao
 
 ## Prerequisites/Requirements
 
