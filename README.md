@@ -1,4 +1,4 @@
-Takes your Last.fm listening history for 2024, processes it, and generates a dynamic bar chart "race" video of your top 10 songs throughout the year complete with album covert art. 
+Takes your Last.fm listening history for 2024 and generates a funny bar chart "race" video of your top 10 songs throughout the year complete with album cover art. 
 
 ## Demo Output
 
