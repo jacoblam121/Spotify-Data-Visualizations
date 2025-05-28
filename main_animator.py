@@ -283,7 +283,7 @@ def create_bar_chart_race_animation(race_df, song_album_map, n_bars=N_BARS,
                     current_x_pos = bar_width_data_units
 
                     # Only show album art if available AND play count is 8 or more
-                    if pil_image and values_for_actual_bars[i] >= 8:
+                    if pil_image and values_for_actual_bars[i] >= 110:
                         try:
                             img_orig_width, img_orig_height = pil_image.size
                             new_height_pixels = int(target_img_height_pixels)
