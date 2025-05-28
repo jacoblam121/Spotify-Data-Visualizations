@@ -1,3 +1,5 @@
+https://www.youtube.com/watch?v=psUn1NVpebw&t=2s
+
 A Python project that takes your Last.fm listening history for 2024, processes it, and generates a dynamic bar chart "race" video of your top 10 songs throughout the year complete with album covert art. 
 
 ## Demo Output
