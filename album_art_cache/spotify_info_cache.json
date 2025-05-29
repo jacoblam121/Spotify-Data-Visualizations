@@ -1,0 +1,75 @@
+{
+  "spotify_iu_eight(prod.&feat. suga of bts)_eight": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c63be04ae902b1da7a54d247",
+    "canonical_album_name": "eight",
+    "spotify_album_id": "5vJNAlQeTf9lsulO1YlmSt",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU",
+      "0ebNdVaOfp6N0oZ1guIxM8"
+    ],
+    "source": "spotify"
+  },
+  "spotify_jeon somi_fast forward_game plan": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2737da22ba88dfc26a18122ee2d",
+    "canonical_album_name": "GAME PLAN",
+    "spotify_album_id": "7xMXoWstClAzBIo5lOAASu",
+    "spotify_artist_ids": [
+      "7zYj9S9SdIunYCfSm7vzAR"
+    ],
+    "source": "spotify"
+  },
+  "spotify_jo yuri_love shhh!_op.22 y-waltz : in major": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e24e844f2650c498fa703c91",
+    "canonical_album_name": "Op.22 Y-Waltz : in Major",
+    "spotify_album_id": "1EAzLUzatSBIs8tA047f5f",
+    "spotify_artist_ids": [
+      "3LFFf4EpKn2krneZ9vozyz"
+    ],
+    "source": "spotify"
+  },
+  "spotify_paramore_that's what you get_riot!": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
+    "canonical_album_name": "Riot!",
+    "spotify_album_id": "71rziY9eLo1tA2dBMxrwhc",
+    "spotify_artist_ids": [
+      "74XFHRwlV6OrjEM0A2NCMF"
+    ],
+    "source": "spotify"
+  },
+  "spotify_tate mcrae_greedy_greedy": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27322fd802bc61db666c7c81aa8",
+    "canonical_album_name": "greedy",
+    "spotify_album_id": "3UOV8XvCwMKaATRNXrYCjN",
+    "spotify_artist_ids": [
+      "45dkTj5sMRSjrmBSBeiHym"
+    ],
+    "source": "spotify"
+  },
+  "spotify_taylor swift_is it over now? (taylor's version) (from the vault)_1989 (taylor's version)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac",
+    "canonical_album_name": "1989 (Taylor's Version)",
+    "spotify_album_id": "64LU4c1nfjz1t4VnGhagcg",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "source": "spotify"
+  },
+  "spotify_taylor swift_style_1989": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac",
+    "canonical_album_name": "1989 (Taylor's Version)",
+    "spotify_album_id": "64LU4c1nfjz1t4VnGhagcg",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "source": "spotify"
+  },
+  "spotify_\u300e\u30e6\u30a4\u30ab\u300f_\u904b\u547d\u306e\u4eba_\u904b\u547d\u306e\u4eba": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739bba46fb362df4d33a0a8b3f",
+    "canonical_album_name": "\u904b\u547d\u306e\u4eba",
+    "spotify_album_id": "0eNmYuy5xTFFwfdwfyGQLL",
+    "spotify_artist_ids": [
+      "2EqaSEa0WkE59Aca9iXSYj"
+    ],
+    "source": "spotify"
+  }
+}
