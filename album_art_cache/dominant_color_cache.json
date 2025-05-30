@@ -1,37 +1,637 @@
 {
-  "IU_eight.jpg": [
-    144,
-    78,
-    87
+  "_Luna_\u30e9\u30ba\u30e9\u30a4\u30c8\u306e\u5922.jpg": [
+    224,
+    222,
+    231
   ],
-  "JEON SOMI_GAME PLAN.jpg": [
-    221,
+  "7___\u30bb\u30c4\u30ca\u30a8\u30e2\u30fc\u30b7\u30e7\u30f3.jpg": [
+    213,
+    223,
+    229
+  ],
+  "Aimer_After Dark.jpg": [
+    0,
+    2,
+    15
+  ],
+  "Aimer_Penny Rain.jpg": [
+    21,
+    34,
+    36
+  ],
+  "Aimer_DAWN.jpg": [
+    112,
+    165,
+    188
+  ],
+  "Aimer_Sun Dance.jpg": [
+    188,
+    214,
+    221
+  ],
+  "Aimer_ONE AND LAST.jpg": [
+    25,
+    44,
+    108
+  ],
+  "Aimer_daydream.jpg": [
+    179,
+    193,
+    196
+  ],
+  "Aimer_\u30b0\u30ec\u30fc\u30b9\u30ce\u30fc\u30c8.jpg": [
+    11,
+    12,
+    11
+  ],
+  "Aimer_\u8776\u3005\u7d50\u3073.jpg": [
+    223,
+    233,
+    222
+  ],
+  "Aimer_\u6b8b\u97ff\u6563\u6b4c.jpg": [
+    115,
+    108,
+    80
+  ],
+  "AliA_AliVe.jpg": [
+    255,
+    255,
+    255
+  ],
+  "DIALOGUE__Omoide Shiritori.jpg": [
+    7,
+    12,
+    32
+  ],
+  "IU_IU 5th Album _LILAC_.jpg": [
+    127,
+    115,
+    124
+  ],
+  "IU_strawberry moon.jpg": [
+    45,
     48,
-    46
+    71
   ],
-  "JO YURI_Op.22 Y-Waltz _ in Major.jpg": [
+  "Mage_Edits 1 EP.jpg": [
+    42,
+    41,
+    26
+  ],
+  "Maroon 5_Overexposed _Deluxe_.jpg": [
+    74,
+    41,
+    72
+  ],
+  "Mashiro Ayano_ideal white.jpg": [
+    121,
+    186,
+    198
+  ],
+  "NF_The Search.jpg": [
+    35,
+    34,
+    32
+  ],
+  "ONEW_Way - SM STATION.jpg": [
+    0,
+    0,
+    0
+  ],
+  "TWICE_Eyes Wide Open.jpg": [
+    196,
+    190,
+    184
+  ],
+  "YOASOBI_\u591c\u306b\u99c6\u3051\u308b.jpg": [
+    242,
+    88,
+    114
+  ],
+  "\u30f4\u30a3\u30f4\u30a3_Vo.\u516b\u6728\u6d77\u8389__Fluorite Eye_s Song.jpg": [
+    251,
+    250,
+    250
+  ],
+  "Andy Lau_\u611b\u5982\u6b64\u795e\u5947.jpg": [
+    152,
+    143,
+    108
+  ],
+  "Andy Lau_\u7e7c\u7e8c\u8ac7\u60c5 \u65b0\u6b4c _ \u7cbe\u9078.jpg": [
+    255,
+    255,
+    255
+  ],
+  "Andy Williams_The Andy Williams Christmas Album.jpg": [
+    223,
+    5,
+    10
+  ],
+  "Aqua Timez_\u3046\u305f\u3044\u53bb\u308a\u3057\u82b1.jpg": [
+    62,
+    104,
+    93
+  ],
+  "Backstreet Boys_Millennium.jpg": [
+    145,
+    177,
+    183
+  ],
+  "Backstreet Boys_Black _ Blue.jpg": [
+    60,
+    81,
+    138
+  ],
+  "Band Aid_Do They Know It_s Christmas_.jpg": [
+    102,
+    97,
+    91
+  ],
+  "Beyond_\u547d\u904b\u6d3e\u5c0d.jpg": [
+    131,
+    115,
+    109
+  ],
+  "Beyond_\u83ef\u7d0d\u5eff\u4e09\u9031\u5e74\u7d00\u5ff5\u7cbe\u9078\u7cfb\u5217 - Beyond.jpg": [
+    20,
+    100,
+    169
+  ],
+  "Blake Neely_Masters of the Air _Apple TV_ Original Series Soun.jpg": [
+    45,
+    38,
+    26
+  ],
+  "Bon Jovi_Slippery When Wet.jpg": [
+    73,
+    76,
+    79
+  ],
+  "Chicago Mass Choir_Project Praise Live in Atlanta.jpg": [
+    161,
+    92,
+    97
+  ],
+  "Christopher Larkin_Hollow Knight _Original Soundtrack_.jpg": [
+    0,
+    0,
+    0
+  ],
+  "Dire Straits_Dire Straits.jpg": [
+    248,
+    255,
+    247
+  ],
+  "Eagles_Hotel California _2013 Remaster_.jpg": [
+    251,
+    241,
+    217
+  ],
+  "Eagles_Please Come Home for Christmas _ Funky New Year _2.jpg": [
+    98,
+    104,
+    112
+  ],
+  "Eason Chan_Stranger Under My Skin.jpg": [
+    204,
+    208,
+    210
+  ],
+  "Eason Chan_What_s Going On..._.jpg": [
+    0,
+    1,
+    2
+  ],
+  "FLOW_FLOW THE BEST _Single Collection_.jpg": [
+    253,
+    254,
+    253
+  ],
+  "Fei Yu-ching_\u5929\u4e4b\u5927.jpg": [
+    229,
+    244,
+    248
+  ],
+  "Foo Fighters_The Colour And The Shape.jpg": [
+    42,
+    53,
+    73
+  ],
+  "Fountains Of Wayne_Welcome Interstate Managers.jpg": [
+    255,
+    255,
+    255
+  ],
+  "Frank Sinatra_A Jolly Christmas From Frank Sinatra.jpg": [
+    184,
+    40,
+    44
+  ],
+  "Freddie Mercury_The Very Best of Freddie Mercury Solo_ Lover of Li.jpg": [
+    255,
+    255,
+    255
+  ],
+  "Freya Ridings_I Can_t Hear It Now _from the series Arcane League.jpg": [
+    2,
+    25,
+    51
+  ],
+  "GRANRODEO_DECADE OF GR.jpg": [
+    0,
+    0,
+    0
+  ],
+  "GRANRODEO_Karma to Labyrinth.jpg": [
+    221,
+    209,
+    206
+  ],
+  "Genesis_Invisible Touch _2007 Remaster_.jpg": [
+    51,
+    22,
+    15
+  ],
+  "George Lam_\u6700\u611b 40 - Beloved 40.jpg": [
+    188,
+    174,
+    182
+  ],
+  "Giacomo Puccini_Romantic Caball\u00e9.jpg": [
+    9,
+    6,
+    8
+  ],
+  "Giacomo Puccini_Opera Arias.jpg": [
+    4,
     32,
-    26,
-    20
+    44
+  ],
+  "Green Day_Greatest Hits_ God_s Favorite Band.jpg": [
+    20,
+    21,
+    21
+  ],
+  "Green Day_Nimrod.jpg": [
+    201,
+    191,
+    136
+  ],
+  "Green Day_American Idiot.jpg": [
+    0,
+    2,
+    17
+  ],
+  "Hacken Lee_Joey Yung X Hacken Lee Concert 2015 _Live_.jpg": [
+    0,
+    0,
+    0
+  ],
+  "Hans Zimmer_Interstellar _Original Motion Picture Soundtrack_ .jpg": [
+    140,
+    157,
+    165
+  ],
+  "Hans Zimmer_Pearl Harbor - Original Motion Picture Soundtrack.jpg": [
+    54,
+    39,
+    42
+  ],
+  "Howard Shore_The Lord of the Rings - The Return of the King - T.jpg": [
+    80,
+    110,
+    76
+  ],
+  "Jay Chou_\u4f9d\u7136\u8303\u7279\u897f.jpg": [
+    12,
+    7,
+    4
+  ],
+  "John Powell_How To Train Your Dragon _Music From The Motion Pi.jpg": [
+    43,
+    75,
+    128
+  ],
+  "John Williams_Jurassic Park.jpg": [
+    3,
+    4,
+    6
+  ],
+  "Johnny Cash_American V_ A Hundred Highways.jpg": [
+    3,
+    9,
+    2
+  ],
+  "Jonathan Groff_Frozen 2 _Original Motion Picture Soundtrack_Delux.jpg": [
+    241,
+    241,
+    241
+  ],
+  "Kanye West_My Beautiful Dark Twisted Fantasy.jpg": [
+    236,
+    34,
+    63
+  ],
+  "Lady Gaga_The Fame Monster _Deluxe Edition_.jpg": [
+    48,
+    48,
+    48
+  ],
+  "Lea Salonga_Aladdin Special Edition.jpg": [
+    94,
+    108,
+    155
+  ],
+  "Led Zeppelin_Led Zeppelin IV _Deluxe Edition_.jpg": [
+    181,
+    186,
+    200
+  ],
+  "Linkin Park_The Emptiness Machine.jpg": [
+    62,
+    64,
+    67
+  ],
+  "Ludwig G\u00f6ransson_Oppenheimer _Original Motion Picture Soundtrack_.jpg": [
+    55,
+    17,
+    5
+  ],
+  "MKTO_MKTO.jpg": [
+    62,
+    51,
+    40
+  ],
+  "Michael Wong_\u5341\u5149\u5e74\u7cbe\u9078\u8f2f.jpg": [
+    255,
+    255,
+    255
+  ],
+  "Mike Shinoda_Arcane League of Legends_ Season 2 _Soundtrack fro.jpg": [
+    2,
+    25,
+    51
+  ],
+  "Mrs. GREEN APPLE_\u30a4\u30f3\u30d5\u30a7\u30eb\u30ce.jpg": [
+    0,
+    0,
+    0
+  ],
+  "Muse_Black Holes and Revelations.jpg": [
+    156,
+    53,
+    30
+  ],
+  "Muse_HAARP _Live from Wembley Stadium_.jpg": [
+    0,
+    0,
+    0
+  ],
+  "Music Therapy_Relax _ Sleep.jpg": [
+    7,
+    24,
+    54
+  ],
+  "NICO Touches the Walls_\u30aa\u30fc\u30ed\u30e9.jpg": [
+    119,
+    167,
+    201
+  ],
+  "Nat King Cole_The Christmas Song _Expanded Edition_.jpg": [
+    93,
+    60,
+    39
+  ],
+  "Nima Fakhrara_Detroit_ Become Human _Original Soundtrack_.jpg": [
+    144,
+    110,
+    137
+  ],
+  "No Doubt_Tragic Kingdom.jpg": [
+    43,
+    74,
+    129
+  ],
+  "One Direction_FOUR _Deluxe_.jpg": [
+    15,
+    16,
+    17
+  ],
+  "One Direction_Midnight Memories _Deluxe_.jpg": [
+    210,
+    206,
+    206
+  ],
+  "One Direction_Up All Night.jpg": [
+    89,
+    59,
+    50
+  ],
+  "Panic_ At The Disco_A Fever You Can_t Sweat Out.jpg": [
+    65,
+    11,
+    34
+  ],
+  "Paramore_Brand New Eyes.jpg": [
+    224,
+    215,
+    205
   ],
   "Paramore_Riot_.jpg": [
     154,
     149,
     146
   ],
-  "Tate McRae_greedy.jpg": [
-    221,
-    219,
-    223
-  ],
-  "Taylor Swift_1989 _Taylor_s Version_.jpg": [
-    140,
-    155,
-    166
-  ],
-  "_\u30e6\u30a4\u30ab__\u904b\u547d\u306e\u4eba.jpg": [
-    55,
-    161,
+  "Paramore_After Laughter.jpg": [
+    218,
+    168,
     205
+  ],
+  "Pitbull_Global Warming_ Meltdown _Deluxe Version_.jpg": [
+    8,
+    12,
+    13
+  ],
+  "Pitbull_Planet Pit _Deluxe Version_.jpg": [
+    2,
+    2,
+    2
+  ],
+  "RADWIMPS_Your Name..jpg": [
+    57,
+    92,
+    119
+  ],
+  "Radiohead_OK Computer.jpg": [
+    205,
+    226,
+    238
+  ],
+  "Ramin Djawadi_House of the Dragon_ Season 1 _Soundtrack from the.jpg": [
+    37,
+    19,
+    9
+  ],
+  "Randy Newman_Songbook_ Volume I.jpg": [
+    58,
+    59,
+    61
+  ],
+  "Randy Newman_Toy Story _Original Motion Picture Soundtrack_.jpg": [
+    26,
+    56,
+    84
+  ],
+  "Realslow_RealSlow Is Back.jpg": [
+    237,
+    241,
+    242
+  ],
+  "Red Hot Chili Peppers_Stadium Arcadium.jpg": [
+    96,
+    95,
+    112
+  ],
+  "Richie Jen_\u611b\u50cf\u592a\u5e73\u6d0b.jpg": [
+    115,
+    121,
+    120
+  ],
+  "Ryan Gosling_Barbie The Album.jpg": [
+    234,
+    31,
+    120
+  ],
+  "Snow Patrol_Eyes Open.jpg": [
+    43,
+    39,
+    39
+  ],
+  "Sting_Arcane League of Legends _Soundtrack from the Anim.jpg": [
+    14,
+    13,
+    15
+  ],
+  "THE ORAL CIGARETTES_Kisses and Kills.jpg": [
+    230,
+    0,
+    36
+  ],
+  "TWRP_Together Through Time.jpg": [
+    31,
+    25,
+    27
+  ],
+  "Taro Umebayashi_Theme of King J.J..jpg": [
+    255,
+    255,
+    255
+  ],
+  "Tatsuya Kitani_\u9752\u306e\u3059\u307f\u304b.jpg": [
+    49,
+    193,
+    214
+  ],
+  "The Young Veins_Take a Vacation_ _Deluxe Edition _ Remastered_.jpg": [
+    141,
+    144,
+    102
+  ],
+  "Thomas Newman_Finding Nemo _Original Motion Picture Soundtrack_.jpg": [
+    31,
+    69,
+    103
+  ],
+  "Tom Petty and the Heartbreakers_Tom Petty And The Heartbreakers.jpg": [
+    10,
+    18,
+    20
+  ],
+  "Wakin Chau_\u5468\u800c\u5fa9\u59cb.jpg": [
+    163,
+    168,
+    120
+  ],
+  "Wakin Chau_\u5468\u83ef\u5065 _ Friends.jpg": [
+    200,
+    190,
+    192
+  ],
+  "Wakin Chau_\u611b\u76f8\u96a8.jpg": [
+    255,
+    255,
+    255
+  ],
+  "Wakin Chau_\u5fd8\u6182\u8349.jpg": [
+    194,
+    75,
+    67
+  ],
+  "Wakin Chau_\u670b\u53cb.jpg": [
+    81,
+    80,
+    71
+  ],
+  "Wakin Chau_\u8b93\u6211\u6b61\u559c\u8b93\u6211\u6182.jpg": [
+    227,
+    152,
+    74
+  ],
+  "Weezer_Christmas With Weezer.jpg": [
+    231,
+    29,
+    74
+  ],
+  "Who-ya Extended_VIVID VICE.jpg": [
+    46,
+    30,
+    52
+  ],
+  "Xu Wei_\u6bcf\u4e00\u523b\u90fd\u662f\u5d2d\u65b0\u7684.jpg": [
+    19,
+    18,
+    25
+  ],
+  "Yugo Kanno_JOJO_S BIZARRE ADVENTURE -Stardust Crusaders O.S.T.jpg": [
+    10,
+    19,
+    25
+  ],
+  "Yuuri_\u30c9\u30e9\u30a4\u30d5\u30e9\u30ef\u30fc.jpg": [
+    6,
+    22,
+    8
+  ],
+  "tacica_HEAD ROOMS.jpg": [
+    82,
+    178,
+    196
+  ],
+  "w.o.d._STARS.jpg": [
+    19,
+    67,
+    139
+  ],
+  "\u5b59\u6960_\u7f8e\u4e3d\u7684\u795e\u8bdd.jpg": [
+    102,
+    129,
+    153
+  ],
+  "\u5f20\u8fdc_\u53ef\u4ee5\u4e0d\u662f\u4f60.jpg": [
+    18,
+    19,
+    16
+  ],
+  "\u6797\u5fd7\u70ab_\u539f\u8072\u4e4b\u65c5_Acoustic Journey_.jpg": [
+    255,
+    255,
+    255
+  ],
+  "\u8b5a\u6676_\u5317\u4eac2008\u5e74\u5967\u904b\u6703\u6b4c\u66f2\u5c08\u8f2f.jpg": [
+    254,
+    122,
+    45
   ]
 }

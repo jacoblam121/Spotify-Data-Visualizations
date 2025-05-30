@@ -2,37 +2,91 @@
 import requests
 import json
 import os
-from PIL import Image, ImageOps # ImageOps might not be used directly here, but good to keep if PIL is used
+from PIL import Image, ImageOps
 from io import BytesIO
 import time
 from urllib.parse import quote
-import base64 # For Spotify Auth
+import base64
 
-# --- Configuration ---
-DEBUG_CACHE = True # <--- SET TO True FOR DETAILED CACHE LOGGING
-USER_AGENT = "SpotifyRaceChart/1.0 lightningfalconyt@gmail.com" # KEEP THIS OR UPDATE AS NEEDED
-ART_CACHE_DIR = "album_art_cache"
-if not os.path.exists(ART_CACHE_DIR):
-    os.makedirs(ART_CACHE_DIR)
+# --- Configuration Variables (will be initialized) ---
+DEBUG_CACHE = True
+USER_AGENT = "SpotifyRaceChart/1.0 default_email@example.com"
+ART_CACHE_DIR = "album_art_cache" # Default, can be overridden
+SPOTIFY_CLIENT_ID = "eaf67929214947d19e34182fb20e96bc" # Default, can be overridden
+SPOTIFY_CLIENT_SECRET = "822e6e3f9d1149d4ad5520237d8385a3" # Default, can be overridden
 
-# --- Spotify API Configuration ---
-SPOTIFY_CLIENT_ID = "eaf67929214947d19e34182fb20e96bc" # YOUR CLIENT ID
-SPOTIFY_CLIENT_SECRET = "822e6e3f9d1149d4ad5520237d8385a3" # YOUR CLIENT SECRET
+# --- Spotify API Configuration (mostly static, client ID/Secret can change) ---
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
 SPOTIFY_API_BASE_URL = "https://api.spotify.com/v1/"
 
-# --- Cache Files ---
-mbid_cache_file = os.path.join(ART_CACHE_DIR, "mbid_cache.json") # Will become legacy
-dominant_color_cache_file = os.path.join(ART_CACHE_DIR, "dominant_color_cache.json")
-spotify_info_cache_file = os.path.join(ART_CACHE_DIR, "spotify_info_cache.json") # New cache
+# --- Cache Files & Global Caches (paths will be dynamic based on ART_CACHE_DIR) ---
+mbid_cache_file = None
+dominant_color_cache_file = None
+spotify_info_cache_file = None
 
-# --- Global Caches (In-Memory) ---
+mbid_cache = {}
+dominant_color_cache = {}
+spotify_info_cache = {}
+
 _spotify_access_token_cache = {
     "token": None,
     "expires_at": 0
 }
 
+# --- Initialization Function ---
+_config_initialized = False
+
+def initialize_from_config(config):
+    global DEBUG_CACHE, USER_AGENT, ART_CACHE_DIR
+    global SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET
+    global mbid_cache_file, dominant_color_cache_file, spotify_info_cache_file
+    global mbid_cache, dominant_color_cache, spotify_info_cache
+    global _config_initialized
+
+    if _config_initialized:
+        if DEBUG_CACHE: print("[CACHE DEBUG] album_art_utils config already initialized.")
+        return
+
+    DEBUG_CACHE = config.get_bool('Debugging', 'DEBUG_CACHE_ALBUM_ART_UTILS', True)
+    USER_AGENT = config.get('General', 'USER_AGENT', USER_AGENT) # Use existing as fallback
+    ART_CACHE_DIR = config.get('AlbumArtSpotify', 'ART_CACHE_DIR', ART_CACHE_DIR)
+
+    # Spotify Credentials: Env Var -> Config File -> Hardcoded Default
+    env_client_id = os.environ.get("SPOTIFY_CLIENT_ID")
+    env_client_secret = os.environ.get("SPOTIFY_CLIENT_SECRET")
+
+    config_client_id = config.get('AlbumArtSpotify', 'SPOTIFY_CLIENT_ID', None)
+    config_client_secret = config.get('AlbumArtSpotify', 'SPOTIFY_CLIENT_SECRET', None)
+
+    SPOTIFY_CLIENT_ID = env_client_id or config_client_id or SPOTIFY_CLIENT_ID
+    SPOTIFY_CLIENT_SECRET = env_client_secret or config_client_secret or SPOTIFY_CLIENT_SECRET
+    
+    if DEBUG_CACHE:
+        print(f"[CONFIG DEBUG album_art_utils] Using SPOTIFY_CLIENT_ID: {'Loaded from Env/Config' if env_client_id or config_client_id else 'Using Default'}")
+
+    if not os.path.exists(ART_CACHE_DIR):
+        os.makedirs(ART_CACHE_DIR)
+        if DEBUG_CACHE: print(f"[CACHE DEBUG] Created ART_CACHE_DIR: {ART_CACHE_DIR}")
+
+    # Update cache file paths
+    mbid_cache_file = os.path.join(ART_CACHE_DIR, "mbid_cache.json")
+    dominant_color_cache_file = os.path.join(ART_CACHE_DIR, "dominant_color_cache.json")
+    spotify_info_cache_file = os.path.join(ART_CACHE_DIR, "spotify_info_cache.json")
+
+    # Load caches (after paths are set)
+    mbid_cache = load_json_cache(mbid_cache_file)
+    dominant_color_cache = load_json_cache(dominant_color_cache_file)
+    spotify_info_cache = load_json_cache(spotify_info_cache_file)
+    
+    _config_initialized = True
+    if DEBUG_CACHE: print("[CACHE DEBUG] album_art_utils configuration initialized.")
+
+
 def load_json_cache(filepath):
+    # DEBUG_CACHE might not be set correctly if this is called before initialize_from_config
+    # So, we'll rely on its value at the time of calling.
+    # Or, pass DEBUG_CACHE as an argument if it's critical before full init.
+    # For now, let's assume initialize_from_config runs early enough.
     if DEBUG_CACHE: print(f"[CACHE DEBUG] Attempting to load cache from: {filepath}")
     if os.path.exists(filepath):
         try:
@@ -50,11 +104,6 @@ def save_json_cache(data, filepath):
     if DEBUG_CACHE: print(f"[CACHE DEBUG] Saving {len(data)} items to cache: {filepath}")
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2)
-
-# Load caches
-mbid_cache = load_json_cache(mbid_cache_file) # Keep for now, but new MBID calls will be disabled
-dominant_color_cache = load_json_cache(dominant_color_cache_file)
-spotify_info_cache = load_json_cache(spotify_info_cache_file)
 
 
 def _get_spotify_access_token():
@@ -425,66 +474,127 @@ def get_album_art_path(artist_name, track_name, album_name_from_lastfm):
 
 
 if __name__ == "__main__":
-    print("Testing Album Art Utilities (Spotify Integration) with DEBUG_CACHE enabled...")
-    DEBUG_CACHE = True 
+    # To test album_art_utils.py standalone, we need to load the configuration first.
+    # This requires config_loader.py to be in the same directory or accessible via Python's path.
+    print("--- Testing album_art_utils.py Standalone ---")
     
+    # Attempt to import AppConfig and initialize
+    try:
+        from config_loader import AppConfig
+        print("Imported AppConfig from config_loader.")
+        
+        # Create a config object. Assumes configurations.txt is in the parent directory 
+        # or the same directory if you copy it for testing.
+        # If album_art_utils.py is in a subdirectory, you might need to adjust path to configurations.txt
+        # For simplicity, let's assume configurations.txt is accessible.
+        try:
+            config = AppConfig(filepath="configurations.txt") # Adjust path if necessary
+            print("AppConfig instance created. Initializing album_art_utils...")
+            initialize_from_config(config) # This is crucial
+            print("album_art_utils initialized with configuration.")
+        except FileNotFoundError:
+            print("CRITICAL: configurations.txt not found. Cannot run standalone test effectively.")
+            print("Please ensure configurations.txt is in the correct location (e.g., project root).")
+            exit()
+        except Exception as e:
+            print(f"Error initializing AppConfig or album_art_utils: {e}")
+            exit()
+
+    except ImportError:
+        print("CRITICAL: Could not import AppConfig from config_loader.py.")
+        print("Ensure config_loader.py is in the same directory or Python's sys.path.")
+        exit()
+    except Exception as e:
+        print(f"An unexpected error occurred during setup: {e}")
+        exit()
+
+    print(f"\nConfiguration check within album_art_utils:")
+    print(f"DEBUG_CACHE set to: {DEBUG_CACHE}")
+    print(f"USER_AGENT set to: {USER_AGENT}")
+    print(f"ART_CACHE_DIR set to: {ART_CACHE_DIR}")
+    print(f"SPOTIFY_CLIENT_ID seems: {'Set (from env/config)' if SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_ID not in ['YOUR_CLIENT_ID', 'eaf67929214947d19e34182fb20e96bc'] else 'Likely Default/Placeholder'}")
+
+
     # --- Test Cases ---
+    # These are similar to your original test cases but will now use the config-driven settings.
+    
     # Test 1: A well-known track
     test_artist_1 = "Taylor Swift"
     test_track_1 = "Cruel Summer"
-    test_album_1_hint = "Lover" # Last.fm might report this
-    print(f"\nTesting with: {test_artist_1} - {test_track_1} (Album Hint: {test_album_1_hint})")
-    art_path_1 = get_album_art_path(test_artist_1, test_track_1, test_album_1_hint)
+    test_album_1_hint = "Lover"
+    print(f"\n[STANDALONE TEST 1] With: {test_artist_1} - {test_track_1} (Album Hint: {test_album_1_hint})")
+    
+    # The function get_album_art_path is what main_animator calls.
+    # It internally calls get_spotify_track_album_info and download_image_to_cache.
+    art_path_data_1 = get_album_art_path(test_artist_1, test_track_1, test_album_1_hint)
+    
+    art_path_1 = None
+    if isinstance(art_path_data_1, str) and art_path_data_1:
+        art_path_1 = art_path_data_1
+    elif isinstance(art_path_data_1, dict) and art_path_data_1.get("art_path"): # If you update get_album_art_path later
+        art_path_1 = art_path_data_1["art_path"]
+        print(f"Canonical album name from Spotify: {art_path_data_1.get('canonical_album_name')}")
+
     print(f"Art path for {test_track_1}: {art_path_1}")
-    if art_path_1:
+    if art_path_1 and os.path.exists(art_path_1):
         dom_color_1 = get_dominant_color(art_path_1)
         print(f"Dominant color for {test_track_1} (RGB): {dom_color_1}")
+    elif art_path_1:
+        print(f"Warning: Art path {art_path_1} was returned but file does not exist.")
 
-    # Test 2: A track that might have multiple album versions (e.g. live, deluxe)
+    # Test 2: A track that might have multiple album versions
     test_artist_2 = "Paramore"
     test_track_2 = "Misery Business"
-    test_album_2_hint = "Riot!" 
-    print(f"\nTesting with: {test_artist_2} - {test_track_2} (Album Hint: {test_album_2_hint})")
-    art_path_2 = get_album_art_path(test_artist_2, test_track_2, test_album_2_hint)
+    test_album_2_hint = "Riot!"
+    print(f"\n[STANDALONE TEST 2] With: {test_artist_2} - {test_track_2} (Album Hint: {test_album_2_hint})")
+    art_path_data_2 = get_album_art_path(test_artist_2, test_track_2, test_album_2_hint)
+    
+    art_path_2 = None
+    if isinstance(art_path_data_2, str) and art_path_data_2:
+        art_path_2 = art_path_data_2
+    elif isinstance(art_path_data_2, dict) and art_path_data_2.get("art_path"):
+        art_path_2 = art_path_data_2["art_path"]
+
     print(f"Art path for {test_track_2}: {art_path_2}")
-    if art_path_2:
+    if art_path_2 and os.path.exists(art_path_2):
         dom_color_2 = get_dominant_color(art_path_2)
         print(f"Dominant color for {test_track_2} (RGB): {dom_color_2}")
 
-    # Test 3: Your previous Perfume example, but using track name now
-    test_artist_3 = "Perfume"
-    test_track_3 = "Future Pop" # Assuming track title is same as album, adjust if not
-    test_album_3_hint = "Future Pop"
-    print(f"\nTesting with: {test_artist_3} - {test_track_3} (Album Hint: {test_album_3_hint})")
-    art_path_3 = get_album_art_path(test_artist_3, test_track_3, test_album_3_hint) 
-    print(f"Art path for {test_track_3}: {art_path_3}")
-    if art_path_3:
+    # Test 3: Potentially problematic (non-Latin characters)
+    test_artist_3 = "ヨルシカ"
+    test_track_3 = "晴る"
+    test_album_3_hint = "幻燈"
+    print(f"\n[STANDALONE TEST 3] With: {test_artist_3} - {test_track_3} (Album Hint: {test_album_3_hint})")
+    art_path_data_3 = get_album_art_path(test_artist_3, test_track_3, test_album_3_hint)
+
+    art_path_3 = None
+    if isinstance(art_path_data_3, str) and art_path_data_3:
+        art_path_3 = art_path_data_3
+    elif isinstance(art_path_data_3, dict) and art_path_data_3.get("art_path"):
+        art_path_3 = art_path_data_3["art_path"]
+
+    print(f"Art path for {test_track_3} by {test_artist_3}: {art_path_3}")
+    if art_path_3 and os.path.exists(art_path_3):
         dom_color_3 = get_dominant_color(art_path_3)
         print(f"Dominant color for {test_track_3} (RGB): {dom_color_3}")
 
-    print(f"\nTesting AGAIN with: {test_artist_3} - {test_track_3} (should hit Spotify info cache & image cache)")
-    art_path_3_again = get_album_art_path(test_artist_3, test_track_3, test_album_3_hint)
-    print(f"Art path (2nd call): {art_path_3_again}")
-    if art_path_3_again:
-        dom_color_3_again = get_dominant_color(art_path_3_again)
-        print(f"Dominant color (2nd call): {dom_color_3_again}")
+    # Test 4: Cache hit test (re-run Test 1)
+    print(f"\n[STANDALONE TEST 4] Cache Re-Test for: {test_artist_1} - {test_track_1}")
+    art_path_data_1_again = get_album_art_path(test_artist_1, test_track_1, test_album_1_hint)
+    
+    art_path_1_again_val = None
+    if isinstance(art_path_data_1_again, str) and art_path_data_1_again:
+         art_path_1_again_val = art_path_data_1_again
+    elif isinstance(art_path_data_1_again, dict) and art_path_data_1_again.get("art_path"):
+        art_path_1_again_val = art_path_data_1_again["art_path"]
 
-    # Test 4: A potentially problematic one (e.g., from your demo: 晴る - Yorushika)
-    # Note: Spotify search can be sensitive to non-Latin characters if not perfectly matched.
-    # This will test how well the quoting and API handle it.
-    test_artist_4 = "ヨルシカ" # Yorushika in Japanese
-    test_track_4 = "晴る" # Haru in Japanese
-    test_album_4_hint = "幻燈" # Album name for "晴る" is "Magic Lantern" (幻燈) - this hint is important
-    # Or if Last.fm reports album as "晴る" (single)
-    # test_album_4_hint = "晴る"
-
-    print(f"\nTesting with: {test_artist_4} - {test_track_4} (Album Hint: {test_album_4_hint})")
-    art_path_4 = get_album_art_path(test_artist_4, test_track_4, test_album_4_hint)
-    print(f"Art path for {test_track_4} by {test_artist_4}: {art_path_4}")
-    if art_path_4:
-        dom_color_4 = get_dominant_color(art_path_4)
-        print(f"Dominant color for {test_track_4} (RGB): {dom_color_4}")
+    print(f"Art path (2nd call): {art_path_1_again_val}")
+    if art_path_1_again_val and os.path.exists(art_path_1_again_val):
+        dom_color_1_again = get_dominant_color(art_path_1_again_val) # Should hit dominant color cache
+        print(f"Dominant color (2nd call): {dom_color_1_again}")
 
 
-    print("\nCheck the 'album_art_cache' folder for new images and 'spotify_info_cache.json'.")
-    print("Also check console for [CACHE DEBUG] and [SPOTIFY ...] messages.")
+    print("\n--- Standalone Test Complete ---")
+    print(f"Check the '{ART_CACHE_DIR}' folder for new images and JSON cache files.")
+    print("Review console output for [CACHE DEBUG], [SPOTIFY AUTH DEBUG], etc., messages.")
+    print("Ensure these messages respect the DEBUG_CACHE_ALBUM_ART_UTILS setting in configurations.txt.")

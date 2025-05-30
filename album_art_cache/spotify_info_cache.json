@@ -1,33 +1,837 @@
 {
-  "spotify_iu_eight(prod.&feat. suga of bts)_eight": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273c63be04ae902b1da7a54d247",
-    "canonical_album_name": "eight",
-    "spotify_album_id": "5vJNAlQeTf9lsulO1YlmSt",
+  "spotify_*luna_8.32_\u30e9\u30ba\u30e9\u30a4\u30c8\u306e\u5922": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27353b179bb193aa0fb34cb2c5a",
+    "canonical_album_name": "\u30e9\u30ba\u30e9\u30a4\u30c8\u306e\u5922",
+    "spotify_album_id": "7hG6XsPZPxj6Y6TYbHaz7t",
     "spotify_artist_ids": [
-      "3HqSLMAZ3g3d5poNaI7GOU",
-      "0ebNdVaOfp6N0oZ1guIxM8"
+      "4vwJe968gHHZzL0or0gSZA"
     ],
     "source": "spotify"
   },
-  "spotify_jeon somi_fast forward_game plan": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2737da22ba88dfc26a18122ee2d",
-    "canonical_album_name": "GAME PLAN",
-    "spotify_album_id": "7xMXoWstClAzBIo5lOAASu",
+  "spotify_7!!_\u30aa\u30ec\u30f3\u30b8_\u30bb\u30c4\u30ca\u30a8\u30e2\u30fc\u30b7\u30e7\u30f3": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27358b4dad535c17cfbb106e9cd",
+    "canonical_album_name": "\u30bb\u30c4\u30ca\u30a8\u30e2\u30fc\u30b7\u30e7\u30f3",
+    "spotify_album_id": "1YbJ32jyr2yzuwzMtgnUag",
     "spotify_artist_ids": [
-      "7zYj9S9SdIunYCfSm7vzAR"
+      "3rJbSZv98yyWLNOvD6MsAV"
     ],
     "source": "spotify"
   },
-  "spotify_jo yuri_love shhh!_op.22 y-waltz : in major": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e24e844f2650c498fa703c91",
-    "canonical_album_name": "Op.22 Y-Waltz : in Major",
-    "spotify_album_id": "1EAzLUzatSBIs8tA047f5f",
+  "spotify_aimer_after rain_after dark": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273be4e6b02d9bf5a0f0a3ce4b1",
+    "canonical_album_name": "After Dark",
+    "spotify_album_id": "7xW2KsTPW5qytt3G9IxEXa",
     "spotify_artist_ids": [
-      "3LFFf4EpKn2krneZ9vozyz"
+      "0bAsR2unSRpn6BQPEnNlZm"
     ],
     "source": "spotify"
   },
-  "spotify_paramore_that's what you get_riot!": {
+  "spotify_aimer_april showers_penny rain": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27330cf3673464552a8342b6ff3",
+    "canonical_album_name": "Penny Rain",
+    "spotify_album_id": "5WxSamBTcE3P1W6sT9My7B",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aimer_last stardust_dawn": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b54e91cdc2fc4e29efab4e4b",
+    "canonical_album_name": "DAWN",
+    "spotify_album_id": "7EHV2huu8yHAsPjzgmUjka",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aimer_one_one / hana no uta / rokutouseino yoru magic blue version": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273189f203384af534b6b269e7d",
+    "canonical_album_name": "Sun Dance",
+    "spotify_album_id": "0FNWMFyb0nLCCHucsDfxmA",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aimer_one and last_one and last": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2738146712bb74bb0189128617c",
+    "canonical_album_name": "ONE AND LAST",
+    "spotify_album_id": "5jc9kybeA4JeT6xucySNte",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aimer_stars in the rain_best selection noir": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b56ada0ba61d7787fb213f72",
+    "canonical_album_name": "daydream",
+    "spotify_album_id": "336m0kejdM5Fkw2HUX46Bw",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aimer_\u30ab\u30bf\u30aa\u30e2\u30a4_daydream": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b56ada0ba61d7787fb213f72",
+    "canonical_album_name": "daydream",
+    "spotify_album_id": "336m0kejdM5Fkw2HUX46Bw",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aimer_\u30b0\u30ec\u30fc\u30b9\u30ce\u30fc\u30c8_\u30b0\u30ec\u30fc\u30b9\u30ce\u30fc\u30c8": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2738733ea8c4df9143f9e09f6d2",
+    "canonical_album_name": "\u30b0\u30ec\u30fc\u30b9\u30ce\u30fc\u30c8",
+    "spotify_album_id": "3yiVMuHSKOxqyyEt20dobj",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aimer_\u30b3\u30a4\u30ef\u30ba\u30e9\u30a4_sun dance": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273189f203384af534b6b269e7d",
+    "canonical_album_name": "Sun Dance",
+    "spotify_album_id": "0FNWMFyb0nLCCHucsDfxmA",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aimer_\u30bb\u30d7\u30c6\u30f3\u30d0\u30fc\u3055\u3093_\u8776\u3005\u7d50\u3073": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273986a5e5ba6ee16f565f5b765",
+    "canonical_album_name": "\u8776\u3005\u7d50\u3073",
+    "spotify_album_id": "6Sxen65iUIObRklGqP1iTh",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aimer_\u6b8b\u97ff\u6563\u6b4c_\u6b8b\u97ff\u6563\u6b4c": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27310179936604a42f16280835e",
+    "canonical_album_name": "\u6b8b\u97ff\u6563\u6b4c",
+    "spotify_album_id": "1gfSftIuafqkGu28ely5z6",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_alia_hide-and-seek_alive": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734822fa9bd78e50a6402c7610",
+    "canonical_album_name": "AliVe",
+    "spotify_album_id": "0F9JHsWL88uGUnDCgdSngV",
+    "spotify_artist_ids": [
+      "4Lmo7h2Ik12QI3Ik0BvGbB"
+    ],
+    "source": "spotify"
+  },
+  "spotify_dialogue+_omoide shiritori_omoide shiritori": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e5ea4dda450ed0071291153",
+    "canonical_album_name": "Omoide Shiritori",
+    "spotify_album_id": "1N6s2iitKL87aXQ2sTNxFG",
+    "spotify_artist_ids": [
+      "2edEpSuGIPWwl7QJF3hXM0"
+    ],
+    "source": "spotify"
+  },
+  "spotify_iu_my sea_iu 5th album 'lilac'": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734ed058b71650a6ca2c04adff",
+    "canonical_album_name": "IU 5th Album 'LILAC'",
+    "spotify_album_id": "01dPJcwyht77brL4JQiR8R",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "source": "spotify"
+  },
+  "spotify_iu_strawberry moon_strawberry moon": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c4d4ade422fa74b8512fd85e",
+    "canonical_album_name": "strawberry moon",
+    "spotify_album_id": "7ed3SknyDqNz4XkPHNu4Fb",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "source": "spotify"
+  },
+  "spotify_mage_the words i never said in d&b_edits 1 ep": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2731678f99a5d678b882f11bea7",
+    "canonical_album_name": "Edits 1 EP",
+    "spotify_album_id": "3iN44wmE9e65a3AjI2Y9ig",
+    "spotify_artist_ids": [
+      "0q7PuJHIkWuHiHezAQFB6u"
+    ],
+    "source": "spotify"
+  },
+  "spotify_maroon 5_payphone_overexposed": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ce7d499847da02a9cbd1c084",
+    "canonical_album_name": "Overexposed (Deluxe)",
+    "spotify_album_id": "2pjfMmH52fryXVQuWTWOgP",
+    "spotify_artist_ids": [
+      "04gDigrS5kc9YWfZHwBETP",
+      "137W8MRPWKqSmrBGDBFSop"
+    ],
+    "source": "spotify"
+  },
+  "spotify_mashiro ayano_ideal white_ideal white": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ad37b7064a8f1b7e1f1b827c",
+    "canonical_album_name": "ideal white",
+    "spotify_album_id": "1VLSTXucz52AwZjvPFVx2m",
+    "spotify_artist_ids": [
+      "3GnM9zjuaItYitYvN8lneJ"
+    ],
+    "source": "spotify"
+  },
+  "spotify_nf_time_the search": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273942a0c9ac8f1def7c8805044",
+    "canonical_album_name": "The Search",
+    "spotify_album_id": "46xdC4Qcvscfs3Ai2RIHcv",
+    "spotify_artist_ids": [
+      "6fOMl44jA4Sp5b9PpYCkzz"
+    ],
+    "source": "spotify"
+  },
+  "spotify_onew_way_way - sm station": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27347c23d2b81189fae42c42ecc",
+    "canonical_album_name": "Way - SM STATION",
+    "spotify_album_id": "5Pq73EZamFkp9SQpI6Zw7Y",
+    "spotify_artist_ids": [
+      "7sZ5ipSoboWdqXkdj6AXHo",
+      "2FgZrgTMX6Sk0VNcOsEPmm"
+    ],
+    "source": "spotify"
+  },
+  "spotify_twice_i can't stop me_eyes wide open": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2736570fd05bcff5edcb16e617d",
+    "canonical_album_name": "Eyes Wide Open",
+    "spotify_album_id": "33jypnU7WULxPaVrjj4RXH",
+    "spotify_artist_ids": [
+      "7n2Ycct7Beij7Dj7meI4X0"
+    ],
+    "source": "spotify"
+  },
+  "spotify_yoasobi_\u591c\u306b\u99c6\u3051\u308b_\u591c\u306b\u99c6\u3051\u308b": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c5716278abba6a103ad13aa7",
+    "canonical_album_name": "\u591c\u306b\u99c6\u3051\u308b",
+    "spotify_album_id": "3GzwPyPZCyrqUTaurTaS23",
+    "spotify_artist_ids": [
+      "64tJ2EAv1R6UaZqc4iOCyj"
+    ],
+    "source": "spotify"
+  },
+  "spotify_\u30f4\u30a3\u30f4\u30a3(vo.\u516b\u6728\u6d77\u8389)_fluorite eye's song_fluorite eye's song": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27349d1ca266506d73bb03a72a8",
+    "canonical_album_name": "Fluorite Eye's Song",
+    "spotify_album_id": "6XG981QfatczXIVkA15IV1",
+    "spotify_artist_ids": [
+      "0yJlj2EYshHk9BWkEAR15k"
+    ],
+    "source": "spotify"
+  },
+  "spotify_\"weird al\" yankovic_amish paradise (parody of \"gangsta's paradise\" by coolio)_bad hair day": null,
+  "spotify_andy lau_\u4e2d\u570b\u4eba_\u611b\u5982\u6b64\u795e\u5947": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2730b5f41f34705fab59dbd2d94",
+    "canonical_album_name": "\u611b\u5982\u6b64\u795e\u5947",
+    "spotify_album_id": "520ACQGg9tjcackQWHq1t3",
+    "spotify_artist_ids": [
+      "2n3uDrupL8UtFSeZhY38MS"
+    ],
+    "source": "spotify"
+  },
+  "spotify_andy lau_\u7121\u9593\u9053 - \u7cb5_\u7e7c\u7e8c\u8ac7\u60c5 \u65b0\u6b4c & \u7cbe\u9078": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273545194be319a58c95a5a2abd",
+    "canonical_album_name": "\u7e7c\u7e8c\u8ac7\u60c5 \u65b0\u6b4c & \u7cbe\u9078",
+    "spotify_album_id": "3VQFpO260TJA3bjMDs3mWr",
+    "spotify_artist_ids": [
+      "2n3uDrupL8UtFSeZhY38MS"
+    ],
+    "source": "spotify"
+  },
+  "spotify_andy williams_the first no\u00ebl_the andy williams christmas album": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27398073965947f92f1641b8356",
+    "canonical_album_name": "The Andy Williams Christmas Album",
+    "spotify_album_id": "4dcJHxlOJwtyypL7sx1qch",
+    "spotify_artist_ids": [
+      "4sj6D0zlMOl25nprDJBiU9"
+    ],
+    "source": "spotify"
+  },
+  "spotify_aqua timez_velonica_\u3046\u305f\u3044\u53bb\u308a\u3057\u82b1": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734e0e7af717bd397ec86f444a",
+    "canonical_album_name": "\u3046\u305f\u3044\u53bb\u308a\u3057\u82b1",
+    "spotify_album_id": "0UFMQ3KEnJkf8U6fCTnRoi",
+    "spotify_artist_ids": [
+      "2XhA8BOHxO5NwbY6q3W8mD"
+    ],
+    "source": "spotify"
+  },
+  "spotify_backstreet boys_don't wanna lose you now_millennium": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732160c02bc56f192df0f4986b",
+    "canonical_album_name": "Millennium",
+    "spotify_album_id": "5ySxm9hxBNss01WCL7GLyQ",
+    "spotify_artist_ids": [
+      "5rSXSAkZ67PYJSvpUpkOr7"
+    ],
+    "source": "spotify"
+  },
+  "spotify_backstreet boys_more than that_black & blue": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273cf871e6326e334bfa92cff20",
+    "canonical_album_name": "Black & Blue",
+    "spotify_album_id": "41zXjyVr6dzmchWf8tv3UO",
+    "spotify_artist_ids": [
+      "5rSXSAkZ67PYJSvpUpkOr7"
+    ],
+    "source": "spotify"
+  },
+  "spotify_band aid_do they know it's christmas? - 1984 version_do they know it's christmas?": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732f77772e5c981e44fc347e22",
+    "canonical_album_name": "Do They Know It's Christmas?",
+    "spotify_album_id": "0Q96oESySVI3gLFTkhttn5",
+    "spotify_artist_ids": [
+      "35S20clEkkSNUo23ViaslZ"
+    ],
+    "source": "spotify"
+  },
+  "spotify_beyond_\u5149\u8f1d\u6b72\u6708_\u547d\u904b\u6d3e\u5c0d": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273890d72e0655a820e8aba7113",
+    "canonical_album_name": "\u547d\u904b\u6d3e\u5c0d",
+    "spotify_album_id": "4DJsm7NVvKHFW7FRcqcEBG",
+    "spotify_artist_ids": [
+      "4F5TrtYYxsVM1PhbtISE5m"
+    ],
+    "source": "spotify"
+  },
+  "spotify_beyond_\u6d77\u95ca\u5929\u7a7a_\u83ef\u7d0d\u5eff\u4e09\u9031\u5e74\u7d00\u5ff5\u7cbe\u9078\u7cfb\u5217 - beyond": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27371befcc92c268193bdda52db",
+    "canonical_album_name": "\u83ef\u7d0d\u5eff\u4e09\u9031\u5e74\u7d00\u5ff5\u7cbe\u9078\u7cfb\u5217 - Beyond",
+    "spotify_album_id": "4lsNuMoDCb89Rso6pGuX0E",
+    "spotify_artist_ids": [
+      "4F5TrtYYxsVM1PhbtISE5m"
+    ],
+    "source": "spotify"
+  },
+  "spotify_blake neely_soar (main title theme from 'masters of the air')_masters of the air (apple tv+ original series soundtrack)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273945c393193f4d1d29a631829",
+    "canonical_album_name": "Masters of the Air (Apple TV+ Original Series Soundtrack)",
+    "spotify_album_id": "5U7ptEceGT3fuGO5hCtmg6",
+    "spotify_artist_ids": [
+      "4UOzqO0jZUrTiTunfBw4tp"
+    ],
+    "source": "spotify"
+  },
+  "spotify_bon jovi_livin' on a prayer_slippery when wet": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2731336b31b6a1799f0de5807ac",
+    "canonical_album_name": "Slippery When Wet",
+    "spotify_album_id": "0kBfgEilUFCMIQY5IOjG4t",
+    "spotify_artist_ids": [
+      "58lV9VcRSjABbAbfWS6skp"
+    ],
+    "source": "spotify"
+  },
+  "spotify_chicago mass choir_jesus promised_project praise live in atlanta": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2737e0b415ad0f22b6bf9151e12",
+    "canonical_album_name": "Project Praise Live in Atlanta",
+    "spotify_album_id": "2MjpL798YMwU3cNGWvJwaA",
+    "spotify_artist_ids": [
+      "4M506nGvYT0WhG0kbkGrla"
+    ],
+    "source": "spotify"
+  },
+  "spotify_christopher larkin_city of tears_hollow knight (original soundtrack)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273dcbca161a7787a3fe0cb429c",
+    "canonical_album_name": "Hollow Knight (Original Soundtrack)",
+    "spotify_album_id": "4XgGOMRY7H4hl6OQi5wb2Z",
+    "spotify_artist_ids": [
+      "13kMpt8IdcHcdxPLcJrgU2",
+      "1S8s6zVDemTvwoVUs80IE4"
+    ],
+    "source": "spotify"
+  },
+  "spotify_dire straits_sultans of swing_dire straits": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27305b07080bdc2dd0e2cf6f008",
+    "canonical_album_name": "Dire Straits",
+    "spotify_album_id": "4dKdxly4ji1vfl7sEYuqBe",
+    "spotify_artist_ids": [
+      "0WwSkZ7LtFUFjGjMZBMt6T"
+    ],
+    "source": "spotify"
+  },
+  "spotify_eagles_hotel california - 2013 remaster_hotel california": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734637341b9f507521afa9a778",
+    "canonical_album_name": "Hotel California (2013 Remaster)",
+    "spotify_album_id": "2widuo17g5CEC66IbzveRu",
+    "spotify_artist_ids": [
+      "0ECwFtbIWEVNwjlrfc6xoL"
+    ],
+    "source": "spotify"
+  },
+  "spotify_eagles_please come home for christmas - 2013 remaster_please come home for christmas / funky new year": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2736d4362a2b2e39422000f8ed3",
+    "canonical_album_name": "Please Come Home for Christmas / Funky New Year (2013 Remaster)",
+    "spotify_album_id": "4QxtDUU3U7gCCyT9Lm3bg5",
+    "spotify_artist_ids": [
+      "0ECwFtbIWEVNwjlrfc6xoL"
+    ],
+    "source": "spotify"
+  },
+  "spotify_eason chan_\u56e0\u70ba\u611b\u60c5_stranger under my skin": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2733326073c82569d68cee6bd60",
+    "canonical_album_name": "Stranger Under My Skin",
+    "spotify_album_id": "3hYNHvbd1Q3AhB5K53ymNm",
+    "spotify_artist_ids": [
+      "2QcZxAgcs2I1q7CtCkl6MI",
+      "3df3XLKuqTQ6iOSmi0K3Wp"
+    ],
+    "source": "spotify"
+  },
+  "spotify_eason chan_\u5bcc\u58eb\u5c71\u4e0b_what's going on...?": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273afcac0b3e8e10a032124b628",
+    "canonical_album_name": "What's Going On...?",
+    "spotify_album_id": "1dtg7IOdq2Q6zA4nIJ5Qsk",
+    "spotify_artist_ids": [
+      "2QcZxAgcs2I1q7CtCkl6MI"
+    ],
+    "source": "spotify"
+  },
+  "spotify_flow_colors_flow the best \u301csingle collection\u301c": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734a32af8953fb7630904decbd",
+    "canonical_album_name": "FLOW THE BEST \u301cSingle Collection\u301c",
+    "spotify_album_id": "0EWoUxWh0SqcK0jN6UTbFc",
+    "spotify_artist_ids": [
+      "3w2HqkKa6upwuXEULtGvnY"
+    ],
+    "source": "spotify"
+  },
+  "spotify_fei yu-ching_\u4e00\u7fe6\u6885_\u5929\u4e4b\u5927": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273511a8449452ae5cd1fe7f281",
+    "canonical_album_name": "\u5929\u4e4b\u5927",
+    "spotify_album_id": "7gaFvGD095KPW7RBZig5an",
+    "spotify_artist_ids": [
+      "6aSJ9LaNaHOKiPchLDYGYl"
+    ],
+    "source": "spotify"
+  },
+  "spotify_foo fighters_everlong_the colour and the shape": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2730389027010b78a5e7dce426b",
+    "canonical_album_name": "The Colour And The Shape",
+    "spotify_album_id": "30ly6F6Xl0TKmyBCU50Khv",
+    "spotify_artist_ids": [
+      "7jy3rLJdDQY21OgRLCZ9sD"
+    ],
+    "source": "spotify"
+  },
+  "spotify_fountains of wayne_stacy's mom_welcome interstate managers": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273079e826265dffc3a8a26bac5",
+    "canonical_album_name": "Welcome Interstate Managers",
+    "spotify_album_id": "6TZp52tXShLQbq8yNMxqNT",
+    "spotify_artist_ids": [
+      "1pgtr4nhBQjp9oCUBPyYWh"
+    ],
+    "source": "spotify"
+  },
+  "spotify_frank sinatra_have yourself a merry little christmas - remastered 1999_a jolly christmas from frank sinatra": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27394fd2e614d0862bdd2592594",
+    "canonical_album_name": "A Jolly Christmas From Frank Sinatra",
+    "spotify_album_id": "0ny6mZMBrYSO0s8HAKbcVq",
+    "spotify_artist_ids": [
+      "1Mxqyy3pSjf8kZZL4QVxS0"
+    ],
+    "source": "spotify"
+  },
+  "spotify_freddie mercury_the great pretender_the very best of freddie mercury solo: lover of life, singer of songs": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d35a992dd865d3b4c24e9db9",
+    "canonical_album_name": "The Very Best of Freddie Mercury Solo: Lover of Life, Singer of Songs",
+    "spotify_album_id": "7zZsa7Cpd5itS9reVPfXZA",
+    "spotify_artist_ids": [
+      "4M1FpEWs2PeYfJe7xxJfhH"
+    ],
+    "source": "spotify"
+  },
+  "spotify_freya ridings_i can't hear it now (from the series arcane league of legends)_i can't hear it now (from the series arcane league of legends)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273f53a65a2d8ea809c4f1e5e93",
+    "canonical_album_name": "I Can't Hear It Now (from the series Arcane League of Legends)",
+    "spotify_album_id": "6ON4aKmVxx5g2cqnts3AMu",
+    "spotify_artist_ids": [
+      "5pDjmC5mRl7vDJhsjVwNfk",
+      "57nPqD7z62gDdq37US9XJR",
+      "47mIJdHORyRerp4os813jD"
+    ],
+    "source": "spotify"
+  },
+  "spotify_granrodeo_hengen jizai no magical star_decade of gr": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2737c1118380825e802096030e9",
+    "canonical_album_name": "DECADE OF GR",
+    "spotify_album_id": "0n5PwOeM0Xpj1GX8fXfaF0",
+    "spotify_artist_ids": [
+      "3LnMh597QKlMqWqqXz7woc"
+    ],
+    "source": "spotify"
+  },
+  "spotify_granrodeo_the other self_\u30ab\u30eb\u30de\u3068\u30e9\u30d3\u30ea\u30f3\u30b9": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734da90d0debf1a6e70d078517",
+    "canonical_album_name": "Karma to Labyrinth",
+    "spotify_album_id": "4EhoqMEx6bm2bDhIHJxmz1",
+    "spotify_artist_ids": [
+      "3LnMh597QKlMqWqqXz7woc"
+    ],
+    "source": "spotify"
+  },
+  "spotify_genesis_invisible touch - 2007 remaster_invisible touch": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b917174eb6069392e8a3cc7f",
+    "canonical_album_name": "Invisible Touch (2007 Remaster)",
+    "spotify_album_id": "632b0oXuFpstA4DO2cUKdG",
+    "spotify_artist_ids": [
+      "3CkvROUTQ6nRi9yQOcsB50"
+    ],
+    "source": "spotify"
+  },
+  "spotify_george lam_\u7537\u5152\u7576\u81ea\u5f37_\u6700\u611b 40 - beloved 40": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735f3cce83ea328b48f6574a66",
+    "canonical_album_name": "\u6700\u611b 40 - Beloved 40",
+    "spotify_album_id": "4KH6yrlyQ7PgJzy3HHxEwB",
+    "spotify_artist_ids": [
+      "7rxRHujzUzobMEbtoE297s"
+    ],
+    "source": "spotify"
+  },
+  "spotify_giacomo puccini_gianni schicchi: o mio babbino caro_romantic caball\u00e9": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273a2439880660290f2600e33fa",
+    "canonical_album_name": "Romantic Caball\u00e9",
+    "spotify_album_id": "1kauVxDJhSs1CLoHDbRrjB",
+    "spotify_artist_ids": [
+      "0OzxPXyowUEQ532c9AmHUR",
+      "6oGu0NZWy8gJ18wggybFqH",
+      "5KfSv4WeArTS1pLtF4VQb5"
+    ],
+    "source": "spotify"
+  },
+  "spotify_giacomo puccini_la boh\u00e8me / act i: \"quando me'n v\u00f2\"_opera arias": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739ad69adb14786671b7d81465",
+    "canonical_album_name": "Opera Arias",
+    "spotify_album_id": "6PFuNyiTgiUbB2ooduWnZf",
+    "spotify_artist_ids": [
+      "0OzxPXyowUEQ532c9AmHUR",
+      "5moBlpk9BYtujdRW6VLepL",
+      "003f4bk13c6Q3gAUXv7dGJ",
+      "4ZfhELUmrY86zwcJHY2q19"
+    ],
+    "source": "spotify"
+  },
+  "spotify_green day_boulevard of broken dreams_greatest hits: god's favorite band": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2737f213369d5265a60af5f7e82",
+    "canonical_album_name": "Greatest Hits: God's Favorite Band",
+    "spotify_album_id": "3id4t9IqRoB1f1smOERtrY",
+    "spotify_artist_ids": [
+      "7oPftvlwr6VrsViSDV7fJY"
+    ],
+    "source": "spotify"
+  },
+  "spotify_green day_good riddance (time of your life)_nimrod": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273da4f6706ae0f2501c61ce776",
+    "canonical_album_name": "Nimrod",
+    "spotify_album_id": "3x2uer6Xh0d5rF8toWpRDA",
+    "spotify_artist_ids": [
+      "7oPftvlwr6VrsViSDV7fJY"
+    ],
+    "source": "spotify"
+  },
+  "spotify_green day_wake me up when september ends_american idiot": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27308a1b1e0674086d3f1995e1b",
+    "canonical_album_name": "American Idiot",
+    "spotify_album_id": "5dN7F9DV0Qg1XRdIgW8rke",
+    "spotify_artist_ids": [
+      "7oPftvlwr6VrsViSDV7fJY"
+    ],
+    "source": "spotify"
+  },
+  "spotify_hacken lee_\u5bcc\u58eb\u5c71\u4e0b_joey yung x hacken lee concert 2015 - live": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273cda145c92346215920db5da9",
+    "canonical_album_name": "Joey Yung X Hacken Lee Concert 2015 (Live)",
+    "spotify_album_id": "3Dc8vyw8nSjhOyZkNzExqc",
+    "spotify_artist_ids": [
+      "3PV11RNUoGfX9tMN2wVljB"
+    ],
+    "source": "spotify"
+  },
+  "spotify_hans zimmer_honor (main title theme from \"the pacific\")_the pacific (music from the hbo miniseries)": null,
+  "spotify_hans zimmer_no time for caution_interstellar (original motion picture soundtrack)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ac29a65e7ffcfa6f9cb0d342",
+    "canonical_album_name": "Interstellar (Original Motion Picture Soundtrack) [Expanded Edition]",
+    "spotify_album_id": "3B61kSKTxlY36cYgzvf3cP",
+    "spotify_artist_ids": [
+      "0YC192cP3KPCRWx8zr8MfZ"
+    ],
+    "source": "spotify"
+  },
+  "spotify_hans zimmer_tennessee_pearl harbor - original motion picture soundtrack": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273088f10626ed0592f4a4a9b72",
+    "canonical_album_name": "Pearl Harbor - Original Motion Picture Soundtrack",
+    "spotify_album_id": "6d0LelwtKFd0F0ZfImWWDz",
+    "spotify_artist_ids": [
+      "0YC192cP3KPCRWx8zr8MfZ"
+    ],
+    "source": "spotify"
+  },
+  "spotify_howard shore_the battle of the pelennor fields_the lord of the rings - the return of the king - the complete recordings": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732b4d071f7824b2c60c3b85cd",
+    "canonical_album_name": "The Lord of the Rings - The Return of the King - The Complete Recordings (Limited Edition)",
+    "spotify_album_id": "2Re6RMBEfD8iv1HMxLMdzI",
+    "spotify_artist_ids": [
+      "0OcclcP5o8VKH2TRqSY2A7"
+    ],
+    "source": "spotify"
+  },
+  "spotify_jay chou_\u83ca\u82b1\u53f0_\u4f9d\u7136\u8303\u7279\u897f": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2731da729c58a0de2893db976cb",
+    "canonical_album_name": "\u4f9d\u7136\u8303\u7279\u897f",
+    "spotify_album_id": "2BvDgFjuzq0BCZOPBeDd1E",
+    "spotify_artist_ids": [
+      "2elBjNSdBE2Y3f0j1mjrql"
+    ],
+    "source": "spotify"
+  },
+  "spotify_john powell_test drive - from how to train your dragon music from the motion picture_how to train your dragon - music from the motion picture": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273164edf20ddc765dff82d95cd",
+    "canonical_album_name": "How To Train Your Dragon (Music From The Motion Picture)",
+    "spotify_album_id": "1kTnC045mQqurTQvGMGpmU",
+    "spotify_artist_ids": [
+      "3EAHF3jdnHHdko5DBrhRUP"
+    ],
+    "source": "spotify"
+  },
+  "spotify_john rzeznik_i'm still here (jim's theme) - from \"treasure planet\"/soundtrack version_treasure planet": null,
+  "spotify_john williams_theme from jurassic park_jurassic park": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27392f051ce3c585b5c2db21d52",
+    "canonical_album_name": "Jurassic Park",
+    "spotify_album_id": "1yyFmCMeNtuLWsLZAXPStf",
+    "spotify_artist_ids": [
+      "3dRfiJ2650SZu6GbydcHNb"
+    ],
+    "source": "spotify"
+  },
+  "spotify_johnny cash_god's gonna cut you down_american v: a hundred highways": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27390c9072fbd484299e0f624ca",
+    "canonical_album_name": "American V: A Hundred Highways",
+    "spotify_album_id": "16VJRQuM2mXHkuppi3SNAh",
+    "spotify_artist_ids": [
+      "6kACVPfCOnqzgfEF5ryl0x"
+    ],
+    "source": "spotify"
+  },
+  "spotify_jonathan groff_lost in the woods_frozen 2 - original motion picture soundtrack/deluxe edition": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735929af1edd645142df679910",
+    "canonical_album_name": "Frozen 2 (Original Motion Picture Soundtrack/Deluxe Edition)",
+    "spotify_album_id": "4M07HWIlZr7zoXoxDHR5mz",
+    "spotify_artist_ids": [
+      "7KkqUt65v6LMtR369OQ6FB"
+    ],
+    "source": "spotify"
+  },
+  "spotify_kanye west_all of the lights_my beautiful dark twisted fantasy": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d9194aa18fa4c9362b47464f",
+    "canonical_album_name": "My Beautiful Dark Twisted Fantasy",
+    "spotify_album_id": "20r762YmB5HeofjMCiPMLv",
+    "spotify_artist_ids": [
+      "5K4W6rqBFWDnAN6FQUkS6x"
+    ],
+    "source": "spotify"
+  },
+  "spotify_kristen bell_do you want to build a snowman? - from \"frozen\"/soundtrack version_frozen": null,
+  "spotify_kristen bell_for the first time in forever - from \"frozen\"/soundtrack version_frozen - original motion picture soundtrack / deluxe edition": null,
+  "spotify_lady gaga_bad romance_the fame monster": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735c9890c0456a3719eeecd8aa",
+    "canonical_album_name": "The Fame Monster (Deluxe Edition)",
+    "spotify_album_id": "6rePArBMb5nLWEaY9aQqL4",
+    "spotify_artist_ids": [
+      "1HY2Jd0NmPuamShAr6KMms"
+    ],
+    "source": "spotify"
+  },
+  "spotify_lea salonga_a whole new world_aladdin special edition": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734a4b92dcf7a5c51cc4f7424c",
+    "canonical_album_name": "Aladdin Special Edition",
+    "spotify_album_id": "7bt2aty3lUo6Q1Ud8pthRz",
+    "spotify_artist_ids": [
+      "1GlMjIezcLwV3OFlX0uXOv",
+      "3dAzSJ9lQnJSq5Z0OgDBep",
+      "3xvaSlT4xsyk6lY1ESOspO"
+    ],
+    "source": "spotify"
+  },
+  "spotify_led zeppelin_stairway to heaven - remaster_led zeppelin iv": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c8a11e48c91a982d086afc69",
+    "canonical_album_name": "Led Zeppelin IV (Deluxe Edition)",
+    "spotify_album_id": "44Ig8dzqOkvkGDzaUof9lK",
+    "spotify_artist_ids": [
+      "36QJpDe2go2KgaRleHCDTp"
+    ],
+    "source": "spotify"
+  },
+  "spotify_linkin park_the emptiness machine_the emptiness machine": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c0db065619ed208515412917",
+    "canonical_album_name": "The Emptiness Machine",
+    "spotify_album_id": "6W0Gabv5f3ugnckc6YgfJQ",
+    "spotify_artist_ids": [
+      "6XyY86QOPPrYVGvF9ch6wz"
+    ],
+    "source": "spotify"
+  },
+  "spotify_london metropolitan orchestra_austria - instrumental_band of brothers - original motion picture soundtrack": null,
+  "spotify_ludwig g\u00f6ransson_fission_oppenheimer (original motion picture soundtrack)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273af634982d9b15de3c77f7dd9",
+    "canonical_album_name": "Oppenheimer (Original Motion Picture Soundtrack)",
+    "spotify_album_id": "0rwbMKjNkp4ehQTwf9V2Jk",
+    "spotify_artist_ids": [
+      "24eDfi2MSYo3A87hCcgpIL"
+    ],
+    "source": "spotify"
+  },
+  "spotify_mkto_classic_mkto": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739474419f15773875a495eed3",
+    "canonical_album_name": "MKTO",
+    "spotify_album_id": "5IenxFp0vpnXBUxPcwJtbE",
+    "spotify_artist_ids": [
+      "2l35CQqtYRh3d8ZIiBep4v"
+    ],
+    "source": "spotify"
+  },
+  "spotify_michael kamen_austria - instrumental_band of brothers - original motion picture soundtrack": null,
+  "spotify_michael wong_\u7ae5\u8a71_\u5341\u5149\u5e74\u7cbe\u9078\u8f2f": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273587fbee0b9d7903024e06c61",
+    "canonical_album_name": "\u5341\u5149\u5e74\u7cbe\u9078\u8f2f",
+    "spotify_album_id": "36Z2YriYoWjRLZOiklzgSm",
+    "spotify_artist_ids": [
+      "26SQFo2qNNGOxh2PUAsTeO"
+    ],
+    "source": "spotify"
+  },
+  "spotify_mike shinoda_heavy is the crown (original score) (from the series arcane league of legends)_arcane league of legends: season 2 (from the series arcane league of legends)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734aaf2413384c1efcc38353c6",
+    "canonical_album_name": "Arcane League of Legends: Season 2 (Soundtrack from the Animated Series)",
+    "spotify_album_id": "2x6LWti2bjYS6AllSomoV7",
+    "spotify_artist_ids": [
+      "57nPqD7z62gDdq37US9XJR",
+      "6xBZgSMsnKVmaAxzWEwMSD",
+      "2j5MUrKK6wSLdUxy2ijqHC"
+    ],
+    "source": "spotify"
+  },
+  "spotify_mrs. green apple_\u30a4\u30f3\u30d5\u30a7\u30eb\u30ce_\u30a4\u30f3\u30d5\u30a7\u30eb\u30ce": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2731a4e99f0c693fecc9038d3dd",
+    "canonical_album_name": "\u30a4\u30f3\u30d5\u30a7\u30eb\u30ce",
+    "spotify_album_id": "137FjNv5TRNvbW6D17bQc1",
+    "spotify_artist_ids": [
+      "4QvgGvpgzgyUOo8Yp8LDm9"
+    ],
+    "source": "spotify"
+  },
+  "spotify_muse_invincible_black holes and revelations": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27328933b808bfb4cbbd0385400",
+    "canonical_album_name": "Black Holes and Revelations",
+    "spotify_album_id": "0lw68yx3MhKflWFqCsGkIs",
+    "spotify_artist_ids": [
+      "12Chz98pHFMPJEknJQMWvI"
+    ],
+    "source": "spotify"
+  },
+  "spotify_muse_knights of cydonia - live from wembley stadium_haarp": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2731391e8030fcadb254c4b23a0",
+    "canonical_album_name": "HAARP (Live from Wembley Stadium)",
+    "spotify_album_id": "7IEp2DUicr3uqt2BTEQfMX",
+    "spotify_artist_ids": [
+      "12Chz98pHFMPJEknJQMWvI"
+    ],
+    "source": "spotify"
+  },
+  "spotify_music therapy_god rest ye, merry gentlemen_relax & sleep": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273259a937df530444fc4afc77c",
+    "canonical_album_name": "Relax & Sleep",
+    "spotify_album_id": "0CLnqBgDU2APb4MPE5lPfJ",
+    "spotify_artist_ids": [
+      "2oojBPGe0dHG8kziRmRNvw"
+    ],
+    "source": "spotify"
+  },
+  "spotify_nico touches the walls_\u30db\u30ed\u30b0\u30e9\u30e0_\u30aa\u30fc\u30ed\u30e9": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e7b3a134360b6a20d7533320",
+    "canonical_album_name": "\u30aa\u30fc\u30ed\u30e9",
+    "spotify_album_id": "1ZjU372a8M7tAlP1qKbvEN",
+    "spotify_artist_ids": [
+      "16FpDRuy5xMHpuLYZV0Hkt"
+    ],
+    "source": "spotify"
+  },
+  "spotify_nat king cole_o holy night_the christmas song": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27330dc6027fd140c7ba68e900c",
+    "canonical_album_name": "The Christmas Song (Expanded Edition)",
+    "spotify_album_id": "6vBGI5522jvPi0ZZuGQNp4",
+    "spotify_artist_ids": [
+      "7v4imS0moSyGdXyLgVTIV7"
+    ],
+    "source": "spotify"
+  },
+  "spotify_nima fakhrara_hostage - connor_detroit: become human (original soundtrack)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2731c562e65a56e6fb9ec8d5cfc",
+    "canonical_album_name": "Detroit: Become Human (Original Soundtrack)",
+    "spotify_album_id": "3mlnG0QIGKsAp50vTBKSur",
+    "spotify_artist_ids": [
+      "0xgLzYXTSX00BF1UpyXQpi"
+    ],
+    "source": "spotify"
+  },
+  "spotify_no doubt_don't speak_tragic kingdom": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2736ebd5e789646a833b8f7d4ba",
+    "canonical_album_name": "Tragic Kingdom",
+    "spotify_album_id": "3VekjWskUut57hx6W9wqL8",
+    "spotify_artist_ids": [
+      "0cQbJU1aAzvbEmTuljWLlF"
+    ],
+    "source": "spotify"
+  },
+  "spotify_one direction_night changes_four": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d304ba2d71de306812eebaf4",
+    "canonical_album_name": "FOUR (Deluxe)",
+    "spotify_album_id": "4gCNyS7pidfK3rKWhB3JOY",
+    "spotify_artist_ids": [
+      "4AK6F7OLvEQ5QYCBNiQWHq"
+    ],
+    "source": "spotify"
+  },
+  "spotify_one direction_story of my life_midnight memories (deluxe)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732f76b797c382bedcafdf45e1",
+    "canonical_album_name": "Midnight Memories (Deluxe)",
+    "spotify_album_id": "7p1fX8aUySrBdx4WSYspOu",
+    "spotify_artist_ids": [
+      "4AK6F7OLvEQ5QYCBNiQWHq"
+    ],
+    "source": "spotify"
+  },
+  "spotify_one direction_what makes you beautiful_up all night": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734a5584795dc73860653a9a3e",
+    "canonical_album_name": "Up All Night",
+    "spotify_album_id": "6cunQQ7YZisYOoiFu2ywIq",
+    "spotify_artist_ids": [
+      "4AK6F7OLvEQ5QYCBNiQWHq"
+    ],
+    "source": "spotify"
+  },
+  "spotify_panic! at the disco_i write sins not tragedies_a fever you can't sweat out": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2730a8881b0d247346c3c447bf3",
+    "canonical_album_name": "A Fever You Can't Sweat Out",
+    "spotify_album_id": "2YeOhhJg3OWpN0F1VYPxtW",
+    "spotify_artist_ids": [
+      "20JZFwl6HVl6yg8a4H3ZqK"
+    ],
+    "source": "spotify"
+  },
+  "spotify_paramore_all i wanted_brand new eyes": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e01d7d558032457b0e4883f6",
+    "canonical_album_name": "Brand New Eyes",
+    "spotify_album_id": "27UqZoE1kV6sIV6uQcI28A",
+    "spotify_artist_ids": [
+      "74XFHRwlV6OrjEM0A2NCMF"
+    ],
+    "source": "spotify"
+  },
+  "spotify_paramore_for a pessimist, i'm pretty optimistic_riot!": {
     "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
     "canonical_album_name": "Riot!",
     "spotify_album_id": "71rziY9eLo1tA2dBMxrwhc",
@@ -36,39 +840,355 @@
     ],
     "source": "spotify"
   },
-  "spotify_tate mcrae_greedy_greedy": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b27322fd802bc61db666c7c81aa8",
-    "canonical_album_name": "greedy",
-    "spotify_album_id": "3UOV8XvCwMKaATRNXrYCjN",
+  "spotify_paramore_hard times_after laughter": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273dbd83e179619408e5d05cc99",
+    "canonical_album_name": "After Laughter",
+    "spotify_album_id": "1c9Sx7XdXuMptGyfCB6hHs",
     "spotify_artist_ids": [
-      "45dkTj5sMRSjrmBSBeiHym"
+      "74XFHRwlV6OrjEM0A2NCMF"
     ],
     "source": "spotify"
   },
-  "spotify_taylor swift_is it over now? (taylor's version) (from the vault)_1989 (taylor's version)": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac",
-    "canonical_album_name": "1989 (Taylor's Version)",
-    "spotify_album_id": "64LU4c1nfjz1t4VnGhagcg",
+  "spotify_pitbull_feel this moment (feat. christina aguilera)_global warming: meltdown (deluxe version)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273f2486b438645e97b523e4f90",
+    "canonical_album_name": "Global Warming: Meltdown (Deluxe Version)",
+    "spotify_album_id": "2F7tejLHzTqFq2XLol9ZGy",
     "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
+      "0TnOYISbd1XYRBk9myaseg",
+      "1l7ZsJRRS8wlW3WfJfPfNS"
     ],
     "source": "spotify"
   },
-  "spotify_taylor swift_style_1989": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac",
-    "canonical_album_name": "1989 (Taylor's Version)",
-    "spotify_album_id": "64LU4c1nfjz1t4VnGhagcg",
+  "spotify_pitbull_international love (feat. chris brown)_planet pit (deluxe version)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2731dc7483a9fcfce54822a2f19",
+    "canonical_album_name": "Planet Pit (Deluxe Version)",
+    "spotify_album_id": "4rG0MhkU6UojACJxkMHIXB",
     "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
+      "0TnOYISbd1XYRBk9myaseg",
+      "7bXgB6jMjp9ATFy66eO08Z"
     ],
     "source": "spotify"
   },
-  "spotify_\u300e\u30e6\u30a4\u30ab\u300f_\u904b\u547d\u306e\u4eba_\u904b\u547d\u306e\u4eba": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2739bba46fb362df4d33a0a8b3f",
-    "canonical_album_name": "\u904b\u547d\u306e\u4eba",
-    "spotify_album_id": "0eNmYuy5xTFFwfdwfyGQLL",
+  "spotify_radwimps_theme of mitsuha_your name.": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2733d1869d8c477d291a205a2d6",
+    "canonical_album_name": "Your Name.",
+    "spotify_album_id": "4qApTp9557qYZzRLEih4uP",
     "spotify_artist_ids": [
-      "2EqaSEa0WkE59Aca9iXSYj"
+      "1EowJ1WwkMzkCkRomFhui7"
+    ],
+    "source": "spotify"
+  },
+  "spotify_radiohead_karma police_ok computer": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c8b444df094279e70d0ed856",
+    "canonical_album_name": "OK Computer",
+    "spotify_album_id": "6dVIqQ8qmQ5GBnJ9shOYGE",
+    "spotify_artist_ids": [
+      "4Z8W4fKeB5YxbusRsdQVPb"
+    ],
+    "source": "spotify"
+  },
+  "spotify_ramin djawadi_reign of the targaryens_house of the dragon: season 1 (soundtrack from the hbo\u00ae series)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273facc849a748de4c55ec980dd",
+    "canonical_album_name": "House of the Dragon: Season 1 (Soundtrack from the HBO\u00ae Series)",
+    "spotify_album_id": "5gD5rf2UnvG1TYUHVv4vjv",
+    "spotify_artist_ids": [
+      "1hCkSJcXREhrodeIHQdav8"
+    ],
+    "source": "spotify"
+  },
+  "spotify_randy newman_a bug's life suite - from \"a bug's life\"/score_a bug's life": null,
+  "spotify_randy newman_the world isn't fair_songbook, volume i": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d0290e71a07be00d69b3bbbb",
+    "canonical_album_name": "Songbook, Volume I",
+    "spotify_album_id": "5MMJhx8yTVqWpxwaqCalgO",
+    "spotify_artist_ids": [
+      "3HQyFCFFfJO3KKBlUfZsyW"
+    ],
+    "source": "spotify"
+  },
+  "spotify_randy newman_you've got a friend in me_toy story": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739e26f06f82a65f3ceb6c259c",
+    "canonical_album_name": "Toy Story (Original Motion Picture Soundtrack)",
+    "spotify_album_id": "47OFnLtLVi5WrPYNXAwFGh",
+    "spotify_artist_ids": [
+      "3HQyFCFFfJO3KKBlUfZsyW"
+    ],
+    "source": "spotify"
+  },
+  "spotify_realslow_cry cry cry_realslow is back": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273a51caaf272031048d5df3315",
+    "canonical_album_name": "RealSlow Is Back",
+    "spotify_album_id": "2cwgIOyJvAEbLgFdzfzbeu",
+    "spotify_artist_ids": [
+      "7luxe2wCwtDtkKSP8ZhPLn"
+    ],
+    "source": "spotify"
+  },
+  "spotify_red hot chili peppers_snow (hey oh)_stadium arcadium": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27309fd83d32aee93dceba78517",
+    "canonical_album_name": "Stadium Arcadium",
+    "spotify_album_id": "7xl50xr9NDkd3i2kBbzsNZ",
+    "spotify_artist_ids": [
+      "0L8ExT028jH3ddEcZwqJJ5"
+    ],
+    "source": "spotify"
+  },
+  "spotify_richie jen_\u4e0d\u8981\u8b8a_\u611b\u50cf\u592a\u5e73\u6d0b": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273107c4ed65d3c97fd0cf49877",
+    "canonical_album_name": "\u611b\u50cf\u592a\u5e73\u6d0b",
+    "spotify_album_id": "67G5JvLWofXLwpRiBh5sw3",
+    "spotify_artist_ids": [
+      "0zjNCSqeDIxn63crtDx7G2"
+    ],
+    "source": "spotify"
+  },
+  "spotify_ryan gosling_i'm just ken_barbie the album": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d16ac0ec27653182d719ab36",
+    "canonical_album_name": "Barbie The Album",
+    "spotify_album_id": "0BaIaHcyBXuOWeM4Aas4EW",
+    "spotify_artist_ids": [
+      "6kXm2YCtdUOpRYNKeKhfue"
+    ],
+    "source": "spotify"
+  },
+  "spotify_snow patrol_chasing cars_eyes open": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735da2756220da9b6f17924f8f",
+    "canonical_album_name": "Eyes Open",
+    "spotify_album_id": "3k7bXPw2u0C0SBKPMsgMS3",
+    "spotify_artist_ids": [
+      "3rIZMv9rysU7JkLzEaC5Jp"
+    ],
+    "source": "spotify"
+  },
+  "spotify_sting_what could have been (from the series arcane league of legends)_arcane league of legends (soundtrack from the animated series)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27390d1dd89316f336262258965",
+    "canonical_album_name": "Arcane League of Legends (Soundtrack from the Animated Series)",
+    "spotify_album_id": "0jV32pIk8l3vTaU3thTaW2",
+    "spotify_artist_ids": [
+      "0Ty63ceoRnnJKVEYP0VQpk",
+      "5Cy6BjgpzVTTP4FURizqmQ"
+    ],
+    "source": "spotify"
+  },
+  "spotify_the oral cigarettes_rei_kisses and kills": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d1d8c6f08fd3cba8ca6fe863",
+    "canonical_album_name": "Kisses and Kills",
+    "spotify_album_id": "3pepTeuEGPpmGF3oOwboo0",
+    "spotify_artist_ids": [
+      "4rqJz9fE9prZvQd8WsQv6q"
+    ],
+    "source": "spotify"
+  },
+  "spotify_twrp_starlight brigade_together through time": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27311668a55ab0ad1561baf9e6f",
+    "canonical_album_name": "Together Through Time",
+    "spotify_album_id": "1PfcsIpr2dosoGTwMB63nO",
+    "spotify_artist_ids": [
+      "6N3egqZ7OtcYYXyU6PBdNr",
+      "5HEl3J1o3yGK8ac6GeUmMo"
+    ],
+    "source": "spotify"
+  },
+  "spotify_taro umebayashi_theme of king j.j._theme of king j.j.": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732264b0ff8f570df9a420ffb4",
+    "canonical_album_name": "Theme of King J.J.",
+    "spotify_album_id": "57eZjcRmajp35GIdY2apsI",
+    "spotify_artist_ids": [
+      "2Nnwx1j1GrmIKZ8vx6fJSI",
+      "5R9LHQH9mb3aAr1DDf81Jf"
+    ],
+    "source": "spotify"
+  },
+  "spotify_tatsuya kitani_\u9752\u306e\u3059\u307f\u304b_\u9752\u306e\u3059\u307f\u304b": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e9ce77912820de8e7a129cfe",
+    "canonical_album_name": "\u9752\u306e\u3059\u307f\u304b",
+    "spotify_album_id": "4QjNVlIw8Rx6jItSZtn2VS",
+    "spotify_artist_ids": [
+      "7mvhRvEAHiCTQHUnH7fgnv"
+    ],
+    "source": "spotify"
+  },
+  "spotify_the city of prague philharmonic orchestra_main title - from \"gettysburg\"_wild west": null,
+  "spotify_the young veins_dangerous blues_take a vacation! (deluxe edition / remastered)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732456c47428341a3f860d9043",
+    "canonical_album_name": "Take a Vacation! (Deluxe Edition / Remastered)",
+    "spotify_album_id": "0aVQtk9RS7xTuKcHym1ZsY",
+    "spotify_artist_ids": [
+      "6vjgLoIHeoblpnAKNPeF8Q"
+    ],
+    "source": "spotify"
+  },
+  "spotify_thomas newman_nemo egg (main title)_finding nemo": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d2446570a048376ec2e720f4",
+    "canonical_album_name": "Finding Nemo (Original Motion Picture Soundtrack)",
+    "spotify_album_id": "2kJpuz9FOqX5riMjGwihhY",
+    "spotify_artist_ids": [
+      "1csBgT42N4pPPs1HJhxXIK"
+    ],
+    "source": "spotify"
+  },
+  "spotify_tom petty and the heartbreakers_american girl_tom petty & the heartbreakers": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d38733f240ef69763120a469",
+    "canonical_album_name": "Tom Petty And The Heartbreakers",
+    "spotify_album_id": "0JBy4lxBlQIxMZ8qPMIJER",
+    "spotify_artist_ids": [
+      "4tX2TplrkIP4v05BNC903e"
+    ],
+    "source": "spotify"
+  },
+  "spotify_wakin chau_\u5200\u528d\u5982\u5922_\u5468\u800c\u5fa9\u59cb": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273be89dbf357e6f05161fd189d",
+    "canonical_album_name": "\u5468\u800c\u5fa9\u59cb",
+    "spotify_album_id": "4AaY5I6tWCUPAfTysEQSKU",
+    "spotify_artist_ids": [
+      "6wcIBaOvA9XNGgPujYZZ7L"
+    ],
+    "source": "spotify"
+  },
+  "spotify_wakin chau_\u5929\u4e0b\u6709\u60c5\u4eba_\u5468\u83ef\u5065 & friends": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273129d7f6d8d629d7709ed97e0",
+    "canonical_album_name": "\u5468\u83ef\u5065 & Friends",
+    "spotify_album_id": "09xlczojDoNiqP77G9PlEY",
+    "spotify_artist_ids": [
+      "6wcIBaOvA9XNGgPujYZZ7L",
+      "5E94Yc9O9D4N3oTr4SzJLx"
+    ],
+    "source": "spotify"
+  },
+  "spotify_wakin chau_\u611b\u76f8\u96a8_\u611b\u76f8\u96a8": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2736fa9de68c0dce98df485b9f9",
+    "canonical_album_name": "\u611b\u76f8\u96a8",
+    "spotify_album_id": "1t9CJL12LGw3GTW0XLTQ88",
+    "spotify_artist_ids": [
+      "6wcIBaOvA9XNGgPujYZZ7L"
+    ],
+    "source": "spotify"
+  },
+  "spotify_wakin chau_\u6709\u6c92\u6709\u4e00\u9996\u6b4c\u6703\u8b93\u4f60\u60f3\u8d77\u6211_\u5fd8\u6182\u8349": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27370fe9423f5b895ba5ce73dc6",
+    "canonical_album_name": "\u5fd8\u6182\u8349",
+    "spotify_album_id": "4kXzA138LYXDr3QXYN6sAs",
+    "spotify_artist_ids": [
+      "6wcIBaOvA9XNGgPujYZZ7L"
+    ],
+    "source": "spotify"
+  },
+  "spotify_wakin chau_\u670b\u53cb_\u670b\u53cb": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d9d2f20b4a6a0769a35ad2b9",
+    "canonical_album_name": "\u670b\u53cb",
+    "spotify_album_id": "1xymvBEFAshTF18RAyFXQv",
+    "spotify_artist_ids": [
+      "6wcIBaOvA9XNGgPujYZZ7L"
+    ],
+    "source": "spotify"
+  },
+  "spotify_wakin chau_\u8b93\u6211\u6b61\u559c\u8b93\u6211\u6182_\u8b93\u6211\u6b61\u559c\u8b93\u6211\u6182": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e4da30553ba857c705408a17",
+    "canonical_album_name": "\u8b93\u6211\u6b61\u559c\u8b93\u6211\u6182",
+    "spotify_album_id": "4kpMRRagkPnUABad2rSGCj",
+    "spotify_artist_ids": [
+      "6wcIBaOvA9XNGgPujYZZ7L"
+    ],
+    "source": "spotify"
+  },
+  "spotify_weezer_we wish you a merry christmas_christmas with weezer": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c27f8cc7788d77a17d65d8d7",
+    "canonical_album_name": "Christmas With Weezer",
+    "spotify_album_id": "0CxHijFYwiAVHCGmwN0hAq",
+    "spotify_artist_ids": [
+      "3jOstUTkEu2JkjvRdBA5Gu"
+    ],
+    "source": "spotify"
+  },
+  "spotify_who-ya extended_vivid vice_vivid vice": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273113ad52fd0dde0a7a1db81f1",
+    "canonical_album_name": "VIVID VICE",
+    "spotify_album_id": "7fjE2Zl2tNBBidhNGlo7AS",
+    "spotify_artist_ids": [
+      "3sE3971KYAw7t9ENx8Eqwk"
+    ],
+    "source": "spotify"
+  },
+  "spotify_xu wei_\u66fe\u7ecf\u7684\u4f60_\u6bcf\u4e00\u523b\u90fd\u662f\u5d2d\u65b0\u7684": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2738a6eda13ce26ca28a3fbe8ad",
+    "canonical_album_name": "\u6bcf\u4e00\u523b\u90fd\u662f\u5d2d\u65b0\u7684",
+    "spotify_album_id": "3aB0jt76q8PVejeZY5IoMG",
+    "spotify_artist_ids": [
+      "3qObkSIVSfNNDL1vbwL2N2"
+    ],
+    "source": "spotify"
+  },
+  "spotify_yugo kanno_stardust crusaders_jojo's bizarre adventure -stardust crusaders o.s.t [departure]": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2730f391ecc755fda7734f42342",
+    "canonical_album_name": "JOJO'S BIZARRE ADVENTURE -Stardust Crusaders O.S.T [Departure]",
+    "spotify_album_id": "0eF8omWNFE3HQEcKoZZhDC",
+    "spotify_artist_ids": [
+      "56DDzGJXY0xndL9wu9aHUD"
+    ],
+    "source": "spotify"
+  },
+  "spotify_yuuri_\u30c9\u30e9\u30a4\u30d5\u30e9\u30ef\u30fc_\u30c9\u30e9\u30a4\u30d5\u30e9\u30ef\u30fc": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732a89f91a19c16e94ba441132",
+    "canonical_album_name": "\u30c9\u30e9\u30a4\u30d5\u30e9\u30ef\u30fc",
+    "spotify_album_id": "69BzgmDXpLIPQI4tUGuLZM",
+    "spotify_artist_ids": [
+      "0ixzjrK1wkN2zWBXt3VW3W"
+    ],
+    "source": "spotify"
+  },
+  "spotify_tacica_\u767a\u71b1_head rooms": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c1352f77f42c2fdecb33c4b8",
+    "canonical_album_name": "HEAD ROOMS",
+    "spotify_album_id": "1RSfEGtOUi0mqaTXdj72Xy",
+    "spotify_artist_ids": [
+      "6iglpAqZTAmvm0ffNKlaFS"
+    ],
+    "source": "spotify"
+  },
+  "spotify_w.o.d._stars_stars": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b70b136862722a57ac0b8817",
+    "canonical_album_name": "STARS",
+    "spotify_album_id": "758HaOSUUneTb9qVyurf3x",
+    "spotify_artist_ids": [
+      "06sqnZl2EzpyIamhM1u3eO"
+    ],
+    "source": "spotify"
+  },
+  "spotify_\u5b59\u6960_\u7f8e\u4e3d\u7684\u795e\u8bdd_\u7f8e\u4e3d\u7684\u795e\u8bdd": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d7660e3e3c8ad905398f6879",
+    "canonical_album_name": "\u7f8e\u4e3d\u7684\u795e\u8bdd",
+    "spotify_album_id": "5YJZZr6uerWzjQVkOwqwye",
+    "spotify_artist_ids": [
+      "5HCUUeuVo8f6kx7oEvf7Jq",
+      "5HdknbCniAHhCssuj6RKzp"
+    ],
+    "source": "spotify"
+  },
+  "spotify_\u5f20\u8fdc_\u53ef\u4ee5\u4e0d\u662f\u4f60_\u53ef\u4ee5\u4e0d\u662f\u4f60": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273f04e0134ae913e9e85613de8",
+    "canonical_album_name": "\u53ef\u4ee5\u4e0d\u662f\u4f60",
+    "spotify_album_id": "3K16i0OWVgYu5SsVlyk0uX",
+    "spotify_artist_ids": [
+      "3PutidTQajzWO1gTetJReW"
+    ],
+    "source": "spotify"
+  },
+  "spotify_\u6797\u5fd7\u70ab_\u8f38\u4e86\u4f60 \u8d0f\u4e86\u4e16\u754c\u53c8\u5982\u4f55_\u539f\u8072\u4e4b\u65c5(acoustic journey)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27344f662ce9b3b91a82452061f",
+    "canonical_album_name": "\u539f\u8072\u4e4b\u65c5(Acoustic Journey)",
+    "spotify_album_id": "6ukPsHgrbvHYTvfA9o5GUz",
+    "spotify_artist_ids": [
+      "6O9BAkGBRRzHUDrWqdT68r"
+    ],
+    "source": "spotify"
+  },
+  "spotify_\u8b5a\u6676_\u5317\u4eac\u6b61\u8fce\u4f60\uff0808\u5967\u904b\u6703\uff09_\u5317\u4eac2008\u5e74\u5967\u904b\u6703\u6b4c\u66f2\u5c08\u8f2f": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ffbd41d171605a9dc6c34aba",
+    "canonical_album_name": "\u5317\u4eac2008\u5e74\u5967\u904b\u6703\u6b4c\u66f2\u5c08\u8f2f",
+    "spotify_album_id": "6kxJHtWxd8Lg37ub0GGh2G",
+    "spotify_artist_ids": [
+      "7CYdpBznx8Xx1oF9kR343k",
+      "4k8YgDzQCSNtVW58QrlRk5"
     ],
     "source": "spotify"
   }
