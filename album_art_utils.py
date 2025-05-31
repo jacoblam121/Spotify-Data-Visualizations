@@ -192,6 +192,42 @@ def _get_spotify_access_token():
         print("Error parsing Spotify token response.")
         return None
 
+def clean_artist_name_for_search(artist_name):
+    """
+    Clean artist names for better Spotify search compatibility.
+    Handles quotes, special characters, and common variations.
+    """
+    import re  # Import at function level to avoid issues
+    
+    if not artist_name:
+        return artist_name
+        
+    cleaned = artist_name
+    
+    # Remove escaped quotes and normalize quotes
+    cleaned = cleaned.replace('\\"', '"').replace('"', '').replace('"', '').replace('"', '')
+    
+    # Handle common nickname patterns
+    # "Joe "Bean" Esposito" -> "Joe Bean Esposito" and "Joe Esposito"
+    variations = [cleaned]
+    
+    # If there are quotes around a nickname, create variations
+    if '"' in artist_name:
+        # Remove the quoted nickname entirely
+        no_nickname = re.sub(r'\s*"[^"]*"\s*', ' ', cleaned).strip()
+        variations.append(no_nickname)
+    
+    # Clean up extra spaces
+    variations = [re.sub(r'\s+', ' ', v).strip() for v in variations]
+    
+    # Remove duplicates while preserving order
+    unique_variations = []
+    for v in variations:
+        if v and v not in unique_variations:
+            unique_variations.append(v)
+    
+    return unique_variations
+
 def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
     """
     Searches Spotify for a track and returns its album art URL, canonical album name,
@@ -207,15 +243,18 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
     # Keep original artist_name for display/logging if needed.
     internal_artist_name = artist_name.strip('"')
 
+    # Generate cache key using CLEANED artist name for consistency
+    artist_variations_for_cache = clean_artist_name_for_search(internal_artist_name)
+    primary_clean_artist = artist_variations_for_cache[0] if artist_variations_for_cache else internal_artist_name
 
-    cache_key = f"spotify_{internal_artist_name.lower().strip()}_{original_track_name.lower().strip()}_{original_album_hint.lower().strip()}"
+    cache_key = f"spotify_{primary_clean_artist.lower().strip()}_{original_track_name.lower().strip()}_{original_album_hint.lower().strip()}"
     
     print(f"\n--- [SPOTIFY_TRACE] Entering get_spotify_track_album_info ---")
     print(f"[SPOTIFY_TRACE] Called with (Original):")
     print(f"[SPOTIFY_TRACE]   Artist (original): '{artist_name}' (Using internally: '{internal_artist_name}')")
     print(f"[SPOTIFY_TRACE]   Track: '{original_track_name}'")
     print(f"[SPOTIFY_TRACE]   Album Hint: '{original_album_hint}'")
-    print(f"[SPOTIFY_TRACE] Cache key generated (from original inputs & internal artist): '{cache_key}'")
+    print(f"[SPOTIFY_TRACE] Cache key generated (using cleaned artist '{primary_clean_artist}'): '{cache_key}'")
 
     force_api_call_for_this_song = False
     # # --- FOR DEBUGGING SPECIFIC TRACKS: UNCOMMENT AND MODIFY AS NEEDED ---
@@ -226,7 +265,7 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
 
     if not force_api_call_for_this_song:
         if DEBUG_CACHE: 
-            print(f"[CACHE DEBUG] Spotify info check for key: '{cache_key}' (using original inputs)")
+            print(f"[CACHE DEBUG] Spotify info check for key: '{cache_key}' (using cleaned artist name)")
         if cache_key in spotify_info_cache:
             cached_value = spotify_info_cache[cache_key]
             if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Info Cache HIT. Value: {cached_value}")
@@ -258,10 +297,16 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
     # --- Build comprehensive search strategy ---
     search_queries_to_try = []
     
-    # --- Attempt 1: Precise Search (using potentially detailed track_name) ---
-    search_queries_to_try.append((original_track_name, original_album_hint, internal_artist_name, "Precise Search"))
+    # Clean artist names - get multiple variations (reuse the ones we calculated above)
+    artist_variations = artist_variations_for_cache
+    if DEBUG_CACHE:
+        print(f"[ARTIST VARIATIONS] Original: '{internal_artist_name}' -> Variations: {artist_variations}")
+    
+    # --- Strategy 1: Precise Search with all artist variations ---
+    for artist_var in artist_variations:
+        search_queries_to_try.append((original_track_name, original_album_hint, artist_var, f"Precise Search (Artist: {artist_var})"))
 
-    # --- Attempt 2: Enhanced Simplified Track Name Search ---
+    # --- Strategy 2: Enhanced Simplified Track Name Search ---
     # Expanded suffix patterns for better soundtrack/orchestral/instrumental coverage
     simplified_track_name = original_track_name
     common_suffixes = [
@@ -270,7 +315,7 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
         " - instrumental", " (instrumental", " - orchestral", " (orchestral",
         " - theme", " (theme", " - main theme", " (main theme",
         " - score", " (score", " - original score", " (original score",
-        " - film version", " (film version", " - movie version", " (movie version",
+        " - film version", " (film version", " - movie version", " (movie version)",
         " - extended", " (extended", " - reprise", " (reprise"
     ]
     
@@ -284,15 +329,16 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
 
     if simplified_track_name.lower() != original_track_name.lower():
         print(f"[SPOTIFY_TRACE] Original track name '{original_track_name}' was complex. Adding simplified track search for '{simplified_track_name}'.")
-        search_queries_to_try.append((simplified_track_name, original_album_hint, internal_artist_name, "Simplified Track Search"))
+        for artist_var in artist_variations:
+            search_queries_to_try.append((simplified_track_name, original_album_hint, artist_var, f"Simplified Track Search (Artist: {artist_var})"))
 
-    # --- Attempt 3: Soundtrack-specific strategies ---
+    # --- Strategy 3: Enhanced Soundtrack-specific strategies ---
     is_soundtrack = any(keyword in original_album_hint.lower() for keyword in [
         "soundtrack", "motion picture", "film", "movie", "original score", "theme"
     ])
     
     if is_soundtrack:
-        print(f"[SPOTIFY_TRACE] Detected soundtrack album '{original_album_hint}'. Adding soundtrack-specific searches.")
+        print(f"[SPOTIFY_TRACE] Detected soundtrack album '{original_album_hint}'. Adding comprehensive soundtrack-specific searches.")
         
         # Try with simplified album name
         simplified_album = original_album_hint
@@ -310,29 +356,47 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
                     simplified_album = original_album_hint[:len(simplified_album)]
                 break
         
+        # Extract core movie/show title (e.g., "The Karate Kid" from "The Karate Kid: The Original Motion Picture Soundtrack")
+        core_title = simplified_album
+        if ":" in core_title:
+            core_title = core_title.split(":")[0].strip()
+        
+        # Strategy 3A: Simplified album with original artists
         if simplified_album.lower() != original_album_hint.lower():
-            search_queries_to_try.append((simplified_track_name, simplified_album, internal_artist_name, "Simplified Soundtrack Search"))
+            for artist_var in artist_variations:
+                search_queries_to_try.append((simplified_track_name, simplified_album, artist_var, f"Simplified Soundtrack Search (Artist: {artist_var})"))
         
-        # For orchestral pieces, try searching without specific orchestra/performer
-        if any(orch_keyword in internal_artist_name.lower() for orch_keyword in [
-            "orchestra", "symphony", "philharmonic", "ensemble", "choir"
-        ]):
-            print(f"[SPOTIFY_TRACE] Detected orchestral artist '{internal_artist_name}'. Adding composer-based search.")
-            
-            # Try a more generic search that might match the main soundtrack album
-            search_queries_to_try.append((simplified_track_name, simplified_album, "", "Generic Soundtrack Search"))
+        # Strategy 3B: Core movie title with original artists  
+        if core_title.lower() != simplified_album.lower():
+            for artist_var in artist_variations:
+                search_queries_to_try.append((simplified_track_name, core_title, artist_var, f"Core Title Search (Artist: {artist_var})"))
+        
+        # Strategy 3C: Various Artists approach (common for soundtracks)
+        search_queries_to_try.append((simplified_track_name, simplified_album, "Various Artists", "Soundtrack Various Artists Search"))
+        search_queries_to_try.append((simplified_track_name, core_title, "Various Artists", "Core Title Various Artists Search"))
+        
+        # Strategy 3D: No artist specified, album-focused search
+        search_queries_to_try.append((simplified_track_name, simplified_album, "", "Album-Focused Soundtrack Search"))
+        search_queries_to_try.append((simplified_track_name, core_title, "", "Core Title Album-Focused Search"))
+        
+        # Strategy 3E: Track + movie title only (very broad)
+        search_queries_to_try.append((simplified_track_name, "", "", f"Track-Only Search"))
 
-    # --- Attempt 4: If all else fails, try very basic search ---
-    if len(search_queries_to_try) == 1:  # Only had the original precise search
-        # Extract just the core track name (remove everything after first dash or parenthesis)
-        basic_track_name = simplified_track_name
-        if " - " in basic_track_name:
-            basic_track_name = basic_track_name.split(" - ")[0].strip()
-        elif " (" in basic_track_name:
-            basic_track_name = basic_track_name.split(" (")[0].strip()
+    # --- Strategy 4: Aggressive Fallback Searches ---
+    # Extract just the core track name (remove everything after first dash or parenthesis)
+    basic_track_name = simplified_track_name
+    if " - " in basic_track_name:
+        basic_track_name = basic_track_name.split(" - ")[0].strip()
+    elif " (" in basic_track_name:
+        basic_track_name = basic_track_name.split(" (")[0].strip()
+    
+    if basic_track_name.lower() != simplified_track_name.lower():
+        # Try basic track name with all artist variations
+        for artist_var in artist_variations:
+            search_queries_to_try.append((basic_track_name, original_album_hint, artist_var, f"Basic Core Search (Artist: {artist_var})"))
         
-        if basic_track_name.lower() != simplified_track_name.lower():
-            search_queries_to_try.append((basic_track_name, original_album_hint, internal_artist_name, "Basic Core Search"))
+        # Try basic track name with no artist (very broad)
+        search_queries_to_try.append((basic_track_name, "", "", "Basic Track-Only Search"))
 
     final_result_from_api = None
 

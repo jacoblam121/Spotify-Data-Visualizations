@@ -19,9 +19,9 @@ FILTER_SKIPPED_TRACKS = True
 # --- Timeframe ---
 [Timeframe]
 # START_DATE: YYYY-MM-DD or "all_time"
-START_DATE = 2021-01-01
+START_DATE = 2024-01-01
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = 2021-12-31
+END_DATE = 2024-12-31
 
 # --- Animation Output ---
 [AnimationOutput]
