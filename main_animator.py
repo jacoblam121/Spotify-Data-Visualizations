@@ -113,7 +113,10 @@ def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_r
     # This function now uses album_art_utils directly, which is config-aware
     print(f"\n--- Pre-fetching album art and dominant colors (Visibility Threshold: >={global_visibility_threshold:.2f} plays) ---")
     
-    albums_processed_for_pil_and_color = set()
+    # This set will now track CANONICAL album names for which PIL/color is loaded in main_animator
+    # to avoid redundant PIL loading and dominant color calculation for the same canonical album.
+    canonical_albums_loaded_in_animator_cache = set()
+    
     processed_count = 0
     skipped_due_to_threshold = 0
 
@@ -121,85 +124,115 @@ def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_r
         try:
             artist_name, track_name = song_id.split(" - ", 1)
         except ValueError:
+            # This warning was already in your code, good to keep.
             print(f"WARNING: Could not parse artist/track from song_id: '{song_id}'. Skipping pre-fetch for this song.")
             continue
 
         album_name_from_lastfm = song_album_map.get(song_id)
         if not album_name_from_lastfm:
-            if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] No album in song_album_map for '{song_id}'. Skipping.")
+            if DEBUG_ALBUM_ART_LOGIC: # DEBUG_ALBUM_ART_LOGIC is your global from config
+                print(f"[PRE-FETCH DEBUG] No album in song_album_map for '{song_id}'. Skipping art/color processing.")
             continue
 
+        # --- Visibility Threshold Check (from your original code) ---
+        # Ensure race_df is available here and contains the song_id as a column
+        if song_id not in race_df.columns:
+            if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] Song ID '{song_id}' not found in race_df columns. Skipping.")
+            continue # Should not happen if unique_song_ids_in_race comes from race_df.columns
+
         max_plays_for_this_song = race_df[song_id].max()
+
+        max_plays_for_this_song = race_df[song_id].max()
+
+        # if "Kristen Bell - For the First Time in Forever" in song_id: # Temporary specific check
+        #     print(f"[THRESHOLD_CHECK_DEBUG] For '{song_id}', max_plays_for_this_song = {max_plays_for_this_song}. global_visibility_threshold = {global_visibility_threshold:.2f}")
+            
         if max_plays_for_this_song < global_visibility_threshold:
-            if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] Song '{song_id}' (max plays: {max_plays_for_this_song}) is below visibility threshold ({global_visibility_threshold:.2f}). Skipping art/color processing.")
+            if DEBUG_ALBUM_ART_LOGIC:
+                print(f"[PRE-FETCH DEBUG] Song '{song_id}' (max plays: {max_plays_for_this_song}) is below visibility threshold ({global_visibility_threshold:.2f}). Skipping art/color processing.")
             skipped_due_to_threshold += 1
             continue
         
-        if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] Song '{song_id}' (max plays: {max_plays_for_this_song}) meets threshold. Processing album '{album_name_from_lastfm}'.")
+        if DEBUG_ALBUM_ART_LOGIC:
+            print(f"[PRE-FETCH DEBUG] Song '{song_id}' (max plays: {max_plays_for_this_song}) meets threshold. Processing album hint: '{album_name_from_lastfm}'.")
 
-        album_processing_key = f"{artist_name}_{album_name_from_lastfm}"
-
-        if album_processing_key in albums_processed_for_pil_and_color:
-            if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] Already processed PIL/color for album key '{album_processing_key}' this session. Skipping redundant load.")
-            continue
+        # --- Call album_art_utils to get path and Spotify info ---
+        # album_art_utils.py handles its own internal caching (spotify_info_cache, image file cache, dominant_color_cache)
+        # to avoid redundant API calls and downloads.
         
+        # Original print for user feedback on what's being processed
         try:
-            print(f"Processing art/color for: Artist='{artist_name}', Track='{track_name}', Album (Last.fm)='{album_name_from_lastfm}'")
-        except UnicodeEncodeError:
+            print(f"Processing art/color for: Artist='{artist_name}', Track='{track_name}', Album (Hint)='{album_name_from_lastfm}'")
+        except UnicodeEncodeError: # Handle potential encoding issues in print
             safe_artist = artist_name.encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
             safe_track = track_name.encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
             safe_album_lastfm = album_name_from_lastfm.encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
-            print(f"Processing art/color for: Artist='{safe_artist}', Track='{safe_track}', Album (Last.fm)='{safe_album_lastfm}'")
+            print(f"Processing art/color for: Artist='{safe_artist}', Track='{safe_track}', Album (Hint)='{safe_album_lastfm}'")
 
-        # get_album_art_path is from the initialized album_art_utils module
-        art_path_data = album_art_utils.get_album_art_path(artist_name, track_name, album_name_from_lastfm)
+        # This call now happens for every song that meets the threshold.
+        art_path = album_art_utils.get_album_art_path(artist_name, track_name, album_name_from_lastfm)
         
-        art_path = None
-        canonical_album_name_for_caching = album_name_from_lastfm # Fallback
+        # --- Determine the canonical_album_name_from_spotify ---
+        # We need this to key the animator's local PIL image and color caches correctly.
+        canonical_album_name_for_animator_cache = album_name_from_lastfm # Fallback to hint
+        
+        # Access the populated spotify_info_cache from album_art_utils
+        # This cache was populated (or hit) during the get_album_art_path call.
+        _spotify_cache_key = f"spotify_{artist_name.lower().strip()}_{track_name.lower().strip()}_{album_name_from_lastfm.lower().strip()}"
+        spotify_info_entry = album_art_utils.spotify_info_cache.get(_spotify_cache_key)
+        
+        if spotify_info_entry and spotify_info_entry.get("canonical_album_name"):
+            canonical_album_name_for_animator_cache = spotify_info_entry["canonical_album_name"]
+            if DEBUG_ALBUM_ART_LOGIC and canonical_album_name_for_animator_cache != album_name_from_lastfm:
+                print(f"[PRE-FETCH DEBUG] Canonical album for '{song_id}' is '{canonical_album_name_for_animator_cache}' (hint was '{album_name_from_lastfm}').")
+        elif DEBUG_ALBUM_ART_LOGIC:
+             print(f"[PRE-FETCH DEBUG] Could not find canonical album name in spotify_info_cache for key '{_spotify_cache_key}'. Using hint '{album_name_from_lastfm}' for animator cache key.")
 
-        # Assuming get_album_art_path will be modified to return a dict { "art_path": ..., "canonical_album_name": ...}
-        # For now, let's adapt to its current return type and re-fetch canonical name if needed
-        if isinstance(art_path_data, str) and art_path_data: # If it's just a path string
-            art_path = art_path_data
-            # We need canonical album name for caching logic. Re-check Spotify cache in album_art_utils.
-            spotify_cache_key = f"spotify_{artist_name.lower().strip()}_{track_name.lower().strip()}_{album_name_from_lastfm.lower().strip()}"
-            spotify_info = album_art_utils.spotify_info_cache.get(spotify_cache_key)
-            if spotify_info and spotify_info.get("canonical_album_name"):
-                canonical_album_name_for_caching = spotify_info["canonical_album_name"]
-        elif isinstance(art_path_data, dict) and art_path_data.get("art_path"): # Ideal future state
-             art_path = art_path_data["art_path"]
-             canonical_album_name_for_caching = art_path_data.get("canonical_album_name", album_name_from_lastfm)
 
-
-        if art_path:
-            if canonical_album_name_for_caching not in album_art_image_objects:
+        # --- Load PIL image and dominant color into animator's memory if not already done for this CANONICAL album ---
+        if art_path: # If an art path was successfully found/downloaded
+            if canonical_album_name_for_animator_cache not in canonical_albums_loaded_in_animator_cache:
                 try:
                     img = Image.open(art_path)
-                    album_art_image_objects[canonical_album_name_for_caching] = img.copy()
+                    album_art_image_objects[canonical_album_name_for_animator_cache] = img.copy()
                     img.close()
-                    if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] Loaded PIL image for '{canonical_album_name_for_caching}' into memory.")
+                    
+                    # Get dominant color (this also uses its own cache in album_art_utils)
+                    dc = album_art_utils.get_dominant_color(art_path) 
+                    album_bar_colors[canonical_album_name_for_animator_cache] = (dc[0]/255.0, dc[1]/255.0, dc[2]/255.0)
+                    
+                    canonical_albums_loaded_in_animator_cache.add(canonical_album_name_for_animator_cache)
+                    if DEBUG_ALBUM_ART_LOGIC:
+                        print(f"[PRE-FETCH DEBUG] Loaded PIL & color into animator cache for CANONICAL album: '{canonical_album_name_for_animator_cache}'.")
+                except FileNotFoundError:
+                    print(f"Error [PRE-FETCH]: Image file not found at path: {art_path} for canonical album '{canonical_album_name_for_animator_cache}'. Using defaults.")
+                    album_art_image_objects[canonical_album_name_for_animator_cache] = None
+                    album_bar_colors[canonical_album_name_for_animator_cache] = (0.5, 0.5, 0.5)
+                    canonical_albums_loaded_in_animator_cache.add(canonical_album_name_for_animator_cache) # Mark as processed
                 except Exception as e:
-                    print(f"Error loading image {art_path} into PIL object: {e}")
-                    album_art_image_objects[canonical_album_name_for_caching] = None
+                    print(f"Error [PRE-FETCH] loading image {art_path} or getting color for canonical album '{canonical_album_name_for_animator_cache}': {e}. Using defaults.")
+                    album_art_image_objects[canonical_album_name_for_animator_cache] = None
+                    album_bar_colors[canonical_album_name_for_animator_cache] = (0.5, 0.5, 0.5)
+                    canonical_albums_loaded_in_animator_cache.add(canonical_album_name_for_animator_cache) # Mark as processed
+            # else: This canonical album's art/color is already in the animator's memory from a previous song.
             
-            if canonical_album_name_for_caching not in album_bar_colors:
-                dc = album_art_utils.get_dominant_color(art_path) # from initialized utils
-                album_bar_colors[canonical_album_name_for_caching] = (dc[0]/255.0, dc[1]/255.0, dc[2]/255.0)
-                if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] Calculated/loaded dominant color for '{canonical_album_name_for_caching}'.")
-        else:
-            if canonical_album_name_for_caching not in album_art_image_objects:
-                album_art_image_objects[canonical_album_name_for_caching] = None
-            if canonical_album_name_for_caching not in album_bar_colors:
-                album_bar_colors[canonical_album_name_for_caching] = (0.5, 0.5, 0.5)
-            if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] No art path for '{artist_name} - {track_name}'. Using defaults for '{canonical_album_name_for_caching}'.")
+        else: # No art_path was found by album_art_utils
+            if DEBUG_ALBUM_ART_LOGIC:
+                print(f"[PRE-FETCH DEBUG] No art path returned by album_art_utils for '{song_id}' (Hint: '{album_name_from_lastfm}').")
+            # Still need to populate animator cache with defaults for this canonical album if it's the first time seeing it
+            if canonical_album_name_for_animator_cache not in canonical_albums_loaded_in_animator_cache:
+                album_art_image_objects[canonical_album_name_for_animator_cache] = None
+                album_bar_colors[canonical_album_name_for_animator_cache] = (0.5, 0.5, 0.5) # Default color
+                canonical_albums_loaded_in_animator_cache.add(canonical_album_name_for_animator_cache)
+                if DEBUG_ALBUM_ART_LOGIC:
+                    print(f"[PRE-FETCH DEBUG] Using default art/color in animator cache for CANONICAL album: '{canonical_album_name_for_animator_cache}'.")
 
-        albums_processed_for_pil_and_color.add(album_processing_key)
-        processed_count +=1
+        processed_count += 1
         
     print(f"--- Pre-fetching complete ---")
     print(f"Attempted to process art/color for {processed_count} song-album groups that met threshold.")
     print(f"Skipped {skipped_due_to_threshold} song-album groups due to not meeting visibility threshold.")
-    print(f"In-memory PIL images: {len(album_art_image_objects)}, In-memory bar colors: {len(album_bar_colors)}")
+    print(f"In-memory PIL images (animator cache): {len(album_art_image_objects)}, In-memory bar colors (animator cache): {len(album_bar_colors)}")
 
 
 def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df here is already potentially truncated
@@ -218,10 +251,10 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
     if pd.isna(raw_max_play_count_overall) or raw_max_play_count_overall <= 0:
         raw_max_play_count_overall = 100 # Fallback
     
-    art_processing_min_plays_threshold = raw_max_play_count_overall * ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR # from config
-    # ... (rest of threshold calculations) ...
+    art_processing_min_plays_threshold = raw_max_play_count_overall * ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR
+    print(f"[ANIMATOR_INFO] global_visibility_threshold (art_processing_min_plays_threshold) = {art_processing_min_plays_threshold:.2f}")
+    print(f"[ANIMATOR_INFO] Based on raw_max_play_count_overall = {raw_max_play_count_overall} and ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = {ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR}")
 
-    # This pre_fetch call will now use the (potentially) truncated race_df
     pre_fetch_album_art_and_colors(race_df, song_album_map_lastfm, unique_song_ids_in_race, art_processing_min_plays_threshold)
 
     # Get animation parameters from global config (already loaded)

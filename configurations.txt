@@ -32,7 +32,7 @@ N_BARS = 10
 TARGET_FPS = 30
 USE_NVENC_IF_AVAILABLE = True
 # MAX_FRAMES_FOR_TEST_RENDER: Max frames for a quick test render. Set to 0 or -1 for full render.
-MAX_FRAMES_FOR_TEST_RENDER = 0
+MAX_FRAMES_FOR_TEST_RENDER = 500
 
 # --- Album Art & Spotify API ---
 [AlbumArtSpotify]
@@ -45,7 +45,10 @@ SPOTIFY_CLIENT_SECRET = 822e6e3f9d1149d4ad5520237d8385a3
 ART_CACHE_DIR = album_art_cache
 # ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR: Relative threshold for showing art
 # (e.g., 0.0628 means art shows if play count > 6.28% of max plays in chart)
-ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = 0.0628
+# Set to 0 to show art for all tracks (useful for debugging)
+ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = 0.06
+# NEGATIVE_CACHE_HOURS: How long to cache failed searches (in hours)
+NEGATIVE_CACHE_HOURS = 24
 
 # --- Font Preferences ---
 [FontPreferences]

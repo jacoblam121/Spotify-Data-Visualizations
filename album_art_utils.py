@@ -1,6 +1,8 @@
-# album_art_utils.py
+print("!!!!!!!!!! RUNNING MODIFIED ALBUM_ART_UTILS.PY !!!!!!!!!!!")
+
 import requests
 import json
+import re
 import os
 from PIL import Image, ImageOps
 from io import BytesIO
@@ -14,6 +16,7 @@ USER_AGENT = "SpotifyRaceChart/1.0 default_email@example.com"
 ART_CACHE_DIR = "album_art_cache" # Default, can be overridden
 SPOTIFY_CLIENT_ID = "eaf67929214947d19e34182fb20e96bc" # Default, can be overridden
 SPOTIFY_CLIENT_SECRET = "822e6e3f9d1149d4ad5520237d8385a3" # Default, can be overridden
+NEGATIVE_CACHE_HOURS = 24 # Default, can be overridden
 
 # --- Spotify API Configuration (mostly static, client ID/Secret can change) ---
 SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
@@ -23,10 +26,12 @@ SPOTIFY_API_BASE_URL = "https://api.spotify.com/v1/"
 mbid_cache_file = None
 dominant_color_cache_file = None
 spotify_info_cache_file = None
+negative_cache_file = None
 
 mbid_cache = {}
 dominant_color_cache = {}
 spotify_info_cache = {}
+negative_cache = {}  # Cache for failed searches with timestamp
 
 _spotify_access_token_cache = {
     "token": None,
@@ -38,9 +43,9 @@ _config_initialized = False
 
 def initialize_from_config(config):
     global DEBUG_CACHE, USER_AGENT, ART_CACHE_DIR
-    global SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET
-    global mbid_cache_file, dominant_color_cache_file, spotify_info_cache_file
-    global mbid_cache, dominant_color_cache, spotify_info_cache
+    global SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, NEGATIVE_CACHE_HOURS
+    global mbid_cache_file, dominant_color_cache_file, spotify_info_cache_file, negative_cache_file
+    global mbid_cache, dominant_color_cache, spotify_info_cache, negative_cache
     global _config_initialized
 
     if _config_initialized:
@@ -50,6 +55,7 @@ def initialize_from_config(config):
     DEBUG_CACHE = config.get_bool('Debugging', 'DEBUG_CACHE_ALBUM_ART_UTILS', True)
     USER_AGENT = config.get('General', 'USER_AGENT', USER_AGENT) # Use existing as fallback
     ART_CACHE_DIR = config.get('AlbumArtSpotify', 'ART_CACHE_DIR', ART_CACHE_DIR)
+    NEGATIVE_CACHE_HOURS = config.get_int('AlbumArtSpotify', 'NEGATIVE_CACHE_HOURS', NEGATIVE_CACHE_HOURS)
 
     # Spotify Credentials: Env Var -> Config File -> Hardcoded Default
     env_client_id = os.environ.get("SPOTIFY_CLIENT_ID")
@@ -63,6 +69,7 @@ def initialize_from_config(config):
     
     if DEBUG_CACHE:
         print(f"[CONFIG DEBUG album_art_utils] Using SPOTIFY_CLIENT_ID: {'Loaded from Env/Config' if env_client_id or config_client_id else 'Using Default'}")
+        print(f"[CONFIG DEBUG album_art_utils] NEGATIVE_CACHE_HOURS set to: {NEGATIVE_CACHE_HOURS}")
 
     if not os.path.exists(ART_CACHE_DIR):
         os.makedirs(ART_CACHE_DIR)
@@ -72,11 +79,13 @@ def initialize_from_config(config):
     mbid_cache_file = os.path.join(ART_CACHE_DIR, "mbid_cache.json")
     dominant_color_cache_file = os.path.join(ART_CACHE_DIR, "dominant_color_cache.json")
     spotify_info_cache_file = os.path.join(ART_CACHE_DIR, "spotify_info_cache.json")
+    negative_cache_file = os.path.join(ART_CACHE_DIR, "negative_cache.json")
 
     # Load caches (after paths are set)
     mbid_cache = load_json_cache(mbid_cache_file)
     dominant_color_cache = load_json_cache(dominant_color_cache_file)
     spotify_info_cache = load_json_cache(spotify_info_cache_file)
+    negative_cache = load_json_cache(negative_cache_file)
     
     _config_initialized = True
     if DEBUG_CACHE: print("[CACHE DEBUG] album_art_utils configuration initialized.")
@@ -104,6 +113,44 @@ def save_json_cache(data, filepath):
     if DEBUG_CACHE: print(f"[CACHE DEBUG] Saving {len(data)} items to cache: {filepath}")
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2)
+
+
+def is_negative_cache_valid(cache_key, hours_to_cache=None):
+    """
+    Check if a negative cache entry is still valid.
+    Returns True if the entry exists and hasn't expired.
+    """
+    if hours_to_cache is None:
+        hours_to_cache = NEGATIVE_CACHE_HOURS
+        
+    if cache_key not in negative_cache:
+        return False
+    
+    cached_time = negative_cache[cache_key].get('timestamp', 0)
+    current_time = time.time()
+    expiry_time = cached_time + (hours_to_cache * 3600)
+    
+    if current_time > expiry_time:
+        # Cache entry has expired, remove it
+        if DEBUG_CACHE: print(f"[NEGATIVE CACHE DEBUG] Entry for '{cache_key}' has expired. Removing.")
+        del negative_cache[cache_key]
+        save_json_cache(negative_cache, negative_cache_file)
+        return False
+    
+    if DEBUG_CACHE: print(f"[NEGATIVE CACHE DEBUG] Valid negative cache entry found for '{cache_key}'.")
+    return True
+
+
+def add_to_negative_cache(cache_key, reason="no_results"):
+    """
+    Add a failed search to the negative cache with current timestamp.
+    """
+    negative_cache[cache_key] = {
+        'timestamp': time.time(),
+        'reason': reason
+    }
+    save_json_cache(negative_cache, negative_cache_file)
+    if DEBUG_CACHE: print(f"[NEGATIVE CACHE DEBUG] Added '{cache_key}' to negative cache. Reason: {reason}")
 
 
 def _get_spotify_access_token():
@@ -150,100 +197,246 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
     Searches Spotify for a track and returns its album art URL, canonical album name,
     Spotify album ID, and Spotify artist IDs.
     Uses album_name_hint to disambiguate if multiple album versions exist.
+    Tries simplified searches if the initial detailed search fails.
     """
-    cache_key = f"spotify_{artist_name.lower().strip()}_{track_name.lower().strip()}_{album_name_hint.lower().strip()}"
-    if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify info check for key: '{cache_key}' (Artist: '{artist_name}', Track: '{track_name}', Album Hint: '{album_name_hint}')")
-
-    if cache_key in spotify_info_cache:
-        if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Info Cache HIT for key: '{cache_key}'. Value: {spotify_info_cache[cache_key]}")
-        return spotify_info_cache[cache_key]
-
-    if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Info Cache MISS for key: '{cache_key}'. Querying API.")
+    original_track_name = track_name 
+    original_album_hint = album_name_hint
     
+    # Sanitize artist name just once for internal use if it has extraneous quotes
+    # This is a light sanitization; Spotify usually handles artist names well.
+    # Keep original artist_name for display/logging if needed.
+    internal_artist_name = artist_name.strip('"')
+
+
+    cache_key = f"spotify_{internal_artist_name.lower().strip()}_{original_track_name.lower().strip()}_{original_album_hint.lower().strip()}"
+    
+    print(f"\n--- [SPOTIFY_TRACE] Entering get_spotify_track_album_info ---")
+    print(f"[SPOTIFY_TRACE] Called with (Original):")
+    print(f"[SPOTIFY_TRACE]   Artist (original): '{artist_name}' (Using internally: '{internal_artist_name}')")
+    print(f"[SPOTIFY_TRACE]   Track: '{original_track_name}'")
+    print(f"[SPOTIFY_TRACE]   Album Hint: '{original_album_hint}'")
+    print(f"[SPOTIFY_TRACE] Cache key generated (from original inputs & internal artist): '{cache_key}'")
+
+    force_api_call_for_this_song = False
+    # # --- FOR DEBUGGING SPECIFIC TRACKS: UNCOMMENT AND MODIFY AS NEEDED ---
+    # # if "kristen bell" in artist_name.lower() and "for the first time in forever" in original_track_name.lower():
+    # #     print(f"[SPOTIFY_TRACE_FORCE] Matched criteria for '{artist_name} - {original_track_name}'. Forcing API call.")
+    # #     force_api_call_for_this_song = True
+    # # ---
+
+    if not force_api_call_for_this_song:
+        if DEBUG_CACHE: 
+            print(f"[CACHE DEBUG] Spotify info check for key: '{cache_key}' (using original inputs)")
+        if cache_key in spotify_info_cache:
+            cached_value = spotify_info_cache[cache_key]
+            if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Info Cache HIT. Value: {cached_value}")
+            print(f"[SPOTIFY_TRACE] Cache HIT. Returning cached: {json.dumps(cached_value, indent=2, ensure_ascii=False) if cached_value is not None else 'None'}")
+            print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (from cache) ---\n")
+            return cached_value
+        
+        # Check negative cache to avoid repeated failed API calls
+        if is_negative_cache_valid(cache_key):
+            print(f"[SPOTIFY_TRACE] Negative cache HIT. This search failed recently. Skipping API calls.")
+            print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (from negative cache) ---\n")
+            spotify_info_cache[cache_key] = None  # Also cache as None in regular cache
+            save_json_cache(spotify_info_cache, spotify_info_cache_file)
+            return None
+        else:
+            if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Info Cache MISS. Querying API.")
+            print(f"[SPOTIFY_TRACE] Cache MISS. Proceeding to query API.")
+    else:
+        print(f"[SPOTIFY_TRACE_FORCE] Proceeding to query Spotify API (cache check bypassed).")
+
     access_token = _get_spotify_access_token()
     if not access_token:
-        return None
-
-    # Spotify search query: be specific with track and artist. Album name is harder to match directly in search query.
-    # We will use album_name_hint to filter results.
-    search_query = f'track:"{quote(track_name)}" artist:"{quote(artist_name)}"'
-    # search_query = f'track:"{quote(track_name)}" artist:"{quote(artist_name)}" album:"{quote(album_name_hint)}"' # Alternative
-    url = f"{SPOTIFY_API_BASE_URL}search?q={search_query}&type=track&limit=10" # Get a few results to check album match
-    
-    headers = {
-        'Authorization': f"Bearer {access_token}",
-        'User-Agent': USER_AGENT
-    }
-
-    print(f"Spotify API call for: Artist='{artist_name}', Track='{track_name}', Album Hint='{album_name_hint}'")
-    try:
-        response = requests.get(url, headers=headers, timeout=10)
-        response.raise_for_status()
-        data = response.json()
-
-        if data.get('tracks') and data['tracks'].get('items'):
-            items = data['tracks']['items']
-            
-            best_match = None
-            
-            # Try to find a match where the album name is similar to album_name_hint
-            # This is a simple similarity check, can be improved (e.g., Levenshtein distance)
-            normalized_album_hint = album_name_hint.lower().strip()
-            
-            for item in items:
-                spotify_album_name = item.get('album', {}).get('name', '').lower().strip()
-                if normalized_album_hint in spotify_album_name or spotify_album_name in normalized_album_hint:
-                    best_match = item
-                    if DEBUG_CACHE: print(f"[SPOTIFY DEBUG] Found album name hint match: '{item.get('album', {}).get('name')}'")
-                    break 
-            
-            if not best_match and items: # If no direct album hint match, take the first result
-                best_match = items[0]
-                if DEBUG_CACHE: print(f"[SPOTIFY DEBUG] No direct album hint match. Taking first result: '{best_match.get('album', {}).get('name')}'")
-
-
-            if best_match:
-                album_info = best_match.get('album', {})
-                canonical_album_name = album_info.get('name')
-                spotify_album_id = album_info.get('id')
-                
-                art_url = None
-                if album_info.get('images'):
-                    # Prefer largest image, but Spotify usually returns 3 sizes: 640, 300, 64
-                    art_url = album_info['images'][0]['url'] # Largest is usually first
-
-                artist_objects = best_match.get('artists', [])
-                spotify_artist_ids = [artist['id'] for artist in artist_objects if artist.get('id')]
-                # Could also store primary artist name from Spotify if desired:
-                # primary_spotify_artist_name = artist_objects[0]['name'] if artist_objects else artist_name
-
-                result = {
-                    "art_url": art_url,
-                    "canonical_album_name": canonical_album_name,
-                    "spotify_album_id": spotify_album_id,
-                    "spotify_artist_ids": spotify_artist_ids,
-                    "source": "spotify"
-                }
-                spotify_info_cache[cache_key] = result
-                save_json_cache(spotify_info_cache, spotify_info_cache_file)
-                print(f"Found Spotify info: Album='{canonical_album_name}', Art URL: {'Yes' if art_url else 'No'}")
-                time.sleep(0.2) # Be respectful to API rate limits
-                return result
-        
-        print(f"No suitable track found on Spotify for: {artist_name} - {track_name} (Album hint: {album_name_hint})")
-        spotify_info_cache[cache_key] = None # Cache failure
+        print(f"[SPOTIFY_TRACE] Failed to get Spotify access token. Caching None.")
+        spotify_info_cache[cache_key] = None
         save_json_cache(spotify_info_cache, spotify_info_cache_file)
-        time.sleep(0.2)
+        print(f"--- [SPOTIFY_TRACE] Exiting (no access token, cached None) ---\n")
         return None
 
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching Spotify info for {artist_name} - {track_name}: {e}")
-        time.sleep(0.2)
-        return None
-    except json.JSONDecodeError:
-        print(f"Error decoding JSON response from Spotify for {artist_name} - {track_name}")
-        time.sleep(0.2)
-        return None
+    # --- Build comprehensive search strategy ---
+    search_queries_to_try = []
+    
+    # --- Attempt 1: Precise Search (using potentially detailed track_name) ---
+    search_queries_to_try.append((original_track_name, original_album_hint, internal_artist_name, "Precise Search"))
+
+    # --- Attempt 2: Enhanced Simplified Track Name Search ---
+    # Expanded suffix patterns for better soundtrack/orchestral/instrumental coverage
+    simplified_track_name = original_track_name
+    common_suffixes = [
+        " - from", " (from", " - soundtrack", " (soundtrack", 
+        " - original motion picture soundtrack", " version",
+        " - instrumental", " (instrumental", " - orchestral", " (orchestral",
+        " - theme", " (theme", " - main theme", " (main theme",
+        " - score", " (score", " - original score", " (original score",
+        " - film version", " (film version", " - movie version", " (movie version",
+        " - extended", " (extended", " - reprise", " (reprise"
+    ]
+    
+    for suffix in common_suffixes:
+        if suffix.lower() in simplified_track_name.lower():
+            simplified_track_name = simplified_track_name.lower().split(suffix.lower())[0].strip()
+            # Attempt to restore original casing for the simplified part if possible (heuristic)
+            if original_track_name.lower().startswith(simplified_track_name):
+                 simplified_track_name = original_track_name[:len(simplified_track_name)]
+            break # Take the first simplification that applies
+
+    if simplified_track_name.lower() != original_track_name.lower():
+        print(f"[SPOTIFY_TRACE] Original track name '{original_track_name}' was complex. Adding simplified track search for '{simplified_track_name}'.")
+        search_queries_to_try.append((simplified_track_name, original_album_hint, internal_artist_name, "Simplified Track Search"))
+
+    # --- Attempt 3: Soundtrack-specific strategies ---
+    is_soundtrack = any(keyword in original_album_hint.lower() for keyword in [
+        "soundtrack", "motion picture", "film", "movie", "original score", "theme"
+    ])
+    
+    if is_soundtrack:
+        print(f"[SPOTIFY_TRACE] Detected soundtrack album '{original_album_hint}'. Adding soundtrack-specific searches.")
+        
+        # Try with simplified album name
+        simplified_album = original_album_hint
+        album_simplifiers = [
+            " - original motion picture soundtrack", " (original motion picture soundtrack)",
+            " - soundtrack", " (soundtrack)", " - original soundtrack", " (original soundtrack)",
+            " - film soundtrack", " (film soundtrack)", " - movie soundtrack", " (movie soundtrack)",
+            " - original score", " (original score)", " - score", " (score)"
+        ]
+        
+        for simplifier in album_simplifiers:
+            if simplifier.lower() in simplified_album.lower():
+                simplified_album = simplified_album.lower().split(simplifier.lower())[0].strip()
+                if original_album_hint.lower().startswith(simplified_album):
+                    simplified_album = original_album_hint[:len(simplified_album)]
+                break
+        
+        if simplified_album.lower() != original_album_hint.lower():
+            search_queries_to_try.append((simplified_track_name, simplified_album, internal_artist_name, "Simplified Soundtrack Search"))
+        
+        # For orchestral pieces, try searching without specific orchestra/performer
+        if any(orch_keyword in internal_artist_name.lower() for orch_keyword in [
+            "orchestra", "symphony", "philharmonic", "ensemble", "choir"
+        ]):
+            print(f"[SPOTIFY_TRACE] Detected orchestral artist '{internal_artist_name}'. Adding composer-based search.")
+            
+            # Try a more generic search that might match the main soundtrack album
+            search_queries_to_try.append((simplified_track_name, simplified_album, "", "Generic Soundtrack Search"))
+
+    # --- Attempt 4: If all else fails, try very basic search ---
+    if len(search_queries_to_try) == 1:  # Only had the original precise search
+        # Extract just the core track name (remove everything after first dash or parenthesis)
+        basic_track_name = simplified_track_name
+        if " - " in basic_track_name:
+            basic_track_name = basic_track_name.split(" - ")[0].strip()
+        elif " (" in basic_track_name:
+            basic_track_name = basic_track_name.split(" (")[0].strip()
+        
+        if basic_track_name.lower() != simplified_track_name.lower():
+            search_queries_to_try.append((basic_track_name, original_album_hint, internal_artist_name, "Basic Core Search"))
+
+    final_result_from_api = None
+
+    for current_track_to_search, current_album_hint_to_use, current_artist_to_use, search_type_label in search_queries_to_try:
+        print(f"\n[SPOTIFY_TRACE] --- Attempting {search_type_label} ---")
+        print(f"[SPOTIFY_TRACE] Using Track for search: '{current_track_to_search}'")
+        print(f"[SPOTIFY_TRACE] Using Album Hint for matching: '{current_album_hint_to_use}'")
+        print(f"[SPOTIFY_TRACE] Using Artist for search: '{current_artist_to_use}'")
+
+        # Build query - use artist if provided, otherwise search more broadly
+        if current_artist_to_use:
+            query_params = f'track:"{quote(current_track_to_search)}" artist:"{quote(current_artist_to_use)}"'
+        else:
+            query_params = f'track:"{quote(current_track_to_search)}"'
+            if current_album_hint_to_use:
+                query_params += f' album:"{quote(current_album_hint_to_use)}"'
+        
+        url = f"{SPOTIFY_API_BASE_URL}search?q={query_params}&type=track&limit=10"
+        
+        print(f"[SPOTIFY_TRACE] Constructed Spotify API URL ({search_type_label}): {url}")
+        headers = {'Authorization': f"Bearer {access_token}", 'User-Agent': USER_AGENT}
+        print(f"Spotify API call ({search_type_label}) for: Artist='{current_artist_to_use}', Track='{current_track_to_search}', Album Hint='{current_album_hint_to_use}'")
+
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+
+            print(f"[SPOTIFY_TRACE] Spotify API call successful ({search_type_label}, HTTP Status: {response.status_code}).")
+            if data.get('tracks') and data['tracks'].get('items'):
+                 print(f"[SPOTIFY_TRACE] Raw Response (Tracks Items, {search_type_label}): {json.dumps(data['tracks']['items'], indent=2, ensure_ascii=False)}")
+            # ... (other raw response prints if needed) ...
+
+            if data.get('tracks') and data['tracks'].get('items'):
+                items = data['tracks']['items']
+                best_match = None
+                normalized_album_hint = current_album_hint_to_use.lower().strip() if current_album_hint_to_use else ""
+                
+                for i, item in enumerate(items):
+                    spotify_album_name_original = item.get('album', {}).get('name', '')
+                    spotify_album_name_lower = spotify_album_name_original.lower().strip()
+                    
+                    # Enhanced matching logic for soundtracks
+                    if normalized_album_hint:
+                        # Direct match
+                        if normalized_album_hint in spotify_album_name_lower or spotify_album_name_lower in normalized_album_hint:
+                            best_match = item
+                            print(f"[SPOTIFY_TRACE] ({search_type_label}) MATCHED Item {i} based on album hint. Selected.")
+                            break
+                        # Soundtrack-specific matching (more flexible)
+                        elif is_soundtrack:
+                            # Check if core album names match (ignoring soundtrack suffixes)
+                            album_core = normalized_album_hint.replace("soundtrack", "").replace("original motion picture", "").strip()
+                            spotify_core = spotify_album_name_lower.replace("soundtrack", "").replace("original motion picture", "").strip()
+                            if album_core and spotify_core and (album_core in spotify_core or spotify_core in album_core):
+                                best_match = item
+                                print(f"[SPOTIFY_TRACE] ({search_type_label}) MATCHED Item {i} based on core album name similarity. Selected.")
+                                break
+                
+                if not best_match and items:
+                    best_match = items[0] # Fallback to first item if no hint match
+                    print(f"[SPOTIFY_TRACE] ({search_type_label}) No album hint match. Taking first result.")
+
+                if best_match:
+                    album_info = best_match.get('album', {})
+                    art_url = album_info.get('images', [{}])[0].get('url') if album_info.get('images') else None
+                    
+                    if art_url: # Found art with this search query!
+                        print(f"[SPOTIFY_TRACE] ({search_type_label}) SUCCESS! Found art_url: {art_url}")
+                        final_result_from_api = {
+                            "art_url": art_url,
+                            "canonical_album_name": album_info.get('name'),
+                            "spotify_album_id": album_info.get('id'),
+                            "spotify_artist_ids": [a['id'] for a in best_match.get('artists', []) if a.get('id')],
+                            "source": f"spotify ({search_type_label})"
+                        }
+                        break # Exit the loop of search_queries_to_try, we found a good result
+                    else:
+                        print(f"[SPOTIFY_TRACE] ({search_type_label}) Found a best_match, but it has no art_url.")
+            else: # No items in response
+                print(f"[SPOTIFY_TRACE] ({search_type_label}) No 'items' in Spotify response.")
+        
+        except requests.exceptions.RequestException as e:
+            print(f"[SPOTIFY_TRACE] ({search_type_label}) RequestException: {e}")
+            # Potentially break or continue to next search type depending on error
+        except json.JSONDecodeError as e_json:
+            print(f"[SPOTIFY_TRACE] ({search_type_label}) JSONDecodeError: {e_json}")
+        
+        time.sleep(0.2) # Respect API limits between different search attempts for the same track
+
+    # After trying all search queries:
+    if final_result_from_api:
+        print(f"Found Spotify info via {final_result_from_api['source']}: Album='{final_result_from_api['canonical_album_name']}', Art URL: {'Yes' if final_result_from_api['art_url'] else 'No'}")
+        print(f"[SPOTIFY_TRACE] Caching and returning result (from {final_result_from_api['source']}): {json.dumps(final_result_from_api, indent=2, ensure_ascii=False)}")
+    else:
+        print(f"No suitable track found on Spotify after all attempts for: Original Track='{original_track_name}', Artist='{artist_name}'")
+        print(f"[SPOTIFY_TRACE] Caching None after all search attempts failed.")
+        # Add to negative cache to avoid repeated failed searches
+        add_to_negative_cache(cache_key, f"no_spotify_results_after_{len(search_queries_to_try)}_attempts")
+    
+    spotify_info_cache[cache_key] = final_result_from_api # Cache the final result (or None) under the original key
+    save_json_cache(spotify_info_cache, spotify_info_cache_file)
+    print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (after API attempt(s)) ---\n")
+    return final_result_from_api
 
 # --- MusicBrainz Functions (Now Legacy/Fallback - Commented out primary usage) ---
 def get_release_mbid(artist_name, album_name):
