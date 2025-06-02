@@ -1,10 +1,12 @@
-## OLD README, updated with v2
-## V2 Changes
+## V2 Changes (NEW)
 *   Album cover art fetching issues fixed
 *   Spotify API instead of MusicBrainz API for better cover art fetching
 *   Can now take either data from last.fm or directly from Spotify
 *   Optimizations to rendering including parallelization
 *   Different sampling rates (frame aggregation periods) available so you don't have to render as many frames
+
+## OLD README
+Will fix later once completely finished, working on v3 now to add rolling 7 day and 30 day windows to display top track of the past 7 days and top track of the past 30 days. Also looking to add a top artists chart as well. 
 
 Takes your Last.fm listening history for 2024 and generates a funny bar chart "race" video of your top 10 songs throughout the year complete with album cover art. 
 
