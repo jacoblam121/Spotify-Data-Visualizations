@@ -19,9 +19,9 @@ FILTER_SKIPPED_TRACKS = True
 # --- Timeframe ---
 [Timeframe]
 # START_DATE: YYYY-MM-DD or "all_time"
-START_DATE = 2021-01-01
+START_DATE = 2024-01-01
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = 2021-12-31
+END_DATE = 2024-12-31
 
 # --- Animation Output ---
 [AnimationOutput]
@@ -37,7 +37,13 @@ MAX_FRAMES_FOR_TEST_RENDER = 500
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '30T' (30 minutes), 'H' (hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = event
+FRAME_AGGREGATION_PERIOD = 30T
+# MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
+# Defaults to the number of CPU cores if not set or set to 0.
+MAX_PARALLEL_WORKERS = 0
+# CLEANUP_INTERMEDIATE_FRAMES: Whether to delete individual frame images after video compilation.
+# Set to False for debugging frame generation.
+CLEANUP_INTERMEDIATE_FRAMES = True
 
 # --- Album Art & Spotify API ---
 [AlbumArtSpotify]
@@ -68,3 +74,8 @@ DEBUG_CACHE_ALBUM_ART_UTILS = True
 DEBUG_ALBUM_ART_LOGIC_ANIMATOR = True
 # LOG_FRAME_TIMES: Enables detailed frame-by-frame rendering time and summary.
 LOG_FRAME_TIMES = True
+# PARALLEL_LOG_COMPLETION_INTERVAL: How often to log frame completion during parallel processing (e.g., 1 = every frame, 50 = every 50th frame).
+# Set to 0 to only log the first and last completed frame. First/last always logged if interval > 0.
+PARALLEL_LOG_COMPLETION_INTERVAL = 100
+# LOG_PARALLEL_PROCESS_START: Whether to log when each parallel worker process starts rendering a frame.
+LOG_PARALLEL_PROCESS_START = False

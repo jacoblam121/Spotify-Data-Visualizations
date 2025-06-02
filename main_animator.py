@@ -1,4 +1,5 @@
 # main_animator.py
+
 import pandas as pd
 from data_processor import clean_and_filter_data, prepare_data_for_bar_chart_race
 
@@ -16,6 +17,9 @@ from PIL import Image
 import os
 import sys
 import time # Added for timing
+import concurrent.futures # Added for parallel processing
+import subprocess # Added for calling ffmpeg
+import shutil # Added for directory operations
 
 # Import the config loader
 from config_loader import AppConfig
@@ -41,6 +45,10 @@ USE_NVENC_IF_AVAILABLE = True
 PREFERRED_FONTS = ['DejaVu Sans', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans TC', 'Arial Unicode MS', 'sans-serif']
 MAX_FRAMES_FOR_TEST_RENDER = 0 # 0 or -1 for full render
 LOG_FRAME_TIMES_CONFIG = False # Will be loaded from config
+MAX_PARALLEL_WORKERS = os.cpu_count() # Default to number of CPU cores, will be loaded from config
+CLEANUP_INTERMEDIATE_FRAMES = True # Will be loaded from config
+PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = 50 # Default, will be loaded from config
+LOG_PARALLEL_PROCESS_START_CONFIG = True # Default, will be loaded from config
 
 # --- Global Dictionaries for Caching Art Paths and Colors within the animator ---
 album_art_image_objects = {}
@@ -50,6 +58,8 @@ def load_configuration():
     global config, N_BARS, TARGET_FPS, OUTPUT_FILENAME_BASE, DEBUG_ALBUM_ART_LOGIC
     global ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR, USE_NVENC_IF_AVAILABLE, PREFERRED_FONTS
     global MAX_FRAMES_FOR_TEST_RENDER, LOG_FRAME_TIMES_CONFIG
+    global MAX_PARALLEL_WORKERS, CLEANUP_INTERMEDIATE_FRAMES, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
+    global LOG_PARALLEL_PROCESS_START_CONFIG
 
     try:
         config = AppConfig() # Assumes configurations.txt is in the same directory
@@ -76,6 +86,22 @@ def load_configuration():
     MAX_FRAMES_FOR_TEST_RENDER = config.get_int('AnimationOutput', 'MAX_FRAMES_FOR_TEST_RENDER', MAX_FRAMES_FOR_TEST_RENDER)
     LOG_FRAME_TIMES_CONFIG = config.get_bool('Debugging', 'LOG_FRAME_TIMES', LOG_FRAME_TIMES_CONFIG)
     
+    # New config options for parallel processing
+    # MAX_PARALLEL_WORKERS = config.get_int('AnimationOutput', 'MAX_PARALLEL_WORKERS', os.cpu_count() or 1) # Ensure at least 1
+    # Corrected logic for MAX_PARALLEL_WORKERS:
+    # If the user sets it to 0 or it's not found, default to CPU count.
+    # The fallback in get_int is for when the key is missing or value is not int.
+    # We also need to handle the case where user explicitly sets 0.
+    workers_from_config = config.get_int('AnimationOutput', 'MAX_PARALLEL_WORKERS', -1) # Use -1 as sentinel for not found/default
+    if workers_from_config <= 0: # If 0, negative, or not found (which get_int might map to its own fallback if not -1)
+        MAX_PARALLEL_WORKERS = os.cpu_count() or 1 # Default to CPU count (ensure at least 1)
+    else:
+        MAX_PARALLEL_WORKERS = workers_from_config
+        
+    CLEANUP_INTERMEDIATE_FRAMES = config.get_bool('AnimationOutput', 'CLEANUP_INTERMEDIATE_FRAMES', True)
+    PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = config.get_int('Debugging', 'PARALLEL_LOG_COMPLETION_INTERVAL', 50)
+    LOG_PARALLEL_PROCESS_START_CONFIG = config.get_bool('Debugging', 'LOG_PARALLEL_PROCESS_START', True)
+
     try:
         plt.rcParams['font.family'] = PREFERRED_FONTS
     except Exception as e:
@@ -249,152 +275,41 @@ def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_r
     print(f"In-memory PIL images (animator cache): {len(album_art_image_objects)}, In-memory bar colors (animator cache): {len(album_bar_colors)}")
 
 
-def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df here is already potentially truncated
-    if race_df is None or race_df.empty:
-        print("Cannot create animation: race_df is empty or None.")
-        return
+def draw_and_save_single_frame(args):
+    # Unpack arguments
+    (frame_index, num_frames, current_timestamp, current_data_slice,
+    song_id_to_canonical_album_map, album_art_image_objects_local, album_bar_colors_local,
+    n_bars_local, chart_xaxis_limit, art_display_min_plays_threshold,
+    output_image_path, dpi, fig_width_pixels, fig_height_pixels,
+    log_frame_times_config_local, preferred_fonts_local,
+    log_parallel_process_start_local) = args
 
-    # ... (setup for resolution, filename, interval as before) ...
-    # num_frames will be len(race_df.index), which is correct for the truncated df
+    # Each process needs to set its font family if it's not inherited
+    try:
+        plt.rcParams['font.family'] = preferred_fonts_local
+    except Exception as e_font:
+        print(f"[Worker PID: {os.getpid()}] Warning: Could not set preferred fonts: {e_font}")
 
-    # This unique_song_ids_in_race will be from the (potentially) truncated race_df
-    unique_song_ids_in_race = race_df.columns.tolist()
 
-    # This max play count will be from the (potentially) truncated race_df
-    raw_max_play_count_overall = race_df.max().max()
-    if pd.isna(raw_max_play_count_overall) or raw_max_play_count_overall <= 0:
-        raw_max_play_count_overall = 100 # Fallback
+    frame_start_time = time.time()
     
-    # --- Calculate target_img_height_pixels before pre_fetch ---
-    # This logic is moved from draw_frame to here
-    selected_res_key = config.get('AnimationOutput', 'RESOLUTION', '4k').strip()
-    res_settings = VIDEO_RESOLUTION_PRESETS.get(selected_res_key, VIDEO_RESOLUTION_PRESETS['4k'])
-    dpi = res_settings['dpi']
-    fig_height_pixels = res_settings['height'] # Directly use configured height in pixels
-
-    # Constants from draw_frame's image scaling logic
-    example_bar_height_data_units = 0.8 
-    image_height_scale_factor = 0.35 # This was part of target_img_height_pixels calculation
-
-    # Ensure N_BARS is positive to avoid division by zero
-    if N_BARS <= 0:
-        print(f"ERROR: N_BARS is {N_BARS}, which is invalid. Defaulting to 10 for image sizing.")
-        current_n_bars_for_sizing = 10 # Use a local var for sizing to avoid changing global N_BARS for actual drawing
-    else:
-        current_n_bars_for_sizing = N_BARS
-        
-    # This is the target display height of the image on the plot in pixels
-    calculated_target_img_height_pixels = \
-        (example_bar_height_data_units / current_n_bars_for_sizing) * \
-        fig_height_pixels * image_height_scale_factor
-    
-    art_processing_min_plays_threshold = raw_max_play_count_overall * ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR
-    print(f"[ANIMATOR_INFO] global_visibility_threshold (art_processing_min_plays_threshold) = {art_processing_min_plays_threshold:.2f}")
-    print(f"[ANIMATOR_INFO] Based on raw_max_play_count_overall = {raw_max_play_count_overall} and ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = {ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR}")
-    print(f"[ANIMATOR_INFO] Calculated target image height for pre-resize: {calculated_target_img_height_pixels:.2f} pixels (based on {selected_res_key} output resolution height {fig_height_pixels}px)")
-
-    art_fetch_start_time = time.time() # <--- ADDED TIMING
-    pre_fetch_album_art_and_colors(race_df, song_album_map_lastfm, unique_song_ids_in_race, art_processing_min_plays_threshold, calculated_target_img_height_pixels, dpi)
-    art_fetch_end_time = time.time() # <--- ADDED TIMING
-    print(f"--- Time taken for pre_fetch_album_art_and_colors: {art_fetch_end_time - art_fetch_start_time:.2f} seconds ---") # <--- ADDED TIMING
-
-    # Get animation parameters from global config (already loaded)
-    # selected_res_key, res_settings, dpi already fetched above for image sizing
-    # config = AppConfig() # This would reload config, not needed. Config is global.
-    
-    width = res_settings['width']
-    height = res_settings['height']
-    # dpi already set
-    
-    output_filename = f"{OUTPUT_FILENAME_BASE}_{selected_res_key}.mp4"
-    interval = 1000 / TARGET_FPS # TARGET_FPS from config
-
-    num_frames = len(race_df.index)
-    target_fps_for_video = 1000.0 / interval
-
-    # For frame timing
-    frame_render_times_list = []
-    overall_animation_start_time = time.time() # For overall timing including save
-
-    print(f"\n--- Starting Animation Creation for {output_filename} ---")
-    print(f"Total frames to render: {num_frames}")
-    print(f"Target video FPS: {target_fps_for_video:.2f}")
-    print(f"Resolution: {width}x{height} @ {dpi} DPI")
-    print(f"Attempting NVENC: {USE_NVENC_IF_AVAILABLE}") # USE_NVENC_IF_AVAILABLE from config
-    
-    figsize_w = width / dpi
-    figsize_h = height / dpi
+    # Create a new figure and axes for each frame to ensure thread safety / process isolation
+    figsize_w = fig_width_pixels / dpi
+    figsize_h = fig_height_pixels / dpi
     fig, ax = plt.subplots(figsize=(figsize_w, figsize_h), dpi=dpi)
-    
-    unique_song_ids_in_race = race_df.columns.tolist()
 
-    raw_max_play_count_overall = race_df.max().max()
-    if pd.isna(raw_max_play_count_overall) or raw_max_play_count_overall <= 0:
-        raw_max_play_count_overall = 100
-    
-    art_processing_min_plays_threshold = raw_max_play_count_overall * ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR # from config
-    chart_xaxis_limit = raw_max_play_count_overall * 1.05
-    art_display_min_plays_threshold = art_processing_min_plays_threshold
-
-    print(f"Calculated Art Processing Threshold (min plays for a song to have its art processed): >={art_processing_min_plays_threshold:.2f}")
-    print(f"Calculated Art Display Threshold (min plays for art to show on a bar): >={art_display_min_plays_threshold:.2f}")
-    print(f"Chart X-axis limit: {chart_xaxis_limit:.2f}")
-
-    # pre_fetch_album_art_and_colors called earlier with calculated_target_img_height_pixels
-    # pre_fetch_album_art_and_colors(race_df, song_album_map_lastfm, unique_song_ids_in_race, art_processing_min_plays_threshold)
-    
-    song_id_to_canonical_album_map = {}
-    for song_id in unique_song_ids_in_race:
-        try:
-            artist_name, track_name = song_id.split(" - ", 1)
-            album_name_hint = song_album_map_lastfm.get(song_id, "")
-            spotify_cache_key = f"spotify_{artist_name.lower().strip()}_{track_name.lower().strip()}_{album_name_hint.lower().strip()}"
-            
-            # Access the cache from the initialized album_art_utils module
-            spotify_data = album_art_utils.spotify_info_cache.get(spotify_cache_key)
-            if spotify_data and spotify_data.get("canonical_album_name"):
-                song_id_to_canonical_album_map[song_id] = spotify_data["canonical_album_name"]
-            else:
-                song_id_to_canonical_album_map[song_id] = album_name_hint
-        except ValueError:
-            song_id_to_canonical_album_map[song_id] = song_album_map_lastfm.get(song_id, "Unknown Album")
-
-    # --- draw_frame function ---
-    # (Keep draw_frame as is, but ensure N_BARS used inside it is the one from config)
-    # ... (your existing draw_frame function, ensuring it uses the global N_BARS)
-    # Inside draw_frame, replace hardcoded `n_bars` with the global `N_BARS` (from config).
-    def draw_frame(frame_index):
-        nonlocal frame_render_times_list # Added for timing
-        frame_start_time = time.time() # Added for timing
-
-        current_timestamp = race_df.index[frame_index]
-        ax.clear()
-
-        # Modified print statement for frame timing
-        if LOG_FRAME_TIMES_CONFIG:
+    try: # Ensure fig is closed even on error
+        if log_parallel_process_start_local: # Condition for logging process start
             if (frame_index + 1) % 10 == 0 or frame_index == 0 or (frame_index + 1) == num_frames:
-                log_message_parts = [f"Rendering frame {frame_index + 1}/{num_frames} ({current_timestamp.strftime('%Y-%m-%d %H:%M:%S')})."]
-                
-                # Calculate running average FPS for logging purposes based on *completed* frames
-                if frame_render_times_list: # If there are completed frames
-                    current_total_render_time_completed = sum(frame_render_times_list)
-                    avg_fps_completed = len(frame_render_times_list) / current_total_render_time_completed if current_total_render_time_completed > 0 else float('inf')
-                    log_message_parts.append(f"Last frame: {frame_render_times_list[-1]:.3f}s.")
-                    log_message_parts.append(f"Avg FPS (rendered): {avg_fps_completed:.2f}")
-                else: # No frames completed yet (this is the first frame being processed)
-                    log_message_parts.append("Avg FPS (rendered): Starting...")
-                print(" ".join(log_message_parts))
-        elif (frame_index + 1) % 100 == 0 or frame_index == 0: # Original conditional print
-            print(f"Rendering frame {frame_index + 1}/{num_frames} ({current_timestamp.strftime('%Y-%m-%d %H:%M:%S')})...")
+                print(f"Process {os.getpid()} starting frame {frame_index + 1}/{num_frames} ({current_timestamp.strftime('%Y-%m-%d %H:%M:%S')})...")
+        # Ensure no other print statements for "Process starting frame..." exist here
 
-        current_data_slice = race_df.iloc[frame_index]
-        top_n_songs = current_data_slice[current_data_slice > 0].nlargest(N_BARS) # N_BARS from config
-        
+        top_n_songs = current_data_slice[current_data_slice > 0].nlargest(n_bars_local)
         songs_to_draw = top_n_songs.sort_values(ascending=True)
 
         date_str = current_timestamp.strftime('%d %B %Y %H:%M:%S')
         ax.text(0.98, 0.05, date_str, transform=ax.transAxes,
-                ha='right', va='bottom', fontsize=20 * (dpi/100.0), color='dimgray', weight='bold') # Font size might need scaling factor from config for 1080p vs 4k
+                ha='right', va='bottom', fontsize=20 * (dpi/100.0), color='dimgray', weight='bold')
 
         ax.set_xlabel("Total Plays", fontsize=18 * (dpi/100.0), labelpad=15 * (dpi/100.0))
         ax.set_xlim(0, chart_xaxis_limit)
@@ -404,10 +319,10 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
         tick_label_fontsize = 11 * (dpi/100.0)
         ax.tick_params(axis='x', labelsize=tick_label_fontsize)
 
-        ax.set_ylim(-0.5, N_BARS - 0.5) # N_BARS from config
-        ax.set_yticks(np.arange(N_BARS)) # N_BARS from config
+        ax.set_ylim(-0.5, n_bars_local - 0.5)
+        ax.set_yticks(np.arange(n_bars_local))
         
-        y_tick_labels = [""] * N_BARS # N_BARS from config
+        y_tick_labels = [""] * n_bars_local
         
         bar_y_positions = []
         bar_widths = []
@@ -416,14 +331,14 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
 
         for i, song_id in enumerate(songs_to_draw.index):
             rank_on_chart = len(songs_to_draw) - 1 - i 
-            y_pos_for_bar = N_BARS - 1 - rank_on_chart # N_BARS from config
+            y_pos_for_bar = n_bars_local - 1 - rank_on_chart
             
             bar_y_positions.append(y_pos_for_bar)
             bar_widths.append(songs_to_draw[song_id])
             bar_song_ids.append(song_id)
 
             canonical_album = song_id_to_canonical_album_map.get(song_id, "Unknown Album")
-            bar_colors_list.append(album_bar_colors.get(canonical_album, (0.5,0.5,0.5)))
+            bar_colors_list.append(album_bar_colors_local.get(canonical_album, (0.5,0.5,0.5)))
             
             max_char_len = int(50 * (150.0/dpi)) 
             display_song_id = song_id
@@ -436,10 +351,6 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
         if bar_y_positions:
             actual_bars = ax.barh(bar_y_positions, bar_widths, color=bar_colors_list, height=0.8, zorder=2)
 
-            # example_bar_height_data_units = 0.8 # Used for target_img_height_pixels calculation, now done before pre_fetch_album_art_and_colors
-            # target_img_height_pixels calculation is now done *before* pre_fetch_album_art_and_colors
-            # The value used for pre-sizing was calculated_target_img_height_pixels
-
             value_label_fontsize = 12 * (dpi/100.0)
             image_padding_data_units = chart_xaxis_limit * 0.005
             value_label_padding_data_units = chart_xaxis_limit * 0.008
@@ -449,44 +360,34 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
                 current_play_count = bar_widths[i]
                 
                 canonical_album_for_bar = song_id_to_canonical_album_map.get(song_id_for_bar, "Unknown Album")
-                pil_image = album_art_image_objects.get(canonical_album_for_bar)
+                pil_image = album_art_image_objects_local.get(canonical_album_for_bar)
 
-                # --- Position for image and text, starting from end of bar and moving left ---
-                current_x_anchor = bar_obj.get_width() # << इंश्योर THIS LINE IS PRESENT AND ACTIVE
+                current_x_anchor = bar_obj.get_width()
 
-                # Add album art if conditions met
                 if pil_image and current_play_count >= art_display_min_plays_threshold:
                     try:
-                        # ... (image processing logic that READS current_x_anchor) ...
-                        # Image is now pre-resized. Get its dimensions.
                         resized_img_width_pixels, resized_img_height_pixels = pil_image.size 
                         
-                        fig_width_pixels = fig.get_size_inches()[0] * dpi
-                        x_axis_range_data_units = ax.get_xlim()[1] - ax.get_xlim()[0] # chart_xaxis_limit
+                        # Recalculate fig_width_pixels for this specific figure instance if needed, or use passed
+                        # fig_width_pixels_current = fig.get_size_inches()[0] * dpi # This is the actual pixel width of this fig
+                        x_axis_range_data_units = ax.get_xlim()[1] - ax.get_xlim()[0]
                         image_width_data_units = 0
-                        if fig_width_pixels > 0 and x_axis_range_data_units > 0:
+                        if fig_width_pixels > 0 and x_axis_range_data_units > 0: # Use passed fig_width_pixels
                              image_width_data_units = (resized_img_width_pixels / fig_width_pixels) * x_axis_range_data_units
                         
-                        # Position image: its right edge is at (current_x_anchor - image_padding_data_units)
                         img_center_x_pos = current_x_anchor - image_padding_data_units - (image_width_data_units / 2.0) 
                         
-                        if img_center_x_pos - (image_width_data_units / 2.0) > chart_xaxis_limit * 0.02: # Ensure some space from y-axis
-                            imagebox = OffsetImage(pil_image, zoom=1.0, resample=False) # Use pre-resized pil_image directly
+                        if img_center_x_pos - (image_width_data_units / 2.0) > chart_xaxis_limit * 0.02:
+                            imagebox = OffsetImage(pil_image, zoom=1.0, resample=False)
                             ab = AnnotationBbox(imagebox,
                                                 (img_center_x_pos, bar_obj.get_y() + bar_obj.get_height() / 2.0),
                                                 xybox=(0,0), xycoords='data', boxcoords="offset points",
                                                 pad=0, frameon=False, zorder=3)
                             ax.add_artist(ab)
-                            # Update current_x_anchor to be the left edge of the image
-                            # THIS LINE ASSIGNS/UPDATES current_x_anchor:
                             current_x_anchor = img_center_x_pos - (image_width_data_units / 2.0)
-                        # else: image is too wide or bar too short, current_x_anchor remains bar_obj.get_width()
-
                     except Exception as e:
-                        # The error message in your screenshot is exactly this one.
-                        print(f"Error processing/adding image for {canonical_album_for_bar} (Song: {song_id_for_bar}): {e}")
+                        print(f"Error (PID {os.getpid()}) processing/adding image for {canonical_album_for_bar} (Song: {song_id_for_bar}): {e}")
                 
-                # Add play count text (this part seems fine as it doesn't use current_x_anchor for its primary positioning)
                 text_x_pos = bar_obj.get_width() + value_label_padding_data_units
                 ax.text(text_x_pos,
                         bar_obj.get_y() + bar_obj.get_height() / 2.0,
@@ -506,79 +407,248 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
             fig.tight_layout(rect=[left_margin, bottom_margin, right_margin, top_margin])
             fig.align_labels() 
         except Exception as e_layout:
-            if DEBUG_ALBUM_ART_LOGIC: print(f"Note: Layout adjustment warning/error: {e_layout}. Plot might not be perfectly aligned.")
+            # if DEBUG_ALBUM_ART_LOGIC: print(f"Note: Layout adjustment warning/error: {e_layout}. Plot might not be perfectly aligned.")
+            # This debug var might not be available or set correctly in parallel context, simple print
+            print(f"Note (PID {os.getpid()}): Layout adjustment warning/error: {e_layout}.")
             plt.subplots_adjust(left=left_margin, bottom=bottom_margin, right=right_margin, top=top_margin)
         
-        # Record frame render time
-        current_frame_render_time = time.time() - frame_start_time
-        frame_render_times_list.append(current_frame_render_time)
-    # --- End of draw_frame ---
+        fig.savefig(output_image_path)
 
-    ani = animation.FuncAnimation(fig, draw_frame, frames=num_frames,
-                                  interval=interval, repeat=False)
-
-    print(f"\nPreparing to save animation to {output_filename}...")
-    
-    writer_to_use = None
-    if USE_NVENC_IF_AVAILABLE and animation.FFMpegWriter.isAvailable(): # USE_NVENC from config
-        # ... (NVENC writer logic remains same) ...
-        print("Attempting to use NVENC (h264_nvenc) for hardware acceleration...")
-        try:
-            nvenc_args = ['-preset', 'p6', '-tune', 'hq', '-b:v', '0', '-cq', '23', '-rc-lookahead', '20', '-pix_fmt', 'yuv420p']
-            writer_nvenc = animation.FFMpegWriter(fps=target_fps_for_video, codec='h264_nvenc', bitrate=-1, extra_args=nvenc_args)
-            _ = writer_nvenc.saving(fig, "test.mp4", dpi) # Test call to ensure it can initialize
-            writer_to_use = writer_nvenc
-            print("NVENC writer initialized successfully.")
-        except Exception as e_nvenc_init:
-            print(f"WARNING: Could not initialize NVENC writer: {e_nvenc_init}")
-            print("Falling back to CPU encoder (libx264).")
-            writer_to_use = None # Ensure fallback
-
-    if writer_to_use is None: # Fallback if NVENC not available or failed to init
-        print("Using CPU encoder (libx264).")
-        cpu_args = ['-crf', '23', '-preset', 'medium', '-pix_fmt', 'yuv420p']
-        writer_to_use = animation.FFMpegWriter(fps=target_fps_for_video, codec='libx264', bitrate=-1, extra_args=cpu_args)
-
-    try:
-        animation_save_start_time = time.time()
-        ani.save(output_filename, writer=writer_to_use, dpi=dpi)
-        animation_save_end_time = time.time()
-        print(f"Animation successfully saved to {output_filename}")
-
-        # --- Frame Timing Summary ---
-        overall_animation_end_time = time.time()
-        if LOG_FRAME_TIMES_CONFIG and frame_render_times_list:
-            total_frame_rendering_cpu_time = sum(frame_render_times_list)
-            avg_frame_render_time = total_frame_rendering_cpu_time / len(frame_render_times_list) if frame_render_times_list else 0
-            overall_avg_fps_cpu = 1.0 / avg_frame_render_time if avg_frame_render_time > 0 else float('inf')
-            min_render_time = min(frame_render_times_list) if frame_render_times_list else 0
-            max_render_time = max(frame_render_times_list) if frame_render_times_list else 0
-            # For median, we need numpy or to sort the list
-            sorted_times = sorted(frame_render_times_list)
-            median_render_time = sorted_times[len(sorted_times) // 2] if sorted_times else 0
-
-            total_wall_clock_time = overall_animation_end_time - overall_animation_start_time
-            video_saving_time = animation_save_end_time - animation_save_start_time
-
-            print("\n--- Animation Rendering Summary ---")
-            print(f"Total wall-clock time (incl. save): {total_wall_clock_time:.2f} seconds")
-            print(f"  Estimated video saving time:        {video_saving_time:.2f} seconds")
-            print(f"  Total CPU time for drawing frames:  {total_frame_rendering_cpu_time:.2f} seconds")
-            print(f"  Number of frames rendered:          {len(frame_render_times_list)}")
-            print(f"  Average FPS (CPU frame drawing):    {overall_avg_fps_cpu:.2f}")
-            print(f"  Frame render times (seconds):")
-            print(f"    Min:    {min_render_time:.3f}")
-            print(f"    Max:    {max_render_time:.3f}")
-            print(f"    Median: {median_render_time:.3f}")
-            print(f"    Avg:    {avg_frame_render_time:.3f}")
-
-    except FileNotFoundError: # This usually means ffmpeg itself is not found
-        print("ERROR: ffmpeg not found. Please ensure ffmpeg is installed and in your system's PATH.")
-    except Exception as e: # Re-adding the general exception for ani.save
-        print(f"Error saving animation: {e}")
+    except Exception as e:
+        print(f"Error in draw_and_save_single_frame (PID: {os.getpid()}, Frame: {frame_index}): {e}")
+        # Potentially re-raise or handle by creating an empty/error frame
     finally:
-        plt.close(fig) # Ensure figure is closed
+        plt.close(fig) # Crucial: close the figure to free memory
 
+    current_frame_render_time = time.time() - frame_start_time
+    return frame_index, current_frame_render_time, os.getpid()
+
+
+def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df here is already potentially truncated
+    if race_df is None or race_df.empty:
+        print("Cannot create animation: race_df is empty or None.")
+        return
+
+    unique_song_ids_in_race = race_df.columns.tolist()
+    raw_max_play_count_overall = race_df.max().max()
+    if pd.isna(raw_max_play_count_overall) or raw_max_play_count_overall <= 0:
+        raw_max_play_count_overall = 100 # Fallback
+    
+    selected_res_key = config.get('AnimationOutput', 'RESOLUTION', '4k').strip()
+    res_settings = VIDEO_RESOLUTION_PRESETS.get(selected_res_key, VIDEO_RESOLUTION_PRESETS['4k'])
+    dpi = res_settings['dpi']
+    fig_width_pixels = res_settings['width']
+    fig_height_pixels = res_settings['height']
+
+    example_bar_height_data_units = 0.8 
+    image_height_scale_factor = 0.35 
+    current_n_bars_for_sizing = N_BARS if N_BARS > 0 else 10
+        
+    calculated_target_img_height_pixels = \
+        (example_bar_height_data_units / current_n_bars_for_sizing) * \
+        fig_height_pixels * image_height_scale_factor
+    
+    art_processing_min_plays_threshold = raw_max_play_count_overall * ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR
+    print(f"[ANIMATOR_INFO] global_visibility_threshold (art_processing_min_plays_threshold) = {art_processing_min_plays_threshold:.2f}")
+    print(f"[ANIMATOR_INFO] Calculated target image height for pre-resize: {calculated_target_img_height_pixels:.2f} pixels")
+
+    art_fetch_start_time = time.time()
+    pre_fetch_album_art_and_colors(race_df, song_album_map_lastfm, unique_song_ids_in_race, art_processing_min_plays_threshold, calculated_target_img_height_pixels, dpi)
+    art_fetch_end_time = time.time()
+    print(f"--- Time taken for pre_fetch_album_art_and_colors: {art_fetch_end_time - art_fetch_start_time:.2f} seconds ---")
+
+    output_filename = f"{OUTPUT_FILENAME_BASE}_{selected_res_key}.mp4"
+    num_frames = len(race_df.index)
+    target_fps_for_video = TARGET_FPS 
+
+    # --- Create a temporary directory for frame images ---
+    temp_frame_dir = os.path.join(os.getcwd(), f"temp_frames_{OUTPUT_FILENAME_BASE}")
+    if os.path.exists(temp_frame_dir):
+        shutil.rmtree(temp_frame_dir) # Clean up from previous run if any
+    os.makedirs(temp_frame_dir, exist_ok=True)
+    print(f"Temporary directory for frames created at: {temp_frame_dir}")
+
+    overall_drawing_start_time = time.time()
+    frame_render_times_list = []
+
+    print(f"\n--- Starting Parallel Frame Generation ---")
+    print(f"Total frames to render: {num_frames}")
+    print(f"Using up to {MAX_PARALLEL_WORKERS} worker processes.")
+    
+    chart_xaxis_limit = raw_max_play_count_overall * 1.05
+    art_display_min_plays_threshold = art_processing_min_plays_threshold 
+
+    song_id_to_canonical_album_map = {} # Prepare this once
+    for song_id in unique_song_ids_in_race:
+        try:
+            artist_name, track_name = song_id.split(" - ", 1)
+            album_name_hint = song_album_map_lastfm.get(song_id, "")
+            spotify_cache_key = f"spotify_{artist_name.lower().strip()}_{track_name.lower().strip()}_{album_name_hint.lower().strip()}"
+            spotify_data = album_art_utils.spotify_info_cache.get(spotify_cache_key)
+            if spotify_data and spotify_data.get("canonical_album_name"):
+                song_id_to_canonical_album_map[song_id] = spotify_data["canonical_album_name"]
+            else:
+                song_id_to_canonical_album_map[song_id] = album_name_hint
+        except ValueError:
+            song_id_to_canonical_album_map[song_id] = song_album_map_lastfm.get(song_id, "Unknown Album")
+
+
+    # Prepare arguments for each frame
+    tasks_args = []
+    for i in range(num_frames):
+        current_timestamp = race_df.index[i]
+        current_data_slice = race_df.iloc[i]
+        # Frame filenames need to be sortable, e.g., frame_00001.png
+        output_image_path = os.path.join(temp_frame_dir, f"frame_{i:0{len(str(num_frames))}d}.png")
+        
+        # Pass copies or immutable data to child processes where appropriate.
+        # The large dictionaries (album_art_image_objects, album_bar_colors) will be pickled.
+        tasks_args.append((
+            i, num_frames, current_timestamp, current_data_slice,
+            song_id_to_canonical_album_map, album_art_image_objects, album_bar_colors, # These are global dicts
+            N_BARS, chart_xaxis_limit, art_display_min_plays_threshold,
+            output_image_path, dpi, fig_width_pixels, fig_height_pixels,
+            LOG_FRAME_TIMES_CONFIG, PREFERRED_FONTS, LOG_PARALLEL_PROCESS_START_CONFIG # Pass config values needed by worker
+        ))
+
+    completed_frames = 0
+    with concurrent.futures.ProcessPoolExecutor(max_workers=MAX_PARALLEL_WORKERS) as executor:
+        futures = [executor.submit(draw_and_save_single_frame, arg_tuple) for arg_tuple in tasks_args]
+        for future in concurrent.futures.as_completed(futures):
+            try:
+                frame_idx, render_time, pid = future.result()
+                frame_render_times_list.append(render_time)
+                completed_frames += 1
+                
+                # Updated logging condition for frame completion
+                should_log_completion = False
+                if PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG > 0:
+                    if completed_frames == 1 or completed_frames == num_frames or \
+                       (completed_frames % PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0):
+                        should_log_completion = True
+                elif PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0: # Log only first and last if interval is 0
+                    if completed_frames == 1 or completed_frames == num_frames:
+                        should_log_completion = True
+
+                if should_log_completion:
+                    print(f"Frame {frame_idx + 1}/{num_frames} completed by PID {pid} in {render_time:.2f}s. ({completed_frames}/{num_frames} total done)")
+            except Exception as exc:
+                print(f'Frame generation failed: {exc}') # Handle error from worker
+    
+    overall_drawing_end_time = time.time()
+    total_frame_rendering_cpu_time = sum(frame_render_times_list)
+    print(f"--- Parallel Frame Generation Complete ---")
+    print(f"Total wall-clock time for drawing {num_frames} frames: {overall_drawing_end_time - overall_drawing_start_time:.2f} seconds")
+    if frame_render_times_list:
+        avg_frame_render_time = total_frame_rendering_cpu_time / len(frame_render_times_list)
+        print(f"Total CPU time sum for drawing frames:  {total_frame_rendering_cpu_time:.2f} seconds")
+        print(f"Average time per frame (across processes): {avg_frame_render_time:.3f} seconds")
+
+
+    print(f"\n--- Compiling video from frames using ffmpeg ---")
+    print(f"Output video: {output_filename}")
+    print(f"Target FPS: {target_fps_for_video}")
+
+    # ffmpeg command construction
+    ffmpeg_cmd = [
+        'ffmpeg',
+        '-framerate', str(target_fps_for_video),
+        '-i', os.path.join(temp_frame_dir, f"frame_%0{len(str(num_frames))}d.png"), # Input pattern
+        '-c:v', 'libx264', # Default to libx264
+        '-pix_fmt', 'yuv420p',
+        '-y' # Overwrite output file if it exists
+    ]
+
+    if USE_NVENC_IF_AVAILABLE:
+        # Check if h264_nvenc is available by trying a dummy command or checking ffmpeg -codecs
+        # For simplicity, we'll assume if USE_NVENC is true, user wants to try it.
+        # A more robust check would involve running `ffmpeg -encoders | grep h264_nvenc`
+        print("Attempting to use NVENC (h264_nvenc) for hardware acceleration...")
+        nvenc_args = ['-preset', 'p6', '-tune', 'hq', '-b:v', '0', '-cq', '23', '-rc-lookahead', '20']
+        ffmpeg_cmd_nvenc = [
+            'ffmpeg',
+            '-framerate', str(target_fps_for_video),
+            '-i', os.path.join(temp_frame_dir, f"frame_%0{len(str(num_frames))}d.png"),
+            '-c:v', 'h264_nvenc',
+            *nvenc_args, # Spread the list of args
+            '-pix_fmt', 'yuv420p',
+            '-y',
+            output_filename
+        ]
+        try:
+            # Try running with NVENC
+            subprocess.run(ffmpeg_cmd_nvenc, check=True, capture_output=True)
+            print("Video successfully compiled using NVENC.")
+        except subprocess.CalledProcessError as e_nvenc:
+            print(f"WARNING: ffmpeg (NVENC) failed. Return code: {e_nvenc.returncode}")
+            print(f"NVENC STDOUT: {e_nvenc.stdout.decode(errors='replace')}")
+            print(f"NVENC STDERR: {e_nvenc.stderr.decode(errors='replace')}")
+            print("Falling back to CPU encoder (libx264).")
+            # Construct libx264 command (default if NVENC fails)
+            cpu_args = ['-crf', '23', '-preset', 'medium']
+            ffmpeg_cmd.extend(cpu_args)
+            ffmpeg_cmd.append(output_filename)
+            try:
+                subprocess.run(ffmpeg_cmd, check=True, capture_output=True)
+                print("Video successfully compiled using libx264 (CPU).")
+            except subprocess.CalledProcessError as e_cpu:
+                print(f"ERROR: ffmpeg (libx264) also failed. Return code: {e_cpu.returncode}")
+                print(f"CPU STDOUT: {e_cpu.stdout.decode(errors='replace')}")
+                print(f"CPU STDERR: {e_cpu.stderr.decode(errors='replace')}")
+                print("Video compilation failed.")
+        except FileNotFoundError:
+             print("ERROR: ffmpeg command not found. Please ensure ffmpeg is installed and in your system's PATH.")
+    else: # Not using NVENC, proceed with libx264
+        print("Using CPU encoder (libx264).")
+        cpu_args = ['-crf', '23', '-preset', 'medium']
+        ffmpeg_cmd.extend(cpu_args)
+        ffmpeg_cmd.append(output_filename)
+        try:
+            subprocess.run(ffmpeg_cmd, check=True, capture_output=True)
+            print("Video successfully compiled using libx264 (CPU).")
+        except subprocess.CalledProcessError as e_cpu:
+            print(f"ERROR: ffmpeg (libx264) failed. Return code: {e_cpu.returncode}")
+            print(f"CPU STDOUT: {e_cpu.stdout.decode(errors='replace')}")
+            print(f"CPU STDERR: {e_cpu.stderr.decode(errors='replace')}")
+            print("Video compilation failed.")
+        except FileNotFoundError:
+            print("ERROR: ffmpeg command not found. Please ensure ffmpeg is installed and in your system's PATH.")
+    
+    # --- Cleanup intermediate frames ---
+    if CLEANUP_INTERMEDIATE_FRAMES:
+        try:
+            shutil.rmtree(temp_frame_dir)
+            print(f"Successfully removed temporary frame directory: {temp_frame_dir}")
+        except OSError as e:
+            print(f"Error removing temporary frame directory {temp_frame_dir}: {e}")
+    else:
+        print(f"Intermediate frames retained at: {temp_frame_dir}")
+
+    # --- Frame Timing Summary (simplified for parallel generation) ---
+    overall_animation_end_time = time.time() # This would need to be redefined if main() changes
+    if LOG_FRAME_TIMES_CONFIG and frame_render_times_list:
+        # total_frame_rendering_cpu_time and avg_frame_render_time already calculated
+        min_render_time = min(frame_render_times_list) if frame_render_times_list else 0
+        max_render_time = max(frame_render_times_list) if frame_render_times_list else 0
+        sorted_times = sorted(frame_render_times_list)
+        median_render_time = sorted_times[len(sorted_times) // 2] if sorted_times else 0
+        
+        # Note: total_wall_clock_time would be better measured in main() around this function call
+        # video_saving_time is now part of the ffmpeg subprocess call, harder to isolate precisely without more timing
+
+        print("\n--- Animation Rendering Summary (Parallel) ---")
+        # print(f"Total wall-clock time (incl. save): {total_wall_clock_time:.2f} seconds") # Needs to be from main
+        print(f"  Total wall-clock time for drawing frames: {overall_drawing_end_time - overall_drawing_start_time:.2f} seconds")
+        print(f"  Total CPU time sum for drawing frames:  {total_frame_rendering_cpu_time:.2f} seconds")
+        print(f"  Number of frames rendered:          {len(frame_render_times_list)}")
+        print(f"  Frame render times (seconds, per process):")
+        print(f"    Min:    {min_render_time:.3f}")
+        print(f"    Max:    {max_render_time:.3f}")
+        print(f"    Median: {median_render_time:.3f}")
+        print(f"    Avg:    {avg_frame_render_time:.3f}")
+
+    # No plt.close(fig) here as figures are created/closed in worker processes.
+    # The original ani.save() and writer logic is now replaced by direct ffmpeg call.
 
 def main():
     load_configuration() # Load config first, sets up MAX_FRAMES_FOR_TEST_RENDER
