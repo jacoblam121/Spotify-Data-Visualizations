@@ -1,0 +1,81 @@
+# --- General Configuration ---
+[General]
+# USER_AGENT: For API requests (Spotify, MusicBrainz)
+USER_AGENT = SpotifyRaceChart/1.0 lightningfalconyt@gmail.com
+# PYTHONIOENCODING_WARNING: Set to False to suppress the encoding hint at startup
+PYTHONIOENCODING_WARNING = True
+
+# --- Data Source ---
+[DataSource]
+# SOURCE: "lastfm" or "spotify"
+SOURCE = spotify
+INPUT_FILENAME_LASTFM = lastfm_data.csv
+# INPUT_FILENAME_SPOTIFY: Path to your Spotify JSON data (e.g., "StreamingHistory0.json")
+# Or use a pattern like "StreamingHistory*.json" if you have multiple files.
+INPUT_FILENAME_SPOTIFY = spotify_data.json
+MIN_MS_PLAYED_FOR_COUNT = 30000
+FILTER_SKIPPED_TRACKS = True
+
+# --- Timeframe ---
+[Timeframe]
+# START_DATE: YYYY-MM-DD or "all_time"
+START_DATE = 2024-01-01
+# END_DATE: YYYY-MM-DD or "all_time" (inclusive)
+END_DATE = 2024-12-31
+
+# --- Animation Output ---
+[AnimationOutput]
+# Resolution: 1080p or 4k
+RESOLUTION = 4k
+FILENAME_BASE = spotify_top_songs_race
+N_BARS = 10
+TARGET_FPS = 30
+USE_NVENC_IF_AVAILABLE = True
+# MAX_FRAMES_FOR_TEST_RENDER: Max frames for a quick test render. Set to 0 or -1 for full render.
+MAX_FRAMES_FOR_TEST_RENDER = 500
+# FRAME_AGGREGATION_PERIOD: Aggregate frames by time period. Options:
+# 'event' (one frame per play event - original behavior)
+# 'S' (second), '30T' (30 minutes), 'H' (hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
+# Using larger periods (D, W, M) drastically reduces frames for long histories.
+FRAME_AGGREGATION_PERIOD = 30T
+# MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
+# Defaults to the number of CPU cores if not set or set to 0.
+MAX_PARALLEL_WORKERS = 0
+# CLEANUP_INTERMEDIATE_FRAMES: Whether to delete individual frame images after video compilation.
+# Set to False for debugging frame generation.
+CLEANUP_INTERMEDIATE_FRAMES = True
+
+# --- Album Art & Spotify API ---
+[AlbumArtSpotify]
+# SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET can be set here,
+# but environment variables are generally preferred for security.
+# The script will attempt to use environment variables 'SPOTIFY_CLIENT_ID' and 'SPOTIFY_CLIENT_SECRET' first.
+# If not found, it will look for them here. If still not found, it will use hardcoded values in album_art_utils.py (if any).
+SPOTIFY_CLIENT_ID = eaf67929214947d19e34182fb20e96bc
+SPOTIFY_CLIENT_SECRET = 822e6e3f9d1149d4ad5520237d8385a3
+ART_CACHE_DIR = album_art_cache
+# ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR: Relative threshold for showing art
+# (e.g., 0.0628 means art shows if play count > 6.28% of max plays in chart)
+# Set to 0 to show art for all tracks (useful for debugging)
+ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = 0.05
+# NEGATIVE_CACHE_HOURS: How long to cache failed searches (in hours)
+NEGATIVE_CACHE_HOURS = 24
+
+# --- Font Preferences ---
+[FontPreferences]
+# Comma-separated list of preferred fonts. First available will be used.
+PREFERRED_FONTS = DejaVu Sans, Noto Sans JP, Noto Sans KR, Noto Sans SC, Noto Sans TC, Arial Unicode MS, sans-serif
+
+# --- Debugging ---
+[Debugging]
+# DEBUG_CACHE_ALBUM_ART_UTILS: Enables detailed cache logging in album_art_utils.py
+DEBUG_CACHE_ALBUM_ART_UTILS = True
+# DEBUG_ALBUM_ART_LOGIC_ANIMATOR: Enables verbose logging for art pre-fetch and drawing in main_animator.py
+DEBUG_ALBUM_ART_LOGIC_ANIMATOR = True
+# LOG_FRAME_TIMES: Enables detailed frame-by-frame rendering time and summary.
+LOG_FRAME_TIMES = True
+# PARALLEL_LOG_COMPLETION_INTERVAL: How often to log frame completion during parallel processing (e.g., 1 = every frame, 50 = every 50th frame).
+# Set to 0 to only log the first and last completed frame. First/last always logged if interval > 0.
+PARALLEL_LOG_COMPLETION_INTERVAL = 100
+# LOG_PARALLEL_PROCESS_START: Whether to log when each parallel worker process starts rendering a frame.
+LOG_PARALLEL_PROCESS_START = False
