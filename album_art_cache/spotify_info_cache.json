@@ -1,4 +1,43 @@
 {
+  "spotify_alan walker_fire! (feat. yuqi ((g)i-dle), jvke)_fire! (feat. yuqi ((g)i-dle), jvke)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739bcee2cb961a04d2e5a29f5c",
+    "canonical_album_name": "Fire! (feat. YUQI ((G)I-DLE), JVKE)",
+    "spotify_album_id": "5uI3nK40uWp8fRu9Cvk71w",
+    "spotify_artist_ids": [
+      "7vk5e3vY1uw9plTHJAMwjN",
+      "22aCD8IrQZjcPgZw728QT6",
+      "164Uj4eKjl6zTBKfJLFKKK",
+      "2AfmfGFbe0A0WsTYm0SDTx"
+    ],
+    "source": "spotify (Precise Search (Artist: Alan Walker))"
+  },
+  "spotify_ariana grande_bloodline_thank u, next": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27356ac7b86e090f307e218e9c8",
+    "canonical_album_name": "thank u, next",
+    "spotify_album_id": "2fYhqwDWXjbpjaIJPEfKFw",
+    "spotify_artist_ids": [
+      "66CXWjxzNUsdJxJ2JdwvnR"
+    ],
+    "source": "spotify (Precise Search (Artist: Ariana Grande))"
+  },
+  "spotify_bol4_some_red diary page.1": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732cfb66b63fe85ccfff4109b1",
+    "canonical_album_name": "Red Diary Page.1",
+    "spotify_album_id": "0d3mf5fBaIBbozCgeEI9AE",
+    "spotify_artist_ids": [
+      "4k5fFEYgkWYrYvtOK3zVBl"
+    ],
+    "source": "spotify (Precise Search (Artist: BOL4))"
+  },
+  "spotify_iu_love wins all_love wins all": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b79a12d47af18d1d83a5caf9",
+    "canonical_album_name": "Love wins all",
+    "spotify_album_id": "2bwwRhKbLeD3LvNDXauV2T",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "source": "spotify (Precise Search (Artist: IU))"
+  },
   "spotify_iu_eight(prod.&feat. suga of bts)_eight": {
     "art_url": "https://i.scdn.co/image/ab67616d0000b273c63be04ae902b1da7a54d247",
     "canonical_album_name": "eight",
@@ -9,23 +48,15 @@
     ],
     "source": "spotify (Precise Search (Artist: IU))"
   },
-  "spotify_jeon somi_fast forward_game plan": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2737da22ba88dfc26a18122ee2d",
-    "canonical_album_name": "GAME PLAN",
-    "spotify_album_id": "7xMXoWstClAzBIo5lOAASu",
+  "spotify_justine skye_collide (feat. tyga)_collide (feat. tyga)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273adadb86bf3555eb27a383c76",
+    "canonical_album_name": "Collide (feat. Tyga)",
+    "spotify_album_id": "2LbrGt2oc08xV8IDJvLzYi",
     "spotify_artist_ids": [
-      "7zYj9S9SdIunYCfSm7vzAR"
+      "0jUQSUOcM7lxVn5eVGTkzQ",
+      "5LHRHt1k9lMyONurDHEdrp"
     ],
-    "source": "spotify (Precise Search (Artist: JEON SOMI))"
-  },
-  "spotify_jo yuri_love shhh!_op.22 y-waltz : in major": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e24e844f2650c498fa703c91",
-    "canonical_album_name": "Op.22 Y-Waltz : in Major",
-    "spotify_album_id": "1EAzLUzatSBIs8tA047f5f",
-    "spotify_artist_ids": [
-      "3LFFf4EpKn2krneZ9vozyz"
-    ],
-    "source": "spotify (Precise Search (Artist: JO YURI))"
+    "source": "spotify (Precise Search (Artist: Justine Skye))"
   },
   "spotify_paramore_that's what you get_riot!": {
     "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
@@ -36,14 +67,14 @@
     ],
     "source": "spotify (Precise Search (Artist: Paramore))"
   },
-  "spotify_paramore_crushcrushcrush_riot!": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
-    "canonical_album_name": "Riot!",
-    "spotify_album_id": "71rziY9eLo1tA2dBMxrwhc",
+  "spotify_twice_i got you_i got you": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d6a4458287c74322874a3d70",
+    "canonical_album_name": "I GOT YOU",
+    "spotify_album_id": "6RZHj6L3NqrvcKeiBHQbjL",
     "spotify_artist_ids": [
-      "74XFHRwlV6OrjEM0A2NCMF"
+      "7n2Ycct7Beij7Dj7meI4X0"
     ],
-    "source": "spotify (Precise Search (Artist: Paramore))"
+    "source": "spotify (Precise Search (Artist: TWICE))"
   },
   "spotify_tate mcrae_greedy_greedy": {
     "art_url": "https://i.scdn.co/image/ab67616d0000b27322fd802bc61db666c7c81aa8",
@@ -53,6 +84,15 @@
       "45dkTj5sMRSjrmBSBeiHym"
     ],
     "source": "spotify (Precise Search (Artist: Tate McRae))"
+  },
+  "spotify_taylor swift_anti-hero_midnights": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273bb54dde68cd23e2a268ae0f5",
+    "canonical_album_name": "Midnights",
+    "spotify_album_id": "151w1FgRZfnKZA9FEcg9Z3",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "source": "spotify (Precise Search (Artist: Taylor Swift))"
   },
   "spotify_taylor swift_is it over now? (taylor's version) (from the vault)_1989 (taylor's version)": {
     "art_url": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac",
@@ -90,13 +130,339 @@
     ],
     "source": "spotify (Precise Search (Artist: Tonight Alive))"
   },
-  "spotify_\u300e\u30e6\u30a4\u30ab\u300f_\u904b\u547d\u306e\u4eba_\u904b\u547d\u306e\u4eba": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2739bba46fb362df4d33a0a8b3f",
-    "canonical_album_name": "\u904b\u547d\u306e\u4eba",
-    "spotify_album_id": "0eNmYuy5xTFFwfdwfyGQLL",
+  "spotify_\u30e8\u30eb\u30b7\u30ab_\u6674\u308b_\u6674\u308b": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e763f5fcb87919a7ae96f8b",
+    "canonical_album_name": "\u6674\u308b",
+    "spotify_album_id": "4O53dhmIctih3p2suAAgga",
     "spotify_artist_ids": [
-      "2EqaSEa0WkE59Aca9iXSYj"
+      "4UK2Lzi6fBfUi9rpDt6cik"
     ],
-    "source": "spotify (Precise Search (Artist: \u300e\u30e6\u30a4\u30ab\u300f))"
+    "source": "spotify (Precise Search (Artist: \u30e8\u30eb\u30b7\u30ab))"
+  },
+  "spotify_*luna_8.32_\u30e9\u30ba\u30e9\u30a4\u30c8\u306e\u5922": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27353b179bb193aa0fb34cb2c5a",
+    "canonical_album_name": "\u30e9\u30ba\u30e9\u30a4\u30c8\u306e\u5922",
+    "spotify_album_id": "7hG6XsPZPxj6Y6TYbHaz7t",
+    "spotify_artist_ids": [
+      "4vwJe968gHHZzL0or0gSZA"
+    ],
+    "source": "spotify (Precise Search (Artist: *Luna))"
+  },
+  "spotify_7!!_\u30aa\u30ec\u30f3\u30b8_\u30bb\u30c4\u30ca\u30a8\u30e2\u30fc\u30b7\u30e7\u30f3": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27358b4dad535c17cfbb106e9cd",
+    "canonical_album_name": "\u30bb\u30c4\u30ca\u30a8\u30e2\u30fc\u30b7\u30e7\u30f3",
+    "spotify_album_id": "1YbJ32jyr2yzuwzMtgnUag",
+    "spotify_artist_ids": [
+      "3rJbSZv98yyWLNOvD6MsAV"
+    ],
+    "source": "spotify (Precise Search (Artist: 7!!))"
+  },
+  "spotify_aimer_after rain_after dark": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273be4e6b02d9bf5a0f0a3ce4b1",
+    "canonical_album_name": "After Dark",
+    "spotify_album_id": "7xW2KsTPW5qytt3G9IxEXa",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_april showers_penny rain": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27330cf3673464552a8342b6ff3",
+    "canonical_album_name": "Penny Rain",
+    "spotify_album_id": "5WxSamBTcE3P1W6sT9My7B",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_last stardust_dawn": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b54e91cdc2fc4e29efab4e4b",
+    "canonical_album_name": "DAWN",
+    "spotify_album_id": "7EHV2huu8yHAsPjzgmUjka",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_one_one / hana no uta / rokutouseino yoru magic blue version": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273189f203384af534b6b269e7d",
+    "canonical_album_name": "Sun Dance",
+    "spotify_album_id": "0FNWMFyb0nLCCHucsDfxmA",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_ref:rain_penny rain": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27330cf3673464552a8342b6ff3",
+    "canonical_album_name": "Penny Rain",
+    "spotify_album_id": "5WxSamBTcE3P1W6sT9My7B",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_stars in the rain_best selection noir": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b56ada0ba61d7787fb213f72",
+    "canonical_album_name": "daydream",
+    "spotify_album_id": "336m0kejdM5Fkw2HUX46Bw",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u30ab\u30bf\u30aa\u30e2\u30a4_daydream": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b56ada0ba61d7787fb213f72",
+    "canonical_album_name": "daydream",
+    "spotify_album_id": "336m0kejdM5Fkw2HUX46Bw",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u30b0\u30ec\u30fc\u30b9\u30ce\u30fc\u30c8_\u30b0\u30ec\u30fc\u30b9\u30ce\u30fc\u30c8": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2738733ea8c4df9143f9e09f6d2",
+    "canonical_album_name": "\u30b0\u30ec\u30fc\u30b9\u30ce\u30fc\u30c8",
+    "spotify_album_id": "3yiVMuHSKOxqyyEt20dobj",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u30b3\u30a4\u30ef\u30ba\u30e9\u30a4_sun dance": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273189f203384af534b6b269e7d",
+    "canonical_album_name": "Sun Dance",
+    "spotify_album_id": "0FNWMFyb0nLCCHucsDfxmA",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u30bb\u30d7\u30c6\u30f3\u30d0\u30fc\u3055\u3093_\u8776\u3005\u7d50\u3073": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273986a5e5ba6ee16f565f5b765",
+    "canonical_album_name": "\u8776\u3005\u7d50\u3073",
+    "spotify_album_id": "6Sxen65iUIObRklGqP1iTh",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u516d\u7b49\u661f\u306e\u591c magic blue ver._one / hana no uta / rokutouseino yoru magic blue version": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d0bf85920b339f26168e0ab0",
+    "canonical_album_name": "ONE / \u82b1\u306e\u5504 / \u516d\u7b49\u661f\u306e\u591c Magic Blue ver.",
+    "spotify_album_id": "2hrsWVbgZvnmKY9QTKDghN",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u7cf8_one / hana no uta / rokutouseino yoru magic blue version": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27380b034fcb0ee1d2de095d060",
+    "canonical_album_name": "\u661f\u306e\u6d88\u3048\u305f\u591c\u306b",
+    "spotify_album_id": "1mR8kxKKuBobjRXaZjHWw4",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u82b1\u3073\u3089\u305f\u3061\u306e\u30de\u30fc\u30c1_sun dance": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273189f203384af534b6b269e7d",
+    "canonical_album_name": "Sun Dance",
+    "spotify_album_id": "0FNWMFyb0nLCCHucsDfxmA",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u8776\u3005\u7d50\u3073_daydream": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b56ada0ba61d7787fb213f72",
+    "canonical_album_name": "daydream",
+    "spotify_album_id": "336m0kejdM5Fkw2HUX46Bw",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_dialogue+_omoide shiritori_omoide shiritori": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e5ea4dda450ed0071291153",
+    "canonical_album_name": "Omoide Shiritori",
+    "spotify_album_id": "1N6s2iitKL87aXQ2sTNxFG",
+    "spotify_artist_ids": [
+      "2edEpSuGIPWwl7QJF3hXM0"
+    ],
+    "source": "spotify (Precise Search (Artist: DIALOGUE+))"
+  },
+  "spotify_iu_strawberry moon_strawberry moon": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c4d4ade422fa74b8512fd85e",
+    "canonical_album_name": "strawberry moon",
+    "spotify_album_id": "7ed3SknyDqNz4XkPHNu4Fb",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "source": "spotify (Precise Search (Artist: IU))"
+  },
+  "spotify_mage_the words i never said in d&b_edits 1 ep": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2731678f99a5d678b882f11bea7",
+    "canonical_album_name": "Edits 1 EP",
+    "spotify_album_id": "3iN44wmE9e65a3AjI2Y9ig",
+    "spotify_artist_ids": [
+      "0q7PuJHIkWuHiHezAQFB6u"
+    ],
+    "source": "spotify (Precise Search (Artist: Mage))"
+  },
+  "spotify_maroon 5_payphone_overexposed": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ce7d499847da02a9cbd1c084",
+    "canonical_album_name": "Overexposed (Deluxe)",
+    "spotify_album_id": "2pjfMmH52fryXVQuWTWOgP",
+    "spotify_artist_ids": [
+      "04gDigrS5kc9YWfZHwBETP",
+      "137W8MRPWKqSmrBGDBFSop"
+    ],
+    "source": "spotify (Precise Search (Artist: Maroon 5))"
+  },
+  "spotify_mashiro ayano_ideal white_ideal white": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ad37b7064a8f1b7e1f1b827c",
+    "canonical_album_name": "ideal white",
+    "spotify_album_id": "1VLSTXucz52AwZjvPFVx2m",
+    "spotify_artist_ids": [
+      "3GnM9zjuaItYitYvN8lneJ"
+    ],
+    "source": "spotify (Precise Search (Artist: Mashiro Ayano))"
+  },
+  "spotify_nf_let you down_perception": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273cd733919ee57d0cc466e152f",
+    "canonical_album_name": "Perception",
+    "spotify_album_id": "1KOmHyNLuOe5YrPhD3Juuf",
+    "spotify_artist_ids": [
+      "6fOMl44jA4Sp5b9PpYCkzz"
+    ],
+    "source": "spotify (Precise Search (Artist: NF))"
+  },
+  "spotify_yoasobi_\u591c\u306b\u99c6\u3051\u308b_\u591c\u306b\u99c6\u3051\u308b": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c5716278abba6a103ad13aa7",
+    "canonical_album_name": "\u591c\u306b\u99c6\u3051\u308b",
+    "spotify_album_id": "3GzwPyPZCyrqUTaurTaS23",
+    "spotify_artist_ids": [
+      "64tJ2EAv1R6UaZqc4iOCyj"
+    ],
+    "source": "spotify (Precise Search (Artist: YOASOBI))"
+  },
+  "spotify_\u3044\u3068\u3046\u304b\u306a\u3053_\u30a2\u30de\u30c7\u30a6\u30b9_one's rock": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27334ac0f08f5c2d90f4cf62a07",
+    "canonical_album_name": "One's Rock",
+    "spotify_album_id": "5RZ4t64BxAv36hELamupNO",
+    "spotify_artist_ids": [
+      "2d12dVIZQZk9CKhEsezaoN"
+    ],
+    "source": "spotify (Precise Search (Artist: \u3044\u3068\u3046\u304b\u306a\u3053))"
+  },
+  "spotify_\u30f4\u30a3\u30f4\u30a3(vo.\u516b\u6728\u6d77\u8389)_fluorite eye's song_fluorite eye's song": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27349d1ca266506d73bb03a72a8",
+    "canonical_album_name": "Fluorite Eye's Song",
+    "spotify_album_id": "6XG981QfatczXIVkA15IV1",
+    "spotify_artist_ids": [
+      "0yJlj2EYshHk9BWkEAR15k"
+    ],
+    "source": "spotify (Precise Search (Artist: \u30f4\u30a3\u30f4\u30a3(Vo.\u516b\u6728\u6d77\u8389)))"
+  },
+  "spotify_aimer_i beg you_penny rain": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27330cf3673464552a8342b6ff3",
+    "canonical_album_name": "Penny Rain",
+    "spotify_album_id": "5WxSamBTcE3P1W6sT9My7B",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u30ad\u30ba\u30ca_dawn": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b54e91cdc2fc4e29efab4e4b",
+    "canonical_album_name": "DAWN",
+    "spotify_album_id": "7EHV2huu8yHAsPjzgmUjka",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_aimer_\u6625\u306f\u3086\u304f_haruhayuku marie": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273146ee402c8243cf8db8630e6",
+    "canonical_album_name": "Walpurgis",
+    "spotify_album_id": "3iFkNa8SRNFHD7La40UqUz",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_iu_my sea_iu 5th album 'lilac'": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734ed058b71650a6ca2c04adff",
+    "canonical_album_name": "IU 5th Album 'LILAC'",
+    "spotify_album_id": "01dPJcwyht77brL4JQiR8R",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "source": "spotify (Precise Search (Artist: IU))"
+  },
+  "spotify_kalafina_to the beginning_consolation": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273879284110fb2e583ed6d2b44",
+    "canonical_album_name": "Consolation",
+    "spotify_album_id": "6wUa2X4ZWE82DSpCn6zNsb",
+    "spotify_artist_ids": [
+      "2otsTXVV2ZWZ8T5LPzsBhy"
+    ],
+    "source": "spotify (Precise Search (Artist: Kalafina))"
+  },
+  "spotify_kang seung yoon_iyah_page": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273f7b851d008790d80625e1b92",
+    "canonical_album_name": "PAGE",
+    "spotify_album_id": "65UY7ED1QGhIlQ63pucq8g",
+    "spotify_artist_ids": [
+      "2Ip3x4XtEEhlGg8qI146jL"
+    ],
+    "source": "spotify (Precise Search (Artist: Kang Seung Yoon))"
+  },
+  "spotify_yoshiki_red swan_red swan": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735ce0fbd16dba08ae792dc1cf",
+    "canonical_album_name": "Red Swan",
+    "spotify_album_id": "6I13Z2eInmybf3WZl4wduL",
+    "spotify_artist_ids": [
+      "2EWIKpC6npt0GTe1Cq1KDm",
+      "0ZXSQd2JNOfwJcLNbX0jpN"
+    ],
+    "source": "spotify (Precise Search (Artist: Yoshiki))"
+  },
+  "spotify_aimer_brave shine_dawn": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b54e91cdc2fc4e29efab4e4b",
+    "canonical_album_name": "DAWN",
+    "spotify_album_id": "7EHV2huu8yHAsPjzgmUjka",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "source": "spotify (Precise Search (Artist: Aimer))"
+  },
+  "spotify_eir aoi_memoria_blau": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732cc95dfdcb569d344a2a6996",
+    "canonical_album_name": "BLAU",
+    "spotify_album_id": "6zZ0a3V5fbQtoMFHmM7kwq",
+    "spotify_artist_ids": [
+      "18moNotPmBWa2YZtRnIoZ3"
+    ],
+    "source": "spotify (Precise Search (Artist: Eir Aoi))"
+  },
+  "spotify_halca_\u30bb\u30f3\u30c1\u30e1\u30f3\u30bf\u30eb\u30af\u30e9\u30a4\u30b7\u30b9_sentimental crisis": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d7a6c99c292eaa54ddf8a3f7",
+    "canonical_album_name": "Assortrip",
+    "spotify_album_id": "21WfM8C9tr6u7MEZ4eWufZ",
+    "spotify_artist_ids": [
+      "2xOEM6pRUsLhlx2PzaQuK2"
+    ],
+    "source": "spotify (Precise Search (Artist: halca))"
+  },
+  "spotify_\u3044\u3068\u3046\u304b\u306a\u3053_\u30b9\u30ab\u30a4\u30af\u30e9\u30c3\u30c9\u306e\u89b3\u6e2c\u8005_chaosattractor": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27381f0671d77f562cfae3e40c5",
+    "canonical_album_name": "ChaosAttractor",
+    "spotify_album_id": "0yHtsepi9vEUIxuHq5ohz7",
+    "spotify_artist_ids": [
+      "2d12dVIZQZk9CKhEsezaoN"
+    ],
+    "source": "spotify (Precise Search (Artist: \u3044\u3068\u3046\u304b\u306a\u3053))"
   }
 }
