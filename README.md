@@ -1,3 +1,11 @@
+## OLD README, updated with v2
+## V2 Changes
+*   Album cover art fetching issues fixed
+*   Spotify API instead of MusicBrainz API for better cover art fetching
+*   Can now take either data from last.fm or directly from Spotify
+*   Optimizations to rendering including parallelization
+*   Different sampling rates (frame aggregation periods) available so you don't have to render as many frames
+
 Takes your Last.fm listening history for 2024 and generates a funny bar chart "race" video of your top 10 songs throughout the year complete with album cover art. 
 
 ## Demo Output
