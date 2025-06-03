@@ -27,11 +27,13 @@ mbid_cache_file = None
 dominant_color_cache_file = None
 spotify_info_cache_file = None
 negative_cache_file = None
+mb_album_info_cache_file = None # New cache file for MB album info
 
 mbid_cache = {}
 dominant_color_cache = {}
 spotify_info_cache = {}
 negative_cache = {}  # Cache for failed searches with timestamp
+mb_album_info_cache = {} # New cache for MB album info
 
 _spotify_access_token_cache = {
     "token": None,
@@ -44,8 +46,8 @@ _config_initialized = False
 def initialize_from_config(config):
     global DEBUG_CACHE, USER_AGENT, ART_CACHE_DIR
     global SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, NEGATIVE_CACHE_HOURS
-    global mbid_cache_file, dominant_color_cache_file, spotify_info_cache_file, negative_cache_file
-    global mbid_cache, dominant_color_cache, spotify_info_cache, negative_cache
+    global mbid_cache_file, dominant_color_cache_file, spotify_info_cache_file, negative_cache_file, mb_album_info_cache_file
+    global mbid_cache, dominant_color_cache, spotify_info_cache, negative_cache, mb_album_info_cache
     global _config_initialized
 
     if _config_initialized:
@@ -80,12 +82,14 @@ def initialize_from_config(config):
     dominant_color_cache_file = os.path.join(ART_CACHE_DIR, "dominant_color_cache.json")
     spotify_info_cache_file = os.path.join(ART_CACHE_DIR, "spotify_info_cache.json")
     negative_cache_file = os.path.join(ART_CACHE_DIR, "negative_cache.json")
+    mb_album_info_cache_file = os.path.join(ART_CACHE_DIR, "mb_album_info_cache.json") # Path for new cache
 
     # Load caches (after paths are set)
     mbid_cache = load_json_cache(mbid_cache_file)
     dominant_color_cache = load_json_cache(dominant_color_cache_file)
     spotify_info_cache = load_json_cache(spotify_info_cache_file)
     negative_cache = load_json_cache(negative_cache_file)
+    mb_album_info_cache = load_json_cache(mb_album_info_cache_file) # Load new cache
     
     _config_initialized = True
     if DEBUG_CACHE: print("[CACHE DEBUG] album_art_utils configuration initialized.")
@@ -228,77 +232,149 @@ def clean_artist_name_for_search(artist_name):
     
     return unique_variations
 
-def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
+def get_spotify_track_album_info(artist_name, track_name, album_name_hint, spotify_track_uri=None):
     """
     Searches Spotify for a track and returns its album art URL, canonical album name,
     Spotify album ID, and Spotify artist IDs.
     Uses album_name_hint to disambiguate if multiple album versions exist.
     Tries simplified searches if the initial detailed search fails.
+    If spotify_track_uri is provided, it attempts a direct lookup first.
     """
     original_track_name = track_name 
     original_album_hint = album_name_hint
     
-    # Sanitize artist name just once for internal use if it has extraneous quotes
-    # This is a light sanitization; Spotify usually handles artist names well.
-    # Keep original artist_name for display/logging if needed.
-    internal_artist_name = artist_name.strip('"')
+    print(f"\n--- [SPOTIFY_TRACE] Entering get_spotify_track_album_info --- ")
+    print(f"[SPOTIFY_TRACE] Called with (Original): Artist='{artist_name}', Track='{original_track_name}', Album Hint='{original_album_hint}', URI='{spotify_track_uri}'")
 
-    # Generate cache key using CLEANED artist name for consistency
+    access_token = _get_spotify_access_token()
+    if not access_token:
+        print(f"[SPOTIFY_TRACE] Failed to get Spotify access token. Cannot proceed.")
+        # No specific cache key to save under here, as failure is general
+        print(f"--- [SPOTIFY_TRACE] Exiting (no access token) ---\\n")
+        return None
+
+    # --- Priority 1: Direct URI Lookup (if spotify_track_uri is provided) ---
+    if spotify_track_uri:
+        try:
+            track_id = spotify_track_uri.split(':')[-1]
+            uri_cache_key = f"spotify_tracklookup_{track_id}"
+            print(f"[SPOTIFY_TRACE] URI provided. Attempting direct lookup with track_id: '{track_id}', cache_key: '{uri_cache_key}'")
+
+            if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify URI Lookup check for key: '{uri_cache_key}'")
+            if uri_cache_key in spotify_info_cache:
+                cached_value = spotify_info_cache[uri_cache_key]
+                if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify URI Lookup Cache HIT. Value: {cached_value}")
+                print(f"[SPOTIFY_TRACE] URI Lookup Cache HIT. Returning cached: {json.dumps(cached_value, indent=2, ensure_ascii=False) if cached_value is not None else 'None'}")
+                print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (from URI cache) ---\\n")
+                return cached_value
+            
+            if is_negative_cache_valid(uri_cache_key):
+                print(f"[SPOTIFY_TRACE] Negative cache HIT for URI lookup '{uri_cache_key}'. This search failed recently. Skipping API call.")
+                print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (from URI negative cache) ---\\n")
+                spotify_info_cache[uri_cache_key] = None # Ensure regular cache also reflects this for consistency if needed
+                save_json_cache(spotify_info_cache, spotify_info_cache_file)
+                return None
+            
+            if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify URI Lookup Cache MISS for '{uri_cache_key}'. Querying API.")
+
+            url = f"{SPOTIFY_API_BASE_URL}tracks/{track_id}"
+            headers = {'Authorization': f"Bearer {access_token}", 'User-Agent': USER_AGENT}
+            print(f"Spotify API call (Direct Track Lookup) for URI: {spotify_track_uri}")
+            response = requests.get(url, headers=headers, timeout=10)
+            response.raise_for_status()
+            track_data = response.json()
+            print(f"[SPOTIFY_TRACE] Spotify API Direct Track Lookup successful (HTTP Status: {response.status_code}).")
+            # print(f"[SPOTIFY_TRACE] Raw Response (Direct Track Lookup): {json.dumps(track_data, indent=2, ensure_ascii=False)}")
+
+            if track_data and track_data.get('album'):
+                album_info = track_data['album']
+                art_url = album_info.get('images', [{}])[0].get('url') if album_info.get('images') else None
+                
+                if art_url: # Successfully found art via direct URI lookup
+                    result = {
+                        "art_url": art_url,
+                        "canonical_album_name": album_info.get('name'),
+                        "spotify_album_id": album_info.get('id'),
+                        "spotify_artist_ids": [a['id'] for a in track_data.get('artists', []) if a.get('id')],
+                        "source": "spotify (uri_lookup)"
+                    }
+                    print(f"[SPOTIFY_TRACE] SUCCESS via URI Lookup! Found art_url: {art_url}")
+                    print(f"[SPOTIFY_TRACE] Caching and returning URI lookup result: {json.dumps(result, indent=2, ensure_ascii=False)}")
+                    spotify_info_cache[uri_cache_key] = result
+                    save_json_cache(spotify_info_cache, spotify_info_cache_file)
+                    print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (from URI API success) ---\\n")
+                    return result
+                else:
+                    print(f"[SPOTIFY_TRACE] URI Lookup successful, but track data has no art_url. Album: '{album_info.get('name')}'. Will proceed to search-based fallback.")
+                    # Don't add to negative cache here, as the track *was* found. Let search logic try.
+                    # spotify_info_cache[uri_cache_key] = None # Cache that this URI has no art
+                    # save_json_cache(spotify_info_cache, spotify_info_cache_file)
+            else:
+                print(f"[SPOTIFY_TRACE] URI Lookup successful, but no album data in response for track '{track_id}'. Will proceed to search-based fallback.")
+                # spotify_info_cache[uri_cache_key] = None # Cache that this URI has no album data
+                # save_json_cache(spotify_info_cache, spotify_info_cache_file)
+
+        except requests.exceptions.HTTPError as e_http:
+            print(f"[SPOTIFY_TRACE] HTTPError during URI Lookup for {spotify_track_uri}: {e_http}")
+            if e_http.response.status_code == 404:
+                print(f"[SPOTIFY_TRACE] Track ID from URI {spotify_track_uri} not found on Spotify (404). Adding to negative cache.")
+                add_to_negative_cache(uri_cache_key, f"spotify_uri_track_not_found_{e_http.response.status_code}")
+                spotify_info_cache[uri_cache_key] = None # Cache failure
+                save_json_cache(spotify_info_cache, spotify_info_cache_file)
+                # Fall through to search-based method, as original track name/artist might still find something else.
+            # For other HTTP errors, we might also want to fall through or handle differently.
+            # For now, a failed URI lookup will generally try search-based as a robust fallback.
+        except requests.exceptions.RequestException as e_req:
+            print(f"[SPOTIFY_TRACE] RequestException during URI Lookup for {spotify_track_uri}: {e_req}. Will proceed to search-based fallback.")
+        except Exception as e_generic_uri:
+            print(f"[SPOTIFY_TRACE] Generic Exception during URI Lookup for {spotify_track_uri}: {e_generic_uri}. Will proceed to search-based fallback.")
+        # If URI lookup found the track but no art, or if it failed, we fall through to search-based logic.
+        print(f"[SPOTIFY_TRACE] URI lookup for '{spotify_track_uri}' did not yield art or failed. Proceeding to search-based methods.")
+
+    # --- Priority 2: Search-Based Lookup (Original Logic) ---
+    # This part of the code is largely the original search logic, now acting as a fallback or primary if no URI.
+    # It uses a different cache key based on artist/track/album_hint.
+    internal_artist_name = artist_name.strip('"')
     artist_variations_for_cache = clean_artist_name_for_search(internal_artist_name)
     primary_clean_artist = artist_variations_for_cache[0] if artist_variations_for_cache else internal_artist_name
+    search_cache_key = f"spotify_search_{primary_clean_artist.lower().strip()}_{original_track_name.lower().strip()}_{original_album_hint.lower().strip()}"
 
-    cache_key = f"spotify_{primary_clean_artist.lower().strip()}_{original_track_name.lower().strip()}_{original_album_hint.lower().strip()}"
-    
-    print(f"\n--- [SPOTIFY_TRACE] Entering get_spotify_track_album_info ---")
-    print(f"[SPOTIFY_TRACE] Called with (Original):")
-    print(f"[SPOTIFY_TRACE]   Artist (original): '{artist_name}' (Using internally: '{internal_artist_name}')")
-    print(f"[SPOTIFY_TRACE]   Track: '{original_track_name}'")
-    print(f"[SPOTIFY_TRACE]   Album Hint: '{original_album_hint}'")
-    print(f"[SPOTIFY_TRACE] Cache key generated (using cleaned artist '{primary_clean_artist}'): '{cache_key}'")
+    print(f"[SPOTIFY_TRACE] Attempting Search-Based Lookup. Artist: '{artist_name}', Track: '{original_track_name}', Album Hint: '{original_album_hint}', Cache Key: '{search_cache_key}'")
 
-    force_api_call_for_this_song = False
-    # # --- FOR DEBUGGING SPECIFIC TRACKS: UNCOMMENT AND MODIFY AS NEEDED ---
-    # # if "kristen bell" in artist_name.lower() and "for the first time in forever" in original_track_name.lower():
-    # #     print(f"[SPOTIFY_TRACE_FORCE] Matched criteria for '{artist_name} - {original_track_name}'. Forcing API call.")
+    force_api_call_for_this_song = False # Reset for search logic
+    # # --- FOR DEBUGGING SPECIFIC TRACKS (Search): UNCOMMENT AND MODIFY AS NEEDED --- 
+    # # if "some specific artist" in artist_name.lower() and "some specific track" in original_track_name.lower():
+    # #     print(f"[SPOTIFY_TRACE_FORCE_SEARCH] Matched criteria. Forcing API search call.")
     # #     force_api_call_for_this_song = True
     # # ---
 
     if not force_api_call_for_this_song:
         if DEBUG_CACHE: 
-            print(f"[CACHE DEBUG] Spotify info check for key: '{cache_key}' (using cleaned artist name)")
-        if cache_key in spotify_info_cache:
-            cached_value = spotify_info_cache[cache_key]
-            if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Info Cache HIT. Value: {cached_value}")
-            print(f"[SPOTIFY_TRACE] Cache HIT. Returning cached: {json.dumps(cached_value, indent=2, ensure_ascii=False) if cached_value is not None else 'None'}")
-            print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (from cache) ---\n")
+            print(f"[CACHE DEBUG] Spotify Search Info check for key: '{search_cache_key}'")
+        if search_cache_key in spotify_info_cache:
+            cached_value = spotify_info_cache[search_cache_key]
+            if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Search Info Cache HIT. Value: {cached_value}")
+            print(f"[SPOTIFY_TRACE] Search Cache HIT. Returning cached: {json.dumps(cached_value, indent=2, ensure_ascii=False) if cached_value is not None else 'None'}")
+            print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (from search cache) ---\\n")
             return cached_value
         
-        # Check negative cache to avoid repeated failed API calls
-        if is_negative_cache_valid(cache_key):
-            print(f"[SPOTIFY_TRACE] Negative cache HIT. This search failed recently. Skipping API calls.")
-            print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (from negative cache) ---\n")
-            spotify_info_cache[cache_key] = None  # Also cache as None in regular cache
+        if is_negative_cache_valid(search_cache_key):
+            print(f"[SPOTIFY_TRACE] Negative cache HIT for search '{search_cache_key}'. This search failed recently. Skipping API calls.")
+            print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (from search negative cache) ---\\n")
+            spotify_info_cache[search_cache_key] = None 
             save_json_cache(spotify_info_cache, spotify_info_cache_file)
             return None
         else:
-            if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Info Cache MISS. Querying API.")
-            print(f"[SPOTIFY_TRACE] Cache MISS. Proceeding to query API.")
+            if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Search Info Cache MISS for '{search_cache_key}'. Querying API.")
+            print(f"[SPOTIFY_TRACE] Search Cache MISS. Proceeding to query API for search.")
     else:
-        print(f"[SPOTIFY_TRACE_FORCE] Proceeding to query Spotify API (cache check bypassed).")
+        print(f"[SPOTIFY_TRACE_FORCE_SEARCH] Proceeding to query Spotify API for search (cache check bypassed for search_cache_key).")
 
-    access_token = _get_spotify_access_token()
-    if not access_token:
-        print(f"[SPOTIFY_TRACE] Failed to get Spotify access token. Caching None.")
-        spotify_info_cache[cache_key] = None
-        save_json_cache(spotify_info_cache, spotify_info_cache_file)
-        print(f"--- [SPOTIFY_TRACE] Exiting (no access token, cached None) ---\n")
-        return None
+    # Access token should still be valid from earlier check, or this function would have exited.
+    # If URI lookup failed due to token issue, this part won't run. This is fine.
 
-    # --- Build comprehensive search strategy ---
     search_queries_to_try = []
-    
-    # Clean artist names - get multiple variations (reuse the ones we calculated above)
-    artist_variations = artist_variations_for_cache
+    artist_variations = artist_variations_for_cache # Re-use from earlier in this function
     if DEBUG_CACHE:
         print(f"[ARTIST VARIATIONS] Original: '{internal_artist_name}' -> Variations: {artist_variations}")
     
@@ -426,39 +502,49 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
             data = response.json()
 
             print(f"[SPOTIFY_TRACE] Spotify API call successful ({search_type_label}, HTTP Status: {response.status_code}).")
-            if data.get('tracks') and data['tracks'].get('items'):
-                 print(f"[SPOTIFY_TRACE] Raw Response (Tracks Items, {search_type_label}): {json.dumps(data['tracks']['items'], indent=2, ensure_ascii=False)}")
-            # ... (other raw response prints if needed) ...
+            # if data.get('tracks') and data['tracks'].get('items'):
+            #      print(f"[SPOTIFY_TRACE] Raw Response (Tracks Items, {search_type_label}): {json.dumps(data['tracks']['items'], indent=2, ensure_ascii=False)}")
 
             if data.get('tracks') and data['tracks'].get('items'):
                 items = data['tracks']['items']
                 best_match = None
-                normalized_album_hint = current_album_hint_to_use.lower().strip() if current_album_hint_to_use else ""
-                
-                for i, item in enumerate(items):
-                    spotify_album_name_original = item.get('album', {}).get('name', '')
-                    spotify_album_name_lower = spotify_album_name_original.lower().strip()
-                    
-                    # Enhanced matching logic for soundtracks
-                    if normalized_album_hint:
-                        # Direct match
-                        if normalized_album_hint in spotify_album_name_lower or spotify_album_name_lower in normalized_album_hint:
+                normalized_album_hint_for_search = current_album_hint_to_use.lower().strip() if current_album_hint_to_use else ""
+
+                # Stage 1: Try for an EXACT album name match first
+                if normalized_album_hint_for_search: # Only if we have a hint
+                    for i, item in enumerate(items):
+                        spotify_album_name_original = item.get('album', {}).get('name', '')
+                        spotify_album_name_lower_stripped = spotify_album_name_original.lower().strip()
+                        if spotify_album_name_lower_stripped == normalized_album_hint_for_search:
                             best_match = item
-                            print(f"[SPOTIFY_TRACE] ({search_type_label}) MATCHED Item {i} based on album hint. Selected.")
-                            break
-                        # Soundtrack-specific matching (more flexible)
-                        elif is_soundtrack:
-                            # Check if core album names match (ignoring soundtrack suffixes)
-                            album_core = normalized_album_hint.replace("soundtrack", "").replace("original motion picture", "").strip()
-                            spotify_core = spotify_album_name_lower.replace("soundtrack", "").replace("original motion picture", "").strip()
-                            if album_core and spotify_core and (album_core in spotify_core or spotify_core in album_core):
+                            print(f"[SPOTIFY_TRACE] ({search_type_label}) EXACT MATCH Item {i} based on album hint ('{normalized_album_hint_for_search}'). Selected.")
+                            break # Found exact match
+
+                # Stage 2: If no exact match, try for containment (more lenient)
+                if not best_match and normalized_album_hint_for_search:
+                    for i, item in enumerate(items):
+                        spotify_album_name_original = item.get('album', {}).get('name', '')
+                        spotify_album_name_lower_stripped = spotify_album_name_original.lower().strip()
+                        
+                        # Check containment: hint in spotify_name OR spotify_name in hint
+                        if (normalized_album_hint_for_search in spotify_album_name_lower_stripped or
+                            spotify_album_name_lower_stripped in normalized_album_hint_for_search):
+                            best_match = item
+                            print(f"[SPOTIFY_TRACE] ({search_type_label}) CONTAINMENT MATCH Item {i} based on album hint ('{normalized_album_hint_for_search}' vs '{spotify_album_name_lower_stripped}'). Selected.")
+                            break # Found a containment match
+                        # Soundtrack-specific matching (more flexible, could be part of this stage or a separate one)
+                        elif is_soundtrack: # is_soundtrack was defined earlier in the function
+                            album_core_hint = normalized_album_hint_for_search.replace("soundtrack", "").replace("original motion picture", "").strip()
+                            spotify_core_name = spotify_album_name_lower_stripped.replace("soundtrack", "").replace("original motion picture", "").strip()
+                            if album_core_hint and spotify_core_name and (album_core_hint in spotify_core_name or spotify_core_name in album_core_hint):
                                 best_match = item
-                                print(f"[SPOTIFY_TRACE] ({search_type_label}) MATCHED Item {i} based on core album name similarity. Selected.")
+                                print(f"[SPOTIFY_TRACE] ({search_type_label}) SOUNDTRACK CORE MATCH Item {i} ('{album_core_hint}' vs '{spotify_core_name}'). Selected.")
                                 break
                 
+                # Stage 3: If still no match and items exist, fallback to the first item
                 if not best_match and items:
-                    best_match = items[0] # Fallback to first item if no hint match
-                    print(f"[SPOTIFY_TRACE] ({search_type_label}) No album hint match. Taking first result.")
+                    best_match = items[0] 
+                    print(f"[SPOTIFY_TRACE] ({search_type_label}) No album hint match (exact or containment). Taking first result (Item 0).")
 
                 if best_match:
                     album_info = best_match.get('album', {})
@@ -490,19 +576,102 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint):
     # After trying all search queries:
     if final_result_from_api:
         print(f"Found Spotify info via {final_result_from_api['source']}: Album='{final_result_from_api['canonical_album_name']}', Art URL: {'Yes' if final_result_from_api['art_url'] else 'No'}")
-        print(f"[SPOTIFY_TRACE] Caching and returning result (from {final_result_from_api['source']}): {json.dumps(final_result_from_api, indent=2, ensure_ascii=False)}")
+        print(f"[SPOTIFY_TRACE] Caching and returning search result (from {final_result_from_api['source']}): {json.dumps(final_result_from_api, indent=2, ensure_ascii=False)}")
     else:
-        print(f"No suitable track found on Spotify after all attempts for: Original Track='{original_track_name}', Artist='{artist_name}'")
-        print(f"[SPOTIFY_TRACE] Caching None after all search attempts failed.")
-        # Add to negative cache to avoid repeated failed searches
-        add_to_negative_cache(cache_key, f"no_spotify_results_after_{len(search_queries_to_try)}_attempts")
+        print(f"No suitable track found on Spotify after all search attempts for: Original Track='{original_track_name}', Artist='{artist_name}'")
+        print(f"[SPOTIFY_TRACE] Caching None to '{search_cache_key}' after all search attempts failed.")
+        add_to_negative_cache(search_cache_key, f"no_spotify_results_after_{len(search_queries_to_try)}_search_attempts")
     
-    spotify_info_cache[cache_key] = final_result_from_api # Cache the final result (or None) under the original key
+    spotify_info_cache[search_cache_key] = final_result_from_api 
     save_json_cache(spotify_info_cache, spotify_info_cache_file)
-    print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (after API attempt(s)) ---\n")
+    print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (after API search attempt(s)) ---\\n")
     return final_result_from_api
 
 # --- MusicBrainz Functions (Now Legacy/Fallback - Commented out primary usage) ---
+def get_canonical_album_name_from_mbid(album_mbid):
+    """
+    Queries MusicBrainz for a given album_mbid (release MBID) to get its
+    canonical album name, preferably from the release group.
+    Caches results in mb_album_info_cache.
+    """
+    if not album_mbid:
+        return None
+
+    cache_key = f"mb_album_{album_mbid}"
+    if DEBUG_CACHE: print(f"[CACHE DEBUG] MB Album Info check for key: '{cache_key}'")
+
+    if cache_key in mb_album_info_cache:
+        cached_data = mb_album_info_cache[cache_key]
+        if DEBUG_CACHE: print(f"[CACHE DEBUG] MB Album Info Cache HIT. Value: {cached_data}")
+        return cached_data.get("canonical_album_name") if isinstance(cached_data, dict) else cached_data # Handle old cache format if any
+
+    # Check negative cache for this specific MBID lookup type
+    negative_cache_key_mb_album = f"neg_mb_album_{album_mbid}"
+    if is_negative_cache_valid(negative_cache_key_mb_album):
+        if DEBUG_CACHE: print(f"[NEGATIVE CACHE DEBUG] Negative cache HIT for '{negative_cache_key_mb_album}'. Skipping MB API call.")
+        return None # Already know this MBID lookup failed recently
+
+    if DEBUG_CACHE: print(f"[CACHE DEBUG] MB Album Info Cache MISS for key: '{cache_key}'. Querying MusicBrainz API.")
+    print(f"MusicBrainz API call for canonical album name (MBID: {album_mbid})")
+
+    url = f"https://musicbrainz.org/ws/2/release/{album_mbid}?inc=release-groups&fmt=json"
+    headers = {'User-Agent': USER_AGENT}
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        canonical_name = None
+        # Prefer release group title if available and seems valid
+        if data.get('release-group') and data['release-group'].get('title'):
+            canonical_name = data['release-group']['title']
+            if DEBUG_CACHE: print(f"[MB ALBUM DEBUG] Using release-group title: '{canonical_name}' for MBID {album_mbid}")
+        # Fallback to release title if release group title is missing
+        elif data.get('title'):
+            canonical_name = data['title']
+            if DEBUG_CACHE: print(f"[MB ALBUM DEBUG] Using release title: '{canonical_name}' for MBID {album_mbid} (no release-group title)")
+        
+        if canonical_name:
+            mb_album_info_cache[cache_key] = {"canonical_album_name": canonical_name, "source": "musicbrainz_api"}
+            save_json_cache(mb_album_info_cache, mb_album_info_cache_file)
+            print(f"Found canonical album name: '{canonical_name}' for MBID: {album_mbid}")
+            time.sleep(1) # Respect MusicBrainz API rate limits
+            return canonical_name
+        else:
+            print(f"No canonical album name found in MusicBrainz response for MBID: {album_mbid}")
+            add_to_negative_cache(negative_cache_key_mb_album, "mb_no_album_title_found")
+            mb_album_info_cache[cache_key] = {"canonical_album_name": None, "source": "musicbrainz_api_failed_no_title"} # Cache failure
+            save_json_cache(mb_album_info_cache, mb_album_info_cache_file)
+            time.sleep(1)
+            return None
+
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            print(f"MusicBrainz API: Release MBID {album_mbid} not found (404).")
+            add_to_negative_cache(negative_cache_key_mb_album, f"mb_mbid_not_found_{e.response.status_code}")
+        else:
+            print(f"MusicBrainz API HTTPError for MBID {album_mbid}: {e}")
+            add_to_negative_cache(negative_cache_key_mb_album, f"mb_http_error_{e.response.status_code}")
+        mb_album_info_cache[cache_key] = {"canonical_album_name": None, "source": f"musicbrainz_api_http_error_{e.response.status_code}"}
+        save_json_cache(mb_album_info_cache, mb_album_info_cache_file)
+        time.sleep(1)
+        return None
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching canonical album name for MBID {album_mbid} from MusicBrainz: {e}")
+        # Don't add to negative cache for general request exceptions like timeouts, allow retries sooner
+        # mb_album_info_cache[cache_key] = {"canonical_album_name": None, "source": "musicbrainz_api_request_exception"} # Optionally cache this type of failure
+        # save_json_cache(mb_album_info_cache, mb_album_info_cache_file)
+        time.sleep(1)
+        return None
+    except json.JSONDecodeError:
+        print(f"Error decoding JSON response for canonical album name (MBID: {album_mbid}) from MusicBrainz.")
+        add_to_negative_cache(negative_cache_key_mb_album, "mb_json_decode_error")
+        mb_album_info_cache[cache_key] = {"canonical_album_name": None, "source": "musicbrainz_api_json_decode_error"}
+        save_json_cache(mb_album_info_cache, mb_album_info_cache_file)
+        time.sleep(1)
+        return None
+
 def get_release_mbid(artist_name, album_name):
     # This function is now effectively deprecated for primary use.
     # Kept for reference or potential future fallback.
@@ -687,47 +856,122 @@ def get_dominant_color(image_path, palette_size=1):
         return (128, 128, 128)
 
 
-def get_album_art_path(artist_name, track_name, album_name_from_lastfm):
+def get_album_art_path(artist_name, track_name, identifier_info):
     """
+    DEPRECATED in favor of get_album_art_path_and_spotify_info.
     Main function to get local album art path.
-    Uses Spotify API first.
-    artist_name: From Last.fm data
-    track_name: From Last.fm data
-    album_name_from_lastfm: Album name as reported by Last.fm (used as a hint for Spotify)
+    Uses Spotify API first, potentially leveraging MBID for Last.fm data to refine album name,
+    or Spotify Track URI for direct Spotify data.
+
+    Args:
+        artist_name (str): Artist name.
+        track_name (str): Track name.
+        identifier_info (dict): Dictionary containing information to help identify the album:
+            {
+                "album_name_hint": "Original album name string",
+                "album_mbid": "mbid_if_lastfm_and_available" or None,
+                "track_uri": "uri_if_spotify_data" or None,
+                "source_data_type": "spotify" or "lastfm"
+            }
+
+    Returns:
+        str: Local path to downloaded album art, or None on failure.
     """
-    print(f"Attempting to get art path for: Artist='{artist_name}', Track='{track_name}', Album (Last.fm)='{album_name_from_lastfm}'")
+    print(f"Attempting to get art path for: Artist='{artist_name}', Track='{track_name}', Identifiers: {identifier_info}")
+
+    current_album_hint = identifier_info.get("album_name_hint", "")
+    track_uri_from_spotify_data = identifier_info.get("track_uri")
+    source_type = identifier_info.get("source_data_type")
+
+    if source_type == "lastfm" and identifier_info.get("album_mbid"):
+        album_mbid = identifier_info["album_mbid"]
+        if DEBUG_CACHE: print(f"[ART_PATH_LOGIC] Last.fm data with MBID: {album_mbid}. Attempting to get canonical album name.")
+        canonical_name_from_mb = get_canonical_album_name_from_mbid(album_mbid)
+        if canonical_name_from_mb:
+            if DEBUG_CACHE: print(f"[ART_PATH_LOGIC] Canonical album name from MB: '{canonical_name_from_mb}'. Using this as hint for Spotify.")
+            current_album_hint = canonical_name_from_mb
+        elif DEBUG_CACHE:
+            print(f"[ART_PATH_LOGIC] No canonical name from MB for {album_mbid}. Using original hint: '{current_album_hint}'")
     
-    spotify_data = get_spotify_track_album_info(artist_name, track_name, album_name_from_lastfm)
+    spotify_data = get_spotify_track_album_info(
+        artist_name, 
+        track_name, 
+        current_album_hint, 
+        spotify_track_uri=track_uri_from_spotify_data
+    )
 
     if spotify_data and spotify_data.get("art_url"):
         art_url = spotify_data["art_url"]
-        # Use canonical album name from Spotify for file naming if available, else fallback to Last.fm's
-        album_name_for_file = spotify_data.get("canonical_album_name", album_name_from_lastfm)
-        # Could also use a primary artist name from Spotify if we fetched it
-        artist_name_for_file = artist_name 
+        album_name_for_file = spotify_data.get("canonical_album_name", current_album_hint) 
+        artist_name_for_file = artist_name
         
+        print(f"[ART_PATH_LOGIC] Spotify returned art URL: {art_url}. Album for filename: '{album_name_for_file}'")
         return download_image_to_cache(art_url, album_name_for_file, artist_name_for_file)
     else:
-        if spotify_data: # Spotify responded but no art URL
-            print(f"Spotify found info for '{artist_name} - {track_name}' but no art URL.")
-        else: # Spotify API call failed or found no match
-            print(f"No Spotify info or art URL found for '{artist_name} - {track_name}'.")
-        
-        # ---- START: Optional Fallback to MusicBrainz (currently disabled by commenting out calls) ----
-        # print(f"Attempting fallback to MusicBrainz for: {artist_name} - {album_name_from_lastfm}")
-        # release_mbid = get_release_mbid(artist_name, album_name_from_lastfm) # Uses original album name for MB
-        # if not release_mbid:
-        #     print(f"Fallback: No MBID for {artist_name} - {album_name_from_lastfm}")
-        #     return None
-        # art_url_mb = get_album_art_url(release_mbid)
-        # if not art_url_mb:
-        #     print(f"Fallback: No art URL from CAA for {artist_name} - {album_name_from_lastfm}")
-        #     return None
-        # print(f"Fallback: Using MusicBrainz/CAA art for {artist_name} - {album_name_from_lastfm}")
-        # return download_image_to_cache(art_url_mb, album_name_from_lastfm, artist_name) # Use original names for MB path
-        # ---- END: Optional Fallback ----
-        
+        if spotify_data:
+            print(f"[ART_PATH_LOGIC] Spotify found info for '{artist_name} - {track_name}' (Source: {spotify_data.get('source')}) but no art URL.")
+        else:
+            print(f"[ART_PATH_LOGIC] No Spotify info or art URL found for '{artist_name} - {track_name}' after all attempts.")
         return None
+
+def get_album_art_path_and_spotify_info(artist_name, track_name, identifier_info):
+    """
+    Main function to get local album art path and the spotify_info data used.
+    Uses Spotify API first, potentially leveraging MBID for Last.fm data to refine album name,
+    or Spotify Track URI for direct Spotify data.
+
+    Args:
+        artist_name (str): Artist name.
+        track_name (str): Track name.
+        identifier_info (dict): Dictionary containing information to help identify the album:
+            {
+                "album_name_hint": "Original album name string",
+                "album_mbid": "mbid_if_lastfm_and_available" or None,
+                "track_uri": "uri_if_spotify_data" or None,
+                "source_data_type": "spotify" or "lastfm"
+            }
+
+    Returns:
+        tuple: (local_art_path, spotify_info_dict) or (None, spotify_info_dict_if_found_else_None)
+               spotify_info_dict is the dict returned by get_spotify_track_album_info
+    """
+    print(f"Attempting to get art path and info for: Artist='{artist_name}', Track='{track_name}', Identifiers: {identifier_info}")
+
+    current_album_hint = identifier_info.get("album_name_hint", "")
+    track_uri_from_spotify_data = identifier_info.get("track_uri")
+    source_type = identifier_info.get("source_data_type")
+
+    if source_type == "lastfm" and identifier_info.get("album_mbid"):
+        album_mbid = identifier_info["album_mbid"]
+        if DEBUG_CACHE: print(f"[ART_PATH_LOGIC] Last.fm data with MBID: {album_mbid}. Attempting to get canonical album name.")
+        canonical_name_from_mb = get_canonical_album_name_from_mbid(album_mbid)
+        if canonical_name_from_mb:
+            if DEBUG_CACHE: print(f"[ART_PATH_LOGIC] Canonical album name from MB: '{canonical_name_from_mb}'. Using this as hint for Spotify.")
+            current_album_hint = canonical_name_from_mb
+        elif DEBUG_CACHE:
+            print(f"[ART_PATH_LOGIC] No canonical name from MB for {album_mbid}. Using original hint: '{current_album_hint}'")
+    
+    spotify_data = get_spotify_track_album_info(
+        artist_name, 
+        track_name, 
+        current_album_hint, 
+        spotify_track_uri=track_uri_from_spotify_data
+    )
+
+    if spotify_data and spotify_data.get("art_url"):
+        art_url = spotify_data["art_url"]
+        album_name_for_file = spotify_data.get("canonical_album_name", current_album_hint) 
+        artist_name_for_file = artist_name
+        
+        print(f"[ART_PATH_LOGIC] Spotify returned art URL: {art_url}. Album for filename: '{album_name_for_file}'")
+        downloaded_path = download_image_to_cache(art_url, album_name_for_file, artist_name_for_file)
+        return downloaded_path, spotify_data # Return path and the spotify_data dict
+    else:
+        if spotify_data:
+            print(f"[ART_PATH_LOGIC] Spotify found info for '{artist_name} - {track_name}' (Source: {spotify_data.get('source')}) but no art URL.")
+        else:
+            print(f"[ART_PATH_LOGIC] No Spotify info or art URL found for '{artist_name} - {track_name}' after all attempts.")
+        return None, spotify_data # Return None for path, but still return spotify_data if it was found
 
 
 if __name__ == "__main__":
@@ -781,21 +1025,29 @@ if __name__ == "__main__":
     test_album_1_hint = "Lover"
     print(f"\n[STANDALONE TEST 1] With: {test_artist_1} - {test_track_1} (Album Hint: {test_album_1_hint})")
     
-    # The function get_album_art_path is what main_animator calls.
-    # It internally calls get_spotify_track_album_info and download_image_to_cache.
-    art_path_data_1 = get_album_art_path(test_artist_1, test_track_1, test_album_1_hint)
-    
-    art_path_1 = None
-    if isinstance(art_path_data_1, str) and art_path_data_1:
-        art_path_1 = art_path_data_1
-    elif isinstance(art_path_data_1, dict) and art_path_data_1.get("art_path"): # If you update get_album_art_path later
-        art_path_1 = art_path_data_1["art_path"]
-        print(f"Canonical album name from Spotify: {art_path_data_1.get('canonical_album_name')}")
+    # Simulate Last.fm type call (no track_uri, has album_name_hint)
+    identifier_info_1_lastfm = {
+        "album_name_hint": test_album_1_hint,
+        "album_mbid": None, # Assume no MBID for this simple test
+        "track_uri": None,
+        "source_data_type": "lastfm"
+    }
+    # art_path_data_1 = get_album_art_path(test_artist_1, test_track_1, identifier_info_1_lastfm)
+    art_path_1, spotify_info_1 = get_album_art_path_and_spotify_info(test_artist_1, test_track_1, identifier_info_1_lastfm)
+
+    # art_path_1 = None
+    if isinstance(art_path_1, str) and art_path_1:
+        art_path_1 = art_path_1
+    elif isinstance(art_path_1, dict) and art_path_1.get("art_path"): # If you update get_album_art_path_and_spotify_info later
+        art_path_1 = art_path_1["art_path"]
+        print(f"Canonical album name from Spotify: {art_path_1.get('canonical_album_name')}")
 
     print(f"Art path for {test_track_1}: {art_path_1}")
     if art_path_1 and os.path.exists(art_path_1):
         dom_color_1 = get_dominant_color(art_path_1)
         print(f"Dominant color for {test_track_1} (RGB): {dom_color_1}")
+        if spotify_info_1:
+            print(f"Spotify Info for test 1: Canonical Album='{spotify_info_1.get('canonical_album_name')}', Source='{spotify_info_1.get('source')}'")
     elif art_path_1:
         print(f"Warning: Art path {art_path_1} was returned but file does not exist.")
 
@@ -804,13 +1056,21 @@ if __name__ == "__main__":
     test_track_2 = "Misery Business"
     test_album_2_hint = "Riot!"
     print(f"\n[STANDALONE TEST 2] With: {test_artist_2} - {test_track_2} (Album Hint: {test_album_2_hint})")
-    art_path_data_2 = get_album_art_path(test_artist_2, test_track_2, test_album_2_hint)
-    
-    art_path_2 = None
-    if isinstance(art_path_data_2, str) and art_path_data_2:
-        art_path_2 = art_path_data_2
-    elif isinstance(art_path_data_2, dict) and art_path_data_2.get("art_path"):
-        art_path_2 = art_path_data_2["art_path"]
+    # Simulate Last.fm type call
+    identifier_info_2_lastfm = {
+        "album_name_hint": test_album_2_hint,
+        "album_mbid": None, 
+        "track_uri": None,
+        "source_data_type": "lastfm"
+    }
+    # art_path_data_2 = get_album_art_path(test_artist_2, test_track_2, identifier_info_2_lastfm)
+    art_path_2, _ = get_album_art_path_and_spotify_info(test_artist_2, test_track_2, identifier_info_2_lastfm)
+
+    # art_path_2 = None
+    if isinstance(art_path_2, str) and art_path_2:
+        art_path_2 = art_path_2
+    elif isinstance(art_path_2, dict) and art_path_2.get("art_path"):
+        art_path_2 = art_path_2["art_path"]
 
     print(f"Art path for {test_track_2}: {art_path_2}")
     if art_path_2 and os.path.exists(art_path_2):
@@ -822,13 +1082,21 @@ if __name__ == "__main__":
     test_track_3 = "晴る"
     test_album_3_hint = "幻燈"
     print(f"\n[STANDALONE TEST 3] With: {test_artist_3} - {test_track_3} (Album Hint: {test_album_3_hint})")
-    art_path_data_3 = get_album_art_path(test_artist_3, test_track_3, test_album_3_hint)
+    # Simulate Last.fm type call
+    identifier_info_3_lastfm = {
+        "album_name_hint": test_album_3_hint,
+        "album_mbid": None, 
+        "track_uri": None,
+        "source_data_type": "lastfm"
+    }
+    # art_path_data_3 = get_album_art_path(test_artist_3, test_track_3, identifier_info_3_lastfm)
+    art_path_3, _ = get_album_art_path_and_spotify_info(test_artist_3, test_track_3, identifier_info_3_lastfm)
 
-    art_path_3 = None
-    if isinstance(art_path_data_3, str) and art_path_data_3:
-        art_path_3 = art_path_data_3
-    elif isinstance(art_path_data_3, dict) and art_path_data_3.get("art_path"):
-        art_path_3 = art_path_data_3["art_path"]
+    # art_path_3 = None
+    if isinstance(art_path_3, str) and art_path_3:
+        art_path_3 = art_path_3
+    elif isinstance(art_path_3, dict) and art_path_3.get("art_path"):
+        art_path_3 = art_path_3["art_path"]
 
     print(f"Art path for {test_track_3} by {test_artist_3}: {art_path_3}")
     if art_path_3 and os.path.exists(art_path_3):
@@ -837,18 +1105,48 @@ if __name__ == "__main__":
 
     # Test 4: Cache hit test (re-run Test 1)
     print(f"\n[STANDALONE TEST 4] Cache Re-Test for: {test_artist_1} - {test_track_1}")
-    art_path_data_1_again = get_album_art_path(test_artist_1, test_track_1, test_album_1_hint)
+    # art_path_data_1_again = get_album_art_path(test_artist_1, test_track_1, identifier_info_1_lastfm) # Using same identifier info
+    art_path_1_again, _ = get_album_art_path_and_spotify_info(test_artist_1, test_track_1, identifier_info_1_lastfm)
     
-    art_path_1_again_val = None
-    if isinstance(art_path_data_1_again, str) and art_path_data_1_again:
-         art_path_1_again_val = art_path_data_1_again
-    elif isinstance(art_path_data_1_again, dict) and art_path_data_1_again.get("art_path"):
-        art_path_1_again_val = art_path_data_1_again["art_path"]
+    # art_path_1_again_val = None
+    # if isinstance(art_path_data_1_again, str) and art_path_data_1_again:
+    #      art_path_1_again_val = art_path_data_1_again
+    # elif isinstance(art_path_data_1_again, dict) and art_path_data_1_again.get("art_path"):
+    #     art_path_1_again_val = art_path_data_1_again["art_path"]
+    art_path_1_again_val = art_path_1_again # Direct assignment from new function call
 
     print(f"Art path (2nd call): {art_path_1_again_val}")
     if art_path_1_again_val and os.path.exists(art_path_1_again_val):
         dom_color_1_again = get_dominant_color(art_path_1_again_val) # Should hit dominant color cache
         print(f"Dominant color (2nd call): {dom_color_1_again}")
+
+    # Test 5: Simulate a Spotify data call with a track URI
+    test_artist_5 = "Taylor Swift"
+    test_track_5 = "Style"
+    test_album_5_hint = "1989 (Taylor's Version)" # This might be the album name in some Spotify entries
+    test_track_uri_5 = "spotify:track:0ug5NqcwcFR2x02gGFeV3Z" # Example URI for Style (Taylor's Version)
+                                                        # For original 1989 Style: "spotify:track:3LmvfNUQtglbTrydsdIqFU"
+    print(f"\n[STANDALONE TEST 5] Spotify direct URI lookup: {test_artist_5} - {test_track_5} (URI: {test_track_uri_5})")
+    identifier_info_5_spotify = {
+        "album_name_hint": test_album_5_hint, # Hint might still be passed but URI takes precedence
+        "album_mbid": None, 
+        "track_uri": test_track_uri_5,
+        "source_data_type": "spotify"
+    }
+    # art_path_data_5 = get_album_art_path(test_artist_5, test_track_5, identifier_info_5_spotify)
+    art_path_5, spotify_info_5 = get_album_art_path_and_spotify_info(test_artist_5, test_track_5, identifier_info_5_spotify)
+
+    # art_path_5 = None
+    # if isinstance(art_path_data_5, str) and art_path_data_5:
+    #     art_path_5 = art_path_data_5
+    # No longer needed, art_path_5 is directly the path or None
+
+    print(f"Art path for {test_track_5} (from URI): {art_path_5}")
+    if art_path_5 and os.path.exists(art_path_5):
+        dom_color_5 = get_dominant_color(art_path_5)
+        print(f"Dominant color for {test_track_5} (RGB): {dom_color_5}")
+        if spotify_info_5:
+            print(f"Spotify Info for test 5: Canonical Album='{spotify_info_5.get('canonical_album_name')}', Source='{spotify_info_5.get('source')}'")
 
 
     print("\n--- Standalone Test Complete ---")

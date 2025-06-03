@@ -56,6 +56,13 @@ def load_spotify_data(spotify_files_pattern, min_ms_played, filter_skipped_track
 
     # Check for essential columns
     required_spotify_cols = ['ts', 'master_metadata_track_name', 'ms_played'] # Artist and Album can sometimes be null for podcasts/etc.
+    # spotify_track_uri is also essential for precise album art lookup
+    if 'spotify_track_uri' not in df.columns:
+        print("Warning: 'spotify_track_uri' column not found in Spotify JSON data. This may affect album art accuracy.")
+        # Decide if this should be a critical error or allow fallback
+        # For now, allow fallback to search-based lookup if URI is missing.
+        # return None # Or: df['spotify_track_uri'] = None (if you want to ensure column exists)
+
     missing_spotify_cols = [col for col in required_spotify_cols if col not in df.columns]
     if missing_spotify_cols:
         print(f"Error: Essential Spotify columns {missing_spotify_cols} are missing from the JSON data.")
@@ -70,7 +77,10 @@ def load_spotify_data(spotify_files_pattern, min_ms_played, filter_skipped_track
     })
 
     # Keep only relevant columns plus ms_played and skipped for filtering
-    cols_to_keep = ['timestamp_str', 'artist', 'album', 'track', 'ms_played']
+    cols_to_keep = ['timestamp_str', 'artist', 'album', 'track', 'ms_played', 'spotify_track_uri']
+    if 'spotify_track_uri' not in df_renamed.columns: # Ensure it exists even if it was missing (will be all None)
+        df_renamed['spotify_track_uri'] = None
+    
     if 'skipped' in df_renamed.columns: # 'skipped' might not always be present
         cols_to_keep.append('skipped')
     
@@ -130,7 +140,7 @@ def load_spotify_data(spotify_files_pattern, min_ms_played, filter_skipped_track
     df_final_spotify['album'] = df_final_spotify['album'].fillna('unknown album')   # Ensure consistent case
 
 
-    return df_final_spotify[['timestamp', 'artist', 'album', 'track']]
+    return df_final_spotify[['timestamp', 'artist', 'album', 'track', 'spotify_track_uri']] # Include URI
 
 
 def load_lastfm_data(csv_filepath):
@@ -158,7 +168,14 @@ def load_lastfm_data(csv_filepath):
 
     # Essential columns for Last.fm processing
     columns_to_keep_lastfm = ['timestamp', 'artist', 'album', 'track']
-    missing_columns = [col for col in columns_to_keep_lastfm if col not in df.columns and col != 'timestamp']
+    # Check if 'album_mbid' exists and add it if so
+    if 'album_mbid' in df.columns:
+        columns_to_keep_lastfm.append('album_mbid')
+    else:
+        print("Note: 'album_mbid' column not found in Last.fm CSV. Will proceed without it.")
+        df['album_mbid'] = None # Ensure the column exists for consistent structure, filled with None
+
+    missing_columns = [col for col in columns_to_keep_lastfm if col not in df.columns and col != 'timestamp' and col != 'album_mbid']
     if missing_columns:
         print(f"Error: Essential Last.fm columns {missing_columns} are missing from the CSV after initial load.")
         return None
@@ -171,7 +188,13 @@ def load_lastfm_data(csv_filepath):
     if rows_dropped > 0:
         print(f"Dropped {rows_dropped} rows from Last.fm data due to missing values in 'artist', 'album', or 'track'.")
     
-    return df_selected
+    # Ensure all expected columns are present before returning, even if some were added as None
+    final_cols = ['timestamp', 'artist', 'album', 'track', 'album_mbid']
+    for col in final_cols:
+        if col not in df_selected.columns:
+            df_selected[col] = None
+            
+    return df_selected[final_cols]
 
 
 def clean_and_filter_data(config):
@@ -205,7 +228,13 @@ def clean_and_filter_data(config):
 
     if df_loaded is None or df_loaded.empty:
         print(f"No data loaded for source '{data_source}'.")
-        return pd.DataFrame(columns=['timestamp', 'artist', 'album', 'track']) # Return empty standard df
+        # Return empty standard df with all expected columns for downstream processing
+        base_cols = ['timestamp', 'artist', 'album', 'track']
+        if data_source == 'spotify':
+            base_cols.append('spotify_track_uri')
+        elif data_source == 'lastfm':
+            base_cols.append('album_mbid')
+        return pd.DataFrame(columns=base_cols)
 
     print(f"Successfully loaded and initially processed {len(df_loaded)} rows from '{data_source}'.")
 
@@ -237,7 +266,13 @@ def clean_and_filter_data(config):
     
     if df_time_filtered.empty:
         print(f"No data found for the specified timeframe. Returning empty DataFrame.")
-        return pd.DataFrame(columns=['timestamp', 'artist', 'album', 'track'])
+        # Ensure empty DataFrame has the necessary columns based on source
+        base_cols = ['timestamp', 'artist', 'album', 'track']
+        if data_source == 'spotify': # Re-check source from config as df_loaded might be empty
+            base_cols.append('spotify_track_uri')
+        elif config.get('DataSource', 'SOURCE', 'lastfm').lower() == 'lastfm': # Check original config source
+            base_cols.append('album_mbid')
+        return pd.DataFrame(columns=base_cols)
 
     print(f"Data cleaning and timeframe filtering complete. {len(df_time_filtered)} rows remaining.")
     return df_time_filtered
@@ -259,8 +294,26 @@ def prepare_data_for_bar_chart_race(cleaned_df):
     print(f"Created 'song_id'. Total unique songs found: {df['song_id'].nunique()}")
     print(f"Total play events to process for frames: {len(df)}")
 
-    song_album_map = df.groupby('song_id')['album'].first().to_dict()
-    print(f"Created song_album_map with {len(song_album_map)} entries.")
+    # song_album_map = df.groupby('song_id')['album'].first().to_dict()
+    # Updated song_details_map creation:
+    song_details_map = {}
+    # Prioritize first occurrence of a song_id to get its details, as album might change over time for same track (e.g. compilations)
+    # Though for URI/MBID based lookup, this specific album association from the event is what we want.
+
+    # To handle potential missing columns depending on source, check existence
+    has_uri = 'spotify_track_uri' in df.columns
+    has_mbid = 'album_mbid' in df.columns
+
+    for _, row in df.drop_duplicates(subset=['song_id'], keep='first').iterrows():
+        song_id = row['song_id']
+        details = {
+            'name': row['album'],
+            'track_uri': row['spotify_track_uri'] if has_uri else None,
+            'mbid': row['album_mbid'] if has_mbid else None
+        }
+        song_details_map[song_id] = details
+
+    print(f"Created song_details_map with {len(song_details_map)} entries.")
 
     df['play_count_increment'] = 1
     df['cumulative_plays_for_song_at_event'] = df.groupby('song_id')['play_count_increment'].cumsum()
@@ -277,7 +330,7 @@ def prepare_data_for_bar_chart_race(cleaned_df):
     race_df = race_df.sort_index(axis=1)
 
     print(f"Data preparation for high-resolution race complete. Final race_df shape: {race_df.shape}")
-    return race_df, song_album_map
+    return race_df, song_details_map # Return new map name
 
 
 # This block allows testing this script directly
@@ -383,17 +436,18 @@ END_DATE = 2023-12-31
     if cleaned_data_spotify is not None and not cleaned_data_spotify.empty:
         print("\n--- Cleaned Spotify Data (from data_processor.py test run) ---")
         print(cleaned_data_spotify.head())
+        print(f"Columns in cleaned_data_spotify: {cleaned_data_spotify.columns.tolist()}") # Show columns
         
-        race_data_spotify, s_album_map_spotify = prepare_data_for_bar_chart_race(cleaned_data_spotify)
+        race_data_spotify, s_details_map_spotify = prepare_data_for_bar_chart_race(cleaned_data_spotify)
         
         if race_data_spotify is not None and not race_data_spotify.empty:
             print("\n--- Race Data (Spotify Source) ---")
             print(race_data_spotify.head())
             print(f"Shape of race_data: {race_data_spotify.shape}")
-            print("\n--- Song Album Map (Spotify Source, first 5) ---")
-            for i, (song, album) in enumerate(s_album_map_spotify.items()):
-                if i >= 5: break
-                print(f"'{song}': '{album}'")
+            print("\n--- Song Details Map (Spotify Source, first 2) ---")
+            for i, (song, details) in enumerate(s_details_map_spotify.items()):
+                if i >= 2: break
+                print(f"'{song}': {details}")
         else:
             print("Spotify race data preparation resulted in empty or None DataFrame.")
     else:
@@ -422,5 +476,18 @@ END_DATE = 2023-12-31
     if cleaned_data_lastfm is not None and not cleaned_data_lastfm.empty:
         print("\n--- Cleaned Last.fm Data (from data_processor.py test run) ---")
         print(cleaned_data_lastfm.head())
+        print(f"Columns in cleaned_data_lastfm: {cleaned_data_lastfm.columns.tolist()}") # Show columns
+
+        race_data_lastfm, s_details_map_lastfm = prepare_data_for_bar_chart_race(cleaned_data_lastfm)
+        if race_data_lastfm is not None and not race_data_lastfm.empty:
+            print("\n--- Race Data (Last.fm Source) ---")
+            print(race_data_lastfm.head())
+            print(f"Shape of race_data: {race_data_lastfm.shape}")
+            print("\n--- Song Details Map (Last.fm Source, first 2) ---")
+            for i, (song, details) in enumerate(s_details_map_lastfm.items()):
+                if i >= 2: break
+                print(f"'{song}': {details}")
+        else:
+            print("Last.fm race data preparation resulted in empty or None DataFrame.")
     else:
         print("Last.fm data cleaning resulted in empty or None DataFrame (or was not configured to run).")

@@ -40,7 +40,7 @@ MAX_FRAMES_FOR_TEST_RENDER = 0
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = M
+FRAME_AGGREGATION_PERIOD = W
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0

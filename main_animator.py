@@ -126,25 +126,26 @@ def run_data_pipeline(): # Removed csv_file_path argument
     print(f"Data cleaning successful. {len(cleaned_df)} relevant rows found.")
     
     print("\nStep 2: Preparing data for bar chart race (high-resolution timestamps)...")
-    race_df, song_album_map = prepare_data_for_bar_chart_race(cleaned_df)
+    race_df, song_details_map = prepare_data_for_bar_chart_race(cleaned_df)
     if race_df is None or race_df.empty: 
         print("Data preparation for race resulted in no data. Exiting.")
-        return None, song_album_map
+        return None, song_details_map
         
     print("Data preparation successful.")
     print(f"Race DataFrame shape: {race_df.shape} (Play Events, Unique Songs)")
-    print(f"Number of entries in song_album_map: {len(song_album_map)}")
+    print(f"Number of entries in song_details_map: {len(song_details_map)}")
     print("--- Data Processing Pipeline Complete ---")
-    return race_df, song_album_map
+    return race_df, song_details_map
 
 
-def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_race, global_visibility_threshold, target_img_height_pixels_for_resize, fig_dpi):
+def pre_fetch_album_art_and_colors(race_df, song_details_map, unique_song_ids_in_race, global_visibility_threshold, target_img_height_pixels_for_resize, fig_dpi):
     # This function now uses album_art_utils directly, which is config-aware
     print(f"\n--- Pre-fetching album art and dominant colors (Target Img Resize Height: {target_img_height_pixels_for_resize}px, Visibility Threshold: >={global_visibility_threshold:.2f} plays) ---")
     
     # This set will now track CANONICAL album names for which PIL/color is loaded in main_animator
     # to avoid redundant PIL loading and dominant color calculation for the same canonical album.
     canonical_albums_loaded_in_animator_cache = set()
+    song_id_to_animator_key_map = {} # New map to return
     
     processed_count = 0
     skipped_due_to_threshold = 0
@@ -157,19 +158,21 @@ def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_r
             print(f"WARNING: Could not parse artist/track from song_id: '{song_id}'. Skipping pre-fetch for this song.")
             continue
 
-        album_name_from_lastfm = song_album_map.get(song_id)
-        if not album_name_from_lastfm:
-            if DEBUG_ALBUM_ART_LOGIC: # DEBUG_ALBUM_ART_LOGIC is your global from config
-                print(f"[PRE-FETCH DEBUG] No album in song_album_map for '{song_id}'. Skipping art/color processing.")
+        song_specific_details = song_details_map.get(song_id)
+        if not song_specific_details:
+            if DEBUG_ALBUM_ART_LOGIC:
+                print(f"[PRE-FETCH DEBUG] No details in song_details_map for '{song_id}'. Skipping art/color processing.")
             continue
+        
+        album_name_hint_from_data = song_specific_details.get('name', "Unknown Album")
+        album_mbid_from_data = song_specific_details.get('mbid')
+        track_uri_from_data = song_specific_details.get('track_uri')
 
         # --- Visibility Threshold Check (from your original code) ---
         # Ensure race_df is available here and contains the song_id as a column
         if song_id not in race_df.columns:
             if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] Song ID '{song_id}' not found in race_df columns. Skipping.")
             continue # Should not happen if unique_song_ids_in_race comes from race_df.columns
-
-        max_plays_for_this_song = race_df[song_id].max()
 
         max_plays_for_this_song = race_df[song_id].max()
 
@@ -180,43 +183,41 @@ def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_r
             if DEBUG_ALBUM_ART_LOGIC:
                 print(f"[PRE-FETCH DEBUG] Song '{song_id}' (max plays: {max_plays_for_this_song}) is below visibility threshold ({global_visibility_threshold:.2f}). Skipping art/color processing.")
             skipped_due_to_threshold += 1
+            song_id_to_animator_key_map[song_id] = album_name_hint_from_data # Store a fallback key
             continue
         
         if DEBUG_ALBUM_ART_LOGIC:
-            print(f"[PRE-FETCH DEBUG] Song '{song_id}' (max plays: {max_plays_for_this_song}) meets threshold. Processing album hint: '{album_name_from_lastfm}'.")
+            print(f"[PRE-FETCH DEBUG] Song '{song_id}' (max plays: {max_plays_for_this_song}) meets threshold. Processing album hint: '{album_name_hint_from_data}'.")
 
         # --- Call album_art_utils to get path and Spotify info ---
-        # album_art_utils.py handles its own internal caching (spotify_info_cache, image file cache, dominant_color_cache)
-        # to avoid redundant API calls and downloads.
-        
-        # Original print for user feedback on what's being processed
         try:
-            print(f"Processing art/color for: Artist='{artist_name}', Track='{track_name}', Album (Hint)='{album_name_from_lastfm}'")
+            print(f"Processing art/color for: Artist='{artist_name}', Track='{track_name}', Album (Hint)='{album_name_hint_from_data}', MBID='{album_mbid_from_data}', URI='{track_uri_from_data}'")
         except UnicodeEncodeError: # Handle potential encoding issues in print
             safe_artist = artist_name.encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
             safe_track = track_name.encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
-            safe_album_lastfm = album_name_from_lastfm.encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
-            print(f"Processing art/color for: Artist='{safe_artist}', Track='{safe_track}', Album (Hint)='{safe_album_lastfm}'")
+            safe_album_hint = album_name_hint_from_data.encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
+            safe_mbid = str(album_mbid_from_data).encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
+            safe_uri = str(track_uri_from_data).encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
+            print(f"Processing art/color for: Artist='{safe_artist}', Track='{safe_track}', Album (Hint)='{safe_album_hint}', MBID='{safe_mbid}', URI='{safe_uri}'")
 
-        # This call now happens for every song that meets the threshold.
-        art_path = album_art_utils.get_album_art_path(artist_name, track_name, album_name_from_lastfm)
+        identifier_info = {
+            "album_name_hint": album_name_hint_from_data,
+            "album_mbid": album_mbid_from_data,
+            "track_uri": track_uri_from_data,
+            "source_data_type": config.get('DataSource', 'SOURCE').lower()
+        }
+        art_path, spotify_info = album_art_utils.get_album_art_path_and_spotify_info(artist_name, track_name, identifier_info)
         
-        # --- Determine the canonical_album_name_from_spotify ---
-        # We need this to key the animator's local PIL image and color caches correctly.
-        canonical_album_name_for_animator_cache = album_name_from_lastfm # Fallback to hint
-        
-        # Access the populated spotify_info_cache from album_art_utils
-        # This cache was populated (or hit) during the get_album_art_path call.
-        _spotify_cache_key = f"spotify_{artist_name.lower().strip()}_{track_name.lower().strip()}_{album_name_from_lastfm.lower().strip()}"
-        spotify_info_entry = album_art_utils.spotify_info_cache.get(_spotify_cache_key)
-        
-        if spotify_info_entry and spotify_info_entry.get("canonical_album_name"):
-            canonical_album_name_for_animator_cache = spotify_info_entry["canonical_album_name"]
-            if DEBUG_ALBUM_ART_LOGIC and canonical_album_name_for_animator_cache != album_name_from_lastfm:
-                print(f"[PRE-FETCH DEBUG] Canonical album for '{song_id}' is '{canonical_album_name_for_animator_cache}' (hint was '{album_name_from_lastfm}').")
+        # --- Determine the canonical_album_name_for_animator_cache --- 
+        canonical_album_name_for_animator_cache = album_name_hint_from_data # Fallback to original hint
+        if spotify_info and spotify_info.get("canonical_album_name"):
+            canonical_album_name_for_animator_cache = spotify_info["canonical_album_name"]
+            if DEBUG_ALBUM_ART_LOGIC and canonical_album_name_for_animator_cache != album_name_hint_from_data:
+                print(f"[PRE-FETCH DEBUG] Canonical album for '{song_id}' is '{canonical_album_name_for_animator_cache}' (hint was '{album_name_hint_from_data}', source: {spotify_info.get('source')}).")
         elif DEBUG_ALBUM_ART_LOGIC:
-             print(f"[PRE-FETCH DEBUG] Could not find canonical album name in spotify_info_cache for key '{_spotify_cache_key}'. Using hint '{album_name_from_lastfm}' for animator cache key.")
+             print(f"[PRE-FETCH DEBUG] Could not find canonical album name from spotify_info for '{song_id}'. Using hint '{album_name_hint_from_data}' for animator cache key.")
 
+        song_id_to_animator_key_map[song_id] = canonical_album_name_for_animator_cache # Store mapping
 
         # --- Load PIL image and dominant color into animator's memory if not already done for this CANONICAL album ---
         if art_path: # If an art path was successfully found/downloaded
@@ -258,7 +259,7 @@ def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_r
             
         else: # No art_path was found by album_art_utils
             if DEBUG_ALBUM_ART_LOGIC:
-                print(f"[PRE-FETCH DEBUG] No art path returned by album_art_utils for '{song_id}' (Hint: '{album_name_from_lastfm}').")
+                print(f"[PRE-FETCH DEBUG] No art path returned by album_art_utils for '{song_id}' (Hint: '{album_name_hint_from_data}').")
             # Still need to populate animator cache with defaults for this canonical album if it's the first time seeing it
             if canonical_album_name_for_animator_cache not in canonical_albums_loaded_in_animator_cache:
                 album_art_image_objects[canonical_album_name_for_animator_cache] = None
@@ -273,6 +274,7 @@ def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_r
     print(f"Attempted to process art/color for {processed_count} song-album groups that met threshold.")
     print(f"Skipped {skipped_due_to_threshold} song-album groups due to not meeting visibility threshold.")
     print(f"In-memory PIL images (animator cache): {len(album_art_image_objects)}, In-memory bar colors (animator cache): {len(album_bar_colors)}")
+    return song_id_to_animator_key_map # Return the new map
 
 
 def draw_and_save_single_frame(args):
@@ -337,8 +339,10 @@ def draw_and_save_single_frame(args):
             bar_widths.append(songs_to_draw[song_id])
             bar_song_ids.append(song_id)
 
-            canonical_album = song_id_to_canonical_album_map.get(song_id, "Unknown Album")
-            bar_colors_list.append(album_bar_colors_local.get(canonical_album, (0.5,0.5,0.5)))
+            # song_id_to_canonical_album_map is now song_id_to_animator_key_map
+            # It maps song_id to the key used for album_art_image_objects_local and album_bar_colors_local
+            animator_cache_key_for_song = song_id_to_canonical_album_map.get(song_id, "Unknown Album")
+            bar_colors_list.append(album_bar_colors_local.get(animator_cache_key_for_song, (0.5,0.5,0.5)))
             
             max_char_len = int(50 * (150.0/dpi)) 
             display_song_id = song_id
@@ -359,8 +363,9 @@ def draw_and_save_single_frame(args):
                 song_id_for_bar = bar_song_ids[i]
                 current_play_count = bar_widths[i]
                 
-                canonical_album_for_bar = song_id_to_canonical_album_map.get(song_id_for_bar, "Unknown Album")
-                pil_image = album_art_image_objects_local.get(canonical_album_for_bar)
+                # song_id_to_canonical_album_map is now song_id_to_animator_key_map
+                animator_cache_key_for_bar = song_id_to_canonical_album_map.get(song_id_for_bar, "Unknown Album")
+                pil_image = album_art_image_objects_local.get(animator_cache_key_for_bar)
 
                 current_x_anchor = bar_obj.get_width()
 
@@ -386,7 +391,7 @@ def draw_and_save_single_frame(args):
                             ax.add_artist(ab)
                             current_x_anchor = img_center_x_pos - (image_width_data_units / 2.0)
                     except Exception as e:
-                        print(f"Error (PID {os.getpid()}) processing/adding image for {canonical_album_for_bar} (Song: {song_id_for_bar}): {e}")
+                        print(f"Error (PID {os.getpid()}) processing/adding image for {animator_cache_key_for_bar} (Song: {song_id_for_bar}): {e}")
                 
                 text_x_pos = bar_obj.get_width() + value_label_padding_data_units
                 ax.text(text_x_pos,
@@ -424,7 +429,7 @@ def draw_and_save_single_frame(args):
     return frame_index, current_frame_render_time, os.getpid()
 
 
-def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df here is already potentially truncated
+def create_bar_chart_race_animation(race_df, song_details_map): # race_df here is already potentially truncated
     if race_df is None or race_df.empty:
         print("Cannot create animation: race_df is empty or None.")
         return
@@ -453,7 +458,8 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
     print(f"[ANIMATOR_INFO] Calculated target image height for pre-resize: {calculated_target_img_height_pixels:.2f} pixels")
 
     art_fetch_start_time = time.time()
-    pre_fetch_album_art_and_colors(race_df, song_album_map_lastfm, unique_song_ids_in_race, art_processing_min_plays_threshold, calculated_target_img_height_pixels, dpi)
+    # pre_fetch_album_art_and_colors now returns song_id_to_animator_key_map
+    song_id_to_animator_key_map = pre_fetch_album_art_and_colors(race_df, song_details_map, unique_song_ids_in_race, art_processing_min_plays_threshold, calculated_target_img_height_pixels, dpi)
     art_fetch_end_time = time.time()
     print(f"--- Time taken for pre_fetch_album_art_and_colors: {art_fetch_end_time - art_fetch_start_time:.2f} seconds ---")
 
@@ -478,19 +484,24 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
     chart_xaxis_limit = raw_max_play_count_overall * 1.05
     art_display_min_plays_threshold = art_processing_min_plays_threshold 
 
-    song_id_to_canonical_album_map = {} # Prepare this once
-    for song_id in unique_song_ids_in_race:
-        try:
-            artist_name, track_name = song_id.split(" - ", 1)
-            album_name_hint = song_album_map_lastfm.get(song_id, "")
-            spotify_cache_key = f"spotify_{artist_name.lower().strip()}_{track_name.lower().strip()}_{album_name_hint.lower().strip()}"
-            spotify_data = album_art_utils.spotify_info_cache.get(spotify_cache_key)
-            if spotify_data and spotify_data.get("canonical_album_name"):
-                song_id_to_canonical_album_map[song_id] = spotify_data["canonical_album_name"]
-            else:
-                song_id_to_canonical_album_map[song_id] = album_name_hint
-        except ValueError:
-            song_id_to_canonical_album_map[song_id] = song_album_map_lastfm.get(song_id, "Unknown Album")
+    # song_id_to_canonical_album_map is now song_id_to_animator_key_map, built by pre_fetch
+    # This map is directly passed to draw_and_save_single_frame
+    # No need to rebuild it here as per the old logic:
+    # song_id_to_canonical_album_map = {} # Prepare this once
+    # for song_id in unique_song_ids_in_race:
+    #     try:
+    #         artist_name, track_name = song_id.split(" - ", 1)
+    #         album_name_hint = song_album_map_lastfm.get(song_id, "") # This would be song_details_map now
+    #         spotify_cache_key = f"spotify_{artist_name.lower().strip()}_{track_name.lower().strip()}_{album_name_hint.lower().strip()}" # This key might not align anymore
+    #         spotify_data = album_art_utils.spotify_info_cache.get(spotify_cache_key)
+    #         if spotify_data and spotify_data.get("canonical_album_name"):
+    #             song_id_to_canonical_album_map[song_id] = spotify_data["canonical_album_name"]
+    #         else:
+    #             # Fallback to the animator key determined during pre_fetch if direct lookup here fails
+    #             # This part is now handled by using the map returned from pre_fetch directly.
+    #             song_id_to_canonical_album_map[song_id] = song_id_to_animator_key_map.get(song_id, album_name_hint) # Default to hint
+    #     except ValueError:
+    #         song_id_to_canonical_album_map[song_id] = song_id_to_animator_key_map.get(song_id, song_details_map.get(song_id, {}).get('name', "Unknown Album"))
 
 
     # Prepare arguments for each frame
@@ -505,7 +516,7 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
         # The large dictionaries (album_art_image_objects, album_bar_colors) will be pickled.
         tasks_args.append((
             i, num_frames, current_timestamp, current_data_slice,
-            song_id_to_canonical_album_map, album_art_image_objects, album_bar_colors, # These are global dicts
+            song_id_to_animator_key_map, album_art_image_objects, album_bar_colors, # Pass the new map
             N_BARS, chart_xaxis_limit, art_display_min_plays_threshold,
             output_image_path, dpi, fig_width_pixels, fig_height_pixels,
             LOG_FRAME_TIMES_CONFIG, PREFERRED_FONTS, LOG_PARALLEL_PROCESS_START_CONFIG # Pass config values needed by worker
@@ -784,7 +795,7 @@ def main():
 
 
     pipeline_start_time = time.time() # <--- ADDED TIMING
-    full_race_df, song_album_map_lastfm = run_data_pipeline()
+    full_race_df, song_details_map = run_data_pipeline() # Updated to receive song_details_map
     pipeline_end_time = time.time() # <--- ADDED TIMING
     print(f"--- Time taken for run_data_pipeline: {pipeline_end_time - pipeline_start_time:.2f} seconds ---") # <--- ADDED TIMING
 
@@ -851,7 +862,7 @@ def main():
     
     # Now, call create_bar_chart_race_animation with the potentially truncated and/or aggregated race_df_for_animation
     # The pre_fetch logic is inside create_bar_chart_race_animation, so it will use the df passed to it.
-    create_bar_chart_race_animation(race_df_for_animation, song_album_map_lastfm)
+    create_bar_chart_race_animation(race_df_for_animation, song_details_map) # Pass song_details_map
 
 
 if __name__ == "__main__":
