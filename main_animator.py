@@ -234,6 +234,10 @@ def pre_fetch_album_art_and_colors(race_df, song_details_map, unique_song_ids_in
                     if new_width_pixels <= 0: new_width_pixels = 1 # Final fallback
 
                     resized_img = img.resize((new_width_pixels, new_height_pixels), Image.Resampling.LANCZOS)
+                    # Ensure the image is in RGB mode for Matplotlib compatibility
+                    if resized_img.mode != 'RGB':
+                        resized_img = resized_img.convert('RGB')
+
                     album_art_image_objects[canonical_album_name_for_animator_cache] = resized_img
                     # No need to copy, resize returns a new image. Close original.
                     img.close() 
