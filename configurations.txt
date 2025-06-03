@@ -14,16 +14,16 @@ INPUT_FILENAME_LASTFM = lastfm_data.csv
 # Or use a pattern like "StreamingHistory*.json" if you have multiple files.
 INPUT_FILENAME_SPOTIFY = spotify_data.json
 MIN_MS_PLAYED_FOR_COUNT = 30000
-FILTER_SKIPPED_TRACKS = True
+FILTER_SKIPPED_TRACKS = False
 
 # --- Timeframe ---
 [Timeframe]
 # START_DATE: YYYY-MM-DD or "all_time"
 # 2024-01-01
 # 2024-12-31
-START_DATE = 2024-01-01
+START_DATE = all_time
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = 2024-12-31
+END_DATE = all_time
 
 # --- Animation Output ---
 [AnimationOutput]
@@ -34,13 +34,13 @@ N_BARS = 10
 TARGET_FPS = 30
 USE_NVENC_IF_AVAILABLE = True
 # MAX_FRAMES_FOR_TEST_RENDER: Max frames for a quick test render. Set to 0 or -1 for full render.
-MAX_FRAMES_FOR_TEST_RENDER = 500
+MAX_FRAMES_FOR_TEST_RENDER = 0
 
 # FRAME_AGGREGATION_PERIOD: Aggregate frames by time period. Options:
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = event
+FRAME_AGGREGATION_PERIOD = W
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
