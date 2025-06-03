@@ -89,6 +89,18 @@ def load_spotify_data(spotify_files_pattern, min_ms_played, filter_skipped_track
     if len(df_selected) < initial_rows:
         print(f"Dropped {initial_rows - len(df_selected)} rows with missing track names (e.g., podcasts, non-music audio).")
 
+    # --- Normalize artist and track names before further processing ---
+    # Convert to string type to ensure .str accessor works, then lower and strip.
+    # This helps ensure consistency for song_id creation.
+    if 'artist' in df_selected.columns:
+        df_selected['artist'] = df_selected['artist'].astype(str).str.lower().str.strip()
+    if 'track' in df_selected.columns: # Should always be present due to dropna above
+        df_selected['track'] = df_selected['track'].astype(str).str.lower().str.strip()
+    if 'album' in df_selected.columns:
+        df_selected['album'] = df_selected['album'].astype(str).str.lower().str.strip()
+    print("Normalized artist, track, and album names (lowercase, stripped whitespace).")
+    # --- End normalization ---
+
     # Filter by ms_played
     df_filtered_ms = df_selected[df_selected['ms_played'] >= min_ms_played].copy()
     if len(df_filtered_ms) < len(df_selected):
@@ -114,8 +126,8 @@ def load_spotify_data(spotify_files_pattern, min_ms_played, filter_skipped_track
 
     # Fill missing artist/album with "Unknown Artist" / "Unknown Album" if necessary
     # This is important because song_id relies on artist & track.
-    df_final_spotify['artist'] = df_final_spotify['artist'].fillna('Unknown Artist')
-    df_final_spotify['album'] = df_final_spotify['album'].fillna('Unknown Album')
+    df_final_spotify['artist'] = df_final_spotify['artist'].fillna('unknown artist') # Ensure consistent case
+    df_final_spotify['album'] = df_final_spotify['album'].fillna('unknown album')   # Ensure consistent case
 
 
     return df_final_spotify[['timestamp', 'artist', 'album', 'track']]
@@ -177,7 +189,16 @@ def clean_and_filter_data(config):
         df_loaded = load_spotify_data(spotify_files, min_ms, filter_skipped)
     elif data_source == 'lastfm':
         lastfm_file = config.get('DataSource', 'INPUT_FILENAME_LASTFM', 'lastfm_data.csv')
-        df_loaded = load_lastfm_data(lastfm_file)
+        # For Last.fm, we assume names are already reasonably consistent or we apply similar normalization
+        df_raw_lastfm = load_lastfm_data(lastfm_file)
+        if df_raw_lastfm is not None and not df_raw_lastfm.empty:
+            df_raw_lastfm['artist'] = df_raw_lastfm['artist'].astype(str).str.lower().str.strip()
+            df_raw_lastfm['track'] = df_raw_lastfm['track'].astype(str).str.lower().str.strip()
+            df_raw_lastfm['album'] = df_raw_lastfm['album'].astype(str).str.lower().str.strip()
+            df_raw_lastfm['artist'] = df_raw_lastfm['artist'].fillna('unknown artist')
+            df_raw_lastfm['album'] = df_raw_lastfm['album'].fillna('unknown album')
+            print("Normalized artist, track, and album names for Last.fm data.")
+        df_loaded = df_raw_lastfm
     else:
         print(f"Error: Unsupported data source '{data_source}' specified in configuration.")
         return None
