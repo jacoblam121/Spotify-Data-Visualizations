@@ -549,72 +549,178 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
     print(f"Output video: {output_filename}")
     print(f"Target FPS: {target_fps_for_video}")
 
+    # --- Define path for ffmpeg progress file ---
+    progress_file_path = os.path.join(temp_frame_dir, "ffmpeg_progress.txt")
+
     # ffmpeg command construction
-    ffmpeg_cmd = [
+    base_ffmpeg_args = [
         'ffmpeg',
         '-framerate', str(target_fps_for_video),
         '-i', os.path.join(temp_frame_dir, f"frame_%0{len(str(num_frames))}d.png"), # Input pattern
-        '-c:v', 'libx264', # Default to libx264
+    ]
+    
+    common_ffmpeg_output_args = [
         '-pix_fmt', 'yuv420p',
-        '-y' # Overwrite output file if it exists
+        '-y', # Overwrite output file if it exists
+        '-progress', progress_file_path, # Output progress to a file
+        '-nostats', # Disable default stats output to stderr
+        '-loglevel', 'error' # Only log errors to stderr
     ]
 
+    def monitor_ffmpeg_progress(process, total_frames, progress_filepath):
+        print("Monitoring ffmpeg progress...")
+        # Ensure progress file exists briefly before ffmpeg writes to it, to avoid initial read error
+        # time.sleep(0.5) # Small delay, ffmpeg might take a moment to create it.
+                        # Alternatively, handle FileNotFoundError initially in the loop.
+        
+        # Ensure the file is created so that the initial read doesn't fail
+        try:
+            with open(progress_filepath, 'w') as pf:
+                pf.write('') # Create/truncate the file
+        except IOError:
+            pass # If it fails, ffmpeg will create it
+
+        last_reported_frame = 0
+        last_progress_output = ""
+
+        while True:
+            if process.poll() is not None: # Process has terminated
+                break
+
+            try:
+                progress_data = {}
+                with open(progress_filepath, 'r') as pf:
+                    for line in pf:
+                        if '=' in line:
+                            key, value = line.strip().split('=', 1)
+                            progress_data[key] = value
+                
+                current_frame = int(progress_data.get('frame', last_reported_frame))
+                speed = progress_data.get('speed', '0.0x').replace('x','')
+                bitrate = progress_data.get('bitrate', 'N/A')
+                # out_time_ms = int(progress_data.get('out_time_ms', '0'))
+                # elapsed_seconds = out_time_ms / 1_000_000
+
+                if current_frame > last_reported_frame or progress_data.get('progress') == 'end':
+                    last_reported_frame = current_frame
+                    percent_complete = (current_frame / total_frames) * 100 if total_frames > 0 else 0
+                    
+                    progress_line = f"Encoding: Frame {current_frame}/{total_frames} ({percent_complete:.1f}%) at {speed}x, Bitrate: {bitrate} Kbit/s"
+                    
+                    # Overwrite previous line
+                    sys.stdout.write('\r' + ' ' * len(last_progress_output) + '\r') # Clear previous
+                    sys.stdout.write(progress_line)
+                    sys.stdout.flush()
+                    last_progress_output = progress_line
+
+                if progress_data.get('progress') == 'end':
+                    break
+            
+            except FileNotFoundError:
+                # Progress file might not be created immediately by ffmpeg
+                # print("\rWaiting for ffmpeg progress file...", end="")
+                sys.stdout.write("\rWaiting for ffmpeg progress file..." + " "*20) # Pad to clear previous
+                sys.stdout.flush()
+            except Exception as e:
+                # print(f"\rError reading/parsing progress file: {e}"+ " "*20)
+                # Avoid flooding console with rapid error messages if file is problematic
+                # Instead, just indicate an issue and let ffmpeg error out if it's fatal.
+                sys.stdout.write(f"\rProblem with progress file (will proceed): {e}"+ " "*20)
+                sys.stdout.flush()
+
+
+            time.sleep(0.25) # Check progress file periodically
+
+        # Final newline after progress is done
+        sys.stdout.write('\r' + ' ' * len(last_progress_output) + '\r') # Clear final progress line
+        sys.stdout.flush()
+        print(f"FFmpeg processing finished. Status: {'Completed' if process.returncode == 0 else f'Error (code {process.returncode})'}")
+
+
     if USE_NVENC_IF_AVAILABLE:
-        # Check if h264_nvenc is available by trying a dummy command or checking ffmpeg -codecs
-        # For simplicity, we'll assume if USE_NVENC is true, user wants to try it.
-        # A more robust check would involve running `ffmpeg -encoders | grep h264_nvenc`
         print("Attempting to use NVENC (h264_nvenc) for hardware acceleration...")
         nvenc_args = ['-preset', 'p6', '-tune', 'hq', '-b:v', '0', '-cq', '23', '-rc-lookahead', '20']
         ffmpeg_cmd_nvenc = [
-            'ffmpeg',
-            '-framerate', str(target_fps_for_video),
-            '-i', os.path.join(temp_frame_dir, f"frame_%0{len(str(num_frames))}d.png"),
+            *base_ffmpeg_args,
             '-c:v', 'h264_nvenc',
-            *nvenc_args, # Spread the list of args
-            '-pix_fmt', 'yuv420p',
-            '-y',
+            *nvenc_args,
+            *common_ffmpeg_output_args,
             output_filename
         ]
+        process_nvenc = None
         try:
-            # Try running with NVENC
-            subprocess.run(ffmpeg_cmd_nvenc, check=True, capture_output=True)
+            print(f"NVENC Command: {' '.join(ffmpeg_cmd_nvenc)}")
+            process_nvenc = subprocess.Popen(ffmpeg_cmd_nvenc, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            monitor_ffmpeg_progress(process_nvenc, num_frames, progress_file_path)
+            stdout, stderr = process_nvenc.communicate() # Wait for process to complete after monitoring
+
+            if process_nvenc.returncode != 0:
+                raise subprocess.CalledProcessError(process_nvenc.returncode, ffmpeg_cmd_nvenc, output=stdout, stderr=stderr)
             print("Video successfully compiled using NVENC.")
+            
         except subprocess.CalledProcessError as e_nvenc:
-            print(f"WARNING: ffmpeg (NVENC) failed. Return code: {e_nvenc.returncode}")
-            print(f"NVENC STDOUT: {e_nvenc.stdout.decode(errors='replace')}")
-            print(f"NVENC STDERR: {e_nvenc.stderr.decode(errors='replace')}")
+            print(f"\nWARNING: ffmpeg (NVENC) failed. Return code: {e_nvenc.returncode}")
+            if e_nvenc.stdout: print(f"NVENC STDOUT: {e_nvenc.stdout.decode(errors='replace')}")
+            if e_nvenc.stderr: print(f"NVENC STDERR: {e_nvenc.stderr.decode(errors='replace')}")
             print("Falling back to CPU encoder (libx264).")
-            # Construct libx264 command (default if NVENC fails)
+            
+            # Fallback to libx264
             cpu_args = ['-crf', '23', '-preset', 'medium']
-            ffmpeg_cmd.extend(cpu_args)
-            ffmpeg_cmd.append(output_filename)
+            ffmpeg_cmd_cpu_fallback = [
+                *base_ffmpeg_args,
+                '-c:v', 'libx264',
+                *cpu_args,
+                *common_ffmpeg_output_args,
+                output_filename
+            ]
+            process_cpu_fallback = None
             try:
-                subprocess.run(ffmpeg_cmd, check=True, capture_output=True)
+                print(f"CPU Fallback Command: {' '.join(ffmpeg_cmd_cpu_fallback)}")
+                process_cpu_fallback = subprocess.Popen(ffmpeg_cmd_cpu_fallback, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                monitor_ffmpeg_progress(process_cpu_fallback, num_frames, progress_file_path)
+                stdout_cpu, stderr_cpu = process_cpu_fallback.communicate()
+
+                if process_cpu_fallback.returncode != 0:
+                    raise subprocess.CalledProcessError(process_cpu_fallback.returncode, ffmpeg_cmd_cpu_fallback, output=stdout_cpu, stderr=stderr_cpu)
                 print("Video successfully compiled using libx264 (CPU).")
-            except subprocess.CalledProcessError as e_cpu:
-                print(f"ERROR: ffmpeg (libx264) also failed. Return code: {e_cpu.returncode}")
-                print(f"CPU STDOUT: {e_cpu.stdout.decode(errors='replace')}")
-                print(f"CPU STDERR: {e_cpu.stderr.decode(errors='replace')}")
+            except subprocess.CalledProcessError as e_cpu_fallback:
+                print(f"\nERROR: ffmpeg (libx264 fallback) also failed. Return code: {e_cpu_fallback.returncode}")
+                if e_cpu_fallback.stdout: print(f"CPU STDOUT: {e_cpu_fallback.stdout.decode(errors='replace')}")
+                if e_cpu_fallback.stderr: print(f"CPU STDERR: {e_cpu_fallback.stderr.decode(errors='replace')}")
                 print("Video compilation failed.")
+            except FileNotFoundError:
+                 print("\nERROR: ffmpeg command not found. Please ensure ffmpeg is installed and in your system's PATH.")
         except FileNotFoundError:
-             print("ERROR: ffmpeg command not found. Please ensure ffmpeg is installed and in your system's PATH.")
+             print("\nERROR: ffmpeg command not found. Please ensure ffmpeg is installed and in your system's PATH.")
     else: # Not using NVENC, proceed with libx264
         print("Using CPU encoder (libx264).")
         cpu_args = ['-crf', '23', '-preset', 'medium']
-        ffmpeg_cmd.extend(cpu_args)
-        ffmpeg_cmd.append(output_filename)
+        ffmpeg_cmd_cpu_direct = [
+            *base_ffmpeg_args,
+            '-c:v', 'libx264',
+            *cpu_args,
+            *common_ffmpeg_output_args,
+            output_filename
+        ]
+        process_cpu_direct = None
         try:
-            subprocess.run(ffmpeg_cmd, check=True, capture_output=True)
+            print(f"CPU Command: {' '.join(ffmpeg_cmd_cpu_direct)}")
+            process_cpu_direct = subprocess.Popen(ffmpeg_cmd_cpu_direct, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            monitor_ffmpeg_progress(process_cpu_direct, num_frames, progress_file_path)
+            stdout, stderr = process_cpu_direct.communicate()
+
+            if process_cpu_direct.returncode != 0:
+                raise subprocess.CalledProcessError(process_cpu_direct.returncode, ffmpeg_cmd_cpu_direct, output=stdout, stderr=stderr)
             print("Video successfully compiled using libx264 (CPU).")
         except subprocess.CalledProcessError as e_cpu:
-            print(f"ERROR: ffmpeg (libx264) failed. Return code: {e_cpu.returncode}")
-            print(f"CPU STDOUT: {e_cpu.stdout.decode(errors='replace')}")
-            print(f"CPU STDERR: {e_cpu.stderr.decode(errors='replace')}")
+            print(f"\nERROR: ffmpeg (libx264) failed. Return code: {e_cpu.returncode}")
+            if e_cpu.stdout: print(f"CPU STDOUT: {e_cpu.stdout.decode(errors='replace')}")
+            if e_cpu.stderr: print(f"CPU STDERR: {e_cpu.stderr.decode(errors='replace')}")
             print("Video compilation failed.")
         except FileNotFoundError:
-            print("ERROR: ffmpeg command not found. Please ensure ffmpeg is installed and in your system's PATH.")
+            print("\nERROR: ffmpeg command not found. Please ensure ffmpeg is installed and in your system's PATH.")
     
-    # --- Cleanup intermediate frames ---
+    # --- Cleanup intermediate frames and progress file ---
     if CLEANUP_INTERMEDIATE_FRAMES:
         try:
             shutil.rmtree(temp_frame_dir)
@@ -623,6 +729,14 @@ def create_bar_chart_race_animation(race_df, song_album_map_lastfm): # race_df h
             print(f"Error removing temporary frame directory {temp_frame_dir}: {e}")
     else:
         print(f"Intermediate frames retained at: {temp_frame_dir}")
+        # Still try to clean up progress file if frames are kept
+        if os.path.exists(progress_file_path):
+            try:
+                os.remove(progress_file_path)
+                print(f"Successfully removed progress file: {progress_file_path}")
+            except OSError as e:
+                print(f"Error removing progress file {progress_file_path}: {e}")
+
 
     # --- Frame Timing Summary (simplified for parallel generation) ---
     overall_animation_end_time = time.time() # This would need to be redefined if main() changes
