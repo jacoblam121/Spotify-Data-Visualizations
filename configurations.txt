@@ -35,12 +35,16 @@ TARGET_FPS = 30
 USE_NVENC_IF_AVAILABLE = True
 # MAX_FRAMES_FOR_TEST_RENDER: Max frames for a quick test render. Set to 0 or -1 for full render.
 MAX_FRAMES_FOR_TEST_RENDER = 0
+# ANIMATION_TRANSITION_DURATION_SECONDS: Duration of the overtake animation in seconds.
+ANIMATION_TRANSITION_DURATION_SECONDS = 0.3
+# ENABLE_OVERTAKE_ANIMATIONS: Set to True to enable smooth overtake animations, False for static transitions.
+ENABLE_OVERTAKE_ANIMATIONS = True
 
 # FRAME_AGGREGATION_PERIOD: Aggregate frames by time period. Options:
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = W
+FRAME_AGGREGATION_PERIOD = D
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
@@ -60,6 +64,8 @@ ART_CACHE_DIR = album_art_cache
 # ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR: Relative threshold for showing art
 # (e.g., 0.0628 means art shows if play count > 6.28% of max plays in chart)
 # Set to 0 to show art for all tracks (useful for debugging)
+# DEPRECATED: This factor is no longer used by main_animator.py to determine if album art is displayed.
+# Album art is now always displayed if it has been fetched.
 ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = 0.05
 # NEGATIVE_CACHE_HOURS: How long to cache failed searches (in hours)
 NEGATIVE_CACHE_HOURS = 24
