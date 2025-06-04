@@ -138,9 +138,9 @@ def run_data_pipeline(): # Removed csv_file_path argument
     return race_df, song_details_map
 
 
-def pre_fetch_album_art_and_colors(race_df, song_details_map, unique_song_ids_in_race, global_visibility_threshold, target_img_height_pixels_for_resize, fig_dpi):
+def pre_fetch_album_art_and_colors(song_details_map, song_ids_to_fetch_art_for, target_img_height_pixels_for_resize, fig_dpi):
     # This function now uses album_art_utils directly, which is config-aware
-    print(f"\n--- Pre-fetching album art and dominant colors (Target Img Resize Height: {target_img_height_pixels_for_resize}px, Visibility Threshold: >={global_visibility_threshold:.2f} plays) ---")
+    print(f"\n--- Pre-fetching album art and dominant colors for songs that appear on chart (Target Img Resize Height: {target_img_height_pixels_for_resize}px) ---")
     
     # This set will now track CANONICAL album names for which PIL/color is loaded in main_animator
     # to avoid redundant PIL loading and dominant color calculation for the same canonical album.
@@ -148,9 +148,8 @@ def pre_fetch_album_art_and_colors(race_df, song_details_map, unique_song_ids_in
     song_id_to_animator_key_map = {} # New map to return
     
     processed_count = 0
-    skipped_due_to_threshold = 0
 
-    for song_id in unique_song_ids_in_race:
+    for song_id in song_ids_to_fetch_art_for: # Iterate over songs that will appear on chart
         try:
             artist_name, track_name = song_id.split(" - ", 1)
         except ValueError:
@@ -168,26 +167,8 @@ def pre_fetch_album_art_and_colors(race_df, song_details_map, unique_song_ids_in
         album_mbid_from_data = song_specific_details.get('mbid')
         track_uri_from_data = song_specific_details.get('track_uri')
 
-        # --- Visibility Threshold Check (from your original code) ---
-        # Ensure race_df is available here and contains the song_id as a column
-        if song_id not in race_df.columns:
-            if DEBUG_ALBUM_ART_LOGIC: print(f"[PRE-FETCH DEBUG] Song ID '{song_id}' not found in race_df columns. Skipping.")
-            continue # Should not happen if unique_song_ids_in_race comes from race_df.columns
-
-        max_plays_for_this_song = race_df[song_id].max()
-
-        # if "Kristen Bell - For the First Time in Forever" in song_id: # Temporary specific check
-        #     print(f"[THRESHOLD_CHECK_DEBUG] For '{song_id}', max_plays_for_this_song = {max_plays_for_this_song}. global_visibility_threshold = {global_visibility_threshold:.2f}")
-            
-        if max_plays_for_this_song < global_visibility_threshold:
-            if DEBUG_ALBUM_ART_LOGIC:
-                print(f"[PRE-FETCH DEBUG] Song '{song_id}' (max plays: {max_plays_for_this_song}) is below visibility threshold ({global_visibility_threshold:.2f}). Skipping art/color processing.")
-            skipped_due_to_threshold += 1
-            song_id_to_animator_key_map[song_id] = album_name_hint_from_data # Store a fallback key
-            continue
-        
         if DEBUG_ALBUM_ART_LOGIC:
-            print(f"[PRE-FETCH DEBUG] Song '{song_id}' (max plays: {max_plays_for_this_song}) meets threshold. Processing album hint: '{album_name_hint_from_data}'.")
+            print(f"[PRE-FETCH DEBUG] Processing song '{song_id}' (it appears on chart). Album hint: '{album_name_hint_from_data}'.")
 
         # --- Call album_art_utils to get path and Spotify info ---
         try:
@@ -276,7 +257,7 @@ def pre_fetch_album_art_and_colors(race_df, song_details_map, unique_song_ids_in
         
     print(f"--- Pre-fetching complete ---")
     print(f"Attempted to process art/color for {processed_count} song-album groups that met threshold.")
-    print(f"Skipped {skipped_due_to_threshold} song-album groups due to not meeting visibility threshold.")
+    print(f"Skipped count based on meeting visibility threshold is no longer applicable here.")
     print(f"In-memory PIL images (animator cache): {len(album_art_image_objects)}, In-memory bar colors (animator cache): {len(album_bar_colors)}")
     return song_id_to_animator_key_map # Return the new map
 
@@ -318,7 +299,19 @@ def draw_and_save_single_frame(args):
                 ha='right', va='bottom', fontsize=20 * (dpi/100.0), color='dimgray', weight='bold')
 
         ax.set_xlabel("Total Plays", fontsize=18 * (dpi/100.0), labelpad=15 * (dpi/100.0))
-        ax.set_xlim(0, chart_xaxis_limit)
+        
+        # --- Dynamic X-axis Limit Calculation ---
+        current_frame_top_play_count = 0
+        if not top_n_songs.empty:
+            current_frame_top_play_count = top_n_songs.max()
+        elif current_data_slice.max() > 0: # Fallback if top_n_songs is empty but there are plays
+            current_frame_top_play_count = current_data_slice.max()
+        # If all current plays are 0, current_frame_top_play_count remains 0
+
+        dynamic_x_axis_limit = max(10, current_frame_top_play_count) * 1.10 # 10% padding, min limit 10
+        ax.set_xlim(0, dynamic_x_axis_limit)
+        # --- End Dynamic X-axis ---
+        
         ax.xaxis.set_major_formatter(ticker.StrMethodFormatter('{x:,.0f}'))
         ax.xaxis.set_ticks_position('top')
         ax.xaxis.set_label_position('top')
@@ -360,8 +353,9 @@ def draw_and_save_single_frame(args):
             actual_bars = ax.barh(bar_y_positions, bar_widths, color=bar_colors_list, height=0.8, zorder=2)
 
             value_label_fontsize = 12 * (dpi/100.0)
-            image_padding_data_units = chart_xaxis_limit * 0.005
-            value_label_padding_data_units = chart_xaxis_limit * 0.008
+            # Update padding calculations to use dynamic_x_axis_limit
+            image_padding_data_units = dynamic_x_axis_limit * 0.005 
+            value_label_padding_data_units = dynamic_x_axis_limit * 0.008
 
             for i, bar_obj in enumerate(actual_bars):
                 song_id_for_bar = bar_song_ids[i]
@@ -373,20 +367,21 @@ def draw_and_save_single_frame(args):
 
                 current_x_anchor = bar_obj.get_width()
 
-                if pil_image and current_play_count >= art_display_min_plays_threshold:
+                if pil_image:
                     try:
                         resized_img_width_pixels, resized_img_height_pixels = pil_image.size 
                         
-                        # Recalculate fig_width_pixels for this specific figure instance if needed, or use passed
-                        # fig_width_pixels_current = fig.get_size_inches()[0] * dpi # This is the actual pixel width of this fig
-                        x_axis_range_data_units = ax.get_xlim()[1] - ax.get_xlim()[0]
+                        # Use dynamic_x_axis_limit for calculating image width in data units
+                        x_axis_range_data_units = dynamic_x_axis_limit 
                         image_width_data_units = 0
-                        if fig_width_pixels > 0 and x_axis_range_data_units > 0: # Use passed fig_width_pixels
+                        if fig_width_pixels > 0 and x_axis_range_data_units > 0: 
                              image_width_data_units = (resized_img_width_pixels / fig_width_pixels) * x_axis_range_data_units
                         
                         img_center_x_pos = current_x_anchor - image_padding_data_units - (image_width_data_units / 2.0) 
                         
-                        if img_center_x_pos - (image_width_data_units / 2.0) > chart_xaxis_limit * 0.02:
+                        # Condition for image placement should also use dynamic_x_axis_limit
+                        min_x_for_image_start = dynamic_x_axis_limit * 0.02
+                        if img_center_x_pos - (image_width_data_units / 2.0) > min_x_for_image_start:
                             imagebox = OffsetImage(pil_image, zoom=1.0, resample=False)
                             ab = AnnotationBbox(imagebox,
                                                 (img_center_x_pos, bar_obj.get_y() + bar_obj.get_height() / 2.0),
@@ -438,7 +433,7 @@ def create_bar_chart_race_animation(race_df, song_details_map): # race_df here i
         print("Cannot create animation: race_df is empty or None.")
         return
 
-    unique_song_ids_in_race = race_df.columns.tolist()
+    # unique_song_ids_in_race = race_df.columns.tolist() # This is ALL songs in race_df
     raw_max_play_count_overall = race_df.max().max()
     if pd.isna(raw_max_play_count_overall) or raw_max_play_count_overall <= 0:
         raw_max_play_count_overall = 100 # Fallback
@@ -462,8 +457,25 @@ def create_bar_chart_race_animation(race_df, song_details_map): # race_df here i
     print(f"[ANIMATOR_INFO] Calculated target image height for pre-resize: {calculated_target_img_height_pixels:.2f} pixels")
 
     art_fetch_start_time = time.time()
+    
+    # --- Determine songs that will actually appear on the chart ---
+    song_ids_ever_on_chart = set()
+    current_n_bars = config.get_int('AnimationOutput', 'N_BARS', N_BARS) # Ensure we use the correct N_BARS
+    print(f"[ANIMATOR_INFO] Determining songs that appear in top {current_n_bars} bars...")
+    for timestamp, frame_data in race_df.iterrows(): # race_df here is the one passed for animation
+        top_n_in_frame = frame_data[frame_data > 0].nlargest(current_n_bars)
+        song_ids_ever_on_chart.update(top_n_in_frame.index.tolist())
+    
+    print(f"[ANIMATOR_INFO] Found {len(song_ids_ever_on_chart)} unique songs that will appear in the top {current_n_bars} bars.")
+    
     # pre_fetch_album_art_and_colors now returns song_id_to_animator_key_map
-    song_id_to_animator_key_map = pre_fetch_album_art_and_colors(race_df, song_details_map, unique_song_ids_in_race, art_processing_min_plays_threshold, calculated_target_img_height_pixels, dpi)
+    # Pass the list of songs that actually appear on chart, and remove race_df and art_processing_min_plays_threshold as direct args
+    song_id_to_animator_key_map = pre_fetch_album_art_and_colors(
+        song_details_map, 
+        list(song_ids_ever_on_chart), # Pass the list of songs that appear
+        calculated_target_img_height_pixels, 
+        dpi
+    )
     art_fetch_end_time = time.time()
     print(f"--- Time taken for pre_fetch_album_art_and_colors: {art_fetch_end_time - art_fetch_start_time:.2f} seconds ---")
 
