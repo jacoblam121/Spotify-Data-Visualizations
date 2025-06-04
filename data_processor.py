@@ -361,6 +361,105 @@ def prepare_data_for_bar_chart_race(cleaned_df):
     return race_df, song_details_map # Return new map name
 
 
+def calculate_rolling_window_stats(cleaned_df_for_rolling_stats, animation_frame_timestamps):
+    """
+    Calculates the top track for a 7-day and 30-day rolling window for each animation frame timestamp.
+
+    Args:
+        cleaned_df_for_rolling_stats (pd.DataFrame): DataFrame containing all play events,
+                                                     must have 'timestamp' and 'song_id' columns.
+                                                     Timestamps should be timezone-aware (UTC).
+        animation_frame_timestamps (pd.DatetimeIndex or list): A list or DatetimeIndex of timestamps
+                                                               for which animation frames will be generated.
+                                                               These are the "current day" for each rolling window.
+
+    Returns:
+        dict: A dictionary where keys are the animation_frame_timestamps and values are dicts
+              containing 'top_7_day': {'song_id': str, 'plays': int, 'original_artist': str, 'original_track': str} or None
+              and 'top_30_day': {'song_id': str, 'plays': int, 'original_artist': str, 'original_track': str} or None.
+    """
+    print("\n--- Calculating Rolling Window Stats (7-day and 30-day) ---")
+    if cleaned_df_for_rolling_stats is None or cleaned_df_for_rolling_stats.empty:
+        print("Warning: cleaned_df_for_rolling_stats is empty. Cannot calculate rolling window stats.")
+        return {ts: {'top_7_day': None, 'top_30_day': None} for ts in animation_frame_timestamps}
+
+    if 'timestamp' not in cleaned_df_for_rolling_stats.columns or 'song_id' not in cleaned_df_for_rolling_stats.columns:
+        print("Error: 'timestamp' or 'song_id' not in cleaned_df_for_rolling_stats. Cannot calculate rolling stats.")
+        return {ts: {'top_7_day': None, 'top_30_day': None} for ts in animation_frame_timestamps}
+
+    # Ensure cleaned_df_for_rolling_stats is sorted by timestamp for potentially faster windowing, though not strictly necessary for filtering.
+    # cleaned_df_for_rolling_stats = cleaned_df_for_rolling_stats.sort_values(by='timestamp') # Already sorted in prepare_data_for_bar_chart_race
+
+    # Create a mapping from song_id to original artist and track names for display
+    # This avoids repeated lookups if song_details_map isn't directly passed or available here easily.
+    # We only need this for songs that become top songs in windows.
+    # It's assumed 'original_artist' and 'original_track' are present.
+    song_id_to_originals = {}
+    if 'original_artist' in cleaned_df_for_rolling_stats.columns and \
+       'original_track' in cleaned_df_for_rolling_stats.columns:
+        song_id_to_originals = cleaned_df_for_rolling_stats.drop_duplicates(subset=['song_id']) \
+                                .set_index('song_id')[['original_artist', 'original_track']].to_dict('index')
+
+    rolling_stats_by_frame_timestamp = {}
+    processed_timestamps = 0
+
+    for current_ts in animation_frame_timestamps:
+        if not isinstance(current_ts, pd.Timestamp):
+            try:
+                current_ts_dt = pd.to_datetime(current_ts, utc=True)
+            except Exception as e:
+                print(f"Warning: Could not convert timestamp {current_ts} to datetime: {e}. Skipping rolling stats for this timestamp.")
+                rolling_stats_by_frame_timestamp[current_ts] = {'top_7_day': None, 'top_30_day': None}
+                continue
+        else:
+            current_ts_dt = current_ts # Already a pandas Timestamp
+
+        # Ensure current_ts_dt is UTC if not already
+        if current_ts_dt.tzinfo is None:
+            current_ts_dt = current_ts_dt.tz_localize('UTC')
+        elif current_ts_dt.tzinfo.utcoffset(current_ts_dt) != pd.Timedelta(0):
+            current_ts_dt = current_ts_dt.tz_convert('UTC')
+            
+        frame_stats = {'top_7_day': None, 'top_30_day': None}
+
+        for period_days, period_key in [(7, 'top_7_day'), (30, 'top_30_day')]:
+            start_date = current_ts_dt - pd.Timedelta(days=period_days)
+            
+            # Filter plays within the window [start_date, current_ts_dt]
+            # Ensure timestamps in cleaned_df are comparable (should be UTC from processing)
+            window_df = cleaned_df_for_rolling_stats[
+                (cleaned_df_for_rolling_stats['timestamp'] >= start_date) &
+                (cleaned_df_for_rolling_stats['timestamp'] <= current_ts_dt)
+            ]
+
+            if not window_df.empty:
+                top_song_in_window = window_df['song_id'].mode() # mode() gives most frequent
+                
+                if not top_song_in_window.empty:
+                    # mode() can return multiple if ties; pick the first one.
+                    top_song_id = top_song_in_window.iloc[0] 
+                    # Count plays for this specific top song_id in the window
+                    plays_count = window_df[window_df['song_id'] == top_song_id].shape[0]
+                    
+                    original_names = song_id_to_originals.get(top_song_id, 
+                                                              {'original_artist': 'Unknown Artist', 'original_track': 'Unknown Track'})
+                    
+                    frame_stats[period_key] = {
+                        'song_id': top_song_id,
+                        'plays': plays_count,
+                        'original_artist': original_names['original_artist'],
+                        'original_track': original_names['original_track']
+                    }
+        
+        rolling_stats_by_frame_timestamp[current_ts] = frame_stats
+        processed_timestamps +=1
+        if processed_timestamps % 100 == 0 or processed_timestamps == len(animation_frame_timestamps):
+            print(f"Processed rolling stats for {processed_timestamps}/{len(animation_frame_timestamps)} animation timestamps.")
+
+    print("--- Rolling Window Stats Calculation Complete ---")
+    return rolling_stats_by_frame_timestamp
+
+
 # This block allows testing this script directly
 if __name__ == "__main__":
     print("--- Running data_processor.py directly for testing ---")
