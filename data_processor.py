@@ -76,8 +76,19 @@ def load_spotify_data(spotify_files_pattern, min_ms_played, filter_skipped_track
         'master_metadata_track_name': 'track'
     })
 
+    # Store original case for display before normalization
+    if 'artist' in df_renamed.columns:
+        df_renamed['original_artist'] = df_renamed['artist']
+    else:
+        df_renamed['original_artist'] = "Unknown Artist" # Fallback
+    
+    if 'track' in df_renamed.columns:
+        df_renamed['original_track'] = df_renamed['track']
+    else:
+        df_renamed['original_track'] = "Unknown Track" # Fallback
+
     # Keep only relevant columns plus ms_played and skipped for filtering
-    cols_to_keep = ['timestamp_str', 'artist', 'album', 'track', 'ms_played', 'spotify_track_uri']
+    cols_to_keep = ['timestamp_str', 'artist', 'album', 'track', 'ms_played', 'spotify_track_uri', 'original_artist', 'original_track']
     if 'spotify_track_uri' not in df_renamed.columns: # Ensure it exists even if it was missing (will be all None)
         df_renamed['spotify_track_uri'] = None
     
@@ -138,9 +149,11 @@ def load_spotify_data(spotify_files_pattern, min_ms_played, filter_skipped_track
     # This is important because song_id relies on artist & track.
     df_final_spotify['artist'] = df_final_spotify['artist'].fillna('unknown artist') # Ensure consistent case
     df_final_spotify['album'] = df_final_spotify['album'].fillna('unknown album')   # Ensure consistent case
+    # Ensure original_artist and original_track also have fallbacks if they were somehow missed or became NaN
+    df_final_spotify['original_artist'] = df_final_spotify['original_artist'].fillna(df_final_spotify['artist'])
+    df_final_spotify['original_track'] = df_final_spotify['original_track'].fillna(df_final_spotify['track'])
 
-
-    return df_final_spotify[['timestamp', 'artist', 'album', 'track', 'spotify_track_uri']] # Include URI
+    return df_final_spotify[['timestamp', 'artist', 'album', 'track', 'spotify_track_uri', 'original_artist', 'original_track']] # Include URI and originals
 
 
 def load_lastfm_data(csv_filepath):
@@ -183,6 +196,10 @@ def load_lastfm_data(csv_filepath):
     df_selected = df[columns_to_keep_lastfm].copy()
     
     initial_rows = len(df_selected)
+    # Store original case for display before normalization (assuming 'artist' and 'track' cols exist)
+    df_selected['original_artist'] = df_selected['artist']
+    df_selected['original_track'] = df_selected['track']
+
     df_selected.dropna(subset=['artist', 'album', 'track'], inplace=True)
     rows_dropped = initial_rows - len(df_selected)
     if rows_dropped > 0:
@@ -220,6 +237,14 @@ def clean_and_filter_data(config):
             df_raw_lastfm['album'] = df_raw_lastfm['album'].astype(str).str.lower().str.strip()
             df_raw_lastfm['artist'] = df_raw_lastfm['artist'].fillna('unknown artist')
             df_raw_lastfm['album'] = df_raw_lastfm['album'].fillna('unknown album')
+            # Preserve original case for display if not already handled in load_lastfm_data
+            if 'original_artist' not in df_raw_lastfm.columns:
+                 df_raw_lastfm['original_artist'] = df_raw_lastfm['artist'] # This will be lowercase if not captured earlier
+            if 'original_track' not in df_raw_lastfm.columns:
+                df_raw_lastfm['original_track'] = df_raw_lastfm['track'] # This will be lowercase
+            # A better approach would be to capture originals in load_lastfm_data itself before any case change
+            # For now, this ensures the columns exist. We'll refine if load_lastfm_data doesn't capture raw case.
+
             print("Normalized artist, track, and album names for Last.fm data.")
         df_loaded = df_raw_lastfm
     else:
@@ -229,7 +254,7 @@ def clean_and_filter_data(config):
     if df_loaded is None or df_loaded.empty:
         print(f"No data loaded for source '{data_source}'.")
         # Return empty standard df with all expected columns for downstream processing
-        base_cols = ['timestamp', 'artist', 'album', 'track']
+        base_cols = ['timestamp', 'artist', 'album', 'track', 'original_artist', 'original_track']
         if data_source == 'spotify':
             base_cols.append('spotify_track_uri')
         elif data_source == 'lastfm':
@@ -267,7 +292,7 @@ def clean_and_filter_data(config):
     if df_time_filtered.empty:
         print(f"No data found for the specified timeframe. Returning empty DataFrame.")
         # Ensure empty DataFrame has the necessary columns based on source
-        base_cols = ['timestamp', 'artist', 'album', 'track']
+        base_cols = ['timestamp', 'artist', 'album', 'track', 'original_artist', 'original_track']
         if data_source == 'spotify': # Re-check source from config as df_loaded might be empty
             base_cols.append('spotify_track_uri')
         elif config.get('DataSource', 'SOURCE', 'lastfm').lower() == 'lastfm': # Check original config source
@@ -290,6 +315,7 @@ def prepare_data_for_bar_chart_race(cleaned_df):
     print("\nStarting data preparation for high-resolution bar chart race...")
     df = cleaned_df.sort_values(by='timestamp').copy()
 
+    # song_id uses the normalized (lowercase) artist and track names
     df['song_id'] = df['artist'] + " - " + df['track']
     print(f"Created 'song_id'. Total unique songs found: {df['song_id'].nunique()}")
     print(f"Total play events to process for frames: {len(df)}")
@@ -307,13 +333,15 @@ def prepare_data_for_bar_chart_race(cleaned_df):
     for _, row in df.drop_duplicates(subset=['song_id'], keep='first').iterrows():
         song_id = row['song_id']
         details = {
-            'name': row['album'],
+            'name': row['album'], # This is the normalized album name
             'track_uri': row['spotify_track_uri'] if has_uri else None,
-            'mbid': row['album_mbid'] if has_mbid else None
+            'mbid': row['album_mbid'] if has_mbid else None,
+            'display_artist': row['original_artist'], # Original case artist
+            'display_track': row['original_track']   # Original case track
         }
         song_details_map[song_id] = details
 
-    print(f"Created song_details_map with {len(song_details_map)} entries.")
+    print(f"Created song_details_map with {len(song_details_map)} entries including display names.")
 
     df['play_count_increment'] = 1
     df['cumulative_plays_for_song_at_event'] = df.groupby('song_id')['play_count_increment'].cumsum()
