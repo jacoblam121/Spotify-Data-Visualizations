@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(rg:*)",
+      "Bash(export PYTHONIOENCODING=utf-8)",
+      "Bash(python:*)",
+      "Bash(pip3:*)",
+      "Bash(sudo apt:*)",
+      "Bash(sudo apt install:*)"
+    ],
+    "deny": []
+  }
+}

@@ -11,7 +11,7 @@ from urllib.parse import quote
 import base64
 
 # --- Configuration Variables (will be initialized) ---
-DEBUG_CACHE = True
+DEBUG_CACHE = False
 USER_AGENT = "SpotifyRaceChart/1.0 default_email@example.com"
 ART_CACHE_DIR = "album_art_cache" # Default, can be overridden
 SPOTIFY_CLIENT_ID = "eaf67929214947d19e34182fb20e96bc" # Default, can be overridden
@@ -54,7 +54,7 @@ def initialize_from_config(config):
         if DEBUG_CACHE: print("[CACHE DEBUG] album_art_utils config already initialized.")
         return
 
-    DEBUG_CACHE = config.get_bool('Debugging', 'DEBUG_CACHE_ALBUM_ART_UTILS', True)
+    DEBUG_CACHE = config.get_bool('Debugging', 'DEBUG_CACHE_ALBUM_ART_UTILS', DEBUG_CACHE)
     USER_AGENT = config.get('General', 'USER_AGENT', USER_AGENT) # Use existing as fallback
     ART_CACHE_DIR = config.get('AlbumArtSpotify', 'ART_CACHE_DIR', ART_CACHE_DIR)
     NEGATIVE_CACHE_HOURS = config.get_int('AlbumArtSpotify', 'NEGATIVE_CACHE_HOURS', NEGATIVE_CACHE_HOURS)
