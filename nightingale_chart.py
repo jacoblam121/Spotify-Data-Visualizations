@@ -11,7 +11,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import matplotlib.patheffects as path_effects
 from matplotlib.figure import Figure
 from typing import Dict, List, Tuple, Optional, Any
 import math
@@ -287,154 +286,83 @@ def draw_nightingale_chart(
     nightingale_data: Dict[str, Any],
     chart_config: Dict[str, Any]
 ) -> None:
-    """
-    Draw the nightingale rose chart on the given figure.
-    
-    Args:
-        fig: Matplotlib figure to draw on
-        nightingale_data: Nightingale data for current frame
-        chart_config: Configuration for chart appearance and positioning
-    """
-    
-    # Extract configuration
-    center_x = chart_config.get('center_x', 0.15)
-    center_y = chart_config.get('center_y', 0.35)
-    chart_radius = chart_config.get('radius', 0.08)
-    show_labels = chart_config.get('show_labels', True)
-    show_high_low = chart_config.get('show_high_low', True)
-    label_font_size = chart_config.get('label_font_size', 10)
-    label_font_color = chart_config.get('label_font_color', 'black')
-    label_font_weight = chart_config.get('label_font_weight', 'normal')
-    high_low_font_size = chart_config.get('high_low_font_size', 9)
-    high_low_y_offset = chart_config.get('high_low_y_offset_fig', -0.12)
-    high_low_spacing = chart_config.get('high_low_spacing_fig', 0.025)
-    debug = chart_config.get('debug', False)
-    
-    periods = nightingale_data.get('periods', [])
+    """Render a polar nightingale chart on ``fig`` using ``nightingale_data``."""
+
+    center_x = chart_config.get("center_x", 0.15)
+    center_y = chart_config.get("center_y", 0.35)
+    radius = chart_config.get("radius", 0.08)
+    width = chart_config.get("chart_width_fig", radius * 2)
+    height = chart_config.get("chart_height_fig", radius * 2)
+    padding = chart_config.get("chart_padding_fig", 0.02)
+
+    show_labels = chart_config.get("show_labels", True)
+    label_radius_ratio = chart_config.get("label_radius_ratio", 1.15)
+    label_font_size = chart_config.get("label_font_size", 10)
+    label_font_color = chart_config.get("label_font_color", "black")
+    label_font_weight = chart_config.get("label_font_weight", "normal")
+
+    show_high_low = chart_config.get("show_high_low", True)
+    high_low_font_size = chart_config.get("high_low_font_size", 9)
+    high_low_y_offset = chart_config.get("high_low_y_offset_fig", -0.12)
+    high_low_spacing = chart_config.get("high_low_spacing_fig", 0.025)
+
+    debug = chart_config.get("debug", False)
+
+    periods = nightingale_data.get("periods", [])
     if not periods:
-        if debug:
-            print("DEBUG: No periods data for nightingale chart")
-        return  # Nothing to draw
-    
-    if debug:
-        print(f"DEBUG: Drawing nightingale chart with {len(periods)} periods at center ({center_x}, {center_y}), radius {chart_radius}")
-    
-    # Draw chart title above the chart
-    aggregation_type = nightingale_data.get('aggregation_type', 'monthly')
-    title_text = f"{'Monthly' if aggregation_type == 'monthly' else 'Yearly'} Distribution of Plays"
-    title_y = center_y + chart_radius + 0.02  # Position above the chart
-    
-    fig.text(
-        center_x, title_y,
-        title_text,
-        fontsize=label_font_size + 2,  # Slightly larger than labels
-        ha='center', va='bottom',
-        color='black',
-        weight='bold',
-        transform=fig.transFigure
-    )
-    
-    if debug:
-        print(f"DEBUG: Added title '{title_text}' at ({center_x:.3f}, {title_y:.3f})")
-    
-    # Get figure dimensions for aspect ratio calculation
-    figure_width = fig.get_figwidth()
-    figure_height = fig.get_figheight()
-    
-    # Calculate layout geometry with aspect ratio correction
-    layout_periods = calculate_nightingale_layout(
-        periods, chart_radius, center_x, center_y, 
-        figure_width=figure_width, figure_height=figure_height
-    )
-    
-    if debug:
-        print(f"DEBUG: Layout periods calculated: {[p['label'] + ' (radius: ' + str(round(p.get('radius', 0), 3)) + ')' for p in layout_periods]}")
-    
-    # Draw each period as a wedge
-    for period in layout_periods:
-        if period['radius'] > 0:  # Only draw if radius > 0
-            if debug:
-                print(f"DEBUG: Drawing wedge for {period['label']}: center=({period['center_x']:.3f}, {period['center_y']:.3f}), " +
-                      f"radius={period['radius']:.3f}, angles={period['angle_start_deg']:.1f}°-{period['angle_end_deg']:.1f}°")
-            
-            # Create circular wedge patch using figure coordinates
-            # Use the period's calculated radius directly for perfect circular shape
-            wedge_radius = period['radius']
-            
-            wedge = patches.Wedge(
-                center=(period['center_x'], period['center_y']),
-                r=wedge_radius,
-                theta1=period['angle_start_deg'],
-                theta2=period['angle_end_deg'],
-                facecolor=period['color'],
-                edgecolor='white',
-                linewidth=2,
-                alpha=0.8,
-                transform=fig.transFigure  # Use figure coordinates
-            )
-            
-            # Add wedge directly to figure
-            fig.patches.append(wedge)
-            
-        # Add radial period labels outside the chart circle
-        if show_labels and periods:
-            label_radius_ratio = chart_config.get('label_radius_ratio', 1.15)  # Position outside circle
-            label_radius = chart_radius * label_radius_ratio
-            
-            for period in layout_periods:
-                if period['radius'] > 0:  # Only label visible segments
-                    # Calculate label position (middle of wedge, outside circle)
-                    mid_angle = math.radians((period['angle_start_deg'] + period['angle_end_deg']) / 2)
-                    label_x = center_x + label_radius * math.cos(mid_angle)
-                    label_y = center_y + label_radius * math.sin(mid_angle)
-                    
-                    if debug:
-                        print(f"DEBUG: Adding radial label '{period['label']}' at ({label_x:.3f}, {label_y:.3f})")
-                    
-                    # Add text with configurable styling
-                    fig.text(
-                        label_x, label_y, 
-                        period['label'],
-                        fontsize=label_font_size,
-                        ha='center', va='center',
-                        color=label_font_color,
-                        weight=label_font_weight,
-                        transform=fig.transFigure
-                    )
-        else:
-            if debug:
-                print(f"DEBUG: Skipping {period['label']} - radius is {period.get('radius', 0)}")
-    
-    # Draw high/low period information below chart
+        return
+
+    # Axis rectangle in figure coords
+    ax_left = center_x - width / 2.0
+    ax_bottom = center_y - height / 2.0
+    ax = fig.add_axes([ax_left, ax_bottom, width, height], polar=True)
+    ax.set_theta_direction(-1)
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_ylim(0, radius)
+    ax.axis("off")
+
+    max_plays = max(p["plays"] for p in periods) if periods else 1
+
+    for p in periods:
+        bar_height = radius * (p["plays"] / max_plays) if max_plays else 0
+        theta = p["angle_start"]
+        width_ang = p["angle_end"] - p["angle_start"]
+        ax.bar(theta, bar_height, width=width_ang, bottom=0.0,
+               color=p["color"], edgecolor="white", linewidth=2, align="edge", alpha=0.8)
+
+    if show_labels:
+        label_r = radius * label_radius_ratio
+        for p in periods:
+            if p["plays"] <= 0:
+                continue
+            angle_mid = (p["angle_start"] + p["angle_end"]) / 2.0
+            rotation = np.degrees(angle_mid) - 90
+            ax.text(angle_mid, label_r, p["label"], ha="center", va="center",
+                    rotation=rotation, rotation_mode="anchor",
+                    fontsize=label_font_size, color=label_font_color,
+                    weight=label_font_weight)
+
+    # Title above chart
+    aggregation_type = nightingale_data.get("aggregation_type", "monthly")
+    title = "Monthly" if aggregation_type == "monthly" else "Yearly"
+    fig.text(center_x, center_y + height / 2 + padding, f"{title} Distribution of Plays",
+             ha="center", va="bottom", fontsize=label_font_size + 2, weight="bold",
+             color="black", transform=fig.transFigure)
+
     if show_high_low:
-        high_period = nightingale_data.get('high_period')
-        low_period = nightingale_data.get('low_period')
-        
-        text_y = center_y + high_low_y_offset  # Position below chart using config
-        
+        high_period = nightingale_data.get("high_period")
+        low_period = nightingale_data.get("low_period")
+        text_y = center_y - height / 2 + high_low_y_offset
         if high_period:
-            high_text = f"High: {high_period['label']} ({high_period['plays']} plays)"
-            fig.text(
-                center_x, text_y,
-                high_text,
-                fontsize=high_low_font_size,
-                ha='center', va='top',
-                color='darkgreen',
-                weight='bold',
-                transform=fig.transFigure
-            )
-        
+            fig.text(center_x, text_y,
+                     f"High: {high_period['label']} ({high_period['plays']} plays)",
+                     ha="center", va="top", fontsize=high_low_font_size,
+                     color="darkgreen", weight="bold", transform=fig.transFigure)
         if low_period and low_period != high_period:
-            low_text = f"Low: {low_period['label']} ({low_period['plays']} plays)"
-            fig.text(
-                center_x, text_y - high_low_spacing,
-                low_text,
-                fontsize=high_low_font_size,
-                ha='center', va='top',
-                color='darkred',
-                weight='bold',
-                transform=fig.transFigure
-            )
+            fig.text(center_x, text_y - high_low_spacing,
+                     f"Low: {low_period['label']} ({low_period['plays']} plays)",
+                     ha="center", va="top", fontsize=high_low_font_size,
+                     color="darkred", weight="bold", transform=fig.transFigure)
 
 
 # Test functionality if run directly
