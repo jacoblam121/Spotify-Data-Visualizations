@@ -23,6 +23,8 @@ import subprocess # Added for calling ffmpeg
 import shutil # Added for directory operations
 import matplotlib.patheffects as path_effects # For text outlining
 import matplotlib.patches as patches # For the text background rectangle
+import matplotlib.font_manager as fm  # Needed for precise text width measurement
+from text_utils import truncate_to_fit  # Helper for dynamic truncation
 
 # Import the config loader
 from config_loader import AppConfig
@@ -54,6 +56,7 @@ PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = 50 # Default, will be loaded from conf
 LOG_PARALLEL_PROCESS_START_CONFIG = True # Default, will be loaded from config
 ANIMATION_TRANSITION_DURATION_SECONDS = 0.3 # Default, will be loaded from config
 ENABLE_OVERTAKE_ANIMATIONS_CONFIG = True # Default, will be loaded from config
+SONG_TEXT_RIGHT_GAP_FRACTION = 0.1  # Fraction of x-axis width to leave as a gap after song text
 
 # --- Global Dictionaries for Caching Art Paths and Colors within the animator ---
 album_art_image_objects = {}
@@ -65,7 +68,7 @@ def load_configuration():
     global MAX_FRAMES_FOR_TEST_RENDER, LOG_FRAME_TIMES_CONFIG
     global MAX_PARALLEL_WORKERS, CLEANUP_INTERMEDIATE_FRAMES, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
     global LOG_PARALLEL_PROCESS_START_CONFIG, ANIMATION_TRANSITION_DURATION_SECONDS
-    global ENABLE_OVERTAKE_ANIMATIONS_CONFIG
+    global ENABLE_OVERTAKE_ANIMATIONS_CONFIG, SONG_TEXT_RIGHT_GAP_FRACTION
 
     try:
         config = AppConfig() # Assumes configurations.txt is in the same directory
@@ -93,6 +96,8 @@ def load_configuration():
     LOG_FRAME_TIMES_CONFIG = config.get_bool('Debugging', 'LOG_FRAME_TIMES', LOG_FRAME_TIMES_CONFIG)
     ANIMATION_TRANSITION_DURATION_SECONDS = config.get_float('AnimationOutput', 'ANIMATION_TRANSITION_DURATION_SECONDS', ANIMATION_TRANSITION_DURATION_SECONDS)
     ENABLE_OVERTAKE_ANIMATIONS_CONFIG = config.get_bool('AnimationOutput', 'ENABLE_OVERTAKE_ANIMATIONS', ENABLE_OVERTAKE_ANIMATIONS_CONFIG)
+    # Load from AlbumArtSpotify section where user has it in configurations.txt
+    SONG_TEXT_RIGHT_GAP_FRACTION = config.get_float('AlbumArtSpotify', 'SONG_TEXT_RIGHT_GAP_FRACTION', SONG_TEXT_RIGHT_GAP_FRACTION)
     
     # New config options for parallel processing
     # MAX_PARALLEL_WORKERS = config.get_int('AnimationOutput', 'MAX_PARALLEL_WORKERS', os.cpu_count() or 1) # Ensure at least 1
@@ -551,55 +556,44 @@ def draw_and_save_single_frame(args):
 
             actual_bar = ax.barh(interpolated_y_pos, interpolated_plays, color=bar_color, height=0.8, zorder=2, align='center')
             
-            # Text truncation will be handled by clipping, but we can still apply a reasonable max length for extreme cases
-            text_to_display_for_song = full_display_name
-            # max_char_len_song_name is still defined, can be used if needed, but clipping is primary
-            # if len(full_display_name) > max_char_len_song_name: 
-            #     text_to_display_for_song = full_display_name[:max_char_len_song_name-3] + "..."
-             
-            text_bbox_props = dict(boxstyle="round,pad=0.2,rounding_size=0.1", facecolor='#333333', alpha=0.5, edgecolor='none')
- 
-            song_text_obj = ax.text(song_name_padding_from_left_spine_data_units, interpolated_y_pos, text_to_display_for_song, 
-                                    va='center', ha='left', fontsize=song_name_fontsize, color='white', zorder=5, bbox=text_bbox_props)
+            # --- Dynamically compute available width for the song label and truncate if needed ---
+            start_x_data = song_name_padding_from_left_spine_data_units
 
-            # --- Clipping for main song text ---
-            # Calculate where the text should be clipped on the right
-            text_clip_x_end = interpolated_plays # Default: end of the bar if no art
-            image_width_data_units_for_clip = 0 # Assume no image initially
-
-            if pil_image: # If there is an album art image for this bar
-                # Recalculate image_width_data_units for accuracy here if needed, or use one passed if robust
-                # This should be the same as image_width_data_units used for placing the image
+            # Determine the data-coordinate x where text must stop
+            right_gap_units = dynamic_x_axis_limit * SONG_TEXT_RIGHT_GAP_FRACTION
+            if pil_image:
                 resized_img_w_pix, _ = pil_image.size
-                if fig_width_pixels > 0 and dynamic_x_axis_limit > 0:
-                    image_width_data_units_for_clip = (resized_img_w_pix / fig_width_pixels) * dynamic_x_axis_limit
-                
-                art_left_edge = interpolated_plays - image_width_data_units_for_clip
-                padding_before_art = dynamic_x_axis_limit * 0.002 # Small gap so text doesn't touch art
-                text_clip_x_end = art_left_edge - padding_before_art
-            else: # No album art, clip slightly before the value label
-                padding_before_value = dynamic_x_axis_limit * 0.01 
-                text_clip_x_end = interpolated_plays - padding_before_value
+                image_width_units = (resized_img_w_pix / fig_width_pixels) * dynamic_x_axis_limit if fig_width_pixels > 0 else 0
+                # Account for the horizontal nudge factor that shifts art left
+                art_nudge_units = dynamic_x_axis_limit * 0.0175  # matches art_horizontal_nudge_factor below
+                art_left_edge = interpolated_plays - image_width_units - art_nudge_units
+                end_x_data = art_left_edge - right_gap_units
+            else:
+                end_x_data = interpolated_plays - value_label_padding_data_units - right_gap_units
 
-            # Ensure clip_x_end is not to the left of where text starts
-            text_clip_x_end = max(text_clip_x_end, song_name_padding_from_left_spine_data_units + dynamic_x_axis_limit * 0.01)
+            # Ensure sane ordering
+            if end_x_data <= start_x_data:
+                available_px = 0
+            else:
+                available_px = (end_x_data - start_x_data) / dynamic_x_axis_limit * fig_width_pixels
 
-            # Define the clipping box in data coordinates
-            # Y-coords should span the bar height to clip text that might be too tall due to bbox padding
-            clip_y_bottom = interpolated_y_pos - 0.4 # Bar height is 0.8, so 0.4 is half
-            clip_y_top = interpolated_y_pos + 0.4
-            clip_box = matplotlib.transforms.Bbox.from_extents(
-                song_name_padding_from_left_spine_data_units, # Left edge of text start
-                clip_y_bottom, 
-                text_clip_x_end, # Calculated right edge for clipping
-                clip_y_top
+            font_props = fm.FontProperties(size=song_name_fontsize)
+            renderer = fig.canvas.get_renderer()
+            text_to_display_for_song = truncate_to_fit(full_display_name, font_props, renderer, available_px)
+
+            text_bbox_props = dict(boxstyle="round,pad=0.2,rounding_size=0.1", facecolor="#333333", alpha=0.5, edgecolor="none")
+
+            song_text_obj = ax.text(
+                song_name_padding_from_left_spine_data_units,
+                interpolated_y_pos,
+                text_to_display_for_song,
+                va="center",
+                ha="left",
+                fontsize=song_name_fontsize,
+                color="white",
+                zorder=5,
+                bbox=text_bbox_props,
             )
-            song_text_obj.set_clip_box(clip_box)
-            # song_text_obj.set_clip_on(True) # Clip_on is true by default for text in axes if clip_box is set
- 
-            text_x_pos_for_value = interpolated_plays + value_label_padding_data_units
-            ax.text(text_x_pos_for_value, interpolated_y_pos, f'{int(round(interpolated_plays))}',
-                    va='center', ha='left', fontsize=value_label_fontsize, weight='bold', zorder=4)
 
             current_x_anchor_for_art = interpolated_plays 
             if pil_image:
@@ -623,6 +617,19 @@ def draw_and_save_single_frame(args):
                         ax.add_artist(ab)
                 except Exception as e_img:
                     print(f"Error (PID {os.getpid()}) adding image for {art_color_cache_key} (Song: {song_id}): {e_img}")
+
+            # --- Numeric play-count label ---
+            text_x_pos_for_value = interpolated_plays + value_label_padding_data_units
+            ax.text(
+                text_x_pos_for_value,
+                interpolated_y_pos,
+                f"{int(round(interpolated_plays))}",
+                va="center",
+                ha="left",
+                fontsize=value_label_fontsize,
+                weight="bold",
+                zorder=4,
+            )
 
         ax.spines['right'].set_visible(False)
         ax.spines['bottom'].set_visible(False)

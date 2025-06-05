@@ -69,6 +69,8 @@ ART_CACHE_DIR = album_art_cache
 ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = 0.05
 # NEGATIVE_CACHE_HOURS: How long to cache failed searches (in hours)
 NEGATIVE_CACHE_HOURS = 24
+# Text formatting
+SONG_TEXT_RIGHT_GAP_FRACTION = 0.06
 
 # --- Font Preferences ---
 [FontPreferences]
