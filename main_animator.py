@@ -4,8 +4,6 @@ import pandas as pd
 import numpy as np
 from data_processor import clean_and_filter_data, prepare_data_for_bar_chart_race
 from rolling_stats import calculate_rolling_window_stats
-from time_aggregation import calculate_nightingale_time_data, determine_aggregation_type
-from nightingale_chart import prepare_nightingale_animation_data, draw_nightingale_chart
 
 import album_art_utils # Import the module
 # from album_art_utils import get_album_art_path, get_dominant_color # Can keep these specific imports
@@ -406,7 +404,7 @@ def pre_fetch_album_art_and_colors(song_details_map, song_ids_to_fetch_art_for, 
     return song_id_to_animator_key_map # Return the new map
 
 
-def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_config, transition_duration_seconds_config, rolling_stats_data, nightingale_data=None):
+def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_config, transition_duration_seconds_config, rolling_stats_data):
     """
     Generates a list of render tasks, including intermediate frames for smooth animations.
     Each task details what to draw for a single output image frame.
@@ -463,8 +461,7 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
                 "display_timestamp": timestamp,
                 "bar_render_data_list": bar_render_data_list_for_frame,
                 "is_keyframe_end_frame": True,
-                "rolling_window_info": rolling_stats_data.get(timestamp, {'top_7_day': None, 'top_30_day': None}),
-                "nightingale_info": nightingale_data.get(timestamp, {}) if nightingale_data else {}
+                "rolling_window_info": rolling_stats_data.get(timestamp, {'top_7_day': None, 'top_30_day': None})
             })
             overall_frame_index_counter += 1
         else:
@@ -545,8 +542,7 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
                     "display_timestamp": timestamp, # Display timestamp of the TARGET keyframe
                     "bar_render_data_list": bar_render_data_list_for_tween_frame,
                     "is_keyframe_end_frame": False,
-                    "rolling_window_info": rolling_stats_data.get(timestamp, {'top_7_day': None, 'top_30_day': None}),
-                "nightingale_info": nightingale_data.get(timestamp, {}) if nightingale_data else {}
+                    "rolling_window_info": rolling_stats_data.get(timestamp, {'top_7_day': None, 'top_30_day': None})
                 })
                 overall_frame_index_counter += 1
 
@@ -568,8 +564,7 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
                 "display_timestamp": timestamp,
                 "bar_render_data_list": bar_render_data_list_for_keyframe_end,
                 "is_keyframe_end_frame": True,
-                "rolling_window_info": rolling_stats_data.get(timestamp, {'top_7_day': None, 'top_30_day': None}),
-                "nightingale_info": nightingale_data.get(timestamp, {}) if nightingale_data else {}
+                "rolling_window_info": rolling_stats_data.get(timestamp, {'top_7_day': None, 'top_30_day': None})
             })
             overall_frame_index_counter += 1
 
@@ -613,7 +608,6 @@ def draw_and_save_single_frame(args):
     display_timestamp = render_task['display_timestamp']
     bar_render_data_list = render_task['bar_render_data_list']
     rolling_window_info_for_frame = render_task.get('rolling_window_info', {'top_7_day': None, 'top_30_day': None})
-    nightingale_info_for_frame = render_task.get('nightingale_info', {})
 
     # Each process needs to set its font family if it's not inherited
     try:
@@ -785,8 +779,8 @@ def draw_and_save_single_frame(args):
         # --- Layout Adjustment for ax BEFORE adding other figure elements ---
         # Define margins for the main chart area (ax)
         # These values define the rectangle into which tight_layout will fit ax.
-        left_margin_ax = 0.28  # Space on the left for the rolling stats panel
-        right_margin_ax = 0.985 # Small gap on the right
+        left_margin_ax = 0.28  # Space on the left for the rolling stats panel (User updated)
+        right_margin_ax = 0.985 # Small gap on the right (User updated)
         bottom_margin_ax = 0.08 # Space at the bottom for the main timestamp
         top_margin_ax = 0.98    # Space at the top for x-axis labels/title
         
@@ -813,14 +807,14 @@ def draw_and_save_single_frame(args):
         # Helper function to draw a single rolling stat panel
         def draw_rolling_stat_panel(fig, panel_data, panel_title_text,
                                     panel_y_top_fig_boundary, # Top Y boundary for this panel's content
-                                    song_id_map, art_objects,
-                                    rs_config_params):
+                                    song_id_map, art_objects): # Removed rs_config_params
             
             if not panel_data:
                 return panel_y_top_fig_boundary # Return current Y boundary if no data to draw
 
             # Unpack rs_config_params (could also pass them individually)
             # For brevity, accessing them directly from the outer scope as they are now args to draw_and_save_single_frame
+            # These are rs_panel_title_x_fig_config and rs_text_truncation_adjust_px_config
             
             # Get artist and track names
             display_artist = panel_data.get('original_artist', 'Unknown Artist')
@@ -879,7 +873,7 @@ def draw_and_save_single_frame(args):
             # Available width for song/artist text (for truncation)
             # This is the space between the start of the text and the left edge of the art, minus a gap.
             available_text_width_fig = text_x_right_boundary_fig - text_x_left_boundary_fig # Max available width for centered text
-            max_width_px_for_song_text = (available_text_width_fig * fig_width_pixels) + rs_text_truncation_adjust_px_config # Added adjustment
+            max_width_px_for_song_text = (available_text_width_fig * fig_width_pixels) + rs_text_truncation_adjust_px_config # Added adjustment (from user diff)
             
             truncated_song_artist_text = truncate_to_fit(song_artist_text, song_artist_font_props, renderer, max_width_px_for_song_text if max_width_px_for_song_text > 0 else 0)
 
@@ -889,12 +883,12 @@ def draw_and_save_single_frame(args):
             
             # Draw Panel Title – centred horizontally within the panel area.
             title_center_x_fig = (panel_x_start_abs + panel_x_end_abs) / 2.0
-            # Use configured X if provided, otherwise use calculated center
+            # Use configured X if provided, otherwise use calculated center (from user diff)
             actual_title_x_fig = rs_panel_title_x_fig_config if rs_panel_title_x_fig_config != -1.0 else title_center_x_fig
             title_y_fig = panel_y_top_fig_boundary  # y-position (from bottom) for the top-aligned title text
 
             fig.text(actual_title_x_fig, title_y_fig, panel_title_text,
-                     fontsize=rs_title_font_size, color='black', # Changed color, removed bold
+                     fontsize=rs_title_font_size, color='black', # Changed color, removed bold (user request)
                      ha='center', va='top', transform=fig.transFigure) # Remains centered on its x-coordinate
 
             # Content area starts below the title
@@ -970,9 +964,7 @@ def draw_and_save_single_frame(args):
         panel_7_day_bottom_y = draw_rolling_stat_panel(fig, stats_7_day_data, "Top Track - Last 7 Days",
                                                        current_y_top_boundary,
                                                        song_id_to_canonical_album_map, 
-                                                       album_art_image_objects_local,
-                                                       (ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX) 
-                                                       ) 
+                                                       album_art_image_objects_local) 
 
         # --- Draw 30-Day Stats Panel ---
         # Position below the 7-day panel
@@ -987,49 +979,44 @@ def draw_and_save_single_frame(args):
         draw_rolling_stat_panel(fig, stats_30_day_data, "Top Track - Last 30 Days",
                                 y_top_for_30_day_title, # This is the Y for the title's top
                                 song_id_to_canonical_album_map,
-                                album_art_image_objects_local, # This should be album_art_image_objects_highres_local for consistency
-                                # Pass None for rs_config_params as they are accessed from outer scope
-                                # but we need to pass the new specific configs
-                                (ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX)
-                                )
+                                album_art_image_objects_local)
         
-        # --- Draw Nightingale Chart (if enabled and data available) ---
-        if ENABLE_NIGHTINGALE and nightingale_info_for_frame:
-            nightingale_config = {
-                'center_x': NIGHTINGALE_CENTER_X_FIG,
-                'center_y': NIGHTINGALE_CENTER_Y_FIG,
-                'radius': NIGHTINGALE_RADIUS_FIG,
-                'chart_width_fig': NIGHTINGALE_CHART_WIDTH_FIG,
-                'chart_height_fig': NIGHTINGALE_CHART_HEIGHT_FIG,
-                'chart_padding_fig': NIGHTINGALE_CHART_PADDING_FIG,
-                'show_labels': NIGHTINGALE_SHOW_PERIOD_LABELS,
-                'label_radius_ratio': NIGHTINGALE_LABEL_RADIUS_RATIO,
-                'label_font_color': NIGHTINGALE_LABEL_FONT_COLOR,
-                'label_font_weight': NIGHTINGALE_LABEL_FONT_WEIGHT,
-                'show_high_low': NIGHTINGALE_SHOW_HIGH_LOW_INFO,
-                'high_low_y_offset_fig': NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG,
-                'high_low_spacing_fig': NIGHTINGALE_HIGH_LOW_SPACING_FIG,
-                'label_font_size': NIGHTINGALE_LABEL_FONT_SIZE,
-                'high_low_font_size': NIGHTINGALE_HIGH_LOW_FONT_SIZE,
-                'min_label_radius_ratio': NIGHTINGALE_MIN_LABEL_RADIUS_RATIO,
-                'enable_smooth_transitions': NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
-                'transition_duration_seconds': NIGHTINGALE_TRANSITION_DURATION_SECONDS,
-                'debug': NIGHTINGALE_DEBUG
-            }
+        # --- Draw Nightingale Chart (REMOVED) ---
+        # if ENABLE_NIGHTINGALE and nightingale_info_for_frame:
+        #     nightingale_config = {
+        #         'center_x': NIGHTINGALE_CENTER_X_FIG,
+        #         'center_y': NIGHTINGALE_CENTER_Y_FIG,
+        #         'radius': NIGHTINGALE_RADIUS_FIG,
+        #         'chart_width_fig': NIGHTINGALE_CHART_WIDTH_FIG,
+        #         'chart_height_fig': NIGHTINGALE_CHART_HEIGHT_FIG,
+        #         'chart_padding_fig': NIGHTINGALE_CHART_PADDING_FIG,
+        #         'show_labels': NIGHTINGALE_SHOW_PERIOD_LABELS,
+        #         'label_radius_ratio': NIGHTINGALE_LABEL_RADIUS_RATIO,
+        #         'label_font_color': NIGHTINGALE_LABEL_FONT_COLOR,
+        #         'label_font_weight': NIGHTINGALE_LABEL_FONT_WEIGHT,
+        #         'show_high_low': NIGHTINGALE_SHOW_HIGH_LOW_INFO,
+        #         'high_low_y_offset_fig': NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG,
+        #         'high_low_spacing_fig': NIGHTINGALE_HIGH_LOW_SPACING_FIG,
+        #         'label_font_size': NIGHTINGALE_LABEL_FONT_SIZE,
+        #         'high_low_font_size': NIGHTINGALE_HIGH_LOW_FONT_SIZE,
+        #         'min_label_radius_ratio': NIGHTINGALE_MIN_LABEL_RADIUS_RATIO,
+        #         'enable_smooth_transitions': NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
+        #         'transition_duration_seconds': NIGHTINGALE_TRANSITION_DURATION_SECONDS,
+        #         'debug': NIGHTINGALE_DEBUG
+        #     }
             
-            try:
-                if NIGHTINGALE_DEBUG:
-                    print(f"[DEBUG] Calling draw_nightingale_chart with center_y: {nightingale_config['center_y']}")
-                draw_nightingale_chart(fig, nightingale_info_for_frame, nightingale_config)
-            except Exception as e_nightingale:
-                print(f"Warning: Error drawing nightingale chart for frame {overall_frame_idx}: {e_nightingale}")
-                # Continue without nightingale chart if there's an error
+        #     try:
+        #         if NIGHTINGALE_DEBUG:
+        #             print(f"[DEBUG] Calling draw_nightingale_chart with center_y: {nightingale_config['center_y']}")
+        #         draw_nightingale_chart(fig, nightingale_info_for_frame, nightingale_config)
+        #     except Exception as e_nightingale:
+        #         print(f"Warning: Error drawing nightingale chart for frame {overall_frame_idx}: {e_nightingale}")
+        #         # Continue without nightingale chart if there's an error
 
 
         # --- Timestamp Display (Below Chart) ---
         # Manual controls for timestamp position (in figure-normalized coordinates 0-1)
-        # timestamp_y_fig_coord = 0.04  # YOU CAN TWEAK THIS: Vertical position from bottom (e.g., 0.04 is 4% from bottom)
-        # Use configured Y position
+        # Use configured Y position (from user diff)
         actual_timestamp_y_fig = main_timestamp_y_fig_config
         
         # Calculate x-coordinate to align with the center of the main chart axes (ax)
@@ -1038,9 +1025,8 @@ def draw_and_save_single_frame(args):
         current_left_margin_for_ax = left_margin_ax # Use the same left margin as ax
         current_right_margin_for_ax = right_margin_ax # Use the same right margin as ax
         ax_center_x_fig_coord = current_left_margin_for_ax + (current_right_margin_for_ax - current_left_margin_for_ax) / 2.0
-        # Use configured X if provided, otherwise use calculated ax center
+        # Use configured X if provided, otherwise use calculated ax center (from user diff)
         actual_timestamp_x_fig = main_timestamp_x_fig_config if main_timestamp_x_fig_config != -1.0 else ax_center_x_fig_coord
-        # timestamp_x_fig_coord = ax_center_x_fig_coord # Align timestamp center with ax center
 
         fig.text(actual_timestamp_x_fig, actual_timestamp_y_fig, date_str, 
                  fontsize=20 * (dpi/100.0), color='dimgray', weight='bold', 
@@ -1079,7 +1065,7 @@ def draw_and_save_single_frame(args):
     return overall_frame_idx, current_frame_render_time, os.getpid()
 
 
-def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_data, nightingale_data=None): # race_df here is already potentially truncated
+def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_data):
     if race_df is None or race_df.empty:
         print("Cannot create animation: race_df is empty or None.")
         return
@@ -1175,8 +1161,7 @@ def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_dat
         N_BARS,  # Use the global N_BARS from config
         TARGET_FPS, # Use the global TARGET_FPS from config
         ANIMATION_TRANSITION_DURATION_SECONDS, # Use the global transition duration
-        rolling_stats_data, # Pass the rolling stats data
-        nightingale_data # Pass nightingale data
+        rolling_stats_data # Pass the rolling stats data
     )
 
     if not all_render_tasks:
@@ -1603,42 +1588,42 @@ def main():
         base_freq=rolling_base_freq_cfg,
     )
     
-    # --- Step 4: Calculate Nightingale Chart Data (if enabled) ---
-    nightingale_data = {}
-    if ENABLE_NIGHTINGALE:
-        print("\nStep 4: Calculating nightingale rose chart data...")
+    # --- Step 4: Calculate Nightingale Chart Data (REMOVED) ---
+    # nightingale_data = {}
+    # if ENABLE_NIGHTINGALE:
+    #     print("\nStep 4: Calculating nightingale rose chart data...")
         
-        # Determine aggregation type
-        agg_type = NIGHTINGALE_AGGREGATION_TYPE
-        if agg_type == 'auto':
-            start_date = cleaned_df['timestamp'].min()
-            end_date = cleaned_df['timestamp'].max()
-            agg_type = determine_aggregation_type(start_date, end_date)
-            print(f"Auto-determined aggregation type: {agg_type}")
+    #     # Determine aggregation type
+    #     agg_type = NIGHTINGALE_AGGREGATION_TYPE
+    #     if agg_type == 'auto':
+    #         start_date = cleaned_df['timestamp'].min()
+    #         end_date = cleaned_df['timestamp'].max()
+    #         agg_type = determine_aggregation_type(start_date, end_date)
+    #         print(f"Auto-determined aggregation type: {agg_type}")
         
-        # Calculate raw nightingale time data
-        nightingale_time_data = calculate_nightingale_time_data(
-            cleaned_df,
-            animation_frame_timestamps.tolist(),
-            aggregation_type=agg_type
-        )
+    #     # Calculate raw nightingale time data
+    #     nightingale_time_data = calculate_nightingale_time_data(
+    #         cleaned_df,
+    #         animation_frame_timestamps.tolist(),
+    #         aggregation_type=agg_type
+    #     )
         
-        # Prepare animation data with smooth transitions
-        nightingale_data = prepare_nightingale_animation_data(
-            nightingale_time_data,
-            animation_frame_timestamps.tolist(),
-            enable_smooth_transitions=ENABLE_OVERTAKE_ANIMATIONS_CONFIG,
-            transition_duration_seconds=ANIMATION_TRANSITION_DURATION_SECONDS,
-            target_fps=TARGET_FPS
-        )
+    #     # Prepare animation data with smooth transitions
+    #     nightingale_data = prepare_nightingale_animation_data(
+    #         nightingale_time_data,
+    #         animation_frame_timestamps.tolist(),
+    #         enable_smooth_transitions=ENABLE_OVERTAKE_ANIMATIONS_CONFIG,
+    #         transition_duration_seconds=ANIMATION_TRANSITION_DURATION_SECONDS,
+    #         target_fps=TARGET_FPS
+    #     )
         
-        print(f"Nightingale data calculated for {len(nightingale_data)} frames")
-    else:
-        print("\nNightingale chart disabled in configuration, skipping calculation")
+    #     print(f"Nightingale data calculated for {len(nightingale_data)} frames")
+    # else:
+    #     print("\nNightingale chart disabled in configuration, skipping calculation")
 
     # Now, call create_bar_chart_race_animation with the potentially truncated and/or aggregated race_df_for_animation
     # The pre_fetch logic is inside create_bar_chart_race_animation, so it will use the df passed to it.
-    create_bar_chart_race_animation(race_df_for_animation, song_details_map, rolling_stats, nightingale_data) # Pass nightingale_data
+    create_bar_chart_race_animation(race_df_for_animation, song_details_map, rolling_stats) # Removed nightingale_data
 
 
 if __name__ == "__main__":
