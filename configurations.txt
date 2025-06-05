@@ -170,7 +170,7 @@ ENABLE_NIGHTINGALE = True
 # CENTER_X_FIG: X-coordinate of chart center (0.0-1.0)
 CENTER_X_FIG = 0.15
 # CENTER_Y_FIG: Y-coordinate of chart center (0.0-1.0) 
-CENTER_Y_FIG = 0.20
+CENTER_Y_FIG = 0.5
 # RADIUS_FIG: Maximum radius of the chart in figure units
 RADIUS_FIG = 0.08
 
