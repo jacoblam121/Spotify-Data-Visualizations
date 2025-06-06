@@ -21,9 +21,9 @@ FILTER_SKIPPED_TRACKS = False
 # START_DATE: YYYY-MM-DD or "all_time"
 # 2024-01-01
 # 2024-12-31
-START_DATE = all_time
+START_DATE = 2024-01-01
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = all_time
+END_DATE = 2024-12-31
 
 # --- Animation Output ---
 [AnimationOutput]
@@ -74,6 +74,12 @@ NEGATIVE_CACHE_HOURS = 24
 [FontPreferences]
 # Comma-separated list of preferred fonts. First available will be used.
 PREFERRED_FONTS = DejaVu Sans, Noto Sans JP, Noto Sans KR, Noto Sans SC, Noto Sans TC, Arial Unicode MS, sans-serif
+# OS_SPECIFIC_FONT_LOADING: Enable OS-specific font loading behavior
+# On Linux: Register custom fonts from fonts/ directory with matplotlib
+# On Windows: Use system fonts (existing behavior)
+OS_SPECIFIC_FONT_LOADING = True
+# CUSTOM_FONT_DIR: Directory containing custom font files (relative to project root)
+CUSTOM_FONT_DIR = fonts
 
 # --- Debugging ---
 [Debugging]

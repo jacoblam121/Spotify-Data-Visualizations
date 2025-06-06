@@ -846,5 +846,86 @@
     ],
     "album_type": "album",
     "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_74X2u8JMVooG2QbjRxXwR8": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e352f6eccf8cb96d0b247cc",
+    "canonical_album_name": "Perfect Night",
+    "spotify_album_id": "6Msc3BwzKZ5f5FXmKuUSu6",
+    "spotify_artist_ids": [
+      "4SpbR6yFEvexJuaBpgAU5p"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5xrtzzzikpG3BLbo4q1Yul": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734ed058b71650a6ca2c04adff",
+    "canonical_album_name": "IU 5th Album 'LILAC'",
+    "spotify_album_id": "01dPJcwyht77brL4JQiR8R",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0Q5VnK2DYzRyfqQRJuUtvi": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739016f58cc49e6473e1207093",
+    "canonical_album_name": "LOVE DIVE",
+    "spotify_album_id": "1AFVTHHm7kKoQ6Rgb25x3p",
+    "spotify_artist_ids": [
+      "6RHTUrRF63xao58xh9FXYJ"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_13On7DYsJ3IrWxBWuOwM8t": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273dbf9cd8fc6b41cfbe7c1d2fb",
+    "canonical_album_name": "Every letter I sent you.",
+    "spotify_album_id": "20hW2P3VSNJ1A7MwjIJ0Up",
+    "spotify_artist_ids": [
+      "6dhfy4ByARPJdPtMyrUYJK"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1TiZWEsxN85yLJBq56K8mG": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e649cde12610c45e05a10d44",
+    "canonical_album_name": "Like I Do",
+    "spotify_album_id": "4AT7V0zZ0B3xWDef7sPCyJ",
+    "spotify_artist_ids": [
+      "0VpMOC5IZU06u29fWjv3qJ"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5Q1tv4GTxP3IJeGMOKdrFO": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732bca95a658fdf653a35a3710",
+    "canonical_album_name": "ROCK-STAR",
+    "spotify_album_id": "0aJnGEZWIc1VCYlZOXv05a",
+    "spotify_artist_ids": [
+      "2dIgFjalVxs4ThymZ67YCE"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5Wll1i0Y8GGjyePcP83L3x": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273de5a12fc93022c4f7b8030b3",
+    "canonical_album_name": "IN:VITE U",
+    "spotify_album_id": "5vxZM8rFJiNvjtAThYnwek",
+    "spotify_artist_ids": [
+      "1wKpMkucynaTfG8lyPprYV"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_210JJAa9nJOgNa0YNrsT5g": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e4179b3fb74beaf0cdfa7a13",
+    "canonical_album_name": "GODS",
+    "spotify_album_id": "0rAaP1OBxVCn2cIUZNjGRs",
+    "spotify_artist_ids": [
+      "47mIJdHORyRerp4os813jD",
+      "6HvZYsbFfjnjFrWF950C9d"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
   }
 }

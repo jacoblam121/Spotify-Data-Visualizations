@@ -23,6 +23,8 @@ import subprocess # Added for calling ffmpeg
 import shutil # Added for directory operations
 import matplotlib.patheffects as path_effects # For text outlining
 import matplotlib.patches as patches # For the text background rectangle
+import platform # For OS detection
+import matplotlib.font_manager as fm # For font management
 
 # Import the config loader
 from config_loader import AppConfig
@@ -58,6 +60,51 @@ ENABLE_OVERTAKE_ANIMATIONS_CONFIG = True # Default, will be loaded from config
 # --- Global Dictionaries for Caching Art Paths and Colors within the animator ---
 album_art_image_objects = {}
 album_bar_colors = {}
+
+def setup_fonts():
+    """Setup fonts based on OS and configuration"""
+    global config, PREFERRED_FONTS
+    
+    if config is None:
+        print("Warning: Config not loaded in setup_fonts()")
+        return
+    
+    # Check if OS-specific font loading is enabled
+    os_specific_loading = config.get_bool('FontPreferences', 'OS_SPECIFIC_FONT_LOADING', True)
+    custom_font_dir = config.get('FontPreferences', 'CUSTOM_FONT_DIR', 'fonts')
+    
+    if os_specific_loading and platform.system() == 'Linux':
+        print("Setting up fonts for Linux...")
+        
+        # Get absolute path to fonts directory
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        fonts_dir = os.path.join(script_dir, custom_font_dir)
+        
+        if os.path.exists(fonts_dir):
+            print(f"Looking for fonts in: {fonts_dir}")
+            
+            # Register each font file with matplotlib
+            for font_file in os.listdir(fonts_dir):
+                if font_file.endswith(('.ttf', '.otf')):
+                    font_path = os.path.join(fonts_dir, font_file)
+                    try:
+                        fm.fontManager.addfont(font_path)
+                        print(f"Registered font: {font_file}")
+                    except Exception as e:
+                        print(f"Warning: Could not register font {font_file}: {e}")
+            
+            # Clear font cache to ensure new fonts are recognized
+            fm._load_fontmanager(try_read_cache=False)
+            print("Font cache cleared and reloaded")
+        else:
+            print(f"Warning: Fonts directory not found: {fonts_dir}")
+    
+    # Set font preferences
+    try:
+        plt.rcParams['font.family'] = PREFERRED_FONTS
+        print(f"Font preferences set: {PREFERRED_FONTS}")
+    except Exception as e:
+        print(f"Warning: Could not set preferred fonts: {e}. Using Matplotlib defaults.")
 
 def load_configuration():
     global config, N_BARS, TARGET_FPS, OUTPUT_FILENAME_BASE, DEBUG_ALBUM_ART_LOGIC
@@ -110,10 +157,8 @@ def load_configuration():
     PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = config.get_int('Debugging', 'PARALLEL_LOG_COMPLETION_INTERVAL', 50)
     LOG_PARALLEL_PROCESS_START_CONFIG = config.get_bool('Debugging', 'LOG_PARALLEL_PROCESS_START', True)
 
-    try:
-        plt.rcParams['font.family'] = PREFERRED_FONTS
-    except Exception as e:
-        print(f"Warning: Could not set preferred fonts from config: {e}. Using Matplotlib defaults.")
+    # Setup fonts after loading configuration
+    setup_fonts()
 
 def run_data_pipeline(): # Removed csv_file_path argument
     print("--- Starting Data Processing Pipeline ---")
