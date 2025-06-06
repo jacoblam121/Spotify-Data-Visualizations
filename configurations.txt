@@ -23,7 +23,7 @@ FILTER_SKIPPED_TRACKS = False
 # 2024-12-31
 START_DATE = 2024-01-01
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = 2024-06-30
+END_DATE = 2024-12-31
 
 # --- Animation Output ---
 [AnimationOutput]
@@ -100,7 +100,8 @@ LOG_PARALLEL_PROCESS_START = False
 # --- Rolling Stats ---
 [RollingStats]
 # BASE_FREQUENCY controls how play events are bucketed before rolling.
-# Examples: 15T (15-minute), 30T, H (hourly), D (daily), W (weekly)
+# Examples: 15T (15-minute), 30T, H (hourly), D (daily)
+# Note: Weekly (W) can cause pandas errors, use D (daily) instead for stable operation
 BASE_FREQUENCY = D
 
 # --- Rolling Stats Display ---
@@ -171,70 +172,62 @@ TIMESTAMP_Y_FIG = 0.04
 
 # --- Nightingale Rose Chart ---
 [NightingaleChart]
-# ENABLE_NIGHTINGALE: Whether to show the nightingale rose chart
-ENABLE_NIGHTINGALE = True
-# CENTER_X_FIG: X-coordinate of chart center (0.0-1.0)
-CENTER_X_FIG = 0.15
-# CENTER_Y_FIG: Y-coordinate of chart center (0.0-1.0) 
-CENTER_Y_FIG = 0.3
-# RADIUS_FIG: Maximum radius of the chart in figure units
-RADIUS_FIG = 0.12
+# ENABLE: Whether to show the nightingale rose chart
+ENABLE = True
 
-# --- Chart Dimensions ---
-# CHART_WIDTH_FIG: Chart panel width (for square layout)
-CHART_WIDTH_FIG = 0.20
-# CHART_HEIGHT_FIG: Chart panel height (for square layout)
-CHART_HEIGHT_FIG = 0.20
-# CHART_PADDING_FIG: Padding around chart
-CHART_PADDING_FIG = 0.02
+# === CHART POSITION & SIZE ===
+# Chart center position (0.0-1.0, where 0.0=left/bottom, 1.0=right/top)
+CHART_X = 0.15
+CHART_Y = 0.28
+# Chart size (radius in figure units, 0.05=small, 0.15=medium, 0.25=large)
+CHART_RADIUS = 0.17
 
-# --- Title Display ---
-TITLE_FONT_SIZE = 12
-TITLE_FONT_WEIGHT = bold
+# === MONTH LABELS ===
+# Show month names around the chart
+SHOW_MONTH_LABELS = True
+# Distance of labels from chart center (1.0=at edge, 1.2=outside chart)
+MONTH_LABEL_DISTANCE = 1.15
+# Month label appearance
+MONTH_LABEL_FONT_SIZE = 16
+MONTH_LABEL_COLOR = black
+MONTH_LABEL_FONT_WEIGHT = normal
+
+# === TITLE ===
+# Title: "Monthly Distribution of Plays" or "Yearly Distribution of Plays"
+TITLE_FONT_SIZE = 22
 TITLE_COLOR = black
+TITLE_FONT_WEIGHT = normal
+# TITLE_POSITION_ABOVE_CHART: Distance above chart (positive = above, negative = below)
+TITLE_POSITION_ABOVE_CHART = 0.15
 
-# --- Period Labels (Month/Year) - Uniform Radial Positioning ---
-# SHOW_PERIOD_LABELS: Whether to show month/year labels on segments
-SHOW_PERIOD_LABELS = True
-# LABEL_RADIUS_RATIO: Multiplier for distance from chart center (1.0 = at max radius, >1.0 = outside chart)
-# All labels are positioned at uniform distance from center for clean, consistent appearance
-LABEL_RADIUS_RATIO = 1.15
-# LABEL_FONT_SIZE: Font size for period labels
-LABEL_FONT_SIZE = 10
-# LABEL_FONT_COLOR: Color for period labels
-LABEL_FONT_COLOR = black
-# LABEL_FONT_WEIGHT: Font weight for period labels
-LABEL_FONT_WEIGHT = normal
-
-# --- High/Low Display ---
-# SHOW_HIGH_LOW_INFO: Whether to display high/low period information below chart
-SHOW_HIGH_LOW_INFO = True
-# HIGH_LOW_FONT_SIZE: Font size for high/low information text
-HIGH_LOW_FONT_SIZE = 9
-# HIGH_LOW_Y_OFFSET_FIG: Position offset below chart for high/low text
-HIGH_LOW_Y_OFFSET_FIG = -0.12
-# HIGH_LOW_SPACING_FIG: Spacing between high/low lines
-HIGH_LOW_SPACING_FIG = 0.025
+# === HIGH/LOW TRACKER ===
+# Show "High: July (200 plays)" and "Low: January (50 plays)" below chart
+SHOW_HIGH_LOW = True
+HIGH_LOW_FONT_SIZE = 20
+# HIGH_LOW_POSITION_BELOW_CHART: Distance below chart (positive = below, negative = above)
+HIGH_LOW_POSITION_BELOW_CHART = 0.06
+HIGH_LOW_SPACING = 0.025
 HIGH_PERIOD_COLOR = darkgreen
 LOW_PERIOD_COLOR = darkred
 
-# --- Chart Aesthetics ---
-# OUTER_CIRCLE: Explicit boundary circle that serves as reference point for label positioning
-OUTER_CIRCLE_COLOR = gray
-OUTER_CIRCLE_LINESTYLE = --
-OUTER_CIRCLE_LINEWIDTH = 1.0
-
-# --- Animation & Data ---
-# MIN_LABEL_RADIUS_RATIO: Minimum radius ratio to show labels (0.0-1.0)
-MIN_LABEL_RADIUS_RATIO = 0.3
-# AGGREGATION_TYPE: 'auto', 'monthly', or 'yearly' (auto determines based on date range)
-AGGREGATION_TYPE = auto
-# ENABLE_SMOOTH_TRANSITIONS: Enable smooth progressive segment growth
-ENABLE_SMOOTH_TRANSITIONS = True
-# TRANSITION_DURATION_SECONDS: Duration for segment transitions
-TRANSITION_DURATION_SECONDS = 0.3
-# ANIMATION_EASING_FUNCTION: Easing function for new segments ('cubic' for smooth, 'elastic' for bouncy)
-ANIMATION_EASING_FUNCTION = cubic
-
-# DEBUG_NIGHTINGALE: Enable debug output for nightingale chart rendering  
-DEBUG_NIGHTINGALE = False
+# === ADVANCED OPTIONS ===
+# Boundary circle around chart (for reference)
+SHOW_BOUNDARY_CIRCLE = True
+BOUNDARY_CIRCLE_COLOR = gray
+BOUNDARY_CIRCLE_STYLE = --
+BOUNDARY_CIRCLE_WIDTH = 1.0
+# Time period aggregation ('auto', 'monthly', 'yearly')
+TIME_AGGREGATION = auto
+# Animation settings
+SMOOTH_TRANSITIONS = True
+TRANSITION_DURATION = 0.3
+ANIMATION_STYLE = cubic
+# Sampling rate for performance optimization
+# Controls how often nightingale chart data is calculated to improve render speed
+# 'D' = Daily (default, full quality, all frames calculated)
+# 'W' = Weekly (7x faster, samples every 7th frame)
+# 'M' = Monthly (30x faster, samples every 30th frame)
+# Note: Animation stays smooth due to interpolation between sampled points
+SAMPLING_RATE = D
+# Debug output
+DEBUG_MODE = False

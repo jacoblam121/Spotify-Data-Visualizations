@@ -399,7 +399,7 @@ def draw_nightingale_chart(
     label_font_size = chart_config.get("label_font_size", 10)
     label_font_color = chart_config.get("label_font_color", "black")
     label_font_weight = chart_config.get("label_font_weight", "normal")
-    min_label_radius_ratio = chart_config.get("min_label_radius_ratio", 0.3)
+    min_label_radius_ratio = chart_config.get("min_label_radius_ratio", 0.0)  # Show labels immediately when slices appear
 
     show_high_low = chart_config.get("show_high_low", True)
     high_low_font_size = chart_config.get("high_low_font_size", 9)
@@ -411,6 +411,7 @@ def draw_nightingale_chart(
     title_font_size = chart_config.get("title_font_size", 12)
     title_font_weight = chart_config.get("title_font_weight", "bold")
     title_color = chart_config.get("title_color", "black")
+    title_y_offset = chart_config.get("title_y_offset_fig", 0.02)
 
     outer_circle_color = chart_config.get("outer_circle_color", "gray")
     outer_circle_linestyle = chart_config.get("outer_circle_linestyle", "--")
@@ -469,17 +470,18 @@ def draw_nightingale_chart(
         )
 
 
-    # Title above chart
+    # Title above chart (configurable position)
     aggregation_type = nightingale_data.get("aggregation_type", "monthly")
     title = "Monthly" if aggregation_type == "monthly" else "Yearly"
-    fig.text(center_x, center_y + height / 2 + padding, f"{title} Distribution of Plays",
+    title_y = center_y + height / 2 + title_y_offset  # Positive values go up, negative go down
+    fig.text(center_x, title_y, f"{title} Distribution of Plays",
              ha="center", va="bottom", fontsize=title_font_size, weight=title_font_weight,
              color=title_color, transform=fig.transFigure)
 
     if show_high_low:
         high_period = nightingale_data.get("high_period")
         low_period = nightingale_data.get("low_period")
-        text_y = center_y - height / 2 + high_low_y_offset
+        text_y = center_y - height / 2 - high_low_y_offset  # Positive values go down, negative go up
         if high_period:
             fig.text(center_x, text_y,
                      f"High: {high_period['label']} ({high_period['plays']} plays)",

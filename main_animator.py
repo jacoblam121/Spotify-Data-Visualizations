@@ -112,6 +112,8 @@ NIGHTINGALE_LABEL_FONT_SIZE = 10
 NIGHTINGALE_HIGH_LOW_FONT_SIZE = 9
 NIGHTINGALE_MIN_LABEL_RADIUS_RATIO = 0.3
 NIGHTINGALE_AGGREGATION_TYPE = 'auto'
+NIGHTINGALE_SAMPLING_RATE = 'D'  # Default to daily sampling
+NIGHTINGALE_TITLE_POSITION_ABOVE_CHART = 0.02  # Default title position
 NIGHTINGALE_DEBUG = False
 # --- End Nightingale Chart Configuration ---
 
@@ -213,46 +215,54 @@ def load_configuration():
     MAIN_TIMESTAMP_X_FIG = config.get_float('TimestampDisplay', 'TIMESTAMP_X_FIG', MAIN_TIMESTAMP_X_FIG)
     MAIN_TIMESTAMP_Y_FIG = config.get_float('TimestampDisplay', 'TIMESTAMP_Y_FIG', MAIN_TIMESTAMP_Y_FIG)
     
-    # Nightingale Chart Configuration Loading
-    ENABLE_NIGHTINGALE = config.get_bool('NightingaleChart', 'ENABLE_NIGHTINGALE', ENABLE_NIGHTINGALE)
-    NIGHTINGALE_CENTER_X_FIG = config.get_float('NightingaleChart', 'CENTER_X_FIG', NIGHTINGALE_CENTER_X_FIG)
-    NIGHTINGALE_CENTER_Y_FIG = config.get_float('NightingaleChart', 'CENTER_Y_FIG', NIGHTINGALE_CENTER_Y_FIG)
-    NIGHTINGALE_RADIUS_FIG = config.get_float('NightingaleChart', 'RADIUS_FIG', NIGHTINGALE_RADIUS_FIG)
-    NIGHTINGALE_CHART_WIDTH_FIG = config.get_float('NightingaleChart', 'CHART_WIDTH_FIG', NIGHTINGALE_CHART_WIDTH_FIG)
-    NIGHTINGALE_CHART_HEIGHT_FIG = config.get_float('NightingaleChart', 'CHART_HEIGHT_FIG', NIGHTINGALE_CHART_HEIGHT_FIG)
-    NIGHTINGALE_CHART_PADDING_FIG = config.get_float('NightingaleChart', 'CHART_PADDING_FIG', NIGHTINGALE_CHART_PADDING_FIG)
-    NIGHTINGALE_SHOW_PERIOD_LABELS = config.get_bool('NightingaleChart', 'SHOW_PERIOD_LABELS', NIGHTINGALE_SHOW_PERIOD_LABELS)
-    NIGHTINGALE_LABEL_RADIUS_RATIO = config.get_float('NightingaleChart', 'LABEL_RADIUS_RATIO', NIGHTINGALE_LABEL_RADIUS_RATIO)
-    NIGHTINGALE_LABEL_FONT_COLOR = config.get('NightingaleChart', 'LABEL_FONT_COLOR', NIGHTINGALE_LABEL_FONT_COLOR)
-    NIGHTINGALE_LABEL_FONT_WEIGHT = config.get('NightingaleChart', 'LABEL_FONT_WEIGHT', NIGHTINGALE_LABEL_FONT_WEIGHT)
-    NIGHTINGALE_SHOW_HIGH_LOW_INFO = config.get_bool('NightingaleChart', 'SHOW_HIGH_LOW_INFO', NIGHTINGALE_SHOW_HIGH_LOW_INFO)
-    NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG = config.get_float('NightingaleChart', 'HIGH_LOW_Y_OFFSET_FIG', NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG)
-    NIGHTINGALE_HIGH_LOW_SPACING_FIG = config.get_float('NightingaleChart', 'HIGH_LOW_SPACING_FIG', NIGHTINGALE_HIGH_LOW_SPACING_FIG)
-    NIGHTINGALE_LABEL_FONT_SIZE = config.get_int('NightingaleChart', 'LABEL_FONT_SIZE', NIGHTINGALE_LABEL_FONT_SIZE)
-    NIGHTINGALE_HIGH_LOW_FONT_SIZE = config.get_int('NightingaleChart', 'HIGH_LOW_FONT_SIZE', NIGHTINGALE_HIGH_LOW_FONT_SIZE)
-    NIGHTINGALE_MIN_LABEL_RADIUS_RATIO = config.get_float('NightingaleChart', 'MIN_LABEL_RADIUS_RATIO', NIGHTINGALE_MIN_LABEL_RADIUS_RATIO)
-    NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS = config.get_bool('NightingaleChart', 'ENABLE_SMOOTH_TRANSITIONS', NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS)
-    NIGHTINGALE_TRANSITION_DURATION_SECONDS = config.get_float('NightingaleChart', 'TRANSITION_DURATION_SECONDS', NIGHTINGALE_TRANSITION_DURATION_SECONDS)
-    NIGHTINGALE_AGGREGATION_TYPE = config.get('NightingaleChart', 'AGGREGATION_TYPE', NIGHTINGALE_AGGREGATION_TYPE).lower()
-    NIGHTINGALE_DEBUG = config.get_bool('NightingaleChart', 'DEBUG_NIGHTINGALE', NIGHTINGALE_DEBUG)
-
-    # Load extended Nightingale Chart configurations
+    # Nightingale Chart Configuration Loading (Simplified)
+    ENABLE_NIGHTINGALE = config.get_bool('NightingaleChart', 'ENABLE', ENABLE_NIGHTINGALE)
+    
+    # Chart Position & Size
+    NIGHTINGALE_CENTER_X_FIG = config.get_float('NightingaleChart', 'CHART_X', NIGHTINGALE_CENTER_X_FIG)
+    NIGHTINGALE_CENTER_Y_FIG = config.get_float('NightingaleChart', 'CHART_Y', NIGHTINGALE_CENTER_Y_FIG)
+    NIGHTINGALE_RADIUS_FIG = config.get_float('NightingaleChart', 'CHART_RADIUS', NIGHTINGALE_RADIUS_FIG)
+    
+    # Month Labels
+    NIGHTINGALE_SHOW_PERIOD_LABELS = config.get_bool('NightingaleChart', 'SHOW_MONTH_LABELS', NIGHTINGALE_SHOW_PERIOD_LABELS)
+    NIGHTINGALE_LABEL_RADIUS_RATIO = config.get_float('NightingaleChart', 'MONTH_LABEL_DISTANCE', NIGHTINGALE_LABEL_RADIUS_RATIO)
+    NIGHTINGALE_LABEL_FONT_SIZE = config.get_int('NightingaleChart', 'MONTH_LABEL_FONT_SIZE', NIGHTINGALE_LABEL_FONT_SIZE)
+    NIGHTINGALE_LABEL_FONT_COLOR = config.get('NightingaleChart', 'MONTH_LABEL_COLOR', NIGHTINGALE_LABEL_FONT_COLOR)
+    NIGHTINGALE_LABEL_FONT_WEIGHT = config.get('NightingaleChart', 'MONTH_LABEL_FONT_WEIGHT', NIGHTINGALE_LABEL_FONT_WEIGHT)
+    
+    # Title
     NIGHTINGALE_TITLE_FONT_SIZE = config.get_int('NightingaleChart', 'TITLE_FONT_SIZE', 12)
     NIGHTINGALE_TITLE_FONT_WEIGHT = config.get('NightingaleChart', 'TITLE_FONT_WEIGHT', 'bold')
     NIGHTINGALE_TITLE_COLOR = config.get('NightingaleChart', 'TITLE_COLOR', 'black')
+    NIGHTINGALE_TITLE_POSITION_ABOVE_CHART = config.get_float('NightingaleChart', 'TITLE_POSITION_ABOVE_CHART', 0.02)
+    
+    # High/Low Tracker
+    NIGHTINGALE_SHOW_HIGH_LOW_INFO = config.get_bool('NightingaleChart', 'SHOW_HIGH_LOW', NIGHTINGALE_SHOW_HIGH_LOW_INFO)
+    NIGHTINGALE_HIGH_LOW_FONT_SIZE = config.get_int('NightingaleChart', 'HIGH_LOW_FONT_SIZE', NIGHTINGALE_HIGH_LOW_FONT_SIZE)
+    NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG = config.get_float('NightingaleChart', 'HIGH_LOW_POSITION_BELOW_CHART', NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG)
+    NIGHTINGALE_HIGH_LOW_SPACING_FIG = config.get_float('NightingaleChart', 'HIGH_LOW_SPACING', NIGHTINGALE_HIGH_LOW_SPACING_FIG)
     NIGHTINGALE_HIGH_PERIOD_COLOR = config.get('NightingaleChart', 'HIGH_PERIOD_COLOR', 'darkgreen')
     NIGHTINGALE_LOW_PERIOD_COLOR = config.get('NightingaleChart', 'LOW_PERIOD_COLOR', 'darkred')
-    NIGHTINGALE_OUTER_CIRCLE_COLOR = config.get('NightingaleChart', 'OUTER_CIRCLE_COLOR', 'gray')
-    NIGHTINGALE_OUTER_CIRCLE_LINESTYLE = config.get('NightingaleChart', 'OUTER_CIRCLE_LINESTYLE', '--')
-    NIGHTINGALE_OUTER_CIRCLE_LINEWIDTH = config.get_float('NightingaleChart', 'OUTER_CIRCLE_LINEWIDTH', 1.0)
-    NIGHTINGALE_ANIMATION_EASING_FUNCTION = config.get('NightingaleChart', 'ANIMATION_EASING_FUNCTION', 'cubic')
+    
+    # Advanced Options
+    NIGHTINGALE_OUTER_CIRCLE_COLOR = config.get('NightingaleChart', 'BOUNDARY_CIRCLE_COLOR', 'gray')
+    NIGHTINGALE_OUTER_CIRCLE_LINESTYLE = config.get('NightingaleChart', 'BOUNDARY_CIRCLE_STYLE', '--')
+    NIGHTINGALE_OUTER_CIRCLE_LINEWIDTH = config.get_float('NightingaleChart', 'BOUNDARY_CIRCLE_WIDTH', 1.0)
+    NIGHTINGALE_AGGREGATION_TYPE = config.get('NightingaleChart', 'TIME_AGGREGATION', NIGHTINGALE_AGGREGATION_TYPE).lower()
+    NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS = config.get_bool('NightingaleChart', 'SMOOTH_TRANSITIONS', NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS)
+    NIGHTINGALE_TRANSITION_DURATION_SECONDS = config.get_float('NightingaleChart', 'TRANSITION_DURATION', NIGHTINGALE_TRANSITION_DURATION_SECONDS)
+    NIGHTINGALE_ANIMATION_EASING_FUNCTION = config.get('NightingaleChart', 'ANIMATION_STYLE', 'cubic')
+    NIGHTINGALE_SAMPLING_RATE = config.get('NightingaleChart', 'SAMPLING_RATE', 'D')
+    NIGHTINGALE_DEBUG = config.get_bool('NightingaleChart', 'DEBUG_MODE', NIGHTINGALE_DEBUG)
+    
+    # Removed redundant settings: CHART_WIDTH_FIG, CHART_HEIGHT_FIG, CHART_PADDING_FIG, MIN_LABEL_RADIUS_RATIO
 
     # Debug output for nightingale configuration
     print(f"=== NIGHTINGALE CONFIG DEBUG ===")
-    print(f"CENTER_Y_FIG loaded: {NIGHTINGALE_CENTER_Y_FIG}")
-    print(f"CENTER_X_FIG loaded: {NIGHTINGALE_CENTER_X_FIG}")
-    print(f"RADIUS_FIG loaded: {NIGHTINGALE_RADIUS_FIG}")
-    print(f"DEBUG_NIGHTINGALE: {NIGHTINGALE_DEBUG}")
+    print(f"CHART_Y loaded: {NIGHTINGALE_CENTER_Y_FIG}")
+    print(f"CHART_X loaded: {NIGHTINGALE_CENTER_X_FIG}")
+    print(f"CHART_RADIUS loaded: {NIGHTINGALE_RADIUS_FIG}")
+    print(f"DEBUG_MODE: {NIGHTINGALE_DEBUG}")
     print(f"=================================")
 
     try:
@@ -1028,35 +1038,40 @@ def draw_and_save_single_frame(args):
         # --- Draw Nightingale Chart (if enabled and data available) ---
         if ENABLE_NIGHTINGALE and nightingale_info_for_frame:
             nightingale_config = {
+                # Chart Position & Size (Simplified)
                 'center_x': NIGHTINGALE_CENTER_X_FIG,
                 'center_y': NIGHTINGALE_CENTER_Y_FIG,
                 'radius': NIGHTINGALE_RADIUS_FIG,
-                'chart_width_fig': NIGHTINGALE_CHART_WIDTH_FIG,
-                'chart_height_fig': NIGHTINGALE_CHART_HEIGHT_FIG,
-                'chart_padding_fig': NIGHTINGALE_CHART_PADDING_FIG,
+                
+                # Month Labels (Simplified)
                 'show_labels': NIGHTINGALE_SHOW_PERIOD_LABELS,
                 'label_radius_ratio': NIGHTINGALE_LABEL_RADIUS_RATIO,
+                'label_font_size': NIGHTINGALE_LABEL_FONT_SIZE,
                 'label_font_color': NIGHTINGALE_LABEL_FONT_COLOR,
                 'label_font_weight': NIGHTINGALE_LABEL_FONT_WEIGHT,
-                'show_high_low': NIGHTINGALE_SHOW_HIGH_LOW_INFO,
-                'high_low_y_offset_fig': NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG,
-                'high_low_spacing_fig': NIGHTINGALE_HIGH_LOW_SPACING_FIG,
-                'label_font_size': NIGHTINGALE_LABEL_FONT_SIZE,
-                'high_low_font_size': NIGHTINGALE_HIGH_LOW_FONT_SIZE,
-                'min_label_radius_ratio': NIGHTINGALE_MIN_LABEL_RADIUS_RATIO,
-                'enable_smooth_transitions': NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
-                'transition_duration_seconds': NIGHTINGALE_TRANSITION_DURATION_SECONDS,
-                'debug': NIGHTINGALE_DEBUG,
-                # Pass new config values to the drawing function
+                
+                # Title (Simplified)
                 'title_font_size': NIGHTINGALE_TITLE_FONT_SIZE,
                 'title_font_weight': NIGHTINGALE_TITLE_FONT_WEIGHT,
                 'title_color': NIGHTINGALE_TITLE_COLOR,
+                'title_y_offset_fig': NIGHTINGALE_TITLE_POSITION_ABOVE_CHART,
+                
+                # High/Low Tracker (Simplified)
+                'show_high_low': NIGHTINGALE_SHOW_HIGH_LOW_INFO,
+                'high_low_font_size': NIGHTINGALE_HIGH_LOW_FONT_SIZE,
+                'high_low_y_offset_fig': NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG,
+                'high_low_spacing_fig': NIGHTINGALE_HIGH_LOW_SPACING_FIG,
                 'high_period_color': NIGHTINGALE_HIGH_PERIOD_COLOR,
                 'low_period_color': NIGHTINGALE_LOW_PERIOD_COLOR,
+                
+                # Advanced Options (Simplified)
                 'outer_circle_color': NIGHTINGALE_OUTER_CIRCLE_COLOR,
                 'outer_circle_linestyle': NIGHTINGALE_OUTER_CIRCLE_LINESTYLE,
                 'outer_circle_linewidth': NIGHTINGALE_OUTER_CIRCLE_LINEWIDTH,
-                'animation_easing_function': NIGHTINGALE_ANIMATION_EASING_FUNCTION
+                'enable_smooth_transitions': NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
+                'transition_duration_seconds': NIGHTINGALE_TRANSITION_DURATION_SECONDS,
+                'animation_easing_function': NIGHTINGALE_ANIMATION_EASING_FUNCTION,
+                'debug': NIGHTINGALE_DEBUG
             }
             
             try:
@@ -1661,20 +1676,35 @@ def main():
             agg_type = determine_aggregation_type(start_date, end_date)
             print(f"Auto-determined aggregation type: {agg_type}")
         
-        # Calculate raw nightingale time data
+        # Apply sampling rate for performance optimization
+        if NIGHTINGALE_SAMPLING_RATE.upper() in ['W', 'M']:
+            print(f"Applying nightingale sampling rate: {NIGHTINGALE_SAMPLING_RATE}")
+            # Sample frame timestamps for faster computation
+            sampled_timestamps = animation_frame_timestamps[::7] if NIGHTINGALE_SAMPLING_RATE.upper() == 'W' else animation_frame_timestamps[::30]
+            # Always include first and last timestamps
+            if sampled_timestamps[0] != animation_frame_timestamps[0]:
+                sampled_timestamps = pd.Index([animation_frame_timestamps[0]]).union(sampled_timestamps)
+            if sampled_timestamps[-1] != animation_frame_timestamps[-1]:
+                sampled_timestamps = sampled_timestamps.union(pd.Index([animation_frame_timestamps[-1]]))
+            print(f"Reduced nightingale frames: {len(animation_frame_timestamps)} → {len(sampled_timestamps)}")
+        else:
+            sampled_timestamps = animation_frame_timestamps
+        
+        # Calculate raw nightingale time data (using sampled timestamps for performance)
         nightingale_time_data = calculate_nightingale_time_data(
             cleaned_df,
-            animation_frame_timestamps.tolist(),
+            sampled_timestamps.tolist(),
             aggregation_type=agg_type
         )
         
-        # Prepare animation data with smooth transitions
+        # Prepare animation data with smooth transitions (interpolate for all frames)
         nightingale_data = prepare_nightingale_animation_data(
             nightingale_time_data,
-            animation_frame_timestamps.tolist(),
-            enable_smooth_transitions=ENABLE_OVERTAKE_ANIMATIONS_CONFIG,
-            transition_duration_seconds=ANIMATION_TRANSITION_DURATION_SECONDS,
-            target_fps=TARGET_FPS
+            animation_frame_timestamps.tolist(),  # Always use all frames for smooth animation
+            enable_smooth_transitions=NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
+            transition_duration_seconds=NIGHTINGALE_TRANSITION_DURATION_SECONDS,
+            target_fps=TARGET_FPS,
+            easing_function=NIGHTINGALE_ANIMATION_EASING_FUNCTION
         )
         
         print(f"Nightingale data calculated for {len(nightingale_data)} frames")

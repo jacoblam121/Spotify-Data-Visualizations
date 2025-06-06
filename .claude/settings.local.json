@@ -15,7 +15,13 @@
       "Bash(pkill:*)",
       "Bash(ls:*)",
       "Bash(timeout 60 python:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(/home/jacob/.nvm/versions/node/v22.16.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/x64-linux/rg -n -A 10 -B 5 \"nightingale_config|chart_config|draw_nightingale_chart\" /home/jacob/Spotify-Data-Visualizations/main_animator.py)",
+      "Bash(/home/jacob/.nvm/versions/node/v22.16.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/x64-linux/rg -n -A 20 -B 5 \"nightingale_config.*=\" /home/jacob/Spotify-Data-Visualizations/main_animator.py)",
+      "Bash(/home/jacob/.nvm/versions/node/v22.16.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/x64-linux/rg -n -A 35 \"nightingale_config = {\" /home/jacob/Spotify-Data-Visualizations/main_animator.py)",
+      "Bash(/home/jacob/.nvm/versions/node/v22.16.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/x64-linux/rg -n -A 35 \"nightingale_config = \\{\" /home/jacob/Spotify-Data-Visualizations/main_animator.py)",
+      "Bash(/home/jacob/.nvm/versions/node/v22.16.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/x64-linux/rg -A 10 -B 10 \"calculate_nightingale_time_data\" /home/jacob/Spotify-Data-Visualizations/main_animator.py)",
+      "Bash(/home/jacob/.nvm/versions/node/v22.16.0/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/x64-linux/rg -A 20 -B 20 \"Calculate raw nightingale time data\" /home/jacob/Spotify-Data-Visualizations/main_animator.py)"
     ],
     "deny": []
   }
