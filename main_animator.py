@@ -139,6 +139,11 @@ def load_configuration():
     global NIGHTINGALE_LABEL_FONT_SIZE, NIGHTINGALE_HIGH_LOW_FONT_SIZE, NIGHTINGALE_MIN_LABEL_RADIUS_RATIO
     global NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS, NIGHTINGALE_TRANSITION_DURATION_SECONDS
     global NIGHTINGALE_AGGREGATION_TYPE, NIGHTINGALE_DEBUG
+    # New globals for extended Nightingale configuration
+    global NIGHTINGALE_TITLE_FONT_SIZE, NIGHTINGALE_TITLE_FONT_WEIGHT, NIGHTINGALE_TITLE_COLOR
+    global NIGHTINGALE_HIGH_PERIOD_COLOR, NIGHTINGALE_LOW_PERIOD_COLOR
+    global NIGHTINGALE_OUTER_CIRCLE_COLOR, NIGHTINGALE_OUTER_CIRCLE_LINESTYLE, NIGHTINGALE_OUTER_CIRCLE_LINEWIDTH
+    global NIGHTINGALE_ANIMATION_EASING_FUNCTION
 
     try:
         config = AppConfig() # Assumes configurations.txt is in the same directory
@@ -230,6 +235,17 @@ def load_configuration():
     NIGHTINGALE_TRANSITION_DURATION_SECONDS = config.get_float('NightingaleChart', 'TRANSITION_DURATION_SECONDS', NIGHTINGALE_TRANSITION_DURATION_SECONDS)
     NIGHTINGALE_AGGREGATION_TYPE = config.get('NightingaleChart', 'AGGREGATION_TYPE', NIGHTINGALE_AGGREGATION_TYPE).lower()
     NIGHTINGALE_DEBUG = config.get_bool('NightingaleChart', 'DEBUG_NIGHTINGALE', NIGHTINGALE_DEBUG)
+
+    # Load extended Nightingale Chart configurations
+    NIGHTINGALE_TITLE_FONT_SIZE = config.get_int('NightingaleChart', 'TITLE_FONT_SIZE', 12)
+    NIGHTINGALE_TITLE_FONT_WEIGHT = config.get('NightingaleChart', 'TITLE_FONT_WEIGHT', 'bold')
+    NIGHTINGALE_TITLE_COLOR = config.get('NightingaleChart', 'TITLE_COLOR', 'black')
+    NIGHTINGALE_HIGH_PERIOD_COLOR = config.get('NightingaleChart', 'HIGH_PERIOD_COLOR', 'darkgreen')
+    NIGHTINGALE_LOW_PERIOD_COLOR = config.get('NightingaleChart', 'LOW_PERIOD_COLOR', 'darkred')
+    NIGHTINGALE_OUTER_CIRCLE_COLOR = config.get('NightingaleChart', 'OUTER_CIRCLE_COLOR', 'gray')
+    NIGHTINGALE_OUTER_CIRCLE_LINESTYLE = config.get('NightingaleChart', 'OUTER_CIRCLE_LINESTYLE', '--')
+    NIGHTINGALE_OUTER_CIRCLE_LINEWIDTH = config.get_float('NightingaleChart', 'OUTER_CIRCLE_LINEWIDTH', 1.0)
+    NIGHTINGALE_ANIMATION_EASING_FUNCTION = config.get('NightingaleChart', 'ANIMATION_EASING_FUNCTION', 'cubic')
 
     # Debug output for nightingale configuration
     print(f"=== NIGHTINGALE CONFIG DEBUG ===")
@@ -628,6 +644,13 @@ def draw_and_save_single_frame(args):
     fig, ax = plt.subplots(figsize=(figsize_w, figsize_h), dpi=dpi)
 
     try: # Ensure fig is closed even on error
+        # --- Define margins for the main chart area (ax) BEFORE drawing ---
+        # These values will be used for both text truncation calculation and final layout.
+        left_margin_ax = 0.28  # Space on the left for the rolling stats panel
+        right_margin_ax = 0.985 # Small gap on the right
+        bottom_margin_ax = 0.08 # Space at the bottom for the main timestamp
+        top_margin_ax = 0.98    # Space at the top for x-axis labels/title
+
         if log_parallel_process_start_local:
             # Log based on overall_frame_idx and num_total_output_frames
             if (overall_frame_idx + 1) % 10 == 0 or overall_frame_idx == 0 or (overall_frame_idx + 1) == num_total_output_frames:
@@ -702,6 +725,9 @@ def draw_and_save_single_frame(args):
 
             actual_bar = ax.barh(interpolated_y_pos, interpolated_plays, color=bar_color, height=0.8, zorder=2, align='center')
             
+            # Define text properties first, to use them in subsequent calculations
+            text_bbox_props = dict(boxstyle="round,pad=0.2,rounding_size=0.1", facecolor="#333333", alpha=0.5, edgecolor="none")
+
             # --- Dynamically compute available width for the song label and truncate if needed ---
             start_x_data = song_name_padding_from_left_spine_data_units
 
@@ -717,17 +743,29 @@ def draw_and_save_single_frame(args):
             else:
                 end_x_data = interpolated_plays - value_label_padding_data_units - right_gap_units
 
-            # Ensure sane ordering
-            if end_x_data <= start_x_data:
-                available_px = 0
-            else:
-                available_px = (end_x_data - start_x_data) / dynamic_x_axis_limit * fig_width_pixels
+            # --- CORRECTED: Convert available data range to pixels using actual axis width ---
+            available_px = 0
+            if end_x_data > start_x_data:
+                # Calculate the pixel width of the main chart axes
+                ax_width_in_fig_coords = right_margin_ax - left_margin_ax
+                ax_width_pixels = ax_width_in_fig_coords * fig_width_pixels
+                
+                # Convert the available width from data coordinates to pixels
+                available_px = (end_x_data - start_x_data) / dynamic_x_axis_limit * ax_width_pixels
+
+                # --- CORRECTED: Account for the padding of the text's bounding box ---
+                # The 'pad' in boxstyle is a multiplier for the font size.
+                bbox_pad_multiplier = 0.2 # As defined in text_bbox_props
+                # Total horizontal padding (left + right) in points. song_name_fontsize is in points.
+                bbox_horizontal_padding_points = 2 * bbox_pad_multiplier * song_name_fontsize
+                # Convert padding from points to pixels. 1 point = 1/72 inch.
+                bbox_horizontal_padding_pixels = bbox_horizontal_padding_points * (dpi / 72.0)
+                
+                available_px -= bbox_horizontal_padding_pixels
 
             font_props = fm.FontProperties(size=song_name_fontsize)
             renderer = fig.canvas.get_renderer()
-            text_to_display_for_song = truncate_to_fit(full_display_name, font_props, renderer, available_px)
-
-            text_bbox_props = dict(boxstyle="round,pad=0.2,rounding_size=0.1", facecolor="#333333", alpha=0.5, edgecolor="none")
+            text_to_display_for_song = truncate_to_fit(full_display_name, font_props, renderer, max(0, available_px))
 
             song_text_obj = ax.text(
                 song_name_padding_from_left_spine_data_units,
@@ -783,13 +821,7 @@ def draw_and_save_single_frame(args):
         ax.grid(True, axis='y', linestyle=':', color='lightgray', alpha=0.7, zorder=0)
         
         # --- Layout Adjustment for ax BEFORE adding other figure elements ---
-        # Define margins for the main chart area (ax)
-        # These values define the rectangle into which tight_layout will fit ax.
-        left_margin_ax = 0.28  # Space on the left for the rolling stats panel
-        right_margin_ax = 0.985 # Small gap on the right
-        bottom_margin_ax = 0.08 # Space at the bottom for the main timestamp
-        top_margin_ax = 0.98    # Space at the top for x-axis labels/title
-        
+        # The margin values are now defined at the top of the function's try block.
         try:
             # Apply tight_layout to the main axes (ax) first, considering the rect.
             # This adjusts 'ax' to fit nicely within the defined margins.
@@ -1014,7 +1046,17 @@ def draw_and_save_single_frame(args):
                 'min_label_radius_ratio': NIGHTINGALE_MIN_LABEL_RADIUS_RATIO,
                 'enable_smooth_transitions': NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
                 'transition_duration_seconds': NIGHTINGALE_TRANSITION_DURATION_SECONDS,
-                'debug': NIGHTINGALE_DEBUG
+                'debug': NIGHTINGALE_DEBUG,
+                # Pass new config values to the drawing function
+                'title_font_size': NIGHTINGALE_TITLE_FONT_SIZE,
+                'title_font_weight': NIGHTINGALE_TITLE_FONT_WEIGHT,
+                'title_color': NIGHTINGALE_TITLE_COLOR,
+                'high_period_color': NIGHTINGALE_HIGH_PERIOD_COLOR,
+                'low_period_color': NIGHTINGALE_LOW_PERIOD_COLOR,
+                'outer_circle_color': NIGHTINGALE_OUTER_CIRCLE_COLOR,
+                'outer_circle_linestyle': NIGHTINGALE_OUTER_CIRCLE_LINESTYLE,
+                'outer_circle_linewidth': NIGHTINGALE_OUTER_CIRCLE_LINEWIDTH,
+                'animation_easing_function': NIGHTINGALE_ANIMATION_EASING_FUNCTION
             }
             
             try:
@@ -1143,6 +1185,9 @@ def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_dat
             if entry and entry.get("song_id"):
                 song_ids_ever_on_chart.add(entry["song_id"])
     
+    # Update call to prepare_nightingale_animation_data to pass easing function
+    album_art_utils.nightingale_animation_easing_function = NIGHTINGALE_ANIMATION_EASING_FUNCTION
+
     # pre_fetch_album_art_and_colors now returns song_id_to_animator_key_map
     # Pass the list of songs that actually appear on chart
     song_id_to_animator_key_map = pre_fetch_album_art_and_colors(

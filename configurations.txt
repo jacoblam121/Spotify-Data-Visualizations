@@ -70,12 +70,18 @@ ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = 0.05
 # NEGATIVE_CACHE_HOURS: How long to cache failed searches (in hours)
 NEGATIVE_CACHE_HOURS = 24
 # Text formatting
-SONG_TEXT_RIGHT_GAP_FRACTION = 0.06
+SONG_TEXT_RIGHT_GAP_FRACTION = 0.032
 
 # --- Font Preferences ---
 [FontPreferences]
 # Comma-separated list of preferred fonts. First available will be used.
 PREFERRED_FONTS = DejaVu Sans, Noto Sans JP, Noto Sans KR, Noto Sans SC, Noto Sans TC, Arial Unicode MS, sans-serif
+# OS_SPECIFIC_FONT_LOADING: Enable OS-specific font loading behavior
+# On Linux: Register custom fonts from fonts/ directory with matplotlib
+# On Windows: Use system fonts (existing behavior)
+OS_SPECIFIC_FONT_LOADING = True
+# CUSTOM_FONT_DIR: Directory containing custom font files (relative to project root)
+CUSTOM_FONT_DIR = fonts
 
 # --- Debugging ---
 [Debugging]
@@ -170,19 +176,24 @@ ENABLE_NIGHTINGALE = True
 # CENTER_X_FIG: X-coordinate of chart center (0.0-1.0)
 CENTER_X_FIG = 0.15
 # CENTER_Y_FIG: Y-coordinate of chart center (0.0-1.0) 
-CENTER_Y_FIG = 0.5
+CENTER_Y_FIG = 0.3
 # RADIUS_FIG: Maximum radius of the chart in figure units
-RADIUS_FIG = 0.08
+RADIUS_FIG = 0.12
 
 # --- Chart Dimensions ---
 # CHART_WIDTH_FIG: Chart panel width (for square layout)
-CHART_WIDTH_FIG = 0.16
+CHART_WIDTH_FIG = 0.20
 # CHART_HEIGHT_FIG: Chart panel height (for square layout)
-CHART_HEIGHT_FIG = 0.16
+CHART_HEIGHT_FIG = 0.20
 # CHART_PADDING_FIG: Padding around chart
 CHART_PADDING_FIG = 0.02
 
-# --- Period Labels ---
+# --- Title Display ---
+TITLE_FONT_SIZE = 12
+TITLE_FONT_WEIGHT = bold
+TITLE_COLOR = black
+
+# --- Period Labels (Month/Year) ---
 # SHOW_PERIOD_LABELS: Whether to show month/year labels on segments
 SHOW_PERIOD_LABELS = True
 # LABEL_RADIUS_RATIO: How far outside circle to place labels (1.0 = circle edge, >1.0 = outside)
@@ -203,8 +214,15 @@ HIGH_LOW_FONT_SIZE = 9
 HIGH_LOW_Y_OFFSET_FIG = -0.12
 # HIGH_LOW_SPACING_FIG: Spacing between high/low lines
 HIGH_LOW_SPACING_FIG = 0.025
+HIGH_PERIOD_COLOR = darkgreen
+LOW_PERIOD_COLOR = darkred
 
-# --- Animation & Display ---
+# --- Chart Aesthetics ---
+OUTER_CIRCLE_COLOR = gray
+OUTER_CIRCLE_LINESTYLE = --
+OUTER_CIRCLE_LINEWIDTH = 1.0
+
+# --- Animation & Data ---
 # MIN_LABEL_RADIUS_RATIO: Minimum radius ratio to show labels (0.0-1.0)
 MIN_LABEL_RADIUS_RATIO = 0.3
 # AGGREGATION_TYPE: 'auto', 'monthly', or 'yearly' (auto determines based on date range)
@@ -213,6 +231,8 @@ AGGREGATION_TYPE = auto
 ENABLE_SMOOTH_TRANSITIONS = True
 # TRANSITION_DURATION_SECONDS: Duration for segment transitions
 TRANSITION_DURATION_SECONDS = 0.3
+# ANIMATION_EASING_FUNCTION: Easing function for new segments ('cubic' for smooth, 'elastic' for bouncy)
+ANIMATION_EASING_FUNCTION = cubic
 
 # DEBUG_NIGHTINGALE: Enable debug output for nightingale chart rendering  
-DEBUG_NIGHTINGALE = True
+DEBUG_NIGHTINGALE = False

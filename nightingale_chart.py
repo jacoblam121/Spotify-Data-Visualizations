@@ -60,7 +60,8 @@ def prepare_nightingale_animation_data(
     animation_frame_timestamps: List[pd.Timestamp],
     enable_smooth_transitions: bool = True,
     transition_duration_seconds: float = 0.3,
-    target_fps: int = 30
+    target_fps: int = 30,
+    easing_function: str = 'cubic'
 ) -> Dict[pd.Timestamp, Dict[str, Any]]:
     """
     Prepare nightingale data for smooth animation by generating interpolated frames.
@@ -72,6 +73,7 @@ def prepare_nightingale_animation_data(
         enable_smooth_transitions: Whether to generate tween frames
         transition_duration_seconds: Duration of transitions
         target_fps: Target frames per second
+        easing_function: Easing function to use for interpolation
         
     Returns:
         Dict with interpolated nightingale data for each frame timestamp
@@ -121,7 +123,7 @@ def prepare_nightingale_animation_data(
         current_data = nightingale_time_data[current_keyframe]
         next_data = nightingale_time_data[next_keyframe]
         
-        interpolated_frame = _interpolate_nightingale_frames(current_data, next_data, progress)
+        interpolated_frame = _interpolate_nightingale_frames(current_data, next_data, progress, easing_function)
         interpolated_data[frame_ts] = interpolated_frame
     
     return interpolated_data
@@ -130,7 +132,8 @@ def prepare_nightingale_animation_data(
 def _interpolate_nightingale_frames(
     current_frame: Dict[str, Any], 
     next_frame: Dict[str, Any], 
-    progress: float
+    progress: float,
+    easing_function: str
 ) -> Dict[str, Any]:
     """
     Interpolate between two nightingale frames for smooth transitions.
@@ -155,9 +158,13 @@ def _interpolate_nightingale_frames(
             # Period exists in both frames - interpolate values
             interpolated_period = _interpolate_period(current_period, next_period, progress)
         elif next_period and not current_period:
-            # New period appearing - animate from 0 radius with elastic easing
+            # New period appearing - animate from 0 radius with selected easing
             interpolated_period = next_period.copy()
-            radius_progress = _elastic_ease_out(progress)  # Use elastic for new segments
+            if easing_function == 'elastic':
+                radius_progress = _elastic_ease_out(progress)
+            else: # Default to cubic
+                radius_progress = _cubic_ease_in_out(progress)
+
             interpolated_period['plays'] = int(next_period['plays'] * progress)
             interpolated_period['radius'] = next_period.get('radius', 0) * radius_progress
         elif current_period and not next_period:
@@ -295,16 +302,28 @@ def draw_nightingale_chart(
     height = chart_config.get("chart_height_fig", radius * 2)
     padding = chart_config.get("chart_padding_fig", 0.02)
 
+    # --- Get all new config values ---
     show_labels = chart_config.get("show_labels", True)
     label_radius_ratio = chart_config.get("label_radius_ratio", 1.15)
     label_font_size = chart_config.get("label_font_size", 10)
     label_font_color = chart_config.get("label_font_color", "black")
     label_font_weight = chart_config.get("label_font_weight", "normal")
+    min_label_radius_ratio = chart_config.get("min_label_radius_ratio", 0.3)
 
     show_high_low = chart_config.get("show_high_low", True)
     high_low_font_size = chart_config.get("high_low_font_size", 9)
     high_low_y_offset = chart_config.get("high_low_y_offset_fig", -0.12)
     high_low_spacing = chart_config.get("high_low_spacing_fig", 0.025)
+    high_period_color = chart_config.get("high_period_color", "darkgreen")
+    low_period_color = chart_config.get("low_period_color", "darkred")
+
+    title_font_size = chart_config.get("title_font_size", 12)
+    title_font_weight = chart_config.get("title_font_weight", "bold")
+    title_color = chart_config.get("title_color", "black")
+
+    outer_circle_color = chart_config.get("outer_circle_color", "gray")
+    outer_circle_linestyle = chart_config.get("outer_circle_linestyle", "--")
+    outer_circle_linewidth = chart_config.get("outer_circle_linewidth", 1.0)
 
     debug = chart_config.get("debug", False)
 
@@ -323,31 +342,61 @@ def draw_nightingale_chart(
 
     max_plays = max(p["plays"] for p in periods) if periods else 1
 
+    # Draw outer circle as a guide
+    if outer_circle_linewidth > 0:
+        circle = patches.Circle((0, 0), radius=radius, transform=ax.transData._b,
+                                color=outer_circle_color, ls=outer_circle_linestyle,
+                                lw=outer_circle_linewidth, fill=False, zorder=1)
+        ax.add_patch(circle)
+
     for p in periods:
         bar_height = radius * (p["plays"] / max_plays) if max_plays else 0
         theta = p["angle_start"]
         width_ang = p["angle_end"] - p["angle_start"]
         ax.bar(theta, bar_height, width=width_ang, bottom=0.0,
-               color=p["color"], edgecolor="white", linewidth=2, align="edge", alpha=0.8)
+               color=p["color"], edgecolor="white", linewidth=2, align="edge", alpha=0.8, zorder=2)
 
     if show_labels:
         label_r = radius * label_radius_ratio
         for p in periods:
-            if p["plays"] <= 0:
+            if p.get("plays", 0) <= 0 or (radius * (p["plays"] / max_plays) < radius * min_label_radius_ratio if max_plays > 0 else True):
                 continue
-            angle_mid = (p["angle_start"] + p["angle_end"]) / 2.0
-            rotation = np.degrees(angle_mid) - 90
-            ax.text(angle_mid, label_r, p["label"], ha="center", va="center",
+                
+            angle_mid_rad = (p["angle_start"] + p["angle_end"]) / 2.0
+            angle_mid_deg = np.degrees(angle_mid_rad)
+
+            # --- Improved Label Placement Logic ---
+            # Normalize angle to be between 0 and 360
+            angle_corr = angle_mid_deg % 360
+
+            # Determine rotation and alignment based on angle
+            if 0 <= angle_corr < 180: # Top half
+                rotation = angle_corr - 90
+                ha = 'left' if 0 < angle_corr < 180 else 'center'
+                va = 'center'
+            else: # Bottom half
+                rotation = angle_corr - 270
+                ha = 'right' if 180 < angle_corr < 360 else 'center'
+                va = 'center'
+
+            # Special cases for top and bottom
+            if abs(angle_corr - 90) < 5: # Top
+                 va = 'bottom'
+            elif abs(angle_corr - 270) < 5: # Bottom
+                 va = 'top'
+
+            ax.text(angle_mid_rad, label_r, p["label"], ha=ha, va=va,
                     rotation=rotation, rotation_mode="anchor",
                     fontsize=label_font_size, color=label_font_color,
-                    weight=label_font_weight)
+                    weight=label_font_weight, zorder=3)
+
 
     # Title above chart
     aggregation_type = nightingale_data.get("aggregation_type", "monthly")
     title = "Monthly" if aggregation_type == "monthly" else "Yearly"
     fig.text(center_x, center_y + height / 2 + padding, f"{title} Distribution of Plays",
-             ha="center", va="bottom", fontsize=label_font_size + 2, weight="bold",
-             color="black", transform=fig.transFigure)
+             ha="center", va="bottom", fontsize=title_font_size, weight=title_font_weight,
+             color=title_color, transform=fig.transFigure)
 
     if show_high_low:
         high_period = nightingale_data.get("high_period")
@@ -357,12 +406,12 @@ def draw_nightingale_chart(
             fig.text(center_x, text_y,
                      f"High: {high_period['label']} ({high_period['plays']} plays)",
                      ha="center", va="top", fontsize=high_low_font_size,
-                     color="darkgreen", weight="bold", transform=fig.transFigure)
+                     color=high_period_color, weight="bold", transform=fig.transFigure)
         if low_period and low_period != high_period:
             fig.text(center_x, text_y - high_low_spacing,
                      f"Low: {low_period['label']} ({low_period['plays']} plays)",
                      ha="center", va="top", fontsize=high_low_font_size,
-                     color="darkred", weight="bold", transform=fig.transFigure)
+                     color=low_period_color, weight="bold", transform=fig.transFigure)
 
 
 # Test functionality if run directly
