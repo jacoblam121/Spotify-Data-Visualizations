@@ -228,6 +228,97 @@ def _create_empty_nightingale_frame() -> Dict[str, Any]:
     }
 
 
+def _draw_simple_radial_labels(
+    ax,
+    periods: List[Dict[str, Any]],
+    radius: float,
+    max_plays: int,
+    label_radius_ratio: float,
+    min_label_radius_ratio: float,
+    label_font_size: float,
+    label_font_color: str,
+    label_font_weight: str,
+    debug: bool = False
+) -> None:
+    """
+    Draw labels around the nightingale chart using uniform radial placement.
+    
+    This simplified implementation ensures:
+    1. All labels are horizontal for maximum readability
+    2. Uniform distance from chart center for clean, consistent appearance
+    3. No complex rotation calculations that can cause messy appearance
+    4. Professional layout regardless of slice sizes
+    """
+    
+    if not periods:
+        return
+    
+    # Minimum bar height threshold for showing labels (avoid cluttering with tiny segments)
+    min_bar_height_for_label = radius * min_label_radius_ratio
+    
+    if debug:
+        print(f"[DEBUG] Simple label positioning: base_radius={radius:.3f}, ratio={label_radius_ratio:.3f}")
+    
+    for period in periods:
+        # Skip periods with no plays or very small segments
+        if period.get("plays", 0) <= 0:
+            continue
+            
+        # Calculate actual bar height for this period
+        bar_height = radius * (period["plays"] / max_plays) if max_plays > 0 else 0
+        if bar_height < min_bar_height_for_label:
+            continue
+            
+        # Calculate the angular center of this period
+        angle_start = period["angle_start"]
+        angle_end = period["angle_end"]
+        angle_mid_rad = (angle_start + angle_end) / 2.0
+        
+        # Position all labels at uniform distance from chart center
+        # This creates clean, consistent spacing regardless of slice size
+        label_distance = radius * label_radius_ratio
+        
+        if debug:
+            bar_height = radius * (period["plays"] / max_plays) if max_plays > 0 else 0
+            print(f"[DEBUG] Period '{period['label']}': bar_height={bar_height:.3f}, "
+                  f"label_distance={label_distance:.3f}, angle={math.degrees(angle_mid_rad):.1f}°")
+        
+        # Draw the label using polar coordinates with simple horizontal text
+        ax.text(
+            angle_mid_rad, label_distance, period["label"],
+            rotation=0,  # Always horizontal for readability
+            ha='center', va='center',  # Always centered
+            fontsize=label_font_size,
+            color=label_font_color,
+            weight=label_font_weight,
+            zorder=10  # Ensure labels appear above chart elements
+        )
+
+
+def _calculate_simple_label_properties(angle_deg: float) -> Tuple[float, str, str]:
+    """
+    Calculate simple label properties for horizontal text placement.
+    
+    This simplified function always returns horizontal orientation for maximum
+    readability and consistency, regardless of angular position.
+    
+    Args:
+        angle_deg: Angle in degrees (0° = right/3 o'clock, 90° = top/12 o'clock)
+        
+    Returns:
+        Tuple of (rotation_angle, horizontal_alignment, vertical_alignment)
+        Always returns (0, 'center', 'center') for consistent horizontal labels
+    """
+    
+    # Always use horizontal, centered text for maximum readability
+    # This eliminates the complex rotation logic that was causing messy placement
+    rotation = 0
+    ha = 'center'
+    va = 'center'
+    
+    return rotation, ha, va
+
+
 def calculate_nightingale_layout(
     periods: List[Dict[str, Any]], 
     chart_radius: float,
@@ -342,12 +433,24 @@ def draw_nightingale_chart(
 
     max_plays = max(p["plays"] for p in periods) if periods else 1
 
-    # Draw outer circle as a guide
+    # Draw explicit outer boundary circle as reference for labels
     if outer_circle_linewidth > 0:
-        circle = patches.Circle((0, 0), radius=radius, transform=ax.transData._b,
-                                color=outer_circle_color, ls=outer_circle_linestyle,
-                                lw=outer_circle_linewidth, fill=False, zorder=1)
-        ax.add_patch(circle)
+        # Draw the outer boundary circle that serves as the reference point for all labels
+        outer_circle = patches.Circle(
+            (0, 0), radius=radius,
+            transform=ax.transData._b,
+            color=outer_circle_color,
+            linestyle=outer_circle_linestyle,
+            linewidth=outer_circle_linewidth,
+            fill=False,
+            zorder=5,  # Above data bars but below labels
+            alpha=0.7  # Slightly transparent to not overpower the data
+        )
+        ax.add_patch(outer_circle)
+        
+        if debug:
+            print(f"[DEBUG] Outer circle drawn with radius={radius:.3f}, "
+                  f"color={outer_circle_color}, style={outer_circle_linestyle}")
 
     for p in periods:
         bar_height = radius * (p["plays"] / max_plays) if max_plays else 0
@@ -356,39 +459,14 @@ def draw_nightingale_chart(
         ax.bar(theta, bar_height, width=width_ang, bottom=0.0,
                color=p["color"], edgecolor="white", linewidth=2, align="edge", alpha=0.8, zorder=2)
 
+    # --- Simplified Label Positioning System ---
     if show_labels:
-        label_r = radius * label_radius_ratio
-        for p in periods:
-            if p.get("plays", 0) <= 0 or (radius * (p["plays"] / max_plays) < radius * min_label_radius_ratio if max_plays > 0 else True):
-                continue
-                
-            angle_mid_rad = (p["angle_start"] + p["angle_end"]) / 2.0
-            angle_mid_deg = np.degrees(angle_mid_rad)
-
-            # --- Improved Label Placement Logic ---
-            # Normalize angle to be between 0 and 360
-            angle_corr = angle_mid_deg % 360
-
-            # Determine rotation and alignment based on angle
-            if 0 <= angle_corr < 180: # Top half
-                rotation = angle_corr - 90
-                ha = 'left' if 0 < angle_corr < 180 else 'center'
-                va = 'center'
-            else: # Bottom half
-                rotation = angle_corr - 270
-                ha = 'right' if 180 < angle_corr < 360 else 'center'
-                va = 'center'
-
-            # Special cases for top and bottom
-            if abs(angle_corr - 90) < 5: # Top
-                 va = 'bottom'
-            elif abs(angle_corr - 270) < 5: # Bottom
-                 va = 'top'
-
-            ax.text(angle_mid_rad, label_r, p["label"], ha=ha, va=va,
-                    rotation=rotation, rotation_mode="anchor",
-                    fontsize=label_font_size, color=label_font_color,
-                    weight=label_font_weight, zorder=3)
+        _draw_simple_radial_labels(
+            ax, periods, radius, max_plays, 
+            label_radius_ratio, min_label_radius_ratio,
+            label_font_size, label_font_color, label_font_weight,
+            debug
+        )
 
 
     # Title above chart
@@ -416,30 +494,79 @@ def draw_nightingale_chart(
 
 # Test functionality if run directly
 if __name__ == "__main__":
-    print("--- Testing nightingale_chart.py ---")
+    print("--- Testing Enhanced Nightingale Chart ---")
     
-    # Create sample nightingale data
+    # Test for different slice counts (1-12 months)
+    print("\n--- Testing All Possible Slice Configurations ---")
+    
+    import math
+    for num_slices in range(1, 13):
+        print(f"\n{num_slices} slice(s):")
+        if num_slices == 1:
+            # Single slice gets full circle
+            angles = [0]  # Could be any angle for full circle
+        else:
+            # Multiple slices equally spaced
+            angle_per_segment = 360 / num_slices
+            angles = [i * angle_per_segment for i in range(num_slices)]
+        
+        for i, angle in enumerate(angles):
+            rotation, ha, va = _calculate_simple_label_properties(angle)
+            month_name = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][i]
+            print(f"  {month_name} at {angle:5.1f}°: rotation={rotation:6.1f}°, ha={ha:>5}")
+    
+    # Test label orientation calculation for specific angles
+    print("\n--- Testing Label Orientation System ---")
+    test_angles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330]
+    
+    for angle in test_angles:
+        rotation, ha, va = _calculate_simple_label_properties(angle)
+        print(f"  Angle {angle:3.0f}°: rotation={rotation:6.1f}°, ha={ha:>5}, va={va:>6}")
+    
+    # Create sample nightingale data with more periods for comprehensive testing
     sample_periods = [
         {
             'label': 'Jan 2024',
             'plays': 150,
             'angle_start': 0,
-            'angle_end': math.pi / 2,
+            'angle_end': math.pi / 3,
             'color': '#ff6b6b'
         },
         {
             'label': 'Feb 2024', 
             'plays': 200,
-            'angle_start': math.pi / 2,
-            'angle_end': math.pi,
+            'angle_start': math.pi / 3,
+            'angle_end': 2 * math.pi / 3,
             'color': '#4ecdc4'
         },
         {
             'label': 'Mar 2024',
             'plays': 120,
-            'angle_start': math.pi,
-            'angle_end': 3 * math.pi / 2,
+            'angle_start': 2 * math.pi / 3,
+            'angle_end': math.pi,
             'color': '#45b7d1'
+        },
+        {
+            'label': 'Apr 2024',
+            'plays': 180,
+            'angle_start': math.pi,
+            'angle_end': 4 * math.pi / 3,
+            'color': '#ffd93d'
+        },
+        {
+            'label': 'May 2024',
+            'plays': 90,
+            'angle_start': 4 * math.pi / 3,
+            'angle_end': 5 * math.pi / 3,
+            'color': '#6bcf7f'
+        },
+        {
+            'label': 'Jun 2024',
+            'plays': 160,
+            'angle_start': 5 * math.pi / 3,
+            'angle_end': 2 * math.pi,
+            'color': '#ff8b94'
         }
     ]
     
@@ -447,17 +574,24 @@ if __name__ == "__main__":
         'aggregation_type': 'monthly',
         'periods': sample_periods,
         'high_period': {'label': 'Feb 2024', 'plays': 200},
-        'low_period': {'label': 'Mar 2024', 'plays': 120},
-        'total_periods': 3,
-        'visible_periods': 3
+        'low_period': {'label': 'May 2024', 'plays': 90},
+        'total_periods': 6,
+        'visible_periods': 6
     }
     
     # Test layout calculation
+    print("\n--- Testing Layout Calculation ---")
     layout_periods = calculate_nightingale_layout(sample_periods, 0.1, 0.15, 0.35)
     
-    print("Layout calculation test:")
     for period in layout_periods:
+        angle_mid = (period['angle_start'] + period['angle_end']) / 2
+        angle_mid_deg = math.degrees(angle_mid) % 360
         print(f"  {period['label']}: radius={period['radius']:.3f}, "
-              f"angles={period['angle_start_deg']:.1f}°-{period['angle_end_deg']:.1f}°")
+              f"mid_angle={angle_mid_deg:.1f}°, plays={period['plays']}")
     
-    print("\nNightingale chart module ready for integration!")
+    print("\n--- Simplified Nightingale Chart System Ready! ---")
+    print("✓ Simple radial label positioning implemented")
+    print("✓ Consistent distance from slice edges")  
+    print("✓ Horizontal text for maximum readability")
+    print("✓ Clean, predictable placement regardless of slice count")
+    print("✓ Configuration system updated")

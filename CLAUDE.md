@@ -59,6 +59,24 @@ python config_loader.py
 - Caches downloaded images and dominant colors
 - Handles multiple cache layers for performance
 
+**rolling_stats.py**: Rolling window statistics computation:
+- Calculates top tracks for 7-day and 30-day windows
+- Provides data-only logic (no Matplotlib dependencies) for reusability
+- Supports configurable aggregation frequencies
+
+**nightingale_chart.py**: Nightingale rose chart visualization:
+- Renders animated polar charts showing listening activity over time
+- Supports smooth transitions and easing animations
+- Integrates with main animation pipeline
+
+**text_utils.py**: Text rendering and typography utilities:
+- Handles font selection and international character support
+- Text truncation and positioning logic
+
+**time_aggregation.py**: Time-based data aggregation:
+- Frame aggregation by time periods (daily, weekly, monthly)
+- Reduces computational load for long time series
+
 ### Data Flow
 
 1. Configuration loaded from `configurations.txt`
@@ -77,6 +95,8 @@ All behavior is controlled through `configurations.txt`:
 - **AnimationOutput**: Video resolution, FPS, frame aggregation
 - **AlbumArtSpotify**: API credentials and caching settings
 - **RollingStats**: 7/30-day window calculations
+- **NightingaleChart**: Enable/disable and configure the polar chart visualization
+- **RollingStatsDisplay**: Layout and styling for rolling statistics panels
 
 ### Performance Features
 
@@ -88,3 +108,14 @@ All behavior is controlled through `configurations.txt`:
 ### Font Handling
 
 The application supports international characters through multiple font fallbacks defined in `PREFERRED_FONTS`. Font files are stored in the `fonts/` directory and include Unicode support for Japanese, Korean, and Chinese characters.
+
+### Visualization Components
+
+The application generates a comprehensive animated visualization with multiple elements:
+
+- **Main Bar Chart Race**: Horizontal bars showing top tracks over time with album art
+- **Rolling Statistics Panels**: Side panels displaying current 7-day and 30-day top tracks
+- **Nightingale Rose Chart**: Optional polar chart showing listening activity patterns over time periods
+- **Timestamp Display**: Current date/time indicator synchronized with data
+
+All visualization elements are fully configurable through `configurations.txt` and support smooth animations, parallel frame generation, and multiple output formats.

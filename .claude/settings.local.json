@@ -11,7 +11,11 @@
       "Bash(sudo apt install:*)",
       "Bash(source:*)",
       "Bash(pip install:*)",
-      "Bash(ffmpeg:*)"
+      "Bash(ffmpeg:*)",
+      "Bash(pkill:*)",
+      "Bash(ls:*)",
+      "Bash(timeout 60 python:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }

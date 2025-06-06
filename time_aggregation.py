@@ -176,7 +176,7 @@ def _calculate_monthly_aggregation(
                 angle_end = (i + 1) * angle_per_segment
             
             period_info = {
-                'label': month.strftime('%b %Y'),  # "Jan 2024"
+                'label': month.strftime('%b'),  # "Jan" (month only, no year)
                 'plays': int(plays),
                 'start_date': month_start,
                 'end_date': month_end,

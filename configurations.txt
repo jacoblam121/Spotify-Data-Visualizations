@@ -193,10 +193,11 @@ TITLE_FONT_SIZE = 12
 TITLE_FONT_WEIGHT = bold
 TITLE_COLOR = black
 
-# --- Period Labels (Month/Year) ---
+# --- Period Labels (Month/Year) - Uniform Radial Positioning ---
 # SHOW_PERIOD_LABELS: Whether to show month/year labels on segments
 SHOW_PERIOD_LABELS = True
-# LABEL_RADIUS_RATIO: How far outside circle to place labels (1.0 = circle edge, >1.0 = outside)
+# LABEL_RADIUS_RATIO: Multiplier for distance from chart center (1.0 = at max radius, >1.0 = outside chart)
+# All labels are positioned at uniform distance from center for clean, consistent appearance
 LABEL_RADIUS_RATIO = 1.15
 # LABEL_FONT_SIZE: Font size for period labels
 LABEL_FONT_SIZE = 10
@@ -218,6 +219,7 @@ HIGH_PERIOD_COLOR = darkgreen
 LOW_PERIOD_COLOR = darkred
 
 # --- Chart Aesthetics ---
+# OUTER_CIRCLE: Explicit boundary circle that serves as reference point for label positioning
 OUTER_CIRCLE_COLOR = gray
 OUTER_CIRCLE_LINESTYLE = --
 OUTER_CIRCLE_LINEWIDTH = 1.0
