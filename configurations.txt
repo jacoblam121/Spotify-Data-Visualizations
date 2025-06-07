@@ -8,7 +8,7 @@ PYTHONIOENCODING_WARNING = True
 # --- Data Source ---
 [DataSource]
 # SOURCE: "lastfm" or "spotify"
-SOURCE = spotify
+SOURCE = lastfm
 INPUT_FILENAME_LASTFM = lastfm_data.csv
 # INPUT_FILENAME_SPOTIFY: Path to your Spotify JSON data (e.g., "StreamingHistory0.json")
 # Or use a pattern like "StreamingHistory*.json" if you have multiple files.
@@ -21,9 +21,9 @@ FILTER_SKIPPED_TRACKS = False
 # START_DATE: YYYY-MM-DD or "all_time"
 # 2024-01-01
 # 2024-12-31
-START_DATE = 2024-01-01
+START_DATE = 2025-01-01
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = 2024-12-31
+END_DATE = 2025-06-05
 
 # --- Animation Output ---
 [AnimationOutput]
@@ -36,15 +36,15 @@ USE_NVENC_IF_AVAILABLE = True
 # MAX_FRAMES_FOR_TEST_RENDER: Max frames for a quick test render. Set to 0 or -1 for full render.
 MAX_FRAMES_FOR_TEST_RENDER = 0
 # ANIMATION_TRANSITION_DURATION_SECONDS: Duration of the overtake animation in seconds.
-ANIMATION_TRANSITION_DURATION_SECONDS = 0.3
+ANIMATION_TRANSITION_DURATION_SECONDS = 0.2
 # ENABLE_OVERTAKE_ANIMATIONS: Set to True to enable smooth overtake animations, False for static transitions.
 ENABLE_OVERTAKE_ANIMATIONS = False
 
 # FRAME_AGGREGATION_PERIOD: Aggregate frames by time period. Options:
 # 'event' (one frame per play event - original behavior)
-# 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
+# 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), '12H' (12-hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = H
+FRAME_AGGREGATION_PERIOD = D
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
@@ -95,14 +95,14 @@ LOG_FRAME_TIMES = True
 # Set to 0 to only log the first and last completed frame. First/last always logged if interval > 0.
 PARALLEL_LOG_COMPLETION_INTERVAL = 100
 # LOG_PARALLEL_PROCESS_START: Whether to log a startup message for each parallel worker process (once per worker).
-LOG_PARALLEL_PROCESS_START = True
+LOG_PARALLEL_PROCESS_START = False
 
 # --- Rolling Stats ---
 [RollingStats]
 # BASE_FREQUENCY controls how play events are bucketed before rolling.
 # Examples: 15T (15-minute), 30T, H (hourly), D (daily)
 # Note: Weekly (W) can cause pandas errors, use D (daily) instead for stable operation
-BASE_FREQUENCY = H
+BASE_FREQUENCY = D
 
 # --- Rolling Stats Display ---
 [RollingStatsDisplay]

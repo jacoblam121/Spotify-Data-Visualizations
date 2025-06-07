@@ -652,7 +652,7 @@ def draw_and_save_single_frame(args):
     except Exception as e_font:
         print(f"[Worker PID: {os.getpid()}] Warning: Could not set preferred fonts: {e_font}")
 
-    frame_start_time = time.time()
+    frame_start_time = time.monotonic()
     
     figsize_w = fig_width_pixels / dpi
     figsize_h = fig_height_pixels / dpi
@@ -1139,7 +1139,7 @@ def draw_and_save_single_frame(args):
     finally:
         plt.close(fig)
 
-    current_frame_render_time = time.time() - frame_start_time
+    current_frame_render_time = time.monotonic() - frame_start_time
     # Return overall_frame_idx for logging in the main process
     return overall_frame_idx, current_frame_render_time, os.getpid()
 
@@ -1302,11 +1302,19 @@ def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_dat
         ))
 
     completed_frames = 0
+    reported_pids = set()
     with concurrent.futures.ProcessPoolExecutor(max_workers=MAX_PARALLEL_WORKERS) as executor:
         futures = [executor.submit(draw_and_save_single_frame, arg_tuple) for arg_tuple in tasks_args]
         for future in concurrent.futures.as_completed(futures):
             try:
                 frame_idx, render_time, pid = future.result()
+
+                # Log a startup message for each worker process exactly once
+                if LOG_PARALLEL_PROCESS_START_CONFIG:
+                    if pid not in reported_pids:
+                        print(f"--- Worker process with PID {pid} has started and is processing frames. ---")
+                        reported_pids.add(pid)
+
                 frame_render_times_list.append(render_time)
                 completed_frames += 1
                 
