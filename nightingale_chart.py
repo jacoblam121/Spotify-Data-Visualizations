@@ -88,18 +88,44 @@ def prepare_nightingale_animation_data(
     # Sort timestamps to create keyframe pairs
     keyframe_timestamps = sorted(nightingale_time_data.keys())
     interpolated_data = {}
+
+    # --- Create a pre-roll period by inserting an empty keyframe at the start ---
+    # This ensures the chart animates in from nothing at the beginning.
+    if keyframe_timestamps:
+        first_keyframe_ts = keyframe_timestamps[0]
+        pre_roll_duration = pd.Timedelta(seconds=transition_duration_seconds)
+        empty_keyframe_ts = first_keyframe_ts - pre_roll_duration
+        
+        # Add the empty keyframe to our data
+        nightingale_time_data[empty_keyframe_ts] = _create_empty_nightingale_frame()
+        # Get the new sorted list of keyframes
+        keyframe_timestamps = sorted(nightingale_time_data.keys())
     
     for i, frame_ts in enumerate(animation_frame_timestamps):
-        # Find the surrounding keyframes
+        # --- Robustly find the surrounding keyframes for any given frame timestamp ---
         current_keyframe = None
         next_keyframe = None
-        
+
+        # Find the index of the first keyframe that is strictly after the frame timestamp
+        next_keyframe_index = -1
         for j, keyframe_ts in enumerate(keyframe_timestamps):
-            if keyframe_ts <= frame_ts:
-                current_keyframe = keyframe_ts
-                if j + 1 < len(keyframe_timestamps):
-                    next_keyframe = keyframe_timestamps[j + 1]
+            if keyframe_ts > frame_ts:
+                next_keyframe_index = j
+                break
         
+        if next_keyframe_index == -1:
+            # frame_ts is at or after the last keyframe, so no transition
+            current_keyframe = keyframe_timestamps[-1] if keyframe_timestamps else None
+            next_keyframe = None
+        elif next_keyframe_index == 0:
+            # frame_ts is before the first keyframe (should be empty)
+            current_keyframe = None
+            next_keyframe = keyframe_timestamps[0]
+        else:
+            # frame_ts is between two keyframes
+            current_keyframe = keyframe_timestamps[next_keyframe_index - 1]
+            next_keyframe = keyframe_timestamps[next_keyframe_index]
+
         if current_keyframe is None:
             # Before first keyframe - use empty data
             interpolated_data[frame_ts] = _create_empty_nightingale_frame()
@@ -158,20 +184,29 @@ def _interpolate_nightingale_frames(
             # Period exists in both frames - interpolate values
             interpolated_period = _interpolate_period(current_period, next_period, progress)
         elif next_period and not current_period:
-            # New period appearing - animate from 0 radius with selected easing
+            # New period appearing - animate from 0 radius and 0 width
             interpolated_period = next_period.copy()
-            if easing_function == 'elastic':
-                radius_progress = _elastic_ease_out(progress)
-            else: # Default to cubic
-                radius_progress = _cubic_ease_in_out(progress)
+            
+            # Ease radius and angle growth
+            eased_progress = _cubic_ease_in_out(progress)
 
             interpolated_period['plays'] = int(next_period['plays'] * progress)
-            interpolated_period['radius'] = next_period.get('radius', 0) * radius_progress
+            interpolated_period['radius'] = next_period.get('radius', 0) * eased_progress
+            
+            # Animate angle width from 0
+            angle_width = next_period['angle_end'] - next_period['angle_start']
+            interpolated_period['angle_end'] = next_period['angle_start'] + (angle_width * eased_progress)
         elif current_period and not next_period:
-            # Period disappearing - animate to 0 radius
+            # Period disappearing - animate to 0 radius and 0 width
             interpolated_period = current_period.copy()
+            eased_progress = _cubic_ease_in_out(progress)
+
             interpolated_period['plays'] = int(current_period['plays'] * (1 - progress))
-            interpolated_period['radius'] = current_period.get('radius', 0) * (1 - progress)
+            interpolated_period['radius'] = current_period.get('radius', 0) * (1 - eased_progress)
+            
+            # Animate angle width to 0
+            angle_width = current_period['angle_end'] - current_period['angle_start']
+            interpolated_period['angle_end'] = current_period['angle_end'] - (angle_width * eased_progress)
         else:
             continue  # Should not happen
         
