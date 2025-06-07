@@ -413,6 +413,7 @@ def draw_nightingale_chart(
     title_color = chart_config.get("title_color", "black")
     title_y_offset = chart_config.get("title_y_offset_fig", 0.02)
 
+    show_boundary_circle = chart_config.get("show_boundary_circle", True)
     outer_circle_color = chart_config.get("outer_circle_color", "gray")
     outer_circle_linestyle = chart_config.get("outer_circle_linestyle", "--")
     outer_circle_linewidth = chart_config.get("outer_circle_linewidth", 1.0)
@@ -435,7 +436,7 @@ def draw_nightingale_chart(
     max_plays = max(p["plays"] for p in periods) if periods else 1
 
     # Draw explicit outer boundary circle as reference for labels
-    if outer_circle_linewidth > 0:
+    if show_boundary_circle and outer_circle_linewidth > 0:
         # Draw the outer boundary circle that serves as the reference point for all labels
         outer_circle = patches.Circle(
             (0, 0), radius=radius,
@@ -473,7 +474,7 @@ def draw_nightingale_chart(
     # Title above chart (configurable position)
     aggregation_type = nightingale_data.get("aggregation_type", "monthly")
     title = "Monthly" if aggregation_type == "monthly" else "Yearly"
-    title_y = center_y + height / 2 + title_y_offset  # Positive values go up, negative go down
+    title_y = center_y + radius + title_y_offset  # Positive values go up, negative go down
     fig.text(center_x, title_y, f"{title} Distribution of Plays",
              ha="center", va="bottom", fontsize=title_font_size, weight=title_font_weight,
              color=title_color, transform=fig.transFigure)
@@ -481,7 +482,7 @@ def draw_nightingale_chart(
     if show_high_low:
         high_period = nightingale_data.get("high_period")
         low_period = nightingale_data.get("low_period")
-        text_y = center_y - height / 2 - high_low_y_offset  # Positive values go down, negative go up
+        text_y = center_y - radius - high_low_y_offset  # Positive values go down, negative go up
         if high_period:
             fig.text(center_x, text_y,
                      f"High: {high_period['label']} ({high_period['plays']} plays)",

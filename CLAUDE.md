@@ -22,6 +22,10 @@ pip install -r requirements.txt
 
 # Ensure FFmpeg is installed and in PATH (required for video output)
 ffmpeg -version
+
+# Verify required environment variables for Spotify API (if using Spotify source)
+echo $SPOTIFY_CLIENT_ID
+echo $SPOTIFY_CLIENT_SECRET
 ```
 
 ### Testing Components
@@ -31,6 +35,14 @@ python data_processor.py
 
 # Test configuration loading
 python config_loader.py
+
+# Test nightingale chart rendering
+python nightingale_chart.py
+
+# Test specific title positioning
+python test_title_positioning.py
+python test_title_config.py
+python test_title_render.py
 ```
 
 ## Architecture
@@ -119,3 +131,34 @@ The application generates a comprehensive animated visualization with multiple e
 - **Timestamp Display**: Current date/time indicator synchronized with data
 
 All visualization elements are fully configurable through `configurations.txt` and support smooth animations, parallel frame generation, and multiple output formats.
+
+## Data Sources
+
+### Spotify Data Format
+The application expects Spotify extended streaming history in JSON format:
+- Files named like `StreamingHistory*.json` or specify exact filename in config
+- Each entry contains: `ts` (timestamp), `artistName`, `trackName`, `msPlayed`
+- Minimum play time filtering available via `MIN_MS_PLAYED_FOR_COUNT`
+
+### Last.fm Data Format  
+Alternative data source using CSV export from Last.fm:
+- File should be named `lastfm_data.csv` (UTF-8 encoded)
+- Contains listening history with timestamps and track metadata
+- Available from https://lastfm.ghan.nl/export/
+
+## Common Issues & Solutions
+
+### Character Encoding
+- Always set `PYTHONIOENCODING=utf-8` before running
+- Font files in `fonts/` directory support international characters
+- OS-specific font loading can be enabled in config
+
+### Performance Optimization
+- Use `FRAME_AGGREGATION_PERIOD = D` (daily) or higher for long time series
+- Adjust `MAX_PARALLEL_WORKERS` based on available CPU cores
+- Enable `CLEANUP_INTERMEDIATE_FRAMES = True` to save disk space
+
+### Album Art Issues
+- Ensure Spotify API credentials are properly configured
+- Check cache directories have write permissions
+- Album art cache stored in `album_art_cache/` with multiple JSON metadata files

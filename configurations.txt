@@ -44,7 +44,7 @@ ENABLE_OVERTAKE_ANIMATIONS = False
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = D
+FRAME_AGGREGATION_PERIOD = W
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
@@ -198,7 +198,7 @@ TITLE_FONT_SIZE = 22
 TITLE_COLOR = black
 TITLE_FONT_WEIGHT = normal
 # TITLE_POSITION_ABOVE_CHART: Distance above chart (positive = above, negative = below)
-TITLE_POSITION_ABOVE_CHART = 0.15
+TITLE_POSITION_ABOVE_CHART = 0.05
 
 # === HIGH/LOW TRACKER ===
 # Show "High: July (200 plays)" and "Low: January (50 plays)" below chart
