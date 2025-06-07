@@ -1,8 +1,10 @@
 # main_animator.py
-
 import pandas as pd
 import numpy as np
 from data_processor import clean_and_filter_data, prepare_data_for_bar_chart_race
+from rolling_stats import calculate_rolling_window_stats
+from time_aggregation import calculate_nightingale_time_data, determine_aggregation_type
+from nightingale_chart import prepare_nightingale_animation_data, draw_nightingale_chart
 
 import album_art_utils # Import the module
 # from album_art_utils import get_album_art_path, get_dominant_color # Can keep these specific imports
@@ -23,8 +25,8 @@ import subprocess # Added for calling ffmpeg
 import shutil # Added for directory operations
 import matplotlib.patheffects as path_effects # For text outlining
 import matplotlib.patches as patches # For the text background rectangle
-import platform # For OS detection
-import matplotlib.font_manager as fm # For font management
+import matplotlib.font_manager as fm  # Needed for precise text width measurement
+from text_utils import truncate_to_fit  # Helper for dynamic truncation
 
 # Import the config loader
 from config_loader import AppConfig
@@ -56,10 +58,68 @@ PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = 50 # Default, will be loaded from conf
 LOG_PARALLEL_PROCESS_START_CONFIG = True # Default, will be loaded from config
 ANIMATION_TRANSITION_DURATION_SECONDS = 0.3 # Default, will be loaded from config
 ENABLE_OVERTAKE_ANIMATIONS_CONFIG = True # Default, will be loaded from config
+SONG_TEXT_RIGHT_GAP_FRACTION = 0.1  # Fraction of x-axis width to leave as a gap after song text
 
 # --- Global Dictionaries for Caching Art Paths and Colors within the animator ---
 album_art_image_objects = {}
 album_bar_colors = {}
+# High-resolution album art specifically for the rolling-stats panel (original size)
+album_art_image_objects_highres = {}
+
+# --- Rolling Stats Display Configuration (loaded from file) ---
+ROLLING_PANEL_AREA_LEFT_FIG = 0.03
+ROLLING_PANEL_AREA_RIGHT_FIG = 0.25
+ROLLING_PANEL_TITLE_Y_FROM_TOP_FIG = 0.02
+ROLLING_TITLE_TO_CONTENT_GAP_FIG = 0.01
+ROLLING_TITLE_FONT_SIZE = 11.0
+ROLLING_SONG_ARTIST_FONT_SIZE = 9.0
+ROLLING_PLAYS_FONT_SIZE = 8.0
+ROLLING_ART_HEIGHT_FIG = 0.07
+ROLLING_ART_ASPECT_RATIO = 1.0
+ROLLING_ART_MAX_WIDTH_FIG = 0.07
+ROLLING_ART_PADDING_RIGHT_FIG = 0.005
+ROLLING_TEXT_PADDING_LEFT_FIG = 0.005
+ROLLING_TEXT_TO_ART_HORIZONTAL_GAP_FIG = 0.005
+ROLLING_TEXT_LINE_VERTICAL_SPACING_FIG = 0.02
+ROLLING_SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG = 0.025
+ROLLING_INTER_PANEL_VERTICAL_SPACING_FIG = 0.04
+# New globals for additional display configurations
+ROLLING_PANEL_TITLE_X_FIG = -1.0 # Default to -1.0, indicating centered
+ROLLING_TEXT_TRUNCATION_ADJUST_PX = 0 # Default to 0 pixels adjustment
+MAIN_TIMESTAMP_X_FIG = -1.0 # Default to -1.0, indicating auto/ax_center
+MAIN_TIMESTAMP_Y_FIG = 0.04 # Default y position
+# --- End Rolling Stats Display Configuration ---
+
+# --- Nightingale Chart Configuration ---
+ENABLE_NIGHTINGALE = True
+NIGHTINGALE_CENTER_X_FIG = 0.15
+NIGHTINGALE_CENTER_Y_FIG = 0.20
+NIGHTINGALE_RADIUS_FIG = 0.08
+NIGHTINGALE_CHART_WIDTH_FIG = 0.16
+NIGHTINGALE_CHART_HEIGHT_FIG = 0.16
+NIGHTINGALE_CHART_PADDING_FIG = 0.02
+NIGHTINGALE_SHOW_PERIOD_LABELS = True
+NIGHTINGALE_LABEL_RADIUS_RATIO = 1.15
+NIGHTINGALE_LABEL_FONT_COLOR = 'black'
+NIGHTINGALE_LABEL_FONT_WEIGHT = 'normal'
+NIGHTINGALE_SHOW_HIGH_LOW_INFO = True
+NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG = -0.12
+NIGHTINGALE_HIGH_LOW_SPACING_FIG = 0.025
+NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS = True
+NIGHTINGALE_TRANSITION_DURATION_SECONDS = 0.3
+NIGHTINGALE_LABEL_FONT_SIZE = 10
+NIGHTINGALE_HIGH_LOW_FONT_SIZE = 9
+NIGHTINGALE_MIN_LABEL_RADIUS_RATIO = 0.3
+NIGHTINGALE_AGGREGATION_TYPE = 'auto'
+NIGHTINGALE_SAMPLING_RATE = 'D'  # Default to daily sampling
+NIGHTINGALE_TITLE_POSITION_ABOVE_CHART = 0.02  # Default title position
+NIGHTINGALE_DEBUG = False
+# New setting for boundary circle
+NIGHTINGALE_SHOW_BOUNDARY_CIRCLE = True
+# --- End Nightingale Chart Configuration ---
+
+# --- Global for tracking worker process startup logging ---
+worker_pids_reported = set()
 
 def setup_fonts():
     """Setup fonts based on OS and configuration"""
@@ -112,7 +172,28 @@ def load_configuration():
     global MAX_FRAMES_FOR_TEST_RENDER, LOG_FRAME_TIMES_CONFIG
     global MAX_PARALLEL_WORKERS, CLEANUP_INTERMEDIATE_FRAMES, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
     global LOG_PARALLEL_PROCESS_START_CONFIG, ANIMATION_TRANSITION_DURATION_SECONDS
-    global ENABLE_OVERTAKE_ANIMATIONS_CONFIG
+    global ENABLE_OVERTAKE_ANIMATIONS_CONFIG, SONG_TEXT_RIGHT_GAP_FRACTION
+    # Rolling Stats Display Globals
+    global ROLLING_PANEL_AREA_LEFT_FIG, ROLLING_PANEL_AREA_RIGHT_FIG, ROLLING_PANEL_TITLE_Y_FROM_TOP_FIG
+    global ROLLING_TITLE_TO_CONTENT_GAP_FIG, ROLLING_TITLE_FONT_SIZE, ROLLING_SONG_ARTIST_FONT_SIZE
+    global ROLLING_PLAYS_FONT_SIZE, ROLLING_ART_HEIGHT_FIG, ROLLING_ART_ASPECT_RATIO, ROLLING_ART_MAX_WIDTH_FIG
+    global ROLLING_ART_PADDING_RIGHT_FIG, ROLLING_TEXT_PADDING_LEFT_FIG, ROLLING_TEXT_TO_ART_HORIZONTAL_GAP_FIG
+    global ROLLING_TEXT_LINE_VERTICAL_SPACING_FIG, ROLLING_SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG, ROLLING_INTER_PANEL_VERTICAL_SPACING_FIG
+    # New globals for additional display control
+    global ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX 
+    global MAIN_TIMESTAMP_X_FIG, MAIN_TIMESTAMP_Y_FIG
+    # Nightingale Chart Globals - Consolidating all into one block for clarity
+    global ENABLE_NIGHTINGALE, NIGHTINGALE_CENTER_X_FIG, NIGHTINGALE_CENTER_Y_FIG, NIGHTINGALE_RADIUS_FIG
+    global NIGHTINGALE_CHART_WIDTH_FIG, NIGHTINGALE_CHART_HEIGHT_FIG, NIGHTINGALE_CHART_PADDING_FIG
+    global NIGHTINGALE_SHOW_PERIOD_LABELS, NIGHTINGALE_LABEL_RADIUS_RATIO, NIGHTINGALE_LABEL_FONT_COLOR, NIGHTINGALE_LABEL_FONT_WEIGHT
+    global NIGHTINGALE_SHOW_HIGH_LOW_INFO, NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG, NIGHTINGALE_HIGH_LOW_SPACING_FIG
+    global NIGHTINGALE_LABEL_FONT_SIZE, NIGHTINGALE_HIGH_LOW_FONT_SIZE, NIGHTINGALE_MIN_LABEL_RADIUS_RATIO
+    global NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS, NIGHTINGALE_TRANSITION_DURATION_SECONDS
+    global NIGHTINGALE_AGGREGATION_TYPE, NIGHTINGALE_SAMPLING_RATE, NIGHTINGALE_DEBUG
+    global NIGHTINGALE_TITLE_FONT_SIZE, NIGHTINGALE_TITLE_FONT_WEIGHT, NIGHTINGALE_TITLE_COLOR, NIGHTINGALE_TITLE_POSITION_ABOVE_CHART
+    global NIGHTINGALE_HIGH_PERIOD_COLOR, NIGHTINGALE_LOW_PERIOD_COLOR
+    global NIGHTINGALE_SHOW_BOUNDARY_CIRCLE, NIGHTINGALE_OUTER_CIRCLE_COLOR, NIGHTINGALE_OUTER_CIRCLE_LINESTYLE, NIGHTINGALE_OUTER_CIRCLE_LINEWIDTH
+    global NIGHTINGALE_ANIMATION_EASING_FUNCTION
 
     try:
         config = AppConfig() # Assumes configurations.txt is in the same directory
@@ -140,6 +221,8 @@ def load_configuration():
     LOG_FRAME_TIMES_CONFIG = config.get_bool('Debugging', 'LOG_FRAME_TIMES', LOG_FRAME_TIMES_CONFIG)
     ANIMATION_TRANSITION_DURATION_SECONDS = config.get_float('AnimationOutput', 'ANIMATION_TRANSITION_DURATION_SECONDS', ANIMATION_TRANSITION_DURATION_SECONDS)
     ENABLE_OVERTAKE_ANIMATIONS_CONFIG = config.get_bool('AnimationOutput', 'ENABLE_OVERTAKE_ANIMATIONS', ENABLE_OVERTAKE_ANIMATIONS_CONFIG)
+    # Load from AlbumArtSpotify section where user has it in configurations.txt
+    SONG_TEXT_RIGHT_GAP_FRACTION = config.get_float('AlbumArtSpotify', 'SONG_TEXT_RIGHT_GAP_FRACTION', SONG_TEXT_RIGHT_GAP_FRACTION)
     
     # New config options for parallel processing
     # MAX_PARALLEL_WORKERS = config.get_int('AnimationOutput', 'MAX_PARALLEL_WORKERS', os.cpu_count() or 1) # Ensure at least 1
@@ -157,8 +240,84 @@ def load_configuration():
     PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = config.get_int('Debugging', 'PARALLEL_LOG_COMPLETION_INTERVAL', 50)
     LOG_PARALLEL_PROCESS_START_CONFIG = config.get_bool('Debugging', 'LOG_PARALLEL_PROCESS_START', True)
 
-    # Setup fonts after loading configuration
-    setup_fonts()
+    ROLLING_PANEL_AREA_LEFT_FIG = config.get_float('RollingStatsDisplay', 'PANEL_AREA_LEFT_FIG', ROLLING_PANEL_AREA_LEFT_FIG)
+    ROLLING_PANEL_AREA_RIGHT_FIG = config.get_float('RollingStatsDisplay', 'PANEL_AREA_RIGHT_FIG', ROLLING_PANEL_AREA_RIGHT_FIG)
+    ROLLING_PANEL_TITLE_Y_FROM_TOP_FIG = config.get_float('RollingStatsDisplay', 'PANEL_TITLE_Y_FROM_TOP_FIG', ROLLING_PANEL_TITLE_Y_FROM_TOP_FIG)
+    ROLLING_TITLE_TO_CONTENT_GAP_FIG = config.get_float('RollingStatsDisplay', 'TITLE_TO_CONTENT_GAP_FIG', ROLLING_TITLE_TO_CONTENT_GAP_FIG)
+    ROLLING_TITLE_FONT_SIZE = config.get_float('RollingStatsDisplay', 'TITLE_FONT_SIZE', ROLLING_TITLE_FONT_SIZE)
+    ROLLING_SONG_ARTIST_FONT_SIZE = config.get_float('RollingStatsDisplay', 'SONG_ARTIST_FONT_SIZE', ROLLING_SONG_ARTIST_FONT_SIZE)
+    ROLLING_PLAYS_FONT_SIZE = config.get_float('RollingStatsDisplay', 'PLAYS_FONT_SIZE', ROLLING_PLAYS_FONT_SIZE)
+    ROLLING_ART_HEIGHT_FIG = config.get_float('RollingStatsDisplay', 'ART_HEIGHT_FIG', ROLLING_ART_HEIGHT_FIG)
+    ROLLING_ART_ASPECT_RATIO = config.get_float('RollingStatsDisplay', 'ART_ASPECT_RATIO', ROLLING_ART_ASPECT_RATIO)
+    ROLLING_ART_MAX_WIDTH_FIG = config.get_float('RollingStatsDisplay', 'ART_MAX_WIDTH_FIG', ROLLING_ART_MAX_WIDTH_FIG)
+    ROLLING_ART_PADDING_RIGHT_FIG = config.get_float('RollingStatsDisplay', 'ART_PADDING_RIGHT_FIG', ROLLING_ART_PADDING_RIGHT_FIG)
+    ROLLING_TEXT_PADDING_LEFT_FIG = config.get_float('RollingStatsDisplay', 'TEXT_PADDING_LEFT_FIG', ROLLING_TEXT_PADDING_LEFT_FIG)
+    ROLLING_TEXT_TO_ART_HORIZONTAL_GAP_FIG = config.get_float('RollingStatsDisplay', 'TEXT_TO_ART_HORIZONTAL_GAP_FIG', ROLLING_TEXT_TO_ART_HORIZONTAL_GAP_FIG)
+    ROLLING_TEXT_LINE_VERTICAL_SPACING_FIG = config.get_float('RollingStatsDisplay', 'TEXT_LINE_VERTICAL_SPACING_FIG', ROLLING_TEXT_LINE_VERTICAL_SPACING_FIG)
+    ROLLING_SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG = config.get_float('RollingStatsDisplay', 'SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG', ROLLING_SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG)
+    ROLLING_INTER_PANEL_VERTICAL_SPACING_FIG = config.get_float('RollingStatsDisplay', 'INTER_PANEL_VERTICAL_SPACING_FIG', ROLLING_INTER_PANEL_VERTICAL_SPACING_FIG)
+    # Load new display configurations
+    ROLLING_PANEL_TITLE_X_FIG = config.get_float('RollingStatsDisplay', 'PANEL_TITLE_X_FIG', ROLLING_PANEL_TITLE_X_FIG)
+    ROLLING_TEXT_TRUNCATION_ADJUST_PX = config.get_int('RollingStatsDisplay', 'ROLLING_TEXT_TRUNCATION_ADJUST_PX', ROLLING_TEXT_TRUNCATION_ADJUST_PX)
+    
+    MAIN_TIMESTAMP_X_FIG = config.get_float('TimestampDisplay', 'TIMESTAMP_X_FIG', MAIN_TIMESTAMP_X_FIG)
+    MAIN_TIMESTAMP_Y_FIG = config.get_float('TimestampDisplay', 'TIMESTAMP_Y_FIG', MAIN_TIMESTAMP_Y_FIG)
+    
+    # Nightingale Chart Configuration Loading (Simplified)
+    ENABLE_NIGHTINGALE = config.get_bool('NightingaleChart', 'ENABLE', ENABLE_NIGHTINGALE)
+    
+    # Chart Position & Size
+    NIGHTINGALE_CENTER_X_FIG = config.get_float('NightingaleChart', 'CHART_X', NIGHTINGALE_CENTER_X_FIG)
+    NIGHTINGALE_CENTER_Y_FIG = config.get_float('NightingaleChart', 'CHART_Y', NIGHTINGALE_CENTER_Y_FIG)
+    NIGHTINGALE_RADIUS_FIG = config.get_float('NightingaleChart', 'CHART_RADIUS', NIGHTINGALE_RADIUS_FIG)
+    
+    # Month Labels
+    NIGHTINGALE_SHOW_PERIOD_LABELS = config.get_bool('NightingaleChart', 'SHOW_MONTH_LABELS', NIGHTINGALE_SHOW_PERIOD_LABELS)
+    NIGHTINGALE_LABEL_RADIUS_RATIO = config.get_float('NightingaleChart', 'MONTH_LABEL_DISTANCE', NIGHTINGALE_LABEL_RADIUS_RATIO)
+    NIGHTINGALE_LABEL_FONT_SIZE = config.get_int('NightingaleChart', 'MONTH_LABEL_FONT_SIZE', NIGHTINGALE_LABEL_FONT_SIZE)
+    NIGHTINGALE_LABEL_FONT_COLOR = config.get('NightingaleChart', 'MONTH_LABEL_COLOR', NIGHTINGALE_LABEL_FONT_COLOR)
+    NIGHTINGALE_LABEL_FONT_WEIGHT = config.get('NightingaleChart', 'MONTH_LABEL_FONT_WEIGHT', NIGHTINGALE_LABEL_FONT_WEIGHT)
+    
+    # Title
+    NIGHTINGALE_TITLE_FONT_SIZE = config.get_int('NightingaleChart', 'TITLE_FONT_SIZE', 12)
+    NIGHTINGALE_TITLE_FONT_WEIGHT = config.get('NightingaleChart', 'TITLE_FONT_WEIGHT', 'bold')
+    NIGHTINGALE_TITLE_COLOR = config.get('NightingaleChart', 'TITLE_COLOR', 'black')
+    NIGHTINGALE_TITLE_POSITION_ABOVE_CHART = config.get_float('NightingaleChart', 'TITLE_POSITION_ABOVE_CHART', 0.02)
+    
+    # High/Low Tracker
+    NIGHTINGALE_SHOW_HIGH_LOW_INFO = config.get_bool('NightingaleChart', 'SHOW_HIGH_LOW', NIGHTINGALE_SHOW_HIGH_LOW_INFO)
+    NIGHTINGALE_HIGH_LOW_FONT_SIZE = config.get_int('NightingaleChart', 'HIGH_LOW_FONT_SIZE', NIGHTINGALE_HIGH_LOW_FONT_SIZE)
+    NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG = config.get_float('NightingaleChart', 'HIGH_LOW_POSITION_BELOW_CHART', NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG)
+    NIGHTINGALE_HIGH_LOW_SPACING_FIG = config.get_float('NightingaleChart', 'HIGH_LOW_SPACING', NIGHTINGALE_HIGH_LOW_SPACING_FIG)
+    NIGHTINGALE_HIGH_PERIOD_COLOR = config.get('NightingaleChart', 'HIGH_PERIOD_COLOR', 'darkgreen')
+    NIGHTINGALE_LOW_PERIOD_COLOR = config.get('NightingaleChart', 'LOW_PERIOD_COLOR', 'darkred')
+    
+    # Advanced Options
+    NIGHTINGALE_SHOW_BOUNDARY_CIRCLE = config.get_bool('NightingaleChart', 'SHOW_BOUNDARY_CIRCLE', NIGHTINGALE_SHOW_BOUNDARY_CIRCLE)
+    NIGHTINGALE_OUTER_CIRCLE_COLOR = config.get('NightingaleChart', 'BOUNDARY_CIRCLE_COLOR', 'gray')
+    NIGHTINGALE_OUTER_CIRCLE_LINESTYLE = config.get('NightingaleChart', 'BOUNDARY_CIRCLE_STYLE', '--')
+    NIGHTINGALE_OUTER_CIRCLE_LINEWIDTH = config.get_float('NightingaleChart', 'BOUNDARY_CIRCLE_WIDTH', 1.0)
+    NIGHTINGALE_AGGREGATION_TYPE = config.get('NightingaleChart', 'TIME_AGGREGATION', NIGHTINGALE_AGGREGATION_TYPE).lower()
+    NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS = config.get_bool('NightingaleChart', 'SMOOTH_TRANSITIONS', NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS)
+    NIGHTINGALE_TRANSITION_DURATION_SECONDS = config.get_float('NightingaleChart', 'TRANSITION_DURATION', NIGHTINGALE_TRANSITION_DURATION_SECONDS)
+    NIGHTINGALE_ANIMATION_EASING_FUNCTION = config.get('NightingaleChart', 'ANIMATION_STYLE', 'cubic')
+    NIGHTINGALE_SAMPLING_RATE = config.get('NightingaleChart', 'SAMPLING_RATE', 'D')
+    NIGHTINGALE_DEBUG = config.get_bool('NightingaleChart', 'DEBUG_MODE', NIGHTINGALE_DEBUG)
+    
+    # Removed redundant settings: CHART_WIDTH_FIG, CHART_HEIGHT_FIG, CHART_PADDING_FIG, MIN_LABEL_RADIUS_RATIO
+
+    # Debug output for nightingale configuration
+    print(f"=== NIGHTINGALE CONFIG DEBUG ===")
+    print(f"CHART_Y loaded: {NIGHTINGALE_CENTER_Y_FIG}")
+    print(f"CHART_X loaded: {NIGHTINGALE_CENTER_X_FIG}")
+    print(f"CHART_RADIUS loaded: {NIGHTINGALE_RADIUS_FIG}")
+    print(f"DEBUG_MODE: {NIGHTINGALE_DEBUG}")
+    print(f"=================================")
+
+    try:
+        plt.rcParams['font.family'] = PREFERRED_FONTS
+    except Exception as e:
+        print(f"Warning: Could not set preferred fonts from config: {e}. Using Matplotlib defaults.")
 
 def run_data_pipeline(): # Removed csv_file_path argument
     print("--- Starting Data Processing Pipeline ---")
@@ -257,9 +416,13 @@ def pre_fetch_album_art_and_colors(song_details_map, song_ids_to_fetch_art_for, 
         if art_path: # If an art path was successfully found/downloaded
             if canonical_album_name_for_animator_cache not in canonical_albums_loaded_in_animator_cache:
                 try:
-                    img = Image.open(art_path)
-                    # --- Resize image here ---
-                    img_orig_width, img_orig_height = img.size
+                    # Load image once and keep an RGB copy in memory at original size.
+                    with Image.open(art_path) as _img_tmp:
+                        _img_tmp = _img_tmp.convert('RGB')
+                        full_res_img = _img_tmp.copy()  # Keep for rolling panel
+
+                        # --- Resize image here for BAR-CHART usage ---
+                        img_orig_width, img_orig_height = _img_tmp.size
                     new_height_pixels = int(target_img_height_pixels_for_resize)
                     new_width_pixels = 1
                     if img_orig_height > 0 and new_height_pixels > 0:
@@ -267,14 +430,16 @@ def pre_fetch_album_art_and_colors(song_details_map, song_ids_to_fetch_art_for, 
                     if new_width_pixels <= 0: new_width_pixels = int(new_height_pixels * 0.75) # Fallback if aspect ratio is extreme
                     if new_width_pixels <= 0: new_width_pixels = 1 # Final fallback
 
-                    resized_img = img.resize((new_width_pixels, new_height_pixels), Image.Resampling.LANCZOS)
-                    # Ensure the image is in RGB mode for Matplotlib compatibility
+                    resized_img = _img_tmp.resize((new_width_pixels, new_height_pixels), Image.Resampling.LANCZOS)
+
+                    # Ensure the resized image is in RGB mode for Matplotlib compatibility
                     if resized_img.mode != 'RGB':
                         resized_img = resized_img.convert('RGB')
 
                     album_art_image_objects[canonical_album_name_for_animator_cache] = resized_img
-                    # No need to copy, resize returns a new image. Close original.
-                    img.close() 
+
+                    # Store the full-resolution copy for rolling-stats panel usage
+                    album_art_image_objects_highres[canonical_album_name_for_animator_cache] = full_res_img
                     
                     # Get dominant color (this also uses its own cache in album_art_utils)
                     dc = album_art_utils.get_dominant_color(art_path) 
@@ -288,13 +453,14 @@ def pre_fetch_album_art_and_colors(song_details_map, song_ids_to_fetch_art_for, 
                     album_art_image_objects[canonical_album_name_for_animator_cache] = None
                     album_bar_colors[canonical_album_name_for_animator_cache] = (0.5, 0.5, 0.5)
                     canonical_albums_loaded_in_animator_cache.add(canonical_album_name_for_animator_cache) # Mark as processed
+                    # Also mark hi-res cache with None so we do not attempt to re-load every frame
+                    album_art_image_objects_highres[canonical_album_name_for_animator_cache] = None
                 except Exception as e:
                     print(f"Error [PRE-FETCH] loading image {art_path} or getting color for canonical album '{canonical_album_name_for_animator_cache}': {e}. Using defaults.")
                     album_art_image_objects[canonical_album_name_for_animator_cache] = None
                     album_bar_colors[canonical_album_name_for_animator_cache] = (0.5, 0.5, 0.5)
                     canonical_albums_loaded_in_animator_cache.add(canonical_album_name_for_animator_cache) # Mark as processed
-            # else: This canonical album's art/color is already in the animator's memory from a previous song.
-            
+                    album_art_image_objects_highres[canonical_album_name_for_animator_cache] = None
         else: # No art_path was found by album_art_utils
             if DEBUG_ALBUM_ART_LOGIC:
                 print(f"[PRE-FETCH DEBUG] No art path returned by album_art_utils for '{song_id}' (Hint: '{album_name_hint_from_data}').")
@@ -315,7 +481,7 @@ def pre_fetch_album_art_and_colors(song_details_map, song_ids_to_fetch_art_for, 
     return song_id_to_animator_key_map # Return the new map
 
 
-def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_config, transition_duration_seconds_config):
+def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_config, transition_duration_seconds_config, rolling_stats_data, nightingale_data=None):
     """
     Generates a list of render tasks, including intermediate frames for smooth animations.
     Each task details what to draw for a single output image frame.
@@ -371,7 +537,9 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
                 "overall_frame_index": overall_frame_index_counter,
                 "display_timestamp": timestamp,
                 "bar_render_data_list": bar_render_data_list_for_frame,
-                "is_keyframe_end_frame": True 
+                "is_keyframe_end_frame": True,
+                "rolling_window_info": rolling_stats_data.get(timestamp, {'top_7_day': None, 'top_30_day': None}),
+                "nightingale_info": nightingale_data.get(timestamp, {}) if nightingale_data else {}
             })
             overall_frame_index_counter += 1
         else:
@@ -451,7 +619,9 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
                     "overall_frame_index": overall_frame_index_counter,
                     "display_timestamp": timestamp, # Display timestamp of the TARGET keyframe
                     "bar_render_data_list": bar_render_data_list_for_tween_frame,
-                    "is_keyframe_end_frame": False
+                    "is_keyframe_end_frame": False,
+                    "rolling_window_info": rolling_stats_data.get(timestamp, {'top_7_day': None, 'top_30_day': None}),
+                "nightingale_info": nightingale_data.get(timestamp, {}) if nightingale_data else {}
                 })
                 overall_frame_index_counter += 1
 
@@ -472,7 +642,9 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
                 "overall_frame_index": overall_frame_index_counter,
                 "display_timestamp": timestamp,
                 "bar_render_data_list": bar_render_data_list_for_keyframe_end,
-                "is_keyframe_end_frame": True
+                "is_keyframe_end_frame": True,
+                "rolling_window_info": rolling_stats_data.get(timestamp, {'top_7_day': None, 'top_30_day': None}),
+                "nightingale_info": nightingale_data.get(timestamp, {}) if nightingale_data else {}
             })
             overall_frame_index_counter += 1
 
@@ -491,20 +663,33 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
 def draw_and_save_single_frame(args):
     # Unpack arguments
     # The first argument is now the 'render_task' dictionary
+    global worker_pids_reported
     (render_task, num_total_output_frames,
     song_id_to_canonical_album_map, # Maps song_id -> canonical_album_name_str (for art/color cache keys)
     song_details_map_main,          # The main song_details_map with display_artist, display_track, etc.
-    album_art_image_objects_local, album_bar_colors_local,
+    album_art_image_objects_local, album_art_image_objects_highres_local, album_bar_colors_local,
     n_bars_local, chart_xaxis_limit_overall_scale, 
     output_image_path, dpi, fig_width_pixels, fig_height_pixels,
     log_frame_times_config_local, preferred_fonts_local,
-    log_parallel_process_start_local) = args
+    log_parallel_process_start_local,
+    # Rolling stats display configs
+    rs_panel_area_left_fig, rs_panel_area_right_fig, rs_panel_title_y_from_top_fig,
+    rs_title_to_content_gap_fig, rs_title_font_size, rs_song_artist_font_size,
+    rs_plays_font_size, rs_art_height_fig, rs_art_aspect_ratio, rs_art_max_width_fig,
+    rs_art_padding_right_fig, rs_text_padding_left_fig, rs_text_to_art_horizontal_gap_fig,
+    rs_text_line_vertical_spacing_fig, rs_song_artist_to_plays_gap_fig, rs_inter_panel_vertical_spacing_fig,
+    # New args for panel title x and truncation adjustment
+    rs_panel_title_x_fig_config, rs_text_truncation_adjust_px_config,
+    # New args for main timestamp position
+    main_timestamp_x_fig_config, main_timestamp_y_fig_config
+    ) = args
 
     # Extract data from render_task
     overall_frame_idx = render_task['overall_frame_index']
     display_timestamp = render_task['display_timestamp']
     bar_render_data_list = render_task['bar_render_data_list']
-    # is_keyframe_end_frame = render_task['is_keyframe_end_frame'] # Available if needed
+    rolling_window_info_for_frame = render_task.get('rolling_window_info', {'top_7_day': None, 'top_30_day': None})
+    nightingale_info_for_frame = render_task.get('nightingale_info', {})
 
     # Each process needs to set its font family if it's not inherited
     try:
@@ -512,21 +697,31 @@ def draw_and_save_single_frame(args):
     except Exception as e_font:
         print(f"[Worker PID: {os.getpid()}] Warning: Could not set preferred fonts: {e_font}")
 
-    frame_start_time = time.time()
+    frame_start_time = time.monotonic()
     
     figsize_w = fig_width_pixels / dpi
     figsize_h = fig_height_pixels / dpi
     fig, ax = plt.subplots(figsize=(figsize_w, figsize_h), dpi=dpi)
 
     try: # Ensure fig is closed even on error
-        if log_parallel_process_start_local:
-            # Log based on overall_frame_idx and num_total_output_frames
-            if (overall_frame_idx + 1) % 10 == 0 or overall_frame_idx == 0 or (overall_frame_idx + 1) == num_total_output_frames:
-                print(f"Process {os.getpid()} starting render task for frame_image {overall_frame_idx + 1}/{num_total_output_frames} ({display_timestamp.strftime('%Y-%m-%d %H:%M:%S')})...")
+        # --- Define margins for the main chart area (ax) BEFORE drawing ---
+        # These values will be used for both text truncation calculation and final layout.
+        left_margin_ax = 0.28  # Space on the left for the rolling stats panel
+        right_margin_ax = 0.985 # Small gap on the right
+        bottom_margin_ax = 0.08 # Space at the bottom for the main timestamp
+        top_margin_ax = 0.98    # Space at the top for x-axis labels/title
 
+        # --- Worker Process Startup Message ---
+        if log_parallel_process_start_local:
+            worker_pid = os.getpid()
+            if worker_pid not in worker_pids_reported:
+                print(f"--- Worker process with PID {worker_pid} has started and is processing frames. ---")
+                worker_pids_reported.add(worker_pid)
+
+        # --- Main Chart Area (ax) ---
         date_str = display_timestamp.strftime('%d %B %Y %H:%M:%S')
-        ax.text(0.98, 0.05, date_str, transform=ax.transAxes,
-                ha='right', va='bottom', fontsize=20 * (dpi/100.0), color='dimgray', weight='bold')
+        # ax.text(0.98, 0.05, date_str, transform=ax.transAxes, # Removed from here
+        #         ha='right', va='bottom', fontsize=20 * (dpi/100.0), color='dimgray', weight='bold')
 
         ax.set_xlabel("Total Plays", fontsize=18 * (dpi/100.0), labelpad=15 * (dpi/100.0))
         
@@ -551,134 +746,436 @@ def draw_and_save_single_frame(args):
         ax.tick_params(axis='x', labelsize=tick_label_fontsize)
 
         # --- Y-Axis setup ---
-        # The y-axis now represents abstract "slots" or ranks. Bars will move smoothly over these.
-        # We set the ylim from -0.5 (just below the last bar slot) to n_bars_local - 0.5 (just above the first bar slot)
-        # This corresponds to ranks 0 to n_bars_local - 1.
         ax.set_ylim(n_bars_local - 0.5, -0.5) # Inverted: 0 is top, n_bars_local-1 is bottom
-        ax.set_yticks(np.arange(n_bars_local)) # Ticks at integer positions 0, 1, ..., n_bars_local-1
-        ax.set_yticklabels([]) # No direct labels on y-axis ticks; song names are drawn manually
-        ax.tick_params(axis='y', length=0) # Hide y-tick marks themselves
+        ax.set_yticks(np.arange(n_bars_local)) 
+        ax.set_yticklabels([]) 
+        ax.tick_params(axis='y', length=0)
 
-        # --- Draw bars and text labels ---
-        # bar_render_data_list is already sorted by interpolated_y_position in generate_render_tasks
-        # if tweening, or by rank if it's a keyframe end.
-        # This helps with z-order if bars overlap during fast transitions, though true z-order control is limited.
-        
-        max_char_len_song_name = int(50 * (150.0/dpi)) # Max characters for song name
+        max_char_len_song_name = int(50 * (150.0/dpi)) 
         value_label_fontsize = 12 * (dpi/100.0)
-        song_name_fontsize = tick_label_fontsize # Use same as x-axis tick labels for consistency
+        song_name_fontsize = tick_label_fontsize
         
-        # Padding for text and images relative to bar end/dynamic_x_axis_limit
         image_padding_data_units = dynamic_x_axis_limit * 0.005 
         value_label_padding_data_units = dynamic_x_axis_limit * 0.008
-        song_name_padding_from_left_spine_data_units = dynamic_x_axis_limit * 0.005 # Small offset from left spine
+        song_name_padding_from_left_spine_data_units = dynamic_x_axis_limit * 0.005
 
 
         for bar_item_data in bar_render_data_list:
-            song_id = bar_item_data['song_id'] # This is the lowercase 'artist - track'
+            song_id = bar_item_data['song_id']
             interpolated_plays = bar_item_data['interpolated_play_count']
             interpolated_y_pos = bar_item_data['interpolated_y_position']
 
             if interpolated_plays < 0.01: 
                 continue
 
-            # Get display names from the main song_details_map_main
             song_master_details = song_details_map_main.get(song_id, {})
             display_artist_name = song_master_details.get('display_artist')
             display_track_name = song_master_details.get('display_track')
             
-            # Fallback if display names are not found (e.g. if map is from older version)
-            if display_artist_name is None:
-                display_artist_name = song_id.split(' - ')[0] if ' - ' in song_id else song_id
-            if display_track_name is None:
-                display_track_name = song_id.split(' - ')[1] if ' - ' in song_id else ''
+            if display_artist_name is None: display_artist_name = song_id.split(' - ')[0] if ' - ' in song_id else song_id
+            if display_track_name is None: display_track_name = song_id.split(' - ')[1] if ' - ' in song_id else ''
 
-            full_display_name = f"{display_artist_name} - {display_track_name}"
-            if not display_track_name: 
-                full_display_name = display_artist_name
+            # full_display_name = f"{display_artist_name} - {display_track_name}" # Old order
+            full_display_name = f"{display_track_name} - {display_artist_name}" # New order: Song - Artist
+            if not display_track_name and display_artist_name: full_display_name = display_artist_name
+            elif not display_artist_name and display_track_name: full_display_name = display_track_name
+            elif not display_track_name and not display_artist_name: full_display_name = song_id # Fallback to song_id
 
-            # Get the key for art/color caches from song_id_to_canonical_album_map
-            # This map stores song_id -> canonical_album_name_string
             art_color_cache_key = song_id_to_canonical_album_map.get(song_id, "Unknown Album")
-
             bar_color = album_bar_colors_local.get(art_color_cache_key, (0.5,0.5,0.5))
             pil_image = album_art_image_objects_local.get(art_color_cache_key)
 
             actual_bar = ax.barh(interpolated_y_pos, interpolated_plays, color=bar_color, height=0.8, zorder=2, align='center')
             
-            text_to_display_for_song = full_display_name
-            if len(full_display_name) > max_char_len_song_name:
-                text_to_display_for_song = full_display_name[:max_char_len_song_name-3] + "..."
-            
-            # Define properties for the text's bounding box
-            text_bbox_props = dict(
-                boxstyle="round,pad=0.2,rounding_size=0.1", 
-                facecolor='#333333', # Changed to a lighter gray
-                alpha=0.5, # Slightly adjusted alpha, can be tuned
-                edgecolor='none' 
+            # Define text properties first, to use them in subsequent calculations
+            text_bbox_props = dict(boxstyle="round,pad=0.2,rounding_size=0.1", facecolor="#333333", alpha=0.5, edgecolor="none")
+
+            # --- Dynamically compute available width for the song label and truncate if needed ---
+            start_x_data = song_name_padding_from_left_spine_data_units
+
+            # Determine the data-coordinate x where text must stop
+            right_gap_units = dynamic_x_axis_limit * SONG_TEXT_RIGHT_GAP_FRACTION
+            if pil_image:
+                resized_img_w_pix, _ = pil_image.size
+                image_width_units = (resized_img_w_pix / fig_width_pixels) * dynamic_x_axis_limit if fig_width_pixels > 0 else 0
+                # Account for the horizontal nudge factor that shifts art left
+                art_nudge_units = dynamic_x_axis_limit * 0.0175  # matches art_horizontal_nudge_factor below
+                art_left_edge = interpolated_plays - image_width_units - art_nudge_units
+                end_x_data = art_left_edge - right_gap_units
+            else:
+                end_x_data = interpolated_plays - value_label_padding_data_units - right_gap_units
+
+            # --- CORRECTED: Convert available data range to pixels using actual axis width ---
+            available_px = 0
+            if end_x_data > start_x_data:
+                # Calculate the pixel width of the main chart axes
+                ax_width_in_fig_coords = right_margin_ax - left_margin_ax
+                ax_width_pixels = ax_width_in_fig_coords * fig_width_pixels
+                
+                # Convert the available width from data coordinates to pixels
+                available_px = (end_x_data - start_x_data) / dynamic_x_axis_limit * ax_width_pixels
+
+                # --- CORRECTED: Account for the padding of the text's bounding box ---
+                # The 'pad' in boxstyle is a multiplier for the font size.
+                bbox_pad_multiplier = 0.2 # As defined in text_bbox_props
+                # Total horizontal padding (left + right) in points. song_name_fontsize is in points.
+                bbox_horizontal_padding_points = 2 * bbox_pad_multiplier * song_name_fontsize
+                # Convert padding from points to pixels. 1 point = 1/72 inch.
+                bbox_horizontal_padding_pixels = bbox_horizontal_padding_points * (dpi / 72.0)
+                
+                available_px -= bbox_horizontal_padding_pixels
+
+            font_props = fm.FontProperties(size=song_name_fontsize)
+            renderer = fig.canvas.get_renderer()
+            text_to_display_for_song = truncate_to_fit(full_display_name, font_props, renderer, max(0, available_px))
+
+            song_text_obj = ax.text(
+                song_name_padding_from_left_spine_data_units,
+                interpolated_y_pos,
+                text_to_display_for_song,
+                va="center",
+                ha="left",
+                fontsize=song_name_fontsize,
+                color="white",
+                zorder=5,
+                bbox=text_bbox_props,
             )
 
-            ax.text(song_name_padding_from_left_spine_data_units, 
-                    interpolated_y_pos,                           
-                    text_to_display_for_song, 
-                    va='center', ha='left', fontsize=song_name_fontsize, color='white', zorder=5,
-                    bbox=text_bbox_props) 
-
-            # --- Draw Play Count Value Label ---
-            text_x_pos_for_value = interpolated_plays + value_label_padding_data_units
-            ax.text(text_x_pos_for_value,
-                    interpolated_y_pos,
-                    f'{int(round(interpolated_plays))}', # Round interpolated plays for display
-                    va='center', ha='left', fontsize=value_label_fontsize, weight='bold', zorder=4)
-
-            # --- Draw Album Art ---
-            # current_x_anchor_for_art is where the album art would start if placed right at bar end
             current_x_anchor_for_art = interpolated_plays 
             if pil_image:
                 try:
                     resized_img_width_pixels, resized_img_height_pixels = pil_image.size 
-                    
                     x_axis_range_data_units = dynamic_x_axis_limit 
                     image_width_data_units = 0
                     if fig_width_pixels > 0 and x_axis_range_data_units > 0: 
                          image_width_data_units = (resized_img_width_pixels / fig_width_pixels) * x_axis_range_data_units
                     
-                    # Position image to the left of the value label, slightly overlapping/near the bar end
-                    img_center_x_pos = current_x_anchor_for_art - image_padding_data_units - (image_width_data_units / 2.0) 
+                    # To manually nudge the art: >0 shifts art left, <0 shifts art right from the bar's end.
+                    art_horizontal_nudge_factor = 0.0175 # YOU CAN TWEAK THIS. Example: 0.001 to shift slightly left.
+                    img_center_x_pos = interpolated_plays - (image_width_data_units / 2.0) - (dynamic_x_axis_limit * art_horizontal_nudge_factor)
                     
-                    min_x_for_image_start = dynamic_x_axis_limit * 0.02 # Don't draw if too squished to the left
+                    min_x_for_image_start = dynamic_x_axis_limit * 0.02
                     if img_center_x_pos - (image_width_data_units / 2.0) > min_x_for_image_start:
-                        imagebox = OffsetImage(pil_image, zoom=1.0, resample=False) # zoom=1 as image is pre-resized
-                        ab = AnnotationBbox(imagebox,
-                                            (img_center_x_pos, interpolated_y_pos), # y is bar center
+                        imagebox = OffsetImage(pil_image, zoom=1.0, resample=False)
+                        ab = AnnotationBbox(imagebox, (img_center_x_pos, interpolated_y_pos), 
                                             xybox=(0,0), xycoords='data', boxcoords="offset points",
                                             pad=0, frameon=False, zorder=3)
                         ax.add_artist(ab)
-                        # The value label's x_pos might need adjustment if art is drawn, to avoid overlap
-                        # However, the current text_x_pos_for_value is already to the right of the bar end.
-                        # If art is also to the left of bar end, they shouldn't overlap with current padding.
                 except Exception as e_img:
                     print(f"Error (PID {os.getpid()}) adding image for {art_color_cache_key} (Song: {song_id}): {e_img}")
 
+            # --- Numeric play-count label ---
+            text_x_pos_for_value = interpolated_plays + value_label_padding_data_units
+            ax.text(
+                text_x_pos_for_value,
+                interpolated_y_pos,
+                f"{int(round(interpolated_plays))}",
+                va="center",
+                ha="left",
+                fontsize=value_label_fontsize,
+                weight="bold",
+                zorder=4,
+            )
+
         ax.spines['right'].set_visible(False)
         ax.spines['bottom'].set_visible(False)
-        # ax.spines['left'].set_visible(False) # Hide left spine as y-ticks are hidden
-        ax.spines['left'].set_linewidth(1.5 * (dpi/100.0)) # Or keep it if desired
-
-        # Grid lines for y-axis (rank slots) - optional
+        ax.spines['left'].set_linewidth(1.5 * (dpi/100.0))
         ax.grid(True, axis='y', linestyle=':', color='lightgray', alpha=0.7, zorder=0)
         
-        left_margin = 0.18 # Increased left margin to accommodate potentially longer song titles by default
-        right_margin = 0.90 
-        bottom_margin = 0.10
-        top_margin = 0.92
-        
+        # --- Layout Adjustment for ax BEFORE adding other figure elements ---
+        # The margin values are now defined at the top of the function's try block.
         try:
-            fig.tight_layout(rect=[left_margin, bottom_margin, right_margin, top_margin])
-            # fig.align_labels() # align_labels might be less relevant with manual text placement
+            # Apply tight_layout to the main axes (ax) first, considering the rect.
+            # This adjusts 'ax' to fit nicely within the defined margins.
+            fig.tight_layout(rect=[left_margin_ax, bottom_margin_ax, right_margin_ax, top_margin_ax])
         except Exception as e_layout:
-            print(f"Note (PID {os.getpid()}): Layout adjustment warning/error: {e_layout}.")
-            plt.subplots_adjust(left=left_margin, bottom=bottom_margin, right=right_margin, top=top_margin)
+            print(f"Note (PID {os.getpid()}): Layout adjustment warning/error for main ax: {e_layout}.")
+            # Fallback if tight_layout fails for ax
+            plt.subplots_adjust(left=left_margin_ax, bottom=bottom_margin_ax, right=right_margin_ax, top=top_margin_ax, wspace=0, hspace=0)
+
+        # --- Rolling Window Stats Display (Left Panel) ---
+        # This section uses fig.text and fig.add_axes for placement in figure coordinates
+        
+        # Define areas for 7-day and 30-day stats
+        # Positions are (left, bottom, width, height) in figure-normalized coords (0-1)
+        # These are approximate and will need refinement.
+        
+        # Common font size for rolling stats text
+        # rolling_text_fontsize = 10 * (dpi / 100.0) # Old
+        # rolling_title_fontsize = 12 * (dpi / 100.0) # Old
+
+        # Helper function to draw a single rolling stat panel
+        def draw_rolling_stat_panel(fig, panel_data, panel_title_text,
+                                    panel_y_top_fig_boundary, # Top Y boundary for this panel's content
+                                    song_id_map, art_objects,
+                                    rs_config_params):
+            
+            if not panel_data:
+                return panel_y_top_fig_boundary # Return current Y boundary if no data to draw
+
+            # Unpack rs_config_params (could also pass them individually)
+            # For brevity, accessing them directly from the outer scope as they are now args to draw_and_save_single_frame
+            
+            # Get artist and track names
+            display_artist = panel_data.get('original_artist', 'Unknown Artist')
+            display_track = panel_data.get('original_track', 'Unknown Track')
+            song_artist_text = f"{display_track} - {display_artist}"
+            plays_text = f"{panel_data['plays']} plays"
+
+            # Font properties for truncation
+            renderer = fig.canvas.get_renderer()
+            song_artist_font_props = fm.FontProperties(family=preferred_fonts_local, size=rs_song_artist_font_size)
+            
+            # --- Calculate panel content dimensions and positions ---
+            # Panel horizontal boundaries
+            panel_x_start_abs = rs_panel_area_left_fig
+            panel_x_end_abs = rs_panel_area_right_fig
+
+            # Art dimensions
+            art_key = song_id_map.get(panel_data['song_id'], "Unknown Album")
+            art_obj = album_art_image_objects_highres_local.get(art_key)
+            if art_obj is None:
+                # Fallback to the smaller image if hi-res is unavailable.
+                art_obj = album_art_image_objects_local.get(art_key)
+            actual_art_height_fig = rs_art_height_fig
+            actual_art_width_fig = 0
+            if art_obj:
+                img_aspect = art_obj.width / art_obj.height if art_obj.height > 0 else (rs_art_aspect_ratio if rs_art_aspect_ratio > 0 else 1.0)
+                actual_art_width_fig = actual_art_height_fig * img_aspect
+                if rs_art_max_width_fig > 0 and actual_art_width_fig > rs_art_max_width_fig:
+                    actual_art_width_fig = rs_art_max_width_fig
+                    if img_aspect > 0: # Recalculate height if width is capped
+                         actual_art_height_fig = actual_art_width_fig / img_aspect
+            else: # No art, use configured aspect ratio if > 0, else square
+                img_aspect = rs_art_aspect_ratio if rs_art_aspect_ratio > 0 else 1.0
+                actual_art_width_fig = actual_art_height_fig * img_aspect
+                if rs_art_max_width_fig > 0 and actual_art_width_fig > rs_art_max_width_fig:
+                    actual_art_width_fig = rs_art_max_width_fig
+                    if img_aspect > 0:
+                        actual_art_height_fig = actual_art_width_fig / img_aspect
+            
+            # Art position (right-aligned within its allocated space in panel)
+            art_x_fig = panel_x_end_abs - rs_art_padding_right_fig - actual_art_width_fig
+
+            # Text X position (left-aligned within panel)
+            # text_x_fig = panel_x_start_abs + rs_text_padding_left_fig # Old: for left align
+
+            # --- New: Calculate boundaries for text centering ---
+            text_x_left_boundary_fig = panel_x_start_abs + rs_text_padding_left_fig
+            text_x_right_boundary_fig = art_x_fig - rs_text_to_art_horizontal_gap_fig
+            # Ensure right boundary is not to the left of left boundary
+            if text_x_right_boundary_fig < text_x_left_boundary_fig:
+                text_x_right_boundary_fig = text_x_left_boundary_fig
+            
+            centered_text_x_fig = text_x_left_boundary_fig + (text_x_right_boundary_fig - text_x_left_boundary_fig) / 2.0
+
+
+            # Available width for song/artist text (for truncation)
+            # This is the space between the start of the text and the left edge of the art, minus a gap.
+            available_text_width_fig = text_x_right_boundary_fig - text_x_left_boundary_fig # Max available width for centered text
+            max_width_px_for_song_text = (available_text_width_fig * fig_width_pixels) + rs_text_truncation_adjust_px_config # Added adjustment
+            
+            truncated_song_artist_text = truncate_to_fit(song_artist_text, song_artist_font_props, renderer, max_width_px_for_song_text if max_width_px_for_song_text > 0 else 0)
+
+            # --- Vertical positioning (centering text block with art) ---
+            # Y coordinates are from bottom of the figure (0.0 to 1.0)
+            # panel_y_top_fig_boundary is the upper Y limit for this panel's drawing operations.
+            
+            # Draw Panel Title – centred horizontally within the panel area.
+            title_center_x_fig = (panel_x_start_abs + panel_x_end_abs) / 2.0
+            # Use configured X if provided, otherwise use calculated center
+            actual_title_x_fig = rs_panel_title_x_fig_config if rs_panel_title_x_fig_config != -1.0 else title_center_x_fig
+            title_y_fig = panel_y_top_fig_boundary  # y-position (from bottom) for the top-aligned title text
+
+            fig.text(actual_title_x_fig, title_y_fig, panel_title_text,
+                     fontsize=rs_title_font_size, color='black', # Changed color, removed bold
+                     ha='center', va='top', transform=fig.transFigure) # Remains centered on its x-coordinate
+
+            # Content area starts below the title
+            # Estimate title height based on font size (very approximate, or use a fixed fig unit)
+            # A simpler approach: fixed gap after title baseline.
+            # Assume title_y_fig is baseline. Content starts below.
+            # For va='top', title_y_fig is top. Content area starts below its effective height.
+            # Let's use a fixed fig unit for text line height estimate based on font points.
+            # Example: 1 point = 1/72 inch. fig_height_inches = fig_height_pixels / dpi.
+            # font_size_in_fig_units_y = (font_size_points / 72) / (fig_height_pixels / dpi)
+            title_font_height_approx_fig = (rs_title_font_size / 72) / (fig_height_pixels / dpi) # Approx height
+            
+            content_top_y_fig = title_y_fig - title_font_height_approx_fig - rs_title_to_content_gap_fig
+
+
+            # Determine vertical center for art and text block
+            # Art will be vertically centered in its available height `actual_art_height_fig`
+            # Text lines (Song/Artist, Plays) will form a block. This block is centered with art.
+            art_center_y_fig = content_top_y_fig - (actual_art_height_fig / 2.0)
+            art_y_bottom_fig = art_center_y_fig - (actual_art_height_fig / 2.0)
+
+            # Place album art
+            if art_obj:
+                art_ax = fig.add_axes([art_x_fig, art_y_bottom_fig, actual_art_width_fig, actual_art_height_fig])
+                art_ax.imshow(art_obj)
+                art_ax.axis('off')
+
+            # Text lines (Song/Artist, Plays) centered with art_center_y_fig
+            # The two lines (Song/Artist, Plays) are stacked.
+            # Let their combined logical height including spacing be H.
+            # Song/Artist line center_y = art_center_y_fig + (spacing / 2)
+            # Plays line center_y = art_center_y_fig - (spacing / 2)
+            
+            # song_artist_line_y_fig = art_center_y_fig + (rs_text_line_vertical_spacing_fig / 2.0) # Old
+            # plays_line_y_fig = art_center_y_fig - (rs_text_line_vertical_spacing_fig / 2.0) # Old
+
+            # --- New vertical positioning for Song/Artist and Plays using rs_song_artist_to_plays_gap_fig ---
+            # Approximate text heights in figure units to help position them around the gap
+            song_artist_text_height_fig = (rs_song_artist_font_size / 72) / (fig_height_pixels / dpi) if fig_height_pixels > 0 and dpi > 0 else 0.01
+            plays_text_height_fig = (rs_plays_font_size / 72) / (fig_height_pixels / dpi) if fig_height_pixels > 0 and dpi > 0 else 0.01
+
+            # The rs_song_artist_to_plays_gap_fig is the distance between the baseline of song/artist
+            # and baseline of plays. For va='center', we adjust.
+            # To make rs_song_artist_to_plays_gap_fig the visual space between the two blocks of text:
+            song_artist_line_y_fig = art_center_y_fig + (rs_song_artist_to_plays_gap_fig / 2.0) + (plays_text_height_fig / 2.0)
+            plays_line_y_fig       = art_center_y_fig - (rs_song_artist_to_plays_gap_fig / 2.0) - (song_artist_text_height_fig / 2.0)
+
+
+            # Draw Song/Artist text
+            fig.text(centered_text_x_fig, song_artist_line_y_fig, truncated_song_artist_text,
+                     fontsize=rs_song_artist_font_size, color='black', # Using black for now
+                     ha='center', va='center', transform=fig.transFigure) # Changed to ha='center' and new x
+            
+            # Draw Plays text
+            fig.text(centered_text_x_fig, plays_line_y_fig, plays_text,
+                     fontsize=rs_plays_font_size, color='dimgray',
+                     ha='center', va='center', transform=fig.transFigure) # Changed to ha='center' and new x
+            
+            # Calculate bottom Y of this panel for stacking next one
+            # Bottom is min of (art bottom, plays text bottom)
+            # Estimate text height for plays line:
+            # plays_font_height_approx_fig = (rs_plays_font_size / 72) / (fig_height_pixels / dpi) # Already calculated as plays_text_height_fig
+            plays_text_baseline_approx_y_fig = plays_line_y_fig - (plays_text_height_fig / 2.0) # Approximate bottom of plays text
+            
+            panel_bottom_y_fig = min(art_y_bottom_fig, plays_text_baseline_approx_y_fig)
+            return panel_bottom_y_fig
+
+
+        # --- Draw 7-Day Stats Panel ---
+        current_y_top_boundary = 1.0 - rs_panel_title_y_from_top_fig # Convert "from top" to "from bottom" for text
+        
+        stats_7_day_data = rolling_window_info_for_frame.get('top_7_day')
+        panel_7_day_bottom_y = draw_rolling_stat_panel(fig, stats_7_day_data, "Top Track - Last 7 Days",
+                                                       current_y_top_boundary,
+                                                       song_id_to_canonical_album_map, 
+                                                       album_art_image_objects_local,
+                                                       (ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX) 
+                                                       ) 
+
+        # --- Draw 30-Day Stats Panel ---
+        # Position below the 7-day panel
+        if panel_7_day_bottom_y is not None: # If 7-day panel was drawn
+             # Estimate title height for calculating where the next title starts
+            title_font_height_approx_fig_next = (rs_title_font_size / 72) / (fig_height_pixels / dpi)
+            y_top_for_30_day_title = panel_7_day_bottom_y - rs_inter_panel_vertical_spacing_fig - title_font_height_approx_fig_next
+        else: # If 7-day panel was not drawn, 30-day panel starts where 7-day would have.
+            y_top_for_30_day_title = current_y_top_boundary 
+
+        stats_30_day_data = rolling_window_info_for_frame.get('top_30_day')
+        draw_rolling_stat_panel(fig, stats_30_day_data, "Top Track - Last 30 Days",
+                                y_top_for_30_day_title, # This is the Y for the title's top
+                                song_id_to_canonical_album_map,
+                                album_art_image_objects_local, # This should be album_art_image_objects_highres_local for consistency
+                                # Pass None for rs_config_params as they are accessed from outer scope
+                                # but we need to pass the new specific configs
+                                (ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX)
+                                )
+        
+        # --- Draw Nightingale Chart (if enabled and data available) ---
+        if ENABLE_NIGHTINGALE and nightingale_info_for_frame:
+            nightingale_config = {
+                # Chart Position & Size (Simplified)
+                'center_x': NIGHTINGALE_CENTER_X_FIG,
+                'center_y': NIGHTINGALE_CENTER_Y_FIG,
+                'radius': NIGHTINGALE_RADIUS_FIG,
+                
+                # Month Labels (Simplified)
+                'show_labels': NIGHTINGALE_SHOW_PERIOD_LABELS,
+                'label_radius_ratio': NIGHTINGALE_LABEL_RADIUS_RATIO,
+                'label_font_size': NIGHTINGALE_LABEL_FONT_SIZE,
+                'label_font_color': NIGHTINGALE_LABEL_FONT_COLOR,
+                'label_font_weight': NIGHTINGALE_LABEL_FONT_WEIGHT,
+                
+                # Title (Simplified)
+                'title_font_size': NIGHTINGALE_TITLE_FONT_SIZE,
+                'title_font_weight': NIGHTINGALE_TITLE_FONT_WEIGHT,
+                'title_color': NIGHTINGALE_TITLE_COLOR,
+                'title_y_offset_fig': NIGHTINGALE_TITLE_POSITION_ABOVE_CHART,
+                
+                # High/Low Tracker (Simplified)
+                'show_high_low': NIGHTINGALE_SHOW_HIGH_LOW_INFO,
+                'high_low_font_size': NIGHTINGALE_HIGH_LOW_FONT_SIZE,
+                'high_low_y_offset_fig': NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG,
+                'high_low_spacing_fig': NIGHTINGALE_HIGH_LOW_SPACING_FIG,
+                'high_period_color': NIGHTINGALE_HIGH_PERIOD_COLOR,
+                'low_period_color': NIGHTINGALE_LOW_PERIOD_COLOR,
+                
+                # Advanced Options (Simplified)
+                'show_boundary_circle': NIGHTINGALE_SHOW_BOUNDARY_CIRCLE,
+                'outer_circle_color': NIGHTINGALE_OUTER_CIRCLE_COLOR,
+                'outer_circle_linestyle': NIGHTINGALE_OUTER_CIRCLE_LINESTYLE,
+                'outer_circle_linewidth': NIGHTINGALE_OUTER_CIRCLE_LINEWIDTH,
+                'enable_smooth_transitions': NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
+                'transition_duration_seconds': NIGHTINGALE_TRANSITION_DURATION_SECONDS,
+                'animation_easing_function': NIGHTINGALE_ANIMATION_EASING_FUNCTION,
+                'debug': NIGHTINGALE_DEBUG
+            }
+            
+            try:
+                if NIGHTINGALE_DEBUG:
+                    print(f"[DEBUG] Calling draw_nightingale_chart with center_y: {nightingale_config['center_y']}")
+                draw_nightingale_chart(fig, nightingale_info_for_frame, nightingale_config)
+            except Exception as e_nightingale:
+                print(f"Warning: Error drawing nightingale chart for frame {overall_frame_idx}: {e_nightingale}")
+                # Continue without nightingale chart if there's an error
+
+
+        # --- Timestamp Display (Below Chart) ---
+        # Manual controls for timestamp position (in figure-normalized coordinates 0-1)
+        # timestamp_y_fig_coord = 0.04  # YOU CAN TWEAK THIS: Vertical position from bottom (e.g., 0.04 is 4% from bottom)
+        # Use configured Y position
+        actual_timestamp_y_fig = main_timestamp_y_fig_config
+        
+        # Calculate x-coordinate to align with the center of the main chart axes (ax)
+        # ax spans from left_margin (defined below before fig.tight_layout) to right_margin in figure coordinates.
+        # Need to use the actual margin values that will be used for the current frame's layout.
+        current_left_margin_for_ax = left_margin_ax # Use the same left margin as ax
+        current_right_margin_for_ax = right_margin_ax # Use the same right margin as ax
+        ax_center_x_fig_coord = current_left_margin_for_ax + (current_right_margin_for_ax - current_left_margin_for_ax) / 2.0
+        # Use configured X if provided, otherwise use calculated ax center
+        actual_timestamp_x_fig = main_timestamp_x_fig_config if main_timestamp_x_fig_config != -1.0 else ax_center_x_fig_coord
+        # timestamp_x_fig_coord = ax_center_x_fig_coord # Align timestamp center with ax center
+
+        fig.text(actual_timestamp_x_fig, actual_timestamp_y_fig, date_str, 
+                 fontsize=20 * (dpi/100.0), color='dimgray', weight='bold', 
+                 ha='center', va='center', transform=fig.transFigure)
+
+        # --- Layout Adjustment ---
+        # left_margin = 0.18 # Original
+        # left_margin = 0.25 # Adjusted to make space for left panel
+        # right_margin = 0.98
+        # bottom_margin = 0.10 # Original
+        # bottom_margin = 0.08 # Adjusted to make space for timestamp below ax
+        # top_margin = 0.98
+        
+        # The main tight_layout call for 'ax' has been moved earlier.
+        # No further global tight_layout or subplots_adjust needed here,
+        # as other elements (rolling stats, timestamp) are manually placed.
+        # try:
+            # Apply tight_layout to the main axes (ax) first, considering the rect.
+            # The fig.text and fig.add_axes for rolling stats are placed in figure coordinates
+            # and are not directly affected by ax.tight_layout, but the rect defines ax's space.
+        #    fig.tight_layout(rect=[left_margin, bottom_margin, right_margin, top_margin])
+        # except Exception as e_layout:
+        #    print(f"Note (PID {os.getpid()}): Layout adjustment warning/error: {e_layout}.")
+            # Fallback if tight_layout fails
+        #    plt.subplots_adjust(left=left_margin, bottom=bottom_margin, right=right_margin, top=top_margin, wspace=0, hspace=0)
         
         fig.savefig(output_image_path)
 
@@ -687,12 +1184,12 @@ def draw_and_save_single_frame(args):
     finally:
         plt.close(fig)
 
-    current_frame_render_time = time.time() - frame_start_time
+    current_frame_render_time = time.monotonic() - frame_start_time
     # Return overall_frame_idx for logging in the main process
     return overall_frame_idx, current_frame_render_time, os.getpid()
 
 
-def create_bar_chart_race_animation(race_df, song_details_map): # race_df here is already potentially truncated
+def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_data, nightingale_data=None): # race_df here is already potentially truncated
     if race_df is None or race_df.empty:
         print("Cannot create animation: race_df is empty or None.")
         return
@@ -709,12 +1206,27 @@ def create_bar_chart_race_animation(race_df, song_details_map): # race_df here i
     fig_height_pixels = res_settings['height']
 
     example_bar_height_data_units = 0.8 
-    image_height_scale_factor = 0.35 
+    # image_height_scale_factor = 0.35 # Old factor, to be replaced
     current_n_bars_for_sizing = N_BARS if N_BARS > 0 else 10
         
-    calculated_target_img_height_pixels = \
-        (example_bar_height_data_units / current_n_bars_for_sizing) * \
-        fig_height_pixels * image_height_scale_factor
+    # New calculation for target image height to match bar height
+    # These margin values MUST MATCH the bottom_margin and top_margin used for 'ax' in draw_and_save_single_frame
+    frame_render_ax_bottom_margin_fig_coords = 0.08 # Updated to match draw_and_save_single_frame
+    frame_render_ax_top_margin_fig_coords = 0.95   # Updated to match draw_and_save_single_frame
+    ax_height_in_figure_coords = frame_render_ax_top_margin_fig_coords - frame_render_ax_bottom_margin_fig_coords
+
+    # Fraction of the ax y-axis height that one bar (data height 0.8) takes up
+    bar_height_fraction_of_ax_y_axis = example_bar_height_data_units / current_n_bars_for_sizing
+    
+    calculated_target_img_height_pixels = (
+        bar_height_fraction_of_ax_y_axis * \
+        ax_height_in_figure_coords * \
+        fig_height_pixels
+    )
+    # Optional: apply a slight scaling factor if direct match is too tight, e.g., 0.95 for 95% of bar height
+    # User found 0.42 factor was needed with previous margin calculation.
+    # This factor may need re-tuning after margin correction above.
+    calculated_target_img_height_pixels *= 0.40 # Keep user's current factor for now
     
     # --- DEPRECATED: ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR is no longer used to gate art display ---
     # art_processing_min_plays_threshold = raw_max_play_count_overall * ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR
@@ -728,12 +1240,22 @@ def create_bar_chart_race_animation(race_df, song_details_map): # race_df here i
     song_ids_ever_on_chart = set()
     current_n_bars = config.get_int('AnimationOutput', 'N_BARS', N_BARS) # Ensure we use the correct N_BARS
     print(f"[ANIMATOR_INFO] Determining songs that appear in top {current_n_bars} bars...")
-    for timestamp, frame_data in race_df.iterrows(): # race_df here is the one passed for animation
+    for timestamp, frame_data in race_df.iterrows():  # race_df here is the one passed for animation
         top_n_in_frame = frame_data[frame_data > 0].nlargest(current_n_bars)
         song_ids_ever_on_chart.update(top_n_in_frame.index.tolist())
     
     print(f"[ANIMATOR_INFO] Found {len(song_ids_ever_on_chart)} unique songs that will appear in the top {current_n_bars} bars.")
     
+    # Also ensure songs that *only* appear in the rolling 7-/30-day panels have art.
+    for stats_dict in rolling_stats_data.values():
+        for key in ("top_7_day", "top_30_day"):
+            entry = stats_dict.get(key)
+            if entry and entry.get("song_id"):
+                song_ids_ever_on_chart.add(entry["song_id"])
+    
+    # Update call to prepare_nightingale_animation_data to pass easing function
+    album_art_utils.nightingale_animation_easing_function = NIGHTINGALE_ANIMATION_EASING_FUNCTION
+
     # pre_fetch_album_art_and_colors now returns song_id_to_animator_key_map
     # Pass the list of songs that actually appear on chart
     song_id_to_animator_key_map = pre_fetch_album_art_and_colors(
@@ -765,7 +1287,9 @@ def create_bar_chart_race_animation(race_df, song_details_map): # race_df here i
         race_df, # This is the potentially aggregated/truncated race_df
         N_BARS,  # Use the global N_BARS from config
         TARGET_FPS, # Use the global TARGET_FPS from config
-        ANIMATION_TRANSITION_DURATION_SECONDS # Use the global transition duration
+        ANIMATION_TRANSITION_DURATION_SECONDS, # Use the global transition duration
+        rolling_stats_data, # Pass the rolling stats data
+        nightingale_data # Pass nightingale data
     )
 
     if not all_render_tasks:
@@ -803,21 +1327,39 @@ def create_bar_chart_race_animation(race_df, song_details_map): # race_df here i
             num_total_output_frames, # Total frames for logging purposes in worker
             song_id_to_animator_key_map, # For art/color lookup (maps song_id to canonical_album_name_str)
             song_details_map, # The main map with display_artist, display_track, original album name etc.
-            album_art_image_objects,     # Pre-fetched art
-            album_bar_colors,            # Pre-fetched colors
+            album_art_image_objects,          # Pre-fetched small art (bar chart)
+            album_art_image_objects_highres,  # Full-res art for rolling panel
+            album_bar_colors,                 # Pre-fetched colors
             N_BARS,                      # For things like y-axis range, bar height aspect
             chart_xaxis_limit,           # Overall scale for some relative calculations, not the dynamic x-lim for drawing
             output_image_path,
             dpi, fig_width_pixels, fig_height_pixels,
-            LOG_FRAME_TIMES_CONFIG, PREFERRED_FONTS, LOG_PARALLEL_PROCESS_START_CONFIG
+            LOG_FRAME_TIMES_CONFIG, PREFERRED_FONTS, LOG_PARALLEL_PROCESS_START_CONFIG,
+            # Rolling stats display configs
+            ROLLING_PANEL_AREA_LEFT_FIG, ROLLING_PANEL_AREA_RIGHT_FIG, ROLLING_PANEL_TITLE_Y_FROM_TOP_FIG,
+            ROLLING_TITLE_TO_CONTENT_GAP_FIG, ROLLING_TITLE_FONT_SIZE, ROLLING_SONG_ARTIST_FONT_SIZE,
+            ROLLING_PLAYS_FONT_SIZE, ROLLING_ART_HEIGHT_FIG, ROLLING_ART_ASPECT_RATIO, ROLLING_ART_MAX_WIDTH_FIG,
+            ROLLING_ART_PADDING_RIGHT_FIG, ROLLING_TEXT_PADDING_LEFT_FIG, ROLLING_TEXT_TO_ART_HORIZONTAL_GAP_FIG,
+            ROLLING_TEXT_LINE_VERTICAL_SPACING_FIG, ROLLING_SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG, ROLLING_INTER_PANEL_VERTICAL_SPACING_FIG,
+            # New args for title X, truncation adjust, and main timestamp X, Y
+            ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX,
+            MAIN_TIMESTAMP_X_FIG, MAIN_TIMESTAMP_Y_FIG
         ))
 
     completed_frames = 0
+    reported_pids = set()
     with concurrent.futures.ProcessPoolExecutor(max_workers=MAX_PARALLEL_WORKERS) as executor:
         futures = [executor.submit(draw_and_save_single_frame, arg_tuple) for arg_tuple in tasks_args]
         for future in concurrent.futures.as_completed(futures):
             try:
                 frame_idx, render_time, pid = future.result()
+
+                # Log a startup message for each worker process exactly once
+                if LOG_PARALLEL_PROCESS_START_CONFIG:
+                    if pid not in reported_pids:
+                        print(f"--- Worker process with PID {pid} has started and is processing frames. ---")
+                        reported_pids.add(pid)
+
                 frame_render_times_list.append(render_time)
                 completed_frames += 1
                 
@@ -839,7 +1381,7 @@ def create_bar_chart_race_animation(race_df, song_details_map): # race_df here i
     overall_drawing_end_time = time.time()
     total_frame_rendering_cpu_time = sum(frame_render_times_list)
     print(f"--- Parallel Frame Generation Complete ---")
-    print(f"Total wall-clock time for drawing {num_total_output_frames} frames: {overall_drawing_end_time - overall_drawing_start_time:.2f} seconds")
+    print(f"Total wall-clock time for drawing frames: {overall_drawing_end_time - overall_drawing_start_time:.2f} seconds")
     if frame_render_times_list:
         avg_frame_render_time = total_frame_rendering_cpu_time / len(frame_render_times_list)
         print(f"Total CPU time sum for drawing frames:  {total_frame_rendering_cpu_time:.2f} seconds")
@@ -1085,17 +1627,35 @@ def main():
 
 
     pipeline_start_time = time.time() # <--- ADDED TIMING
-    full_race_df, song_details_map = run_data_pipeline() # Updated to receive song_details_map
-    pipeline_end_time = time.time() # <--- ADDED TIMING
-    print(f"--- Time taken for run_data_pipeline: {pipeline_end_time - pipeline_start_time:.2f} seconds ---") # <--- ADDED TIMING
-
-    if full_race_df is None or full_race_df.empty:
-        print("\nNo data available for animation. Please check your CSV file and data processing steps.")
+    
+    # --- Step 1: Clean and filter data ---
+    print(f"\nStep 1: Cleaning and filtering data based on configuration (Source: {config.get('DataSource', 'SOURCE')})...")
+    cleaned_df = clean_and_filter_data(config)
+    
+    if cleaned_df is None or cleaned_df.empty: 
+        print("Data cleaning and filtering resulted in no data. Exiting.")
         return
+    print(f"Data cleaning successful. {len(cleaned_df)} relevant rows found.")
+
+    # --- Step 2: Prepare data for bar chart race (high-resolution timestamps) ---
+    print("\nStep 2: Preparing data for bar chart race (high-resolution timestamps)...")
+    full_race_df, song_details_map = prepare_data_for_bar_chart_race(cleaned_df) # Use cleaned_df from above
+    
+    if full_race_df is None or full_race_df.empty:
+        print("\nNo data available for animation after race preparation. Please check your data and processing steps.")
+        return
+        
+    print("Data preparation for race successful.")
+    print(f"Race DataFrame shape: {full_race_df.shape} (Play Events, Unique Songs)")
+    print(f"Number of entries in song_details_map: {len(song_details_map)}")
+
+    pipeline_end_time = time.time() # <--- ADDED TIMING
+    print(f"--- Time taken for data processing (Steps 1 & 2): {pipeline_end_time - pipeline_start_time:.2f} seconds ---") # <--- ADDED TIMING
+
 
     print("\n--- Data ready for Animation ---")
     
-    race_df_for_animation = full_race_df # Start with the full df
+    race_df_for_animation = full_race_df.copy() # Start with the full df, copy to avoid modifying original full_race_df
 
     # --- Apply FRAME_AGGREGATION_PERIOD ---    
     aggregation_period_config = config.get('AnimationOutput', 'FRAME_AGGREGATION_PERIOD', 'event').strip() # Keep case for freq strings like '30T'
@@ -1150,9 +1710,71 @@ def main():
     elif MAX_FRAMES_FOR_TEST_RENDER > 0:
          print(f"Note: MAX_FRAMES_FOR_TEST_RENDER ({MAX_FRAMES_FOR_TEST_RENDER}) is >= total frames ({len(race_df_for_animation)}). Rendering full video (or full aggregated video).")
     
+    # --- Step 3: Calculate Rolling Window Stats ---
+    if race_df_for_animation.empty:
+        print("\nrace_df_for_animation is empty before calculating rolling stats. Exiting.")
+        return
+        
+    animation_frame_timestamps = race_df_for_animation.index
+    # Rolling base frequency allows users to control granularity (e.g. 'D', 'H', '15T').
+    rolling_base_freq_cfg = config.get('RollingStats', 'BASE_FREQUENCY', 'D').strip() or 'D'
+    rolling_stats = calculate_rolling_window_stats(
+        cleaned_df,
+        animation_frame_timestamps,
+        base_freq=rolling_base_freq_cfg,
+    )
+    
+    # --- Step 4: Calculate Nightingale Chart Data (if enabled) ---
+    nightingale_data = {}
+    if ENABLE_NIGHTINGALE:
+        print("\nStep 4: Calculating nightingale rose chart data...")
+        
+        # Determine aggregation type
+        agg_type = NIGHTINGALE_AGGREGATION_TYPE
+        if agg_type == 'auto':
+            start_date = cleaned_df['timestamp'].min()
+            end_date = cleaned_df['timestamp'].max()
+            agg_type = determine_aggregation_type(start_date, end_date)
+            print(f"Auto-determined aggregation type: {agg_type}")
+        
+        # Apply sampling rate for performance optimization
+        if NIGHTINGALE_SAMPLING_RATE.upper() in ['W', 'M']:
+            print(f"Applying nightingale sampling rate: {NIGHTINGALE_SAMPLING_RATE}")
+            # Sample frame timestamps for faster computation
+            sampled_timestamps = animation_frame_timestamps[::7] if NIGHTINGALE_SAMPLING_RATE.upper() == 'W' else animation_frame_timestamps[::30]
+            # Always include first and last timestamps
+            if sampled_timestamps[0] != animation_frame_timestamps[0]:
+                sampled_timestamps = pd.Index([animation_frame_timestamps[0]]).union(sampled_timestamps)
+            if sampled_timestamps[-1] != animation_frame_timestamps[-1]:
+                sampled_timestamps = sampled_timestamps.union(pd.Index([animation_frame_timestamps[-1]]))
+            print(f"Reduced nightingale frames: {len(animation_frame_timestamps)} → {len(sampled_timestamps)}")
+        else:
+            sampled_timestamps = animation_frame_timestamps
+        
+        # Calculate raw nightingale time data (using sampled timestamps for performance)
+        nightingale_time_data = calculate_nightingale_time_data(
+            cleaned_df,
+            sampled_timestamps.tolist(),
+            aggregation_type=agg_type
+        )
+        
+        # Prepare animation data with smooth transitions (interpolate for all frames)
+        nightingale_data = prepare_nightingale_animation_data(
+            nightingale_time_data,
+            animation_frame_timestamps.tolist(),  # Always use all frames for smooth animation
+            enable_smooth_transitions=NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
+            transition_duration_seconds=NIGHTINGALE_TRANSITION_DURATION_SECONDS,
+            target_fps=TARGET_FPS,
+            easing_function=NIGHTINGALE_ANIMATION_EASING_FUNCTION
+        )
+        
+        print(f"Nightingale data calculated for {len(nightingale_data)} frames")
+    else:
+        print("\nNightingale chart disabled in configuration, skipping calculation")
+
     # Now, call create_bar_chart_race_animation with the potentially truncated and/or aggregated race_df_for_animation
     # The pre_fetch logic is inside create_bar_chart_race_animation, so it will use the df passed to it.
-    create_bar_chart_race_animation(race_df_for_animation, song_details_map) # Pass song_details_map
+    create_bar_chart_race_animation(race_df_for_animation, song_details_map, rolling_stats, nightingale_data) # Pass nightingale_data
 
 
 if __name__ == "__main__":
