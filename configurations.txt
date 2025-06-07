@@ -44,7 +44,7 @@ ENABLE_OVERTAKE_ANIMATIONS = False
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = D
+FRAME_AGGREGATION_PERIOD = H
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
@@ -94,15 +94,15 @@ LOG_FRAME_TIMES = True
 # PARALLEL_LOG_COMPLETION_INTERVAL: How often to log frame completion during parallel processing (e.g., 1 = every frame, 50 = every 50th frame).
 # Set to 0 to only log the first and last completed frame. First/last always logged if interval > 0.
 PARALLEL_LOG_COMPLETION_INTERVAL = 100
-# LOG_PARALLEL_PROCESS_START: Whether to log when each parallel worker process starts rendering a frame.
-LOG_PARALLEL_PROCESS_START = False
+# LOG_PARALLEL_PROCESS_START: Whether to log a startup message for each parallel worker process (once per worker).
+LOG_PARALLEL_PROCESS_START = True
 
 # --- Rolling Stats ---
 [RollingStats]
 # BASE_FREQUENCY controls how play events are bucketed before rolling.
 # Examples: 15T (15-minute), 30T, H (hourly), D (daily)
 # Note: Weekly (W) can cause pandas errors, use D (daily) instead for stable operation
-BASE_FREQUENCY = D
+BASE_FREQUENCY = H
 
 # --- Rolling Stats Display ---
 [RollingStatsDisplay]
@@ -114,19 +114,19 @@ BASE_FREQUENCY = D
 PANEL_AREA_LEFT_FIG = 0.015
 # Right edge of the stats panel area, from left of figure (e.g., 0.23 = 23% from left)
 # This should be less than the main chart's left margin (currently around 0.25)
-PANEL_AREA_RIGHT_FIG = 0.30
+PANEL_AREA_RIGHT_FIG = 0.31
 
 # --- Positioning Within Each Panel (7-day, 30-day) ---
 # Top Y-coordinate for the title of the uppermost panel (e.g., 7-day panel), from top of figure.
 # (e.g. 0.15 means title baseline is 15% from the figure top)
 PANEL_TITLE_Y_FROM_TOP_FIG = 0.04
 # X-coordinate for the panel title. If -1, title is centered in PANEL_AREA. Otherwise, this is the x-coordinate for the title's center.
-PANEL_TITLE_X_FIG = -1
+PANEL_TITLE_X_FIG = 0.145
 # Vertical gap between the bottom of the panel title and the top of the content (art/text lines) below it, in figure units.
-TITLE_TO_CONTENT_GAP_FIG = 0.02
+TITLE_TO_CONTENT_GAP_FIG = 0.015
 
 # --- Font Sizes ---
-TITLE_FONT_SIZE = 23
+TITLE_FONT_SIZE = 22
 SONG_ARTIST_FONT_SIZE = 20
 PLAYS_FONT_SIZE = 20
 
@@ -143,12 +143,12 @@ ART_PADDING_RIGHT_FIG = 0.00 # Small padding from the panel's right edge
 
 # --- Text Block (Title, Song/Artist, Plays lines are to the left of art) ---
 # Horizontal padding between the PANEL_AREA_LEFT_FIG and the left edge of text lines, in figure units.
-TEXT_PADDING_LEFT_FIG = 0.005
+TEXT_PADDING_LEFT_FIG = 0.015
 # Horizontal gap between the rightmost extent of the (truncated) song/artist text and the left edge of the album art, in figure units.
 # This is used for text truncation.
 TEXT_TO_ART_HORIZONTAL_GAP_FIG = 0.00
 # Pixel adjustment for rolling stats text truncation. Positive values allow more text, negative less.
-ROLLING_TEXT_TRUNCATION_ADJUST_PX = 100
+ROLLING_TEXT_TRUNCATION_ADJUST_PX = 120
 # Vertical spacing factor for text lines (Title, Song, Plays). This is multiplied by font size.
 # Approximate height of one line of text, relative to its font size.
 # (e.g. if line height is 1.2 * font_size, this helps calculate y-positions)
@@ -161,14 +161,14 @@ SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG = 0.025
 # --- Panel Spacing ---
 # Vertical spacing between the bottom of the 7-day panel (art and text content)
 # and the top of the 30-day panel's title, in figure units.
-INTER_PANEL_VERTICAL_SPACING_FIG = 0.03
+INTER_PANEL_VERTICAL_SPACING_FIG = 0.015
 
 # --- Main Timestamp Display ---
 [TimestampDisplay]
 # X-coordinate for the main timestamp (0.0-1.0). If -1, defaults to center of main chart area.
 TIMESTAMP_X_FIG = -1
 # Y-coordinate for the main timestamp (0.0-1.0).
-TIMESTAMP_Y_FIG = 0.04
+TIMESTAMP_Y_FIG = 0.042
 
 # --- Nightingale Rose Chart ---
 [NightingaleChart]
@@ -177,8 +177,8 @@ ENABLE = True
 
 # === CHART POSITION & SIZE ===
 # Chart center position (0.0-1.0, where 0.0=left/bottom, 1.0=right/top)
-CHART_X = 0.15
-CHART_Y = 0.28
+CHART_X = 0.145
+CHART_Y = 0.29
 # Chart size (radius in figure units, 0.05=small, 0.15=medium, 0.25=large)
 CHART_RADIUS = 0.17
 
@@ -186,7 +186,7 @@ CHART_RADIUS = 0.17
 # Show month names around the chart
 SHOW_MONTH_LABELS = True
 # Distance of labels from chart center (1.0=at edge, 1.2=outside chart)
-MONTH_LABEL_DISTANCE = 1.15
+MONTH_LABEL_DISTANCE = 1.2
 # Month label appearance
 MONTH_LABEL_FONT_SIZE = 16
 MONTH_LABEL_COLOR = black
@@ -198,7 +198,7 @@ TITLE_FONT_SIZE = 22
 TITLE_COLOR = black
 TITLE_FONT_WEIGHT = normal
 # TITLE_POSITION_ABOVE_CHART: Distance above chart (positive = above, negative = below)
-TITLE_POSITION_ABOVE_CHART = 0.05
+TITLE_POSITION_ABOVE_CHART = 0.06
 
 # === HIGH/LOW TRACKER ===
 # Show "High: July (200 plays)" and "Low: January (50 plays)" below chart

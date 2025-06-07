@@ -1,5 +1,4 @@
 # main_animator.py
-
 import pandas as pd
 import numpy as np
 from data_processor import clean_and_filter_data, prepare_data_for_bar_chart_race
@@ -118,6 +117,9 @@ NIGHTINGALE_DEBUG = False
 # New setting for boundary circle
 NIGHTINGALE_SHOW_BOUNDARY_CIRCLE = True
 # --- End Nightingale Chart Configuration ---
+
+# --- Global for tracking worker process startup logging ---
+worker_pids_reported = set()
 
 def load_configuration():
     global config, N_BARS, TARGET_FPS, OUTPUT_FILENAME_BASE, DEBUG_ALBUM_ART_LOGIC
@@ -616,6 +618,7 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
 def draw_and_save_single_frame(args):
     # Unpack arguments
     # The first argument is now the 'render_task' dictionary
+    global worker_pids_reported
     (render_task, num_total_output_frames,
     song_id_to_canonical_album_map, # Maps song_id -> canonical_album_name_str (for art/color cache keys)
     song_details_map_main,          # The main song_details_map with display_artist, display_track, etc.
@@ -663,10 +666,12 @@ def draw_and_save_single_frame(args):
         bottom_margin_ax = 0.08 # Space at the bottom for the main timestamp
         top_margin_ax = 0.98    # Space at the top for x-axis labels/title
 
+        # --- Worker Process Startup Message ---
         if log_parallel_process_start_local:
-            # Log based on overall_frame_idx and num_total_output_frames
-            if (overall_frame_idx + 1) % 10 == 0 or overall_frame_idx == 0 or (overall_frame_idx + 1) == num_total_output_frames:
-                print(f"Process {os.getpid()} starting render task for frame_image {overall_frame_idx + 1}/{num_total_output_frames} ({display_timestamp.strftime('%Y-%m-%d %H:%M:%S')})...")
+            worker_pid = os.getpid()
+            if worker_pid not in worker_pids_reported:
+                print(f"--- Worker process with PID {worker_pid} has started and is processing frames. ---")
+                worker_pids_reported.add(worker_pid)
 
         # --- Main Chart Area (ax) ---
         date_str = display_timestamp.strftime('%d %B %Y %H:%M:%S')
