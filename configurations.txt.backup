@@ -30,7 +30,7 @@ END_DATE = 2025-06-05
 # MODE: "tracks" or "artists"
 # tracks: Show top tracks over time with album covers
 # artists: Show top artists over time with artist profile photos
-MODE = artists
+MODE = tracks
 
 # --- Animation Output ---
 [AnimationOutput]
@@ -69,6 +69,8 @@ CLEANUP_INTERMEDIATE_FRAMES = True
 SPOTIFY_CLIENT_ID = eaf67929214947d19e34182fb20e96bc
 SPOTIFY_CLIENT_SECRET = 822e6e3f9d1149d4ad5520237d8385a3
 ART_CACHE_DIR = album_art_cache
+# ARTIST_ART_CACHE_DIR: Separate directory for artist profile photos
+ARTIST_ART_CACHE_DIR = artist_art_cache
 # ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR: Relative threshold for showing art
 # (e.g., 0.0628 means art shows if play count > 6.28% of max plays in chart)
 # Set to 0 to show art for all tracks (useful for debugging)

@@ -33,6 +33,7 @@ from config_loader import AppConfig
 
 # --- Configuration (will be loaded from file) ---
 config = None # Global config object
+VISUALIZATION_MODE = "tracks" # Default mode - will be loaded from config
 
 # --- Default values that might be overridden by config ---
 N_BARS = 10
@@ -167,7 +168,7 @@ def setup_fonts():
         print(f"Warning: Could not set preferred fonts: {e}. Using Matplotlib defaults.")
 
 def load_configuration():
-    global config, N_BARS, TARGET_FPS, OUTPUT_FILENAME_BASE, DEBUG_ALBUM_ART_LOGIC
+    global config, VISUALIZATION_MODE, N_BARS, TARGET_FPS, OUTPUT_FILENAME_BASE, DEBUG_ALBUM_ART_LOGIC
     global ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR, USE_NVENC_IF_AVAILABLE, PREFERRED_FONTS
     global MAX_FRAMES_FOR_TEST_RENDER, LOG_FRAME_TIMES_CONFIG
     global MAX_PARALLEL_WORKERS, CLEANUP_INTERMEDIATE_FRAMES, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
@@ -207,6 +208,13 @@ def load_configuration():
 
     # Initialize album_art_utils with the loaded config
     album_art_utils.initialize_from_config(config)
+
+    # Load visualization mode and validate it
+    VISUALIZATION_MODE = config.get('VisualizationMode', 'MODE', VISUALIZATION_MODE).lower()
+    if VISUALIZATION_MODE not in ['tracks', 'artists']:
+        print(f"WARNING: Invalid MODE '{VISUALIZATION_MODE}' in configuration. Defaulting to 'tracks'.")
+        VISUALIZATION_MODE = 'tracks'
+    print(f"Visualization mode: {VISUALIZATION_MODE}")
 
     # Override defaults with values from config
     N_BARS = config.get_int('AnimationOutput', 'N_BARS', N_BARS)
@@ -337,17 +345,18 @@ def run_data_pipeline(): # Removed csv_file_path argument
     # ... rest of run_data_pipeline remains the same ...
     print(f"Data cleaning successful. {len(cleaned_df)} relevant rows found.")
     
-    print("\nStep 2: Preparing data for bar chart race (high-resolution timestamps)...")
-    race_df, song_details_map = prepare_data_for_bar_chart_race(cleaned_df)
+    print(f"\nStep 2: Preparing data for bar chart race (high-resolution timestamps) in {VISUALIZATION_MODE} mode...")
+    race_df, entity_details_map = prepare_data_for_bar_chart_race(cleaned_df, mode=VISUALIZATION_MODE)
     if race_df is None or race_df.empty: 
         print("Data preparation for race resulted in no data. Exiting.")
-        return None, song_details_map
+        return None, entity_details_map
         
     print("Data preparation successful.")
-    print(f"Race DataFrame shape: {race_df.shape} (Play Events, Unique Songs)")
-    print(f"Number of entries in song_details_map: {len(song_details_map)}")
+    entity_type = "songs" if VISUALIZATION_MODE == "tracks" else "artists"
+    print(f"Race DataFrame shape: {race_df.shape} (Play Events, Unique {entity_type.title()})")
+    print(f"Number of entries in entity_details_map: {len(entity_details_map)}")
     print("--- Data Processing Pipeline Complete ---")
-    return race_df, song_details_map
+    return race_df, entity_details_map
 
 
 def pre_fetch_album_art_and_colors(song_details_map, song_ids_to_fetch_art_for, target_img_height_pixels_for_resize, fig_dpi):
@@ -481,6 +490,137 @@ def pre_fetch_album_art_and_colors(song_details_map, song_ids_to_fetch_art_for, 
     return song_id_to_animator_key_map # Return the new map
 
 
+def pre_fetch_artist_photos_and_colors(entity_details_map, entity_ids_to_fetch_art_for, target_img_height_pixels_for_resize, fig_dpi):
+    """
+    Pre-fetch artist profile photos and dominant colors for artists that appear on chart.
+    This is the artist mode equivalent of pre_fetch_album_art_and_colors().
+    """
+    print(f"\n--- Pre-fetching artist profile photos and dominant colors for artists that appear on chart (Target Img Resize Height: {target_img_height_pixels_for_resize}px) ---")
+    
+    # This set will track CANONICAL artist names for which PIL/color is loaded in main_animator
+    canonical_artists_loaded_in_animator_cache = set()
+    entity_id_to_animator_key_map = {} # Map entity IDs to cache keys
+    
+    processed_count = 0
+
+    for entity_id in entity_ids_to_fetch_art_for: # Iterate over entities that will appear on chart
+        artist_name = entity_id  # In artist mode, entity_id is the artist name
+        
+        entity_specific_details = entity_details_map.get(entity_id)
+        if not entity_specific_details:
+            if DEBUG_ALBUM_ART_LOGIC:
+                print(f"[ARTIST PRE-FETCH DEBUG] No details in entity_details_map for '{entity_id}'. Skipping photo/color processing.")
+            continue
+        
+        # Extract fallback track info and artist MBID for Last.fm data
+        fallback_track_info = None
+        artist_mbid = entity_specific_details.get('artist_mbid')
+        
+        # Get the most played track info for fallback
+        most_played_track = entity_specific_details.get('most_played_track', {})
+        if most_played_track:
+            fallback_track_info = {
+                "track_name": most_played_track.get('track_name', "Unknown Track"),
+                "album_name": most_played_track.get('album_name', "Unknown Album"),
+                "track_uri": most_played_track.get('track_uri')
+            }
+
+        if DEBUG_ALBUM_ART_LOGIC:
+            print(f"[ARTIST PRE-FETCH DEBUG] Processing artist '{entity_id}' (it appears on chart). MBID: '{artist_mbid}'.")
+
+        # --- Call album_art_utils to get artist photo path and info ---
+        try:
+            print(f"Processing artist photo/color for: Artist='{artist_name}', MBID='{artist_mbid}'")
+        except UnicodeEncodeError: # Handle potential encoding issues in print
+            safe_artist = artist_name.encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
+            safe_mbid = str(artist_mbid).encode(sys.stdout.encoding, errors='replace').decode(sys.stdout.encoding)
+            print(f"Processing artist photo/color for: Artist='{safe_artist}', MBID='{safe_mbid}'")
+
+        photo_path, artist_info = album_art_utils.get_artist_profile_photo_and_spotify_info(
+            artist_name, 
+            fallback_track_info=fallback_track_info,
+            artist_mbid=artist_mbid
+        )
+        
+        # --- Determine the canonical_artist_name_for_animator_cache --- 
+        canonical_artist_name_for_animator_cache = artist_name # Fallback to original name
+        if artist_info and artist_info.get("canonical_artist_name"):
+            canonical_artist_name_for_animator_cache = artist_info["canonical_artist_name"]
+            if DEBUG_ALBUM_ART_LOGIC and canonical_artist_name_for_animator_cache != artist_name:
+                print(f"[ARTIST PRE-FETCH DEBUG] Canonical artist for '{entity_id}' is '{canonical_artist_name_for_animator_cache}' (original was '{artist_name}', source: {artist_info.get('source')}).")
+        elif DEBUG_ALBUM_ART_LOGIC:
+             print(f"[ARTIST PRE-FETCH DEBUG] Could not find canonical artist name from artist_info for '{entity_id}'. Using original name '{artist_name}' for animator cache key.")
+
+        entity_id_to_animator_key_map[entity_id] = canonical_artist_name_for_animator_cache # Store mapping
+
+        # --- Load PIL image and dominant color into animator's memory if not already done for this CANONICAL artist ---
+        if photo_path: # If a photo path was successfully found/downloaded
+            if canonical_artist_name_for_animator_cache not in canonical_artists_loaded_in_animator_cache:
+                try:
+                    # Load image once and keep an RGB copy in memory at original size.
+                    with Image.open(photo_path) as _img_tmp:
+                        _img_tmp = _img_tmp.convert('RGB')
+                        full_res_img = _img_tmp.copy()  # Keep for rolling panel
+
+                        # --- Resize image here for BAR-CHART usage ---
+                        img_orig_width, img_orig_height = _img_tmp.size
+                    new_height_pixels = int(target_img_height_pixels_for_resize)
+                    new_width_pixels = 1
+                    if img_orig_height > 0 and new_height_pixels > 0:
+                        new_width_pixels = int(new_height_pixels * (img_orig_width / img_orig_height))
+                    if new_width_pixels <= 0: new_width_pixels = int(new_height_pixels * 0.75) # Fallback if aspect ratio is extreme
+                    if new_width_pixels <= 0: new_width_pixels = 1 # Final fallback
+
+                    resized_img = _img_tmp.resize((new_width_pixels, new_height_pixels), Image.Resampling.LANCZOS)
+
+                    # Ensure the resized image is in RGB mode for Matplotlib compatibility
+                    if resized_img.mode != 'RGB':
+                        resized_img = resized_img.convert('RGB')
+
+                    album_art_image_objects[canonical_artist_name_for_animator_cache] = resized_img
+
+                    # Store the full-resolution copy for rolling-stats panel usage
+                    album_art_image_objects_highres[canonical_artist_name_for_animator_cache] = full_res_img
+                    
+                    # Get dominant color using artist-specific function
+                    dc = album_art_utils.get_artist_dominant_color(photo_path) 
+                    album_bar_colors[canonical_artist_name_for_animator_cache] = (dc[0]/255.0, dc[1]/255.0, dc[2]/255.0)
+                    
+                    canonical_artists_loaded_in_animator_cache.add(canonical_artist_name_for_animator_cache)
+                    if DEBUG_ALBUM_ART_LOGIC:
+                        print(f"[ARTIST PRE-FETCH DEBUG] Loaded PIL & color into animator cache for CANONICAL artist: '{canonical_artist_name_for_animator_cache}'.")
+                except FileNotFoundError:
+                    print(f"Error [ARTIST PRE-FETCH]: Image file not found at path: {photo_path} for canonical artist '{canonical_artist_name_for_animator_cache}'. Using defaults.")
+                    album_art_image_objects[canonical_artist_name_for_animator_cache] = None
+                    album_bar_colors[canonical_artist_name_for_animator_cache] = (0.5, 0.5, 0.5)
+                    canonical_artists_loaded_in_animator_cache.add(canonical_artist_name_for_animator_cache) # Mark as processed
+                    # Also mark hi-res cache with None so we do not attempt to re-load every frame
+                    album_art_image_objects_highres[canonical_artist_name_for_animator_cache] = None
+                except Exception as e:
+                    print(f"Error [ARTIST PRE-FETCH] loading image {photo_path} or getting color for canonical artist '{canonical_artist_name_for_animator_cache}': {e}. Using defaults.")
+                    album_art_image_objects[canonical_artist_name_for_animator_cache] = None
+                    album_bar_colors[canonical_artist_name_for_animator_cache] = (0.5, 0.5, 0.5)
+                    canonical_artists_loaded_in_animator_cache.add(canonical_artist_name_for_animator_cache) # Mark as processed
+                    album_art_image_objects_highres[canonical_artist_name_for_animator_cache] = None
+        else: # No photo_path was found by album_art_utils
+            if DEBUG_ALBUM_ART_LOGIC:
+                print(f"[ARTIST PRE-FETCH DEBUG] No photo path returned by album_art_utils for '{entity_id}'.")
+            # Still need to populate animator cache with defaults for this canonical artist if it's the first time seeing it
+            if canonical_artist_name_for_animator_cache not in canonical_artists_loaded_in_animator_cache:
+                album_art_image_objects[canonical_artist_name_for_animator_cache] = None
+                album_bar_colors[canonical_artist_name_for_animator_cache] = (0.5, 0.5, 0.5) # Default color
+                canonical_artists_loaded_in_animator_cache.add(canonical_artist_name_for_animator_cache)
+                if DEBUG_ALBUM_ART_LOGIC:
+                    print(f"[ARTIST PRE-FETCH DEBUG] Using default photo/color in animator cache for CANONICAL artist: '{canonical_artist_name_for_animator_cache}'.")
+
+        processed_count += 1
+        
+    print(f"--- Artist photo pre-fetching complete ---")
+    print(f"Attempted to process photo/color for {processed_count} artist groups that met threshold.")
+    print(f"In-memory PIL images (animator cache): {len(album_art_image_objects)}, In-memory bar colors (animator cache): {len(album_bar_colors)}")
+    return entity_id_to_animator_key_map # Return the new map
+
+
 def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_config, transition_duration_seconds_config, rolling_stats_data, nightingale_data=None):
     """
     Generates a list of render tasks, including intermediate frames for smooth animations.
@@ -503,19 +643,19 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
     print(f"Generating render tasks. Overtake animations enabled: {ENABLE_OVERTAKE_ANIMATIONS_CONFIG}. Tween frames per transition: {num_tween_frames}")
 
     for keyframe_idx, (timestamp, current_keyframe_series) in enumerate(race_df_for_animation.iterrows()):
-        # --- Determine current keyframe's top N songs and their target y_positions ---
-        current_top_n_songs = current_keyframe_series[current_keyframe_series > 0].nlargest(n_bars_config)
+        # --- Determine current keyframe's top N entities and their target y_positions ---
+        current_top_n_entities = current_keyframe_series[current_keyframe_series > 0].nlargest(n_bars_config)
         
-        # Target state for songs in this keyframe
-        current_keyframe_target_render_data = {} # song_id: {"plays": count, "y_pos": position_float, "rank": rank}
+        # Target state for entities in this keyframe
+        current_keyframe_target_render_data = {} # entity_id: {"plays": count, "y_pos": position_float, "rank": rank}
         
         # Sort by play count descending to determine rank and initial target y_pos
         # We need to handle ties in play counts correctly for stable ranking if possible,
         # but for y_pos, the actual sorted order is what matters.
-        sorted_current_songs = current_top_n_songs.sort_values(ascending=False)
+        sorted_current_entities = current_top_n_entities.sort_values(ascending=False)
         
-        for rank, (song_id, plays) in enumerate(sorted_current_songs.items()):
-            current_keyframe_target_render_data[song_id] = {
+        for rank, (entity_id, plays) in enumerate(sorted_current_entities.items()):
+            current_keyframe_target_render_data[entity_id] = {
                 "plays": float(plays),
                 "y_pos": float(rank), # Target y_pos is its rank (0 for top, n_bars_config-1 for bottom)
                 "rank": rank 
@@ -524,10 +664,10 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
         if keyframe_idx == 0:
             # For the very first keyframe, no animation. Just display the state.
             bar_render_data_list_for_frame = []
-            for song_id, data in current_keyframe_target_render_data.items():
+            for entity_id, data in current_keyframe_target_render_data.items():
                 if data["rank"] < n_bars_config: # Ensure it's within the N bars to draw
                     bar_render_data_list_for_frame.append({
-                        "song_id": song_id,
+                        "entity_id": entity_id,
                         "interpolated_play_count": data["plays"],
                         "interpolated_y_position": data["y_pos"],
                         "current_rank": data["rank"] # The rank in *this* keyframe
@@ -545,9 +685,9 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
         else:
             # This is a subsequent keyframe, so we need to interpolate from previous_keyframe_render_data
             
-            # --- Identify all unique songs involved in the transition ---
-            # These are songs present in the top N of the previous OR current keyframe
-            all_involved_song_ids = set(previous_keyframe_render_data.keys()) | set(current_keyframe_target_render_data.keys())
+            # --- Identify all unique entities involved in the transition ---
+            # These are entities present in the top N of the previous OR current keyframe
+            all_involved_entity_ids = set(previous_keyframe_render_data.keys()) | set(current_keyframe_target_render_data.keys())
 
             # --- Generate Tween Frames ---
             for tween_idx in range(num_tween_frames):
@@ -559,9 +699,9 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
 
                 bar_render_data_list_for_tween_frame = []
 
-                for song_id in all_involved_song_ids:
-                    prev_data = previous_keyframe_render_data.get(song_id)
-                    curr_data = current_keyframe_target_render_data.get(song_id)
+                for entity_id in all_involved_entity_ids:
+                    prev_data = previous_keyframe_render_data.get(entity_id)
+                    curr_data = current_keyframe_target_render_data.get(entity_id)
 
                     # --- Determine start and end values for interpolation ---
                     # Start plays and y_pos:
@@ -605,7 +745,7 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
                     # We want to draw it if its interpolated_y is roughly within chart bounds.
                     if interpolated_y < n_bars_config + 1 and interpolated_y > -2: # Allow slight over/undershoot for effect
                         bar_render_data_list_for_tween_frame.append({
-                            "song_id": song_id,
+                            "entity_id": entity_id,
                             "interpolated_play_count": interpolated_plays,
                             "interpolated_y_position": interpolated_y,
                             "current_rank": target_rank_in_current_keyframe # Use target rank for consistency
@@ -627,10 +767,10 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
 
             # --- Add the final keyframe state (end of transition) ---
             bar_render_data_list_for_keyframe_end = []
-            for song_id, data in current_keyframe_target_render_data.items():
+            for entity_id, data in current_keyframe_target_render_data.items():
                  if data["rank"] < n_bars_config:
                     bar_render_data_list_for_keyframe_end.append({
-                        "song_id": song_id,
+                        "entity_id": entity_id,
                         "interpolated_play_count": data["plays"],
                         "interpolated_y_position": data["y_pos"],
                         "current_rank": data["rank"]
@@ -652,10 +792,10 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
         # It should store the state of *all* songs that were in the top N of the current_keyframe_series,
         # not just what was drawn if N_BARS was smaller.
         # For songs that dropped out, they won't be in current_keyframe_target_render_data.
-        # For songs that are new, they will be.
+        # For entities that are new, they will be.
         previous_keyframe_render_data.clear()
-        for song_id, data in current_keyframe_target_render_data.items():
-             previous_keyframe_render_data[song_id] = {"plays": data["plays"], "y_pos": data["y_pos"], "rank": data["rank"]}
+        for entity_id, data in current_keyframe_target_render_data.items():
+             previous_keyframe_render_data[entity_id] = {"plays": data["plays"], "y_pos": data["y_pos"], "rank": data["rank"]}
         
     print(f"Generated {len(render_tasks)} total render tasks (frames).")
     return render_tasks
@@ -665,8 +805,8 @@ def draw_and_save_single_frame(args):
     # The first argument is now the 'render_task' dictionary
     global worker_pids_reported
     (render_task, num_total_output_frames,
-    song_id_to_canonical_album_map, # Maps song_id -> canonical_album_name_str (for art/color cache keys)
-    song_details_map_main,          # The main song_details_map with display_artist, display_track, etc.
+    entity_id_to_canonical_name_map, # Maps entity_id -> canonical_name (for art/color cache keys)
+    entity_details_map_main,          # The main entity_details_map with display info
     album_art_image_objects_local, album_art_image_objects_highres_local, album_bar_colors_local,
     n_bars_local, chart_xaxis_limit_overall_scale, 
     output_image_path, dpi, fig_width_pixels, fig_height_pixels,
@@ -681,7 +821,9 @@ def draw_and_save_single_frame(args):
     # New args for panel title x and truncation adjustment
     rs_panel_title_x_fig_config, rs_text_truncation_adjust_px_config,
     # New args for main timestamp position
-    main_timestamp_x_fig_config, main_timestamp_y_fig_config
+    main_timestamp_x_fig_config, main_timestamp_y_fig_config,
+    # Mode information
+    visualization_mode_local
     ) = args
 
     # Extract data from render_task
@@ -761,27 +903,34 @@ def draw_and_save_single_frame(args):
 
 
         for bar_item_data in bar_render_data_list:
-            song_id = bar_item_data['song_id']
+            entity_id = bar_item_data['entity_id']
             interpolated_plays = bar_item_data['interpolated_play_count']
             interpolated_y_pos = bar_item_data['interpolated_y_position']
 
             if interpolated_plays < 0.01: 
                 continue
 
-            song_master_details = song_details_map_main.get(song_id, {})
-            display_artist_name = song_master_details.get('display_artist')
-            display_track_name = song_master_details.get('display_track')
+            entity_master_details = entity_details_map_main.get(entity_id, {})
             
-            if display_artist_name is None: display_artist_name = song_id.split(' - ')[0] if ' - ' in song_id else song_id
-            if display_track_name is None: display_track_name = song_id.split(' - ')[1] if ' - ' in song_id else ''
+            # Mode-aware text display
+            if visualization_mode_local == "artists":
+                # In artist mode, entity_id is the artist name
+                display_artist_name = entity_master_details.get('display_artist', entity_id)
+                full_display_name = display_artist_name  # Just show artist name
+            else:
+                # In tracks mode, show track - artist format
+                display_artist_name = entity_master_details.get('display_artist')
+                display_track_name = entity_master_details.get('display_track')
+                
+                if display_artist_name is None: display_artist_name = entity_id.split(' - ')[0] if ' - ' in entity_id else entity_id
+                if display_track_name is None: display_track_name = entity_id.split(' - ')[1] if ' - ' in entity_id else ''
 
-            # full_display_name = f"{display_artist_name} - {display_track_name}" # Old order
-            full_display_name = f"{display_track_name} - {display_artist_name}" # New order: Song - Artist
-            if not display_track_name and display_artist_name: full_display_name = display_artist_name
-            elif not display_artist_name and display_track_name: full_display_name = display_track_name
-            elif not display_track_name and not display_artist_name: full_display_name = song_id # Fallback to song_id
+                full_display_name = f"{display_track_name} - {display_artist_name}" # Song - Artist
+                if not display_track_name and display_artist_name: full_display_name = display_artist_name
+                elif not display_artist_name and display_track_name: full_display_name = display_track_name
+                elif not display_track_name and not display_artist_name: full_display_name = entity_id # Fallback to entity_id
 
-            art_color_cache_key = song_id_to_canonical_album_map.get(song_id, "Unknown Album")
+            art_color_cache_key = entity_id_to_canonical_name_map.get(entity_id, "Unknown")
             bar_color = album_bar_colors_local.get(art_color_cache_key, (0.5,0.5,0.5))
             pil_image = album_art_image_objects_local.get(art_color_cache_key)
 
@@ -862,7 +1011,7 @@ def draw_and_save_single_frame(args):
                                             pad=0, frameon=False, zorder=3)
                         ax.add_artist(ab)
                 except Exception as e_img:
-                    print(f"Error (PID {os.getpid()}) adding image for {art_color_cache_key} (Song: {song_id}): {e_img}")
+                    print(f"Error (PID {os.getpid()}) adding image for {art_color_cache_key} (Entity: {entity_id}): {e_img}")
 
             # --- Numeric play-count label ---
             text_x_pos_for_value = interpolated_plays + value_label_padding_data_units
@@ -916,10 +1065,16 @@ def draw_and_save_single_frame(args):
             # Unpack rs_config_params (could also pass them individually)
             # For brevity, accessing them directly from the outer scope as they are now args to draw_and_save_single_frame
             
-            # Get artist and track names
-            display_artist = panel_data.get('original_artist', 'Unknown Artist')
-            display_track = panel_data.get('original_track', 'Unknown Track')
-            song_artist_text = f"{display_track} - {display_artist}"
+            # Mode-aware text formatting
+            if visualization_mode_local == "artists":
+                # For artist mode: show just the artist name
+                song_artist_text = panel_data.get('original_artist', 'Unknown Artist')
+            else:
+                # For tracks mode: show "Track - Artist" format
+                display_artist = panel_data.get('original_artist', 'Unknown Artist')
+                display_track = panel_data.get('original_track', 'Unknown Track')
+                song_artist_text = f"{display_track} - {display_artist}"
+            
             plays_text = f"{panel_data['plays']} plays"
 
             # Font properties for truncation
@@ -931,8 +1086,9 @@ def draw_and_save_single_frame(args):
             panel_x_start_abs = rs_panel_area_left_fig
             panel_x_end_abs = rs_panel_area_right_fig
 
-            # Art dimensions
-            art_key = song_id_map.get(panel_data['song_id'], "Unknown Album")
+            # Art dimensions - mode-aware key access
+            entity_key = "artist_id" if visualization_mode_local == "artists" else "song_id"
+            art_key = song_id_map.get(panel_data[entity_key], "Unknown Album")
             art_obj = album_art_image_objects_highres_local.get(art_key)
             if art_obj is None:
                 # Fallback to the smaller image if hi-res is unavailable.
@@ -1061,11 +1217,13 @@ def draw_and_save_single_frame(args):
         current_y_top_boundary = 1.0 - rs_panel_title_y_from_top_fig # Convert "from top" to "from bottom" for text
         
         stats_7_day_data = rolling_window_info_for_frame.get('top_7_day')
-        panel_7_day_bottom_y = draw_rolling_stat_panel(fig, stats_7_day_data, "Top Track - Last 7 Days",
+        # Mode-aware panel title
+        panel_title_7_day = "Top Artist - Last 7 Days" if visualization_mode_local == "artists" else "Top Tracks - Last 7 Days"
+        panel_7_day_bottom_y = draw_rolling_stat_panel(fig, stats_7_day_data, panel_title_7_day,
                                                        current_y_top_boundary,
-                                                       song_id_to_canonical_album_map, 
+                                                       entity_id_to_canonical_name_map, 
                                                        album_art_image_objects_local,
-                                                       (ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX) 
+                                                       (rs_panel_title_x_fig_config, rs_text_truncation_adjust_px_config) 
                                                        ) 
 
         # --- Draw 30-Day Stats Panel ---
@@ -1078,13 +1236,15 @@ def draw_and_save_single_frame(args):
             y_top_for_30_day_title = current_y_top_boundary 
 
         stats_30_day_data = rolling_window_info_for_frame.get('top_30_day')
-        draw_rolling_stat_panel(fig, stats_30_day_data, "Top Track - Last 30 Days",
+        # Mode-aware panel title
+        panel_title_30_day = "Top Artist - Last 30 Days" if visualization_mode_local == "artists" else "Top Tracks - Last 30 Days"
+        draw_rolling_stat_panel(fig, stats_30_day_data, panel_title_30_day,
                                 y_top_for_30_day_title, # This is the Y for the title's top
-                                song_id_to_canonical_album_map,
+                                entity_id_to_canonical_name_map,
                                 album_art_image_objects_local, # This should be album_art_image_objects_highres_local for consistency
                                 # Pass None for rs_config_params as they are accessed from outer scope
                                 # but we need to pass the new specific configs
-                                (ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX)
+                                (rs_panel_title_x_fig_config, rs_text_truncation_adjust_px_config)
                                 )
         
         # --- Draw Nightingale Chart (if enabled and data available) ---
@@ -1189,7 +1349,7 @@ def draw_and_save_single_frame(args):
     return overall_frame_idx, current_frame_render_time, os.getpid()
 
 
-def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_data, nightingale_data=None): # race_df here is already potentially truncated
+def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_data, nightingale_data=None): # race_df here is already potentially truncated
     if race_df is None or race_df.empty:
         print("Cannot create animation: race_df is empty or None.")
         return
@@ -1246,33 +1406,49 @@ def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_dat
     
     print(f"[ANIMATOR_INFO] Found {len(song_ids_ever_on_chart)} unique songs that will appear in the top {current_n_bars} bars.")
     
-    # Also ensure songs that *only* appear in the rolling 7-/30-day panels have art.
+    # Also ensure entities that *only* appear in the rolling 7-/30-day panels have art.
     for stats_dict in rolling_stats_data.values():
         for key in ("top_7_day", "top_30_day"):
             entry = stats_dict.get(key)
-            if entry and entry.get("song_id"):
-                song_ids_ever_on_chart.add(entry["song_id"])
+            if entry:
+                # Mode-aware key access
+                entity_key = "artist_id" if VISUALIZATION_MODE == "artists" else "song_id"
+                if entry.get(entity_key):
+                    song_ids_ever_on_chart.add(entry[entity_key])
     
     # Update call to prepare_nightingale_animation_data to pass easing function
     album_art_utils.nightingale_animation_easing_function = NIGHTINGALE_ANIMATION_EASING_FUNCTION
 
-    # pre_fetch_album_art_and_colors now returns song_id_to_animator_key_map
-    # Pass the list of songs that actually appear on chart
-    song_id_to_animator_key_map = pre_fetch_album_art_and_colors(
-        song_details_map, 
-        list(song_ids_ever_on_chart), # Pass the list of songs that appear
-        calculated_target_img_height_pixels, 
-        dpi
-    )
+    # Mode-aware pre-fetching: use appropriate function based on visualization mode
+    if VISUALIZATION_MODE == "artists":
+        entity_id_to_animator_key_map = pre_fetch_artist_photos_and_colors(
+            entity_details_map, 
+            list(song_ids_ever_on_chart), # Pass the list of entities that appear
+            calculated_target_img_height_pixels, 
+            dpi
+        )
+        fetch_type = "artist photos"
+    else:
+        entity_id_to_animator_key_map = pre_fetch_album_art_and_colors(
+            entity_details_map, 
+            list(song_ids_ever_on_chart), # Pass the list of songs that appear
+            calculated_target_img_height_pixels, 
+            dpi
+        )
+        fetch_type = "album art"
+    
     art_fetch_end_time = time.time()
-    print(f"--- Time taken for pre_fetch_album_art_and_colors: {art_fetch_end_time - art_fetch_start_time:.2f} seconds ---")
+    print(f"--- Time taken for pre_fetch_{fetch_type.replace(' ', '_')}_and_colors: {art_fetch_end_time - art_fetch_start_time:.2f} seconds ---")
 
-    output_filename = f"{OUTPUT_FILENAME_BASE}_{selected_res_key}.mp4"
+    # Generate mode-aware filename
+    mode_suffix = "artists" if VISUALIZATION_MODE == "artists" else "songs"
+    base_filename = OUTPUT_FILENAME_BASE.replace("songs", mode_suffix) if "songs" in OUTPUT_FILENAME_BASE else f"{OUTPUT_FILENAME_BASE}_{mode_suffix}"
+    output_filename = f"{base_filename}_{selected_res_key}.mp4"
     # num_frames = len(race_df.index) # Replaced by render_tasks
     target_fps_for_video = TARGET_FPS 
 
     # --- Create a temporary directory for frame images ---
-    temp_frame_dir = os.path.join(os.getcwd(), f"temp_frames_{OUTPUT_FILENAME_BASE}")
+    temp_frame_dir = os.path.join(os.getcwd(), f"temp_frames_{base_filename}")
     if os.path.exists(temp_frame_dir):
         shutil.rmtree(temp_frame_dir) # Clean up from previous run if any
     os.makedirs(temp_frame_dir, exist_ok=True)
@@ -1325,8 +1501,8 @@ def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_dat
         tasks_args.append((
             task, # Pass the whole render task dictionary
             num_total_output_frames, # Total frames for logging purposes in worker
-            song_id_to_animator_key_map, # For art/color lookup (maps song_id to canonical_album_name_str)
-            song_details_map, # The main map with display_artist, display_track, original album name etc.
+            entity_id_to_animator_key_map, # For art/color lookup (maps entity_id to canonical name)
+            entity_details_map, # The main map with display info
             album_art_image_objects,          # Pre-fetched small art (bar chart)
             album_art_image_objects_highres,  # Full-res art for rolling panel
             album_bar_colors,                 # Pre-fetched colors
@@ -1343,7 +1519,9 @@ def create_bar_chart_race_animation(race_df, song_details_map, rolling_stats_dat
             ROLLING_TEXT_LINE_VERTICAL_SPACING_FIG, ROLLING_SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG, ROLLING_INTER_PANEL_VERTICAL_SPACING_FIG,
             # New args for title X, truncation adjust, and main timestamp X, Y
             ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX,
-            MAIN_TIMESTAMP_X_FIG, MAIN_TIMESTAMP_Y_FIG
+            MAIN_TIMESTAMP_X_FIG, MAIN_TIMESTAMP_Y_FIG,
+            # Mode information
+            VISUALIZATION_MODE
         ))
 
     completed_frames = 0
@@ -1638,16 +1816,17 @@ def main():
     print(f"Data cleaning successful. {len(cleaned_df)} relevant rows found.")
 
     # --- Step 2: Prepare data for bar chart race (high-resolution timestamps) ---
-    print("\nStep 2: Preparing data for bar chart race (high-resolution timestamps)...")
-    full_race_df, song_details_map = prepare_data_for_bar_chart_race(cleaned_df) # Use cleaned_df from above
+    print(f"\nStep 2: Preparing data for bar chart race (high-resolution timestamps) in {VISUALIZATION_MODE} mode...")
+    full_race_df, entity_details_map = prepare_data_for_bar_chart_race(cleaned_df, mode=VISUALIZATION_MODE) # Use cleaned_df from above
     
     if full_race_df is None or full_race_df.empty:
         print("\nNo data available for animation after race preparation. Please check your data and processing steps.")
         return
         
     print("Data preparation for race successful.")
-    print(f"Race DataFrame shape: {full_race_df.shape} (Play Events, Unique Songs)")
-    print(f"Number of entries in song_details_map: {len(song_details_map)}")
+    entity_type = "songs" if VISUALIZATION_MODE == "tracks" else "artists"
+    print(f"Race DataFrame shape: {full_race_df.shape} (Play Events, Unique {entity_type.title()})")
+    print(f"Number of entries in entity_details_map: {len(entity_details_map)}")
 
     pipeline_end_time = time.time() # <--- ADDED TIMING
     print(f"--- Time taken for data processing (Steps 1 & 2): {pipeline_end_time - pipeline_start_time:.2f} seconds ---") # <--- ADDED TIMING
@@ -1722,6 +1901,7 @@ def main():
         cleaned_df,
         animation_frame_timestamps,
         base_freq=rolling_base_freq_cfg,
+        mode=VISUALIZATION_MODE
     )
     
     # --- Step 4: Calculate Nightingale Chart Data (if enabled) ---
@@ -1774,7 +1954,7 @@ def main():
 
     # Now, call create_bar_chart_race_animation with the potentially truncated and/or aggregated race_df_for_animation
     # The pre_fetch logic is inside create_bar_chart_race_animation, so it will use the df passed to it.
-    create_bar_chart_race_animation(race_df_for_animation, song_details_map, rolling_stats, nightingale_data) # Pass nightingale_data
+    create_bar_chart_race_animation(race_df_for_animation, entity_details_map, rolling_stats, nightingale_data) # Pass nightingale_data
 
 
 if __name__ == "__main__":

@@ -110,7 +110,11 @@ def load_spotify_data(spotify_files_pattern, min_ms_played, filter_skipped_track
     if len(df_selected) < initial_rows:
         print(f"Dropped {initial_rows - len(df_selected)} rows with missing track names (e.g., podcasts, non-music audio).")
 
-    # --- Normalize artist and track names before further processing ---
+    # --- Store original case for display before normalization ---
+    df_selected['original_artist'] = df_selected['artist'].astype(str).str.strip()
+    df_selected['original_track'] = df_selected['track'].astype(str).str.strip()
+    
+    # --- Normalize artist and track names for consistent key generation ---
     # Convert to string type to ensure .str accessor works, then lower and strip.
     # This helps ensure consistency for song_id creation.
     if 'artist' in df_selected.columns:
@@ -206,7 +210,7 @@ def load_lastfm_data(csv_filepath):
         print(f"Dropped {rows_dropped} rows from Last.fm data due to missing values in 'artist', 'album', or 'track'.")
     
     # Ensure all expected columns are present before returning, even if some were added as None
-    final_cols = ['timestamp', 'artist', 'album', 'track', 'album_mbid']
+    final_cols = ['timestamp', 'artist', 'album', 'track', 'album_mbid', 'original_artist', 'original_track']
     for col in final_cols:
         if col not in df_selected.columns:
             df_selected[col] = None
@@ -237,13 +241,14 @@ def clean_and_filter_data(config):
             df_raw_lastfm['album'] = df_raw_lastfm['album'].astype(str).str.lower().str.strip()
             df_raw_lastfm['artist'] = df_raw_lastfm['artist'].fillna('unknown artist')
             df_raw_lastfm['album'] = df_raw_lastfm['album'].fillna('unknown album')
-            # Preserve original case for display if not already handled in load_lastfm_data
+            # Ensure original case columns exist (they should already be set in load_lastfm_data)
+            # Don't overwrite them with lowercase versions if they already exist
             if 'original_artist' not in df_raw_lastfm.columns:
-                 df_raw_lastfm['original_artist'] = df_raw_lastfm['artist'] # This will be lowercase if not captured earlier
+                print("Warning: original_artist column missing from Last.fm data - display names may be lowercase")
+                df_raw_lastfm['original_artist'] = df_raw_lastfm['artist'] # This will be lowercase
             if 'original_track' not in df_raw_lastfm.columns:
+                print("Warning: original_track column missing from Last.fm data - display names may be lowercase")
                 df_raw_lastfm['original_track'] = df_raw_lastfm['track'] # This will be lowercase
-            # A better approach would be to capture originals in load_lastfm_data itself before any case change
-            # For now, this ensures the columns exist. We'll refine if load_lastfm_data doesn't capture raw case.
 
             print("Normalized artist, track, and album names for Last.fm data.")
         df_loaded = df_raw_lastfm
@@ -374,10 +379,17 @@ def prepare_data_for_bar_chart_race(cleaned_df, mode="tracks"):
             # Find most played track for this artist (by frequency)
             track_counts = artist_tracks['track'].value_counts()
             if not track_counts.empty:
-                most_played_track = track_counts.index[0]
+                most_played_track_name = track_counts.index[0]
                 # Get the first occurrence of this track for this artist
-                track_row = artist_tracks[artist_tracks['track'] == most_played_track].iloc[0]
-                entity_details_map[artist_id]['most_played_track'] = track_row['original_track']
+                track_row = artist_tracks[artist_tracks['track'] == most_played_track_name].iloc[0]
+                
+                # Store as dictionary for consistent access
+                entity_details_map[artist_id]['most_played_track'] = {
+                    'track_name': track_row['original_track'],
+                    'album_name': track_row['album'],
+                    'track_uri': track_row['spotify_track_uri'] if has_uri else None
+                }
+                # Keep backwards compatibility
                 entity_details_map[artist_id]['most_played_album'] = track_row['album']
                 if has_uri:
                     entity_details_map[artist_id]['most_played_track_uri'] = track_row['spotify_track_uri']

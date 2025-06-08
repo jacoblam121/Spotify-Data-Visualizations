@@ -227,7 +227,7 @@ def _get_spotify_access_token():
 def clean_artist_name_for_search(artist_name):
     """
     Clean artist names for better Spotify search compatibility.
-    Handles quotes, special characters, and common variations.
+    Handles quotes, special characters, Japanese romanization, and common variations.
     """
     import re  # Import at function level to avoid issues
     
@@ -242,6 +242,26 @@ def clean_artist_name_for_search(artist_name):
     # Handle common nickname patterns
     # "Joe "Bean" Esposito" -> "Joe Bean Esposito" and "Joe Esposito"
     variations = [cleaned]
+    
+    # Japanese romanization alternatives (high-priority artists known to have issues)
+    japanese_romanization_map = {
+        'yorushika': 'ヨルシカ',
+        'yoasobi': 'YOASOBI',
+        'aimer': 'Aimer',  # Keep original case
+        'aimyon': 'あいみょん',
+        'kenshi yonezu': '米津玄師',
+        'official hige dandism': 'Official髭男dism',
+        'lisa': 'LiSA',
+        'ado': 'Ado',
+        'fujii kaze': '藤井風'
+    }
+    
+    # Add Japanese alternative if romanized name exists in our mapping
+    cleaned_lower = cleaned.lower().strip()
+    if cleaned_lower in japanese_romanization_map:
+        japanese_name = japanese_romanization_map[cleaned_lower]
+        variations.append(japanese_name)
+        _debug_print(f"[ARTIST_SEARCH] Added Japanese alternative for '{cleaned}': '{japanese_name}'")
     
     # If there are quotes around a nickname, create variations
     if '"' in artist_name:
@@ -809,6 +829,7 @@ def get_spotify_artist_info(artist_name):
         search_queries_to_try.append((simplified_artist, f"Simplified Artist Search (Name: {simplified_artist})"))
 
     final_result_from_api = None
+    all_search_results = []  # Collect all successful searches to find the best match
 
     for current_artist_to_search, search_type_label in search_queries_to_try:
         _debug_print(f"\n[SPOTIFY_ARTIST_TRACE] --- Attempting {search_type_label} ---")
@@ -861,7 +882,7 @@ def get_spotify_artist_info(artist_name):
                     
                     if photo_url:  # Found artist with photo!
                         _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) SUCCESS! Found photo_url: {photo_url}")
-                        final_result_from_api = {
+                        result = {
                             "photo_url": photo_url,
                             "canonical_artist_name": best_match.get('name'),
                             "spotify_artist_id": best_match.get('id'),
@@ -870,7 +891,9 @@ def get_spotify_artist_info(artist_name):
                             "followers": best_match.get('followers', {}).get('total', 0),
                             "source": f"spotify ({search_type_label})"
                         }
-                        break  # Exit the loop, we found a good result
+                        all_search_results.append(result)
+                        _debug_print(f"[SPOTIFY_ARTIST_TRACE] Added result to collection: popularity={result['popularity']}, followers={result['followers']}")
+                        # Don't break - continue searching to find potentially better matches
                     else:
                         _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) Found artist '{best_match.get('name')}', but no profile photo.")
             else:
@@ -883,6 +906,13 @@ def get_spotify_artist_info(artist_name):
         
         time.sleep(0.2)  # Respect API limits between different search attempts
 
+    # Choose the best result from all searches
+    if all_search_results:
+        # Sort by popularity (higher is better), then by followers (higher is better) 
+        best_result = max(all_search_results, key=lambda x: (x['popularity'], x['followers']))
+        _debug_print(f"[SPOTIFY_ARTIST_TRACE] Selected best result from {len(all_search_results)} candidates: '{best_result['canonical_artist_name']}' (popularity: {best_result['popularity']}, followers: {best_result['followers']})")
+        final_result_from_api = best_result
+    
     # Cache and return result
     if final_result_from_api:
         print(f"Found Spotify artist info via {final_result_from_api['source']}: Artist='{final_result_from_api['canonical_artist_name']}', Photo URL: {'Yes' if final_result_from_api['photo_url'] else 'No'}")
