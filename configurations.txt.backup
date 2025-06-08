@@ -1,0 +1,243 @@
+# --- General Configuration ---
+[General]
+# USER_AGENT: For API requests (Spotify, MusicBrainz)
+USER_AGENT = SpotifyRaceChart/1.0 lightningfalconyt@gmail.com
+# PYTHONIOENCODING_WARNING: Set to False to suppress the encoding hint at startup
+PYTHONIOENCODING_WARNING = True
+
+# --- Data Source ---
+[DataSource]
+# SOURCE: "lastfm" or "spotify"
+SOURCE = lastfm
+INPUT_FILENAME_LASTFM = lastfm_data.csv
+# INPUT_FILENAME_SPOTIFY: Path to your Spotify JSON data (e.g., "StreamingHistory0.json")
+# Or use a pattern like "StreamingHistory*.json" if you have multiple files.
+INPUT_FILENAME_SPOTIFY = spotify_data.json
+MIN_MS_PLAYED_FOR_COUNT = 30000
+FILTER_SKIPPED_TRACKS = False
+
+# --- Timeframe ---
+[Timeframe]
+# START_DATE: YYYY-MM-DD or "all_time"
+# 2024-01-01
+# 2024-12-31
+START_DATE = 2025-01-01
+# END_DATE: YYYY-MM-DD or "all_time" (inclusive)
+END_DATE = 2025-06-05
+
+# --- Visualization Mode ---
+[VisualizationMode]
+# MODE: "tracks" or "artists"
+# tracks: Show top tracks over time with album covers
+# artists: Show top artists over time with artist profile photos
+MODE = tracks
+
+# --- Animation Output ---
+[AnimationOutput]
+# Resolution: 1080p or 4k
+RESOLUTION = 4k
+# FILENAME_BASE: Will be auto-adjusted based on MODE (e.g., spotify_top_songs_race or spotify_top_artists_race)
+FILENAME_BASE = spotify_top_songs_race
+N_BARS = 10
+TARGET_FPS = 30
+USE_NVENC_IF_AVAILABLE = True
+# MAX_FRAMES_FOR_TEST_RENDER: Max frames for a quick test render. Set to 0 or -1 for full render.
+MAX_FRAMES_FOR_TEST_RENDER = 0
+# ANIMATION_TRANSITION_DURATION_SECONDS: Duration of the overtake animation in seconds.
+ANIMATION_TRANSITION_DURATION_SECONDS = 0.2
+# ENABLE_OVERTAKE_ANIMATIONS: Set to True to enable smooth overtake animations, False for static transitions.
+ENABLE_OVERTAKE_ANIMATIONS = False
+
+# FRAME_AGGREGATION_PERIOD: Aggregate frames by time period. Options:
+# 'event' (one frame per play event - original behavior)
+# 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), '12H' (12-hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
+# Using larger periods (D, W, M) drastically reduces frames for long histories.
+FRAME_AGGREGATION_PERIOD = D
+# MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
+# Defaults to the number of CPU cores if not set or set to 0.
+MAX_PARALLEL_WORKERS = 0
+# CLEANUP_INTERMEDIATE_FRAMES: Whether to delete individual frame images after video compilation.
+# Set to False for debugging frame generation.
+CLEANUP_INTERMEDIATE_FRAMES = True
+
+# --- Album Art & Artist Photos & Spotify API ---
+[AlbumArtSpotify]
+# SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET can be set here,
+# but environment variables are generally preferred for security.
+# The script will attempt to use environment variables 'SPOTIFY_CLIENT_ID' and 'SPOTIFY_CLIENT_SECRET' first.
+# If not found, it will look for them here. If still not found, it will use hardcoded values in album_art_utils.py (if any).
+SPOTIFY_CLIENT_ID = eaf67929214947d19e34182fb20e96bc
+SPOTIFY_CLIENT_SECRET = 822e6e3f9d1149d4ad5520237d8385a3
+ART_CACHE_DIR = album_art_cache
+# ARTIST_ART_CACHE_DIR: Separate directory for artist profile photos
+ARTIST_ART_CACHE_DIR = artist_art_cache
+# ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR: Relative threshold for showing art
+# (e.g., 0.0628 means art shows if play count > 6.28% of max plays in chart)
+# Set to 0 to show art for all tracks (useful for debugging)
+# DEPRECATED: This factor is no longer used by main_animator.py to determine if album art is displayed.
+# Album art is now always displayed if it has been fetched.
+ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = 0.05
+# NEGATIVE_CACHE_HOURS: How long to cache failed searches (in hours)
+NEGATIVE_CACHE_HOURS = 24
+# Text formatting
+SONG_TEXT_RIGHT_GAP_FRACTION = 0.032
+
+# --- Font Preferences ---
+[FontPreferences]
+# Comma-separated list of preferred fonts. First available will be used.
+PREFERRED_FONTS = DejaVu Sans, Noto Sans JP, Noto Sans KR, Noto Sans SC, Noto Sans TC, Arial Unicode MS, sans-serif
+# OS_SPECIFIC_FONT_LOADING: Enable OS-specific font loading behavior
+# On Linux: Register custom fonts from fonts/ directory with matplotlib
+# On Windows: Use system fonts (existing behavior)
+OS_SPECIFIC_FONT_LOADING = True
+# CUSTOM_FONT_DIR: Directory containing custom font files (relative to project root)
+CUSTOM_FONT_DIR = fonts
+
+# --- Debugging ---
+[Debugging]
+# DEBUG_CACHE_ALBUM_ART_UTILS: Enables detailed cache logging in album_art_utils.py
+DEBUG_CACHE_ALBUM_ART_UTILS = False
+# DEBUG_ALBUM_ART_LOGIC_ANIMATOR: Enables verbose logging for art pre-fetch and drawing in main_animator.py
+DEBUG_ALBUM_ART_LOGIC_ANIMATOR = False
+# LOG_FRAME_TIMES: Enables detailed frame-by-frame rendering time and summary.
+LOG_FRAME_TIMES = True
+# PARALLEL_LOG_COMPLETION_INTERVAL: How often to log frame completion during parallel processing (e.g., 1 = every frame, 50 = every 50th frame).
+# Set to 0 to only log the first and last completed frame. First/last always logged if interval > 0.
+PARALLEL_LOG_COMPLETION_INTERVAL = 100
+# LOG_PARALLEL_PROCESS_START: Whether to log a startup message for each parallel worker process (once per worker).
+LOG_PARALLEL_PROCESS_START = False
+
+# --- Rolling Stats ---
+[RollingStats]
+# BASE_FREQUENCY controls how play events are bucketed before rolling.
+# Examples: 15T (15-minute), 30T, H (hourly), D (daily)
+# Note: Weekly (W) can cause pandas errors, use D (daily) instead for stable operation
+BASE_FREQUENCY = D
+
+# --- Rolling Stats Display ---
+[RollingStatsDisplay]
+# All _FIG units are fractions of total figure width/height unless specified.
+# Font sizes are in points.
+
+# --- Overall Panel Area ---
+# Left edge of the stats panel area, from left of figure (e.g., 0.03 = 3% from left)
+PANEL_AREA_LEFT_FIG = 0.015
+# Right edge of the stats panel area, from left of figure (e.g., 0.23 = 23% from left)
+# This should be less than the main chart's left margin (currently around 0.25)
+PANEL_AREA_RIGHT_FIG = 0.31
+
+# --- Positioning Within Each Panel (7-day, 30-day) ---
+# Top Y-coordinate for the title of the uppermost panel (e.g., 7-day panel), from top of figure.
+# (e.g. 0.15 means title baseline is 15% from the figure top)
+PANEL_TITLE_Y_FROM_TOP_FIG = 0.04
+# X-coordinate for the panel title. If -1, title is centered in PANEL_AREA. Otherwise, this is the x-coordinate for the title's center.
+PANEL_TITLE_X_FIG = 0.145
+# Vertical gap between the bottom of the panel title and the top of the content (art/text lines) below it, in figure units.
+TITLE_TO_CONTENT_GAP_FIG = 0.015
+
+# --- Font Sizes ---
+TITLE_FONT_SIZE = 22
+SONG_ARTIST_FONT_SIZE = 20
+PLAYS_FONT_SIZE = 20
+
+# --- Album Art ---
+# Desired height of the album art in figure units (e.g., 0.08 = 8% of figure height)
+ART_HEIGHT_FIG = 0.135
+# Aspect ratio (width/height) to use for art. If 0 or not positive, uses image's original.
+# Set to 1.0 for square.
+ART_ASPECT_RATIO = 1.0
+# Maximum width for album art, in figure units, if maintaining aspect ratio would make it too wide.
+ART_MAX_WIDTH_FIG = 0.135
+# Horizontal padding between the right edge of the PANEL_AREA_RIGHT_FIG and the right edge of album art, in figure units.
+ART_PADDING_RIGHT_FIG = 0.00 # Small padding from the panel's right edge
+
+# --- Text Block (Title, Song/Artist, Plays lines are to the left of art) ---
+# Horizontal padding between the PANEL_AREA_LEFT_FIG and the left edge of text lines, in figure units.
+TEXT_PADDING_LEFT_FIG = 0.015
+# Horizontal gap between the rightmost extent of the (truncated) song/artist text and the left edge of the album art, in figure units.
+# This is used for text truncation.
+TEXT_TO_ART_HORIZONTAL_GAP_FIG = 0.00
+# Pixel adjustment for rolling stats text truncation. Positive values allow more text, negative less.
+ROLLING_TEXT_TRUNCATION_ADJUST_PX = 120
+# Vertical spacing factor for text lines (Title, Song, Plays). This is multiplied by font size.
+# Approximate height of one line of text, relative to its font size.
+# (e.g. if line height is 1.2 * font_size, this helps calculate y-positions)
+# This is more of a conceptual guide for stacking; absolute positions will be calculated.
+# We'll use a simpler fig unit for spacing:
+TEXT_LINE_VERTICAL_SPACING_FIG = 0.025 # e.g. 2%% of figure height between centerlines of text
+# Vertical gap between the baseline of the 'Song - Artist' line and the baseline of the 'Plays' line, in figure units.
+SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG = 0.025
+
+# --- Panel Spacing ---
+# Vertical spacing between the bottom of the 7-day panel (art and text content)
+# and the top of the 30-day panel's title, in figure units.
+INTER_PANEL_VERTICAL_SPACING_FIG = 0.015
+
+# --- Main Timestamp Display ---
+[TimestampDisplay]
+# X-coordinate for the main timestamp (0.0-1.0). If -1, defaults to center of main chart area.
+TIMESTAMP_X_FIG = -1
+# Y-coordinate for the main timestamp (0.0-1.0).
+TIMESTAMP_Y_FIG = 0.042
+
+# --- Nightingale Rose Chart ---
+[NightingaleChart]
+# ENABLE: Whether to show the nightingale rose chart
+ENABLE = True
+
+# === CHART POSITION & SIZE ===
+# Chart center position (0.0-1.0, where 0.0=left/bottom, 1.0=right/top)
+CHART_X = 0.145
+CHART_Y = 0.29
+# Chart size (radius in figure units, 0.05=small, 0.15=medium, 0.25=large)
+CHART_RADIUS = 0.17
+
+# === MONTH LABELS ===
+# Show month names around the chart
+SHOW_MONTH_LABELS = True
+# Distance of labels from chart center (1.0=at edge, 1.2=outside chart)
+MONTH_LABEL_DISTANCE = 1.2
+# Month label appearance
+MONTH_LABEL_FONT_SIZE = 16
+MONTH_LABEL_COLOR = black
+MONTH_LABEL_FONT_WEIGHT = normal
+
+# === TITLE ===
+# Title: "Monthly Distribution of Plays" or "Yearly Distribution of Plays"
+TITLE_FONT_SIZE = 22
+TITLE_COLOR = black
+TITLE_FONT_WEIGHT = normal
+# TITLE_POSITION_ABOVE_CHART: Distance above chart (positive = above, negative = below)
+TITLE_POSITION_ABOVE_CHART = 0.06
+
+# === HIGH/LOW TRACKER ===
+# Show "High: July (200 plays)" and "Low: January (50 plays)" below chart
+SHOW_HIGH_LOW = True
+HIGH_LOW_FONT_SIZE = 20
+# HIGH_LOW_POSITION_BELOW_CHART: Distance below chart (positive = below, negative = above)
+HIGH_LOW_POSITION_BELOW_CHART = 0.06
+HIGH_LOW_SPACING = 0.025
+HIGH_PERIOD_COLOR = darkgreen
+LOW_PERIOD_COLOR = darkred
+
+# === ADVANCED OPTIONS ===
+# Boundary circle around chart (for reference)
+SHOW_BOUNDARY_CIRCLE = True
+BOUNDARY_CIRCLE_COLOR = gray
+BOUNDARY_CIRCLE_STYLE = --
+BOUNDARY_CIRCLE_WIDTH = 1.0
+# Time period aggregation ('auto', 'monthly', 'yearly')
+TIME_AGGREGATION = auto
+# Animation settings
+SMOOTH_TRANSITIONS = True
+TRANSITION_DURATION = 0.3
+ANIMATION_STYLE = cubic
+# Sampling rate for performance optimization
+# Controls how often nightingale chart data is calculated to improve render speed
+# 'D' = Daily (default, full quality, all frames calculated)
+# 'W' = Weekly (7x faster, samples every 7th frame)
+# 'M' = Monthly (30x faster, samples every 30th frame)
+# Note: Animation stays smooth due to interpolation between sampled points
+SAMPLING_RATE = D
+# Debug output
+DEBUG_MODE = False

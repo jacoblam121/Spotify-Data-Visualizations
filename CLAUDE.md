@@ -30,19 +30,35 @@ echo $SPOTIFY_CLIENT_SECRET
 
 ### Testing Components
 ```bash
-# Test data processing
+# Run full test suite for all functionality
+python test_phases_1_2.py
+
+# Interactive testing menu
+python quick_test.py
+
+# Test specific components
 python data_processor.py
-
-# Test configuration loading
 python config_loader.py
-
-# Test nightingale chart rendering
 python nightingale_chart.py
 
-# Test specific title positioning
+# Test specific functionality via command line
+python quick_test.py config          # Test configuration
+python quick_test.py data            # Test data processing  
+python quick_test.py artist "Taylor Swift"  # Test artist photos
+python quick_test.py cache           # View cache files
+
+# Test title positioning
 python test_title_positioning.py
 python test_title_config.py
 python test_title_render.py
+```
+
+### Mode Switching
+```bash
+# Switch between visualization modes
+python switch_mode.py artists        # Switch to artists mode
+python switch_mode.py tracks         # Switch to tracks mode
+python switch_mode.py               # Interactive mode selection
 ```
 
 ## Architecture
@@ -103,6 +119,7 @@ python test_title_render.py
 
 All behavior is controlled through `configurations.txt`:
 - **DataSource**: Choose between Spotify (`SOURCE = spotify`) or Last.fm (`SOURCE = lastfm`)
+- **VisualizationMode**: Choose between tracks (`MODE = tracks`) or artists (`MODE = artists`) visualizations
 - **Timeframe**: Filter data by date range
 - **AnimationOutput**: Video resolution, FPS, frame aggregation
 - **AlbumArtSpotify**: API credentials and caching settings
@@ -125,10 +142,17 @@ The application supports international characters through multiple font fallback
 
 The application generates a comprehensive animated visualization with multiple elements:
 
-- **Main Bar Chart Race**: Horizontal bars showing top tracks over time with album art
-- **Rolling Statistics Panels**: Side panels displaying current 7-day and 30-day top tracks
+- **Main Bar Chart Race**: Horizontal bars showing top tracks/artists over time with album art or artist photos
+- **Rolling Statistics Panels**: Side panels displaying current 7-day and 30-day top tracks/artists
 - **Nightingale Rose Chart**: Optional polar chart showing listening activity patterns over time periods
 - **Timestamp Display**: Current date/time indicator synchronized with data
+
+### Visualization Modes
+
+The application supports two distinct visualization modes:
+
+- **Tracks Mode**: Shows individual songs over time with album artwork and track-specific rolling statistics
+- **Artists Mode**: Shows artists over time with artist profile photos (fallback to most popular track's album art) and artist-specific rolling statistics
 
 All visualization elements are fully configurable through `configurations.txt` and support smooth animations, parallel frame generation, and multiple output formats.
 
@@ -162,3 +186,4 @@ Alternative data source using CSV export from Last.fm:
 - Ensure Spotify API credentials are properly configured
 - Check cache directories have write permissions
 - Album art cache stored in `album_art_cache/` with multiple JSON metadata files
+- Artist photos cache stored in `artist_art_cache/` directory for artists mode

@@ -43,6 +43,18 @@ class AppConfig:
             return [item.strip() for item in value_str.split(delimiter)]
         except (configparser.NoOptionError, configparser.NoSectionError):
             return fallback
+    
+    def validate_visualization_mode(self):
+        """Validate the visualization mode setting and return the normalized mode."""
+        mode = self.get('VisualizationMode', 'MODE', 'tracks').lower().strip()
+        valid_modes = ['tracks', 'artists']
+        
+        if mode not in valid_modes:
+            print(f"Warning: Invalid visualization mode '{mode}'. Valid modes are: {valid_modes}")
+            print("Defaulting to 'tracks' mode.")
+            return 'tracks'
+        
+        return mode
 
 # Global config instance (optional, but can be convenient)
 # app_config = None
@@ -63,6 +75,7 @@ if __name__ == '__main__':
         print(f"Target FPS: {config.get_int('AnimationOutput', 'TARGET_FPS', 25)}")
         print(f"Use NVENC: {config.get_bool('AnimationOutput', 'USE_NVENC_IF_AVAILABLE', False)}")
         print(f"Preferred Fonts: {config.get_list('FontPreferences', 'PREFERRED_FONTS')}")
+        print(f"Visualization Mode: {config.validate_visualization_mode()}")
         print(f"Non-existent key (with fallback): {config.get('General', 'NON_EXISTENT_KEY', 'fallback_value')}")
         print(f"Non-existent bool (with fallback): {config.get_bool('General', 'NON_EXISTENT_BOOL', True)}")
 

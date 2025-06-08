@@ -8,7 +8,7 @@ PYTHONIOENCODING_WARNING = True
 # --- Data Source ---
 [DataSource]
 # SOURCE: "lastfm" or "spotify"
-SOURCE = lastfm
+SOURCE = spotify
 INPUT_FILENAME_LASTFM = lastfm_data.csv
 # INPUT_FILENAME_SPOTIFY: Path to your Spotify JSON data (e.g., "StreamingHistory0.json")
 # Or use a pattern like "StreamingHistory*.json" if you have multiple files.
@@ -21,14 +21,23 @@ FILTER_SKIPPED_TRACKS = False
 # START_DATE: YYYY-MM-DD or "all_time"
 # 2024-01-01
 # 2024-12-31
-START_DATE = 2025-01-01
+START_DATE = all_time
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = 2025-06-05
+END_DATE = all_time
+
+# --- Visualization Mode ---
+[VisualizationMode]
+# MODE: "tracks", "artists", or "both"
+# tracks: Show top tracks over time with album covers
+# artists: Show top artists over time with artist profile photos  
+# both: Generate both track and artist visualizations (comprehensive mode for long renders)
+MODE = artists
 
 # --- Animation Output ---
 [AnimationOutput]
 # Resolution: 1080p or 4k
 RESOLUTION = 4k
+# FILENAME_BASE: Will be auto-adjusted based on MODE (e.g., spotify_top_songs_race or spotify_top_artists_race)
 FILENAME_BASE = spotify_top_songs_race
 N_BARS = 10
 TARGET_FPS = 30
@@ -44,7 +53,7 @@ ENABLE_OVERTAKE_ANIMATIONS = False
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), '12H' (12-hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = D
+FRAME_AGGREGATION_PERIOD = W
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
@@ -52,7 +61,7 @@ MAX_PARALLEL_WORKERS = 0
 # Set to False for debugging frame generation.
 CLEANUP_INTERMEDIATE_FRAMES = True
 
-# --- Album Art & Spotify API ---
+# --- Album Art & Artist Photos & Spotify API ---
 [AlbumArtSpotify]
 # SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET can be set here,
 # but environment variables are generally preferred for security.
@@ -61,6 +70,8 @@ CLEANUP_INTERMEDIATE_FRAMES = True
 SPOTIFY_CLIENT_ID = eaf67929214947d19e34182fb20e96bc
 SPOTIFY_CLIENT_SECRET = 822e6e3f9d1149d4ad5520237d8385a3
 ART_CACHE_DIR = album_art_cache
+# ARTIST_ART_CACHE_DIR: Separate directory for artist profile photos
+ARTIST_ART_CACHE_DIR = artist_art_cache
 # ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR: Relative threshold for showing art
 # (e.g., 0.0628 means art shows if play count > 6.28% of max plays in chart)
 # Set to 0 to show art for all tracks (useful for debugging)
