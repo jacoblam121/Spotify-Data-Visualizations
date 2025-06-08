@@ -1,5 +1,6 @@
 # Spotify Data Visualizations
 
+(Yes, this is AI generated). I'll manually update with more specific instructions and more detailed explanations of how it works later when I finish the full project. 
 Create stunning animated bar chart "race" videos from your Spotify or Last.fm listening history. Watch your top tracks or artists compete over time with beautiful album artwork and artist photos.
 
 ## ✨ Features
