@@ -294,7 +294,7 @@ def test_artist_photos():
                         
                     # Test dominant color
                     try:
-                        dom_color = album_art_utils.get_dominant_color(photo_path)
+                        dom_color = album_art_utils.get_artist_dominant_color(photo_path)
                         print(f"   Dominant color: RGB{dom_color}")
                     except Exception as e:
                         print(f"   Dominant color: Failed ({e})")

@@ -33,17 +33,21 @@ SPOTIFY_API_BASE_URL = "https://api.spotify.com/v1/"
 # --- Cache Files & Global Caches (paths will be dynamic based on ART_CACHE_DIR) ---
 mbid_cache_file = None
 dominant_color_cache_file = None
+artist_dominant_color_cache_file = None  # Separate cache for artist photo colors
 spotify_info_cache_file = None
 spotify_artist_cache_file = None  # New cache file for Spotify artist info
 negative_cache_file = None
 mb_album_info_cache_file = None # New cache file for MB album info
+mb_artist_info_cache_file = None # New cache file for MB artist info
 
 mbid_cache = {}
-dominant_color_cache = {}
+dominant_color_cache = {}  # For album art dominant colors
+artist_dominant_color_cache = {}  # For artist photo dominant colors
 spotify_info_cache = {}
 spotify_artist_cache = {}  # New cache for Spotify artist info
 negative_cache = {}  # Cache for failed searches with timestamp
 mb_album_info_cache = {} # New cache for MB album info
+mb_artist_info_cache = {} # New cache for MB artist info
 
 _spotify_access_token_cache = {
     "token": None,
@@ -56,8 +60,8 @@ _config_initialized = False
 def initialize_from_config(config):
     global DEBUG_CACHE, USER_AGENT, ART_CACHE_DIR, ARTIST_ART_CACHE_DIR
     global SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, NEGATIVE_CACHE_HOURS
-    global mbid_cache_file, dominant_color_cache_file, spotify_info_cache_file, spotify_artist_cache_file, negative_cache_file, mb_album_info_cache_file
-    global mbid_cache, dominant_color_cache, spotify_info_cache, spotify_artist_cache, negative_cache, mb_album_info_cache
+    global mbid_cache_file, dominant_color_cache_file, artist_dominant_color_cache_file, spotify_info_cache_file, spotify_artist_cache_file, negative_cache_file, mb_album_info_cache_file, mb_artist_info_cache_file
+    global mbid_cache, dominant_color_cache, artist_dominant_color_cache, spotify_info_cache, spotify_artist_cache, negative_cache, mb_album_info_cache, mb_artist_info_cache
     global _config_initialized
 
     if _config_initialized:
@@ -102,14 +106,18 @@ def initialize_from_config(config):
     
     # Artist-specific cache files go in ARTIST_ART_CACHE_DIR
     spotify_artist_cache_file = os.path.join(ARTIST_ART_CACHE_DIR, "spotify_artist_cache.json")
+    artist_dominant_color_cache_file = os.path.join(ARTIST_ART_CACHE_DIR, "artist_dominant_color_cache.json")
+    mb_artist_info_cache_file = os.path.join(ARTIST_ART_CACHE_DIR, "mb_artist_info_cache.json")
 
     # Load caches (after paths are set)
     mbid_cache = load_json_cache(mbid_cache_file)
     dominant_color_cache = load_json_cache(dominant_color_cache_file)
+    artist_dominant_color_cache = load_json_cache(artist_dominant_color_cache_file)  # Load artist color cache
     spotify_info_cache = load_json_cache(spotify_info_cache_file)
     spotify_artist_cache = load_json_cache(spotify_artist_cache_file)  # Load new artist cache
     negative_cache = load_json_cache(negative_cache_file)
     mb_album_info_cache = load_json_cache(mb_album_info_cache_file) # Load new cache
+    mb_artist_info_cache = load_json_cache(mb_artist_info_cache_file) # Load new MB artist cache
     
     _config_initialized = True
     if DEBUG_CACHE: print("[CACHE DEBUG] album_art_utils configuration initialized.")
@@ -975,6 +983,91 @@ def get_canonical_album_name_from_mbid(album_mbid):
         time.sleep(1)
         return None
 
+
+def get_canonical_artist_name_from_mbid(artist_mbid):
+    """
+    Queries MusicBrainz for a given artist_mbid to get its canonical artist name.
+    Caches results in mb_artist_info_cache.
+    THIS IS MAINLY FOR LAST.FM DATA FLOW.
+    """
+    if not artist_mbid:
+        return None
+
+    cache_key = f"mb_artist_{artist_mbid}"
+    if DEBUG_CACHE: print(f"[CACHE DEBUG] MB Artist Info check for key: '{cache_key}'")
+
+    if cache_key in mb_artist_info_cache:
+        cached_data = mb_artist_info_cache[cache_key]
+        if DEBUG_CACHE: print(f"[CACHE DEBUG] MB Artist Info Cache HIT. Value: {cached_data}")
+        return cached_data.get("canonical_artist_name") if isinstance(cached_data, dict) else cached_data # Handle old cache format if any
+
+    # Check negative cache for this specific MBID lookup type
+    negative_cache_key_mb_artist = f"neg_mb_artist_{artist_mbid}"
+    if is_negative_cache_valid(negative_cache_key_mb_artist):
+        if DEBUG_CACHE: print(f"[NEGATIVE CACHE DEBUG] Negative cache HIT for '{negative_cache_key_mb_artist}'. Skipping MB API call.")
+        return None # Already know this MBID lookup failed recently
+
+    if DEBUG_CACHE: print(f"[CACHE DEBUG] MB Artist Info Cache MISS for key: '{cache_key}'. Querying MusicBrainz API.")
+    _debug_print(f"MusicBrainz API call for canonical artist name (MBID: {artist_mbid})")
+
+    url = f"https://musicbrainz.org/ws/2/artist/{artist_mbid}?fmt=json"
+    headers = {'User-Agent': USER_AGENT}
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+
+        canonical_name = data.get('name')
+        
+        if canonical_name:
+            # Also capture additional useful artist info
+            artist_data = {
+                "canonical_artist_name": canonical_name,
+                "sort_name": data.get('sort-name'),
+                "disambiguation": data.get('disambiguation'),
+                "type": data.get('type'),
+                "country": data.get('country'),
+                "source": "musicbrainz_api"
+            }
+            mb_artist_info_cache[cache_key] = artist_data
+            save_json_cache(mb_artist_info_cache, mb_artist_info_cache_file)
+            _debug_print(f"Found canonical artist name: '{canonical_name}' for MBID: {artist_mbid}")
+            time.sleep(1) # Respect MusicBrainz API rate limits
+            return canonical_name
+        else:
+            _debug_print(f"No canonical artist name found in MusicBrainz response for MBID: {artist_mbid}")
+            add_to_negative_cache(negative_cache_key_mb_artist, "mb_no_artist_name_found")
+            mb_artist_info_cache[cache_key] = {"canonical_artist_name": None, "source": "musicbrainz_api_failed_no_name"} # Cache failure
+            save_json_cache(mb_artist_info_cache, mb_artist_info_cache_file)
+            time.sleep(1)
+            return None
+
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            print(f"MusicBrainz API: Artist MBID {artist_mbid} not found (404).")
+            add_to_negative_cache(negative_cache_key_mb_artist, f"mb_mbid_not_found_{e.response.status_code}")
+        else:
+            print(f"MusicBrainz API HTTPError for artist MBID {artist_mbid}: {e}")
+            add_to_negative_cache(negative_cache_key_mb_artist, f"mb_http_error_{e.response.status_code}")
+        mb_artist_info_cache[cache_key] = {"canonical_artist_name": None, "source": f"musicbrainz_api_http_error_{e.response.status_code}"}
+        save_json_cache(mb_artist_info_cache, mb_artist_info_cache_file)
+        time.sleep(1)
+        return None
+    except requests.exceptions.RequestException as e:
+        _debug_print(f"Error fetching canonical artist name for MBID {artist_mbid} from MusicBrainz: {e}")
+        # Don't add to negative cache for general request exceptions like timeouts, allow retries sooner
+        time.sleep(1)
+        return None
+    except json.JSONDecodeError:
+        _debug_print(f"Error decoding JSON response for canonical artist name (MBID: {artist_mbid}) from MusicBrainz.")
+        add_to_negative_cache(negative_cache_key_mb_artist, "mb_json_decode_error")
+        mb_artist_info_cache[cache_key] = {"canonical_artist_name": None, "source": "musicbrainz_api_json_decode_error"}
+        save_json_cache(mb_artist_info_cache, mb_artist_info_cache_file)
+        time.sleep(1)
+        return None
+
+
 def get_release_mbid(artist_name, album_name):
     # This function is now effectively deprecated for primary use.
     # Kept for reference or potential future fallback.
@@ -1157,35 +1250,69 @@ def download_artist_image_to_cache(image_url, artist_name_for_file):
 
 
 def get_dominant_color(image_path, palette_size=1):
-    # This function remains largely unchanged, but ensure its cache key is robust
-    # It uses the basename of the image_path, which should be fine as download_image_to_cache creates unique names
+    """
+    Get dominant color for album art images. Uses the album art dominant color cache.
+    This function is for tracks mode (album covers).
+    """
     cache_key = os.path.basename(image_path)
-    if DEBUG_CACHE: print(f"[CACHE DEBUG] Dominant color check for key: '{cache_key}'")
+    if DEBUG_CACHE: print(f"[CACHE DEBUG] Album Art Dominant color check for key: '{cache_key}'")
 
     if cache_key in dominant_color_cache:
-        if DEBUG_CACHE: print(f"[CACHE DEBUG] Dominant Color Cache HIT for '{cache_key}'. Value: {dominant_color_cache[cache_key]}")
+        if DEBUG_CACHE: print(f"[CACHE DEBUG] Album Art Dominant Color Cache HIT for '{cache_key}'. Value: {dominant_color_cache[cache_key]}")
         # Ensure it returns a tuple, as cache stores a list
         return tuple(dominant_color_cache[cache_key])
 
-    if DEBUG_CACHE: print(f"[CACHE DEBUG] Dominant Color Cache MISS for '{cache_key}'. Calculating color.")
+    if DEBUG_CACHE: print(f"[CACHE DEBUG] Album Art Dominant Color Cache MISS for '{cache_key}'. Calculating color.")
+    dominant_rgb = _calculate_dominant_color(image_path, palette_size)
+    
+    # Cache the result in album art cache
+    dominant_color_cache[cache_key] = list(dominant_rgb)
+    save_json_cache(dominant_color_cache, dominant_color_cache_file)
+    return dominant_rgb
+
+
+def get_artist_dominant_color(image_path, palette_size=1):
+    """
+    Get dominant color for artist profile photos. Uses the artist dominant color cache.
+    This function is for artists mode (artist profile photos).
+    """
+    cache_key = os.path.basename(image_path)
+    if DEBUG_CACHE: print(f"[ARTIST CACHE DEBUG] Artist Photo Dominant color check for key: '{cache_key}'")
+
+    if cache_key in artist_dominant_color_cache:
+        if DEBUG_CACHE: print(f"[ARTIST CACHE DEBUG] Artist Dominant Color Cache HIT for '{cache_key}'. Value: {artist_dominant_color_cache[cache_key]}")
+        # Ensure it returns a tuple, as cache stores a list
+        return tuple(artist_dominant_color_cache[cache_key])
+
+    if DEBUG_CACHE: print(f"[ARTIST CACHE DEBUG] Artist Dominant Color Cache MISS for '{cache_key}'. Calculating color.")
+    dominant_rgb = _calculate_dominant_color(image_path, palette_size)
+    
+    # Cache the result in artist color cache
+    artist_dominant_color_cache[cache_key] = list(dominant_rgb)
+    save_json_cache(artist_dominant_color_cache, artist_dominant_color_cache_file)
+    return dominant_rgb
+
+
+def _calculate_dominant_color(image_path, palette_size=1):
+    """
+    Internal function to calculate dominant color from an image.
+    Used by both get_dominant_color and get_artist_dominant_color.
+    """
     if not image_path or not os.path.exists(image_path):
         # Default color if no image or path issue
-        dominant_color_cache[cache_key] = [128, 128, 128] 
-        save_json_cache(dominant_color_cache, dominant_color_cache_file)
         return (128, 128, 128) 
+    
     try:
         img = Image.open(image_path).convert('RGB')
         # Resize for faster processing, MEDIANCUT is good for dominant color
         img.thumbnail((100, 100)) 
         # Using a slightly larger palette size for quantize can sometimes yield better representative colors
-        paletted = img.quantize(colors=palette_size * 5, method=Image.Quantize.MEDIANCUT) # Or Image.Quantize.FASTOCTREE
+        paletted = img.quantize(colors=palette_size * 5, method=Image.Quantize.MEDIANCUT)
         palette = paletted.getpalette() # Palette is flattened list: [R1,G1,B1, R2,G2,B2, ...]
         
         color_counts = sorted(paletted.getcolors(), reverse=True) # List of (count, index)
         
         if not color_counts: # Should not happen with RGB image but good check
-            dominant_color_cache[cache_key] = [128, 128, 128]
-            save_json_cache(dominant_color_cache, dominant_color_cache_file)
             return (128, 128, 128)
 
         dominant_color_index = color_counts[0][1] # Index in the palette
@@ -1195,15 +1322,9 @@ def get_dominant_color(image_path, palette_size=1):
         g = palette[dominant_color_index * 3 + 1]
         b = palette[dominant_color_index * 3 + 2]
         
-        dominant_rgb = (r, g, b)
-        dominant_color_cache[cache_key] = list(dominant_rgb) # Store as list in JSON
-        save_json_cache(dominant_color_cache, dominant_color_cache_file)
-        return dominant_rgb
+        return (r, g, b)
     except Exception as e:
-        print(f"Error getting dominant color for {image_path}: {e}")
-        # Cache default color on error to avoid re-processing problematic image
-        dominant_color_cache[cache_key] = [128, 128, 128]
-        save_json_cache(dominant_color_cache, dominant_color_cache_file)
+        print(f"Error calculating dominant color for {image_path}: {e}")
         return (128, 128, 128)
 
 
@@ -1451,10 +1572,10 @@ def get_spotify_artist_info_from_track_uri(track_uri):
         return None
 
 
-def get_artist_profile_photo_and_spotify_info(artist_name, fallback_track_info=None):
+def get_artist_profile_photo_and_spotify_info(artist_name, fallback_track_info=None, artist_mbid=None):
     """
     Main function to get artist profile photo path and the spotify_info data used.
-    Implements improved strategy: Track URI → Artist ID → Profile Photo → Name Search → Album Art Fallback
+    Implements improved strategy: MBID → Canonical Name → Track URI → Artist ID → Profile Photo → Name Search → Album Art Fallback
     
     Args:
         artist_name (str): The artist name to search for
@@ -1464,16 +1585,29 @@ def get_artist_profile_photo_and_spotify_info(artist_name, fallback_track_info=N
                 "album_name": "Album Name", 
                 "track_uri": "spotify:track:..."  # Optional but preferred for accuracy
             }
+        artist_mbid (str, optional): MusicBrainz artist ID for Last.fm data (most accurate)
     
     Returns:
         tuple: (local_photo_path, spotify_artist_info_dict) or (None, spotify_artist_info_dict_if_found_else_None)
                spotify_artist_info_dict is the dict returned by get_spotify_artist_info
     """
-    print(f"Attempting to get artist profile photo for: Artist='{artist_name}'")
+    print(f"Attempting to get artist profile photo for: Artist='{artist_name}'{f', MBID={artist_mbid}' if artist_mbid else ''}")
     
     artist_info = None
+    search_artist_name = artist_name  # Will be updated if we get canonical name from MBID
     
-    # Strategy 1: Use Spotify Track URI to get exact artist (most reliable)
+    # Strategy 1: Use MusicBrainz MBID to get canonical artist name (most accurate for Last.fm data)
+    if artist_mbid:
+        print(f"[ARTIST_PHOTO_LOGIC] Using MusicBrainz MBID for canonical artist name: {artist_mbid}")
+        canonical_name_from_mb = get_canonical_artist_name_from_mbid(artist_mbid)
+        
+        if canonical_name_from_mb:
+            print(f"[ARTIST_PHOTO_LOGIC] Found canonical artist name from MBID: '{canonical_name_from_mb}'")
+            search_artist_name = canonical_name_from_mb  # Use canonical name for Spotify search
+        else:
+            print(f"[ARTIST_PHOTO_LOGIC] MBID lookup failed, will use original name: '{artist_name}'")
+    
+    # Strategy 2: Use Spotify Track URI to get exact artist (most reliable for Spotify data)
     if fallback_track_info and fallback_track_info.get("track_uri"):
         print(f"[ARTIST_PHOTO_LOGIC] Using track URI for accurate artist lookup: {fallback_track_info['track_uri']}")
         artist_info = get_spotify_artist_info_from_track_uri(fallback_track_info["track_uri"])
@@ -1483,33 +1617,40 @@ def get_artist_profile_photo_and_spotify_info(artist_name, fallback_track_info=N
         else:
             print(f"[ARTIST_PHOTO_LOGIC] Track URI lookup failed, will try name search")
     
-    # Strategy 2: Fallback to name-based search if no URI or URI failed
+    # Strategy 3: Use name-based search (with canonical name if available from MBID)
     if not artist_info:
-        print(f"[ARTIST_PHOTO_LOGIC] Attempting name-based search for: {artist_name}")
-        artist_info = get_spotify_artist_info(artist_name)
+        print(f"[ARTIST_PHOTO_LOGIC] Attempting name-based search for: {search_artist_name}")
+        artist_info = get_spotify_artist_info(search_artist_name)
         
         if artist_info:
             print(f"[ARTIST_PHOTO_LOGIC] Found artist via name search: {artist_info.get('canonical_artist_name')} (popularity: {artist_info.get('popularity', 'N/A')})")
             
-            # Warn if there might be name mismatch
-            canonical_name = artist_info.get('canonical_artist_name', '').lower()
-            search_name = artist_name.lower()
-            if canonical_name != search_name and canonical_name not in search_name and search_name not in canonical_name:
-                print(f"[ARTIST_PHOTO_LOGIC] ⚠️  WARNING: Name mismatch detected!")
-                print(f"[ARTIST_PHOTO_LOGIC]    Searched for: '{artist_name}'")
-                print(f"[ARTIST_PHOTO_LOGIC]    Found: '{artist_info.get('canonical_artist_name')}'")
-                print(f"[ARTIST_PHOTO_LOGIC]    This might be the wrong artist. Consider providing track_uri for accuracy.")
+            # Warn if there might be name mismatch (but not if we used MBID canonical name)
+            if not artist_mbid:  # Only warn for direct name searches
+                canonical_name = artist_info.get('canonical_artist_name', '').lower()
+                search_name = artist_name.lower()
+                if canonical_name != search_name and canonical_name not in search_name and search_name not in canonical_name:
+                    print(f"[ARTIST_PHOTO_LOGIC] ⚠️  WARNING: Name mismatch detected!")
+                    print(f"[ARTIST_PHOTO_LOGIC]    Searched for: '{artist_name}'")
+                    print(f"[ARTIST_PHOTO_LOGIC]    Found: '{artist_info.get('canonical_artist_name')}'")
+                    print(f"[ARTIST_PHOTO_LOGIC]    This might be the wrong artist. Consider providing track_uri or artist_mbid for accuracy.")
     
-    # Strategy 3: Try to get profile photo if we found artist info
+    # Strategy 4: Try to get profile photo if we found artist info
     if artist_info and artist_info.get("photo_url"):
         photo_url = artist_info["photo_url"]
         canonical_artist_name = artist_info.get("canonical_artist_name", artist_name)
         
         print(f"[ARTIST_PHOTO_LOGIC] Spotify returned artist photo URL: {photo_url}. Artist: '{canonical_artist_name}'")
         downloaded_path = download_artist_image_to_cache(photo_url, canonical_artist_name)
+        
+        # Calculate dominant color for the artist photo if download was successful
+        if downloaded_path:
+            dominant_color = get_artist_dominant_color(downloaded_path)
+            print(f"[ARTIST_PHOTO_LOGIC] Calculated dominant color for artist '{canonical_artist_name}': RGB{dominant_color}")
+        
         return downloaded_path, artist_info
     
-    # Strategy 4: Fallback to album art if we have fallback track info
+    # Strategy 5: Fallback to album art if we have fallback track info
     if fallback_track_info:
         print(f"[ARTIST_PHOTO_LOGIC] No artist profile photo found. Attempting fallback to album art from track: '{fallback_track_info.get('track_name', 'Unknown')}'")
         
@@ -1542,6 +1683,28 @@ def get_artist_profile_photo_and_spotify_info(artist_name, fallback_track_info=N
         print(f"[ARTIST_PHOTO_LOGIC] No Spotify artist info found for '{artist_name}' and no successful fallback.")
     
     return None, artist_info
+
+
+def get_artist_dominant_color_by_name(artist_name, fallback_track_info=None, artist_mbid=None):
+    """
+    Helper function to get dominant color for an artist by name.
+    This will get the artist photo and return its dominant color.
+    
+    Args:
+        artist_name (str): The artist name
+        fallback_track_info (dict, optional): Fallback track info if needed
+        artist_mbid (str, optional): MusicBrainz artist ID for Last.fm data (most accurate)
+    
+    Returns:
+        tuple: RGB color tuple (r, g, b) or (128, 128, 128) if not found
+    """
+    photo_path, _ = get_artist_profile_photo_and_spotify_info(artist_name, fallback_track_info, artist_mbid)
+    
+    if photo_path and os.path.exists(photo_path):
+        return get_artist_dominant_color(photo_path)
+    else:
+        # Return default color if no photo found
+        return (128, 128, 128)
 
 
 if __name__ == "__main__":

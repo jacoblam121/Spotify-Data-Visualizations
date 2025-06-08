@@ -14,5 +14,13 @@
   "spotify_search_nonexistenttestartist12345_cruel summer_lover": {
     "timestamp": 1749361491.1270154,
     "reason": "no_spotify_results_after_1_search_attempts"
+  },
+  "neg_mb_artist_invalid-mbid-12345": {
+    "timestamp": 1749363934.4151008,
+    "reason": "mb_http_error_400"
+  },
+  "spotify_artist_search_taylor swift via mbid 20244d07-534f-4eff-b4d4-930878889970": {
+    "timestamp": 1749365038.1354744,
+    "reason": "no_spotify_artist_results_after_1_search_attempts"
   }
 }

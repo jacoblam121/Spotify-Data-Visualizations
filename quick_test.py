@@ -57,9 +57,12 @@ def test_data_modes():
     except Exception as e:
         print(f"❌ Error: {e}")
 
-def test_artist_photo(artist_name):
+def test_artist_photo(artist_name, artist_mbid=None):
     """Quick test of artist photo retrieval."""
-    print(f"📸 Testing Artist Photo for: {artist_name}")
+    if artist_mbid:
+        print(f"📸 Testing Artist Photo for: {artist_name} (MBID: {artist_mbid})")
+    else:
+        print(f"📸 Testing Artist Photo for: {artist_name}")
     
     try:
         from config_loader import AppConfig
@@ -68,7 +71,11 @@ def test_artist_photo(artist_name):
         config = AppConfig()
         album_art_utils.initialize_from_config(config)
         
-        photo_path, artist_info = album_art_utils.get_artist_profile_photo_and_spotify_info(artist_name)
+        # Use the MBID parameter if provided
+        photo_path, artist_info = album_art_utils.get_artist_profile_photo_and_spotify_info(
+            artist_name, 
+            artist_mbid=artist_mbid
+        )
         
         if photo_path and os.path.exists(photo_path):
             file_size = os.path.getsize(photo_path)
@@ -79,10 +86,12 @@ def test_artist_photo(artist_name):
                 print(f"   Artist: {artist_info.get('canonical_artist_name')}")
                 print(f"   Popularity: {artist_info.get('popularity')}")
                 print(f"   Source: {artist_info.get('source')}")
+                if artist_mbid and 'mbid_canonical_name' in artist_info:
+                    print(f"   MBID canonical name: {artist_info.get('mbid_canonical_name')}")
             
             # Test dominant color
             try:
-                dom_color = album_art_utils.get_dominant_color(photo_path)
+                dom_color = album_art_utils.get_artist_dominant_color(photo_path)
                 print(f"   Dominant color: RGB{dom_color}")
             except Exception as e:
                 print(f"   Dominant color failed: {e}")
@@ -123,11 +132,13 @@ def interactive_menu():
         print("3. Test Artist Photo (Taylor Swift)")
         print("4. Test Artist Photo (Custom Artist)")
         print("5. Test Artist Photo (Japanese Artist)")
-        print("6. Show Cache Files")
-        print("7. Exit")
+        print("6. Test Artist Photo with MBID (Taylor Swift)")
+        print("7. Test Artist Photo with Custom MBID")
+        print("8. Show Cache Files")
+        print("9. Exit")
         print("-"*50)
         
-        choice = input("Select option (1-7): ").strip()
+        choice = input("Select option (1-9): ").strip()
         
         if choice == "1":
             test_config_modes()
@@ -149,14 +160,27 @@ def interactive_menu():
             test_artist_photo("ヨルシカ")
             
         elif choice == "6":
-            show_cache_files()
+            # Taylor Swift's MBID for testing
+            taylor_swift_mbid = "20244d07-534f-4eff-b4d4-930878889970"
+            test_artist_photo("Taylor Swift", artist_mbid=taylor_swift_mbid)
             
         elif choice == "7":
+            artist_name = input("Enter artist name: ").strip()
+            artist_mbid = input("Enter artist MBID: ").strip()
+            if artist_name and artist_mbid:
+                test_artist_photo(artist_name, artist_mbid=artist_mbid)
+            else:
+                print("❌ Both artist name and MBID are required")
+                
+        elif choice == "8":
+            show_cache_files()
+            
+        elif choice == "9":
             print("👋 Goodbye!")
             break
             
         else:
-            print("❌ Invalid choice. Please select 1-7.")
+            print("❌ Invalid choice. Please select 1-9.")
 
 def show_cache_files():
     """Show contents of cache directory."""
@@ -225,15 +249,24 @@ def main():
         elif command == "artist" and len(sys.argv) > 2:
             artist_name = " ".join(sys.argv[2:])
             test_artist_photo(artist_name)
+        elif command == "mbid" and len(sys.argv) > 3:
+            artist_name = sys.argv[2]
+            artist_mbid = sys.argv[3]
+            test_artist_photo(artist_name, artist_mbid=artist_mbid)
         elif command == "cache":
             show_cache_files()
         else:
             print("Usage:")
-            print("  python quick_test.py config         # Test configuration")
-            print("  python quick_test.py data           # Test data processing")
-            print("  python quick_test.py artist <name>  # Test artist photo")
-            print("  python quick_test.py cache          # Show cache files")
-            print("  python quick_test.py                # Interactive menu")
+            print("  python quick_test.py config                    # Test configuration")
+            print("  python quick_test.py data                      # Test data processing")
+            print("  python quick_test.py artist <name>             # Test artist photo")
+            print("  python quick_test.py mbid <name> <mbid>        # Test artist photo with MBID")
+            print("  python quick_test.py cache                     # Show cache files")
+            print("  python quick_test.py                           # Interactive menu")
+            print("")
+            print("Examples:")
+            print("  python quick_test.py artist \"Taylor Swift\"")
+            print("  python quick_test.py mbid \"Taylor Swift\" \"20244d07-534f-4eff-b4d4-930878889970\"")
     else:
         # Interactive mode
         interactive_menu()
