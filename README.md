@@ -1,142 +1,371 @@
-## V2 Changes (NEW)
-*   Album cover art fetching issues fixed
-*   Spotify API instead of MusicBrainz API for better cover art fetching
-*   Can now take either data from last.fm or directly from Spotify
-*   Optimizations to rendering including parallelization
-*   Different sampling rates (frame aggregation periods) available so you don't have to render as many frames
+# Spotify Data Visualizations
 
-## OLD README
-Will fix later once completely finished, working on v3 now to add rolling 7 day and 30 day windows to display top track of the past 7 days and top track of the past 30 days. Also looking to add a top artists chart as well. 
+Create stunning animated bar chart "race" videos from your Spotify or Last.fm listening history. Watch your top tracks or artists compete over time with beautiful album artwork and artist photos.
 
-Takes your Last.fm listening history for 2024 and generates a funny bar chart "race" video of your top 10 songs throughout the year complete with album cover art. 
+## ✨ Features
 
-## Demo Output
+### Dual Visualization Modes
+- **Tracks Mode**: Animated bar chart race of your top songs with album covers
+- **Artists Mode**: Animated bar chart race of your top artists with profile photos
+- **Seamless Mode Switching**: Switch between modes with a simple command
 
-Generates an MP4 video file named `spotify_top_songs_2024_4k.mp4`. 
-Mine is currently in the repo with this name, but will overwrite if you decide to run locally.
+### Data Sources
+- **Spotify Extended Streaming History**: Direct JSON import from Spotify data export
+- **Last.fm Data**: CSV export from Last.fm listening history
+- **Flexible Time Filtering**: Analyze any date range or your entire listening history
 
-[https://www.youtube.com/watch?v=z108hBXyb9w]
+### Rich Visual Elements
+- **High-Quality Artwork**: Album covers and artist profile photos via Spotify API
+- **Rolling Statistics Panels**: Live 7-day and 30-day top tracks/artists
+- **Nightingale Rose Chart**: Optional polar chart showing monthly listening patterns
+- **Dynamic Timestamp Display**: Real-time date progression during animation
 
-[![Youtube](https://img.youtube.com/vi/z108hBXyb9w/hqdefault.jpg)](https://www.youtube.com/watch?v=z108hBXyb9w)
+### Performance & Quality
+- **Multiple Resolutions**: 1080p and 4K output options
+- **Frame Aggregation**: Reduce render time with daily/weekly/monthly sampling
+- **Parallel Processing**: Multi-core frame generation for faster rendering
+- **GPU Encoding**: NVENC support for hardware-accelerated video encoding
+- **Smart Caching**: Multiple cache layers for artwork, metadata, and colors
 
-## Project Structure
+### International Support
+- **Unicode Text Rendering**: Full support for Japanese, Korean, Chinese, and other international characters
+- **Multiple Font Fallbacks**: Automatic font selection for optimal character display
+- **UTF-8 Encoding**: Proper handling of international artist and track names
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+1. **FFmpeg** (required for video output)
+   ```bash
+   # Install FFmpeg and add to PATH
+   # Download from https://ffmpeg.org
+   ffmpeg -version  # Verify installation
+   ```
+
+2. **Python Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Spotify API Credentials** (for artwork fetching)
+   - Get credentials from [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
+   - Add to `configurations.txt` or set as environment variables:
+     ```bash
+     export SPOTIFY_CLIENT_ID="your_client_id"
+     export SPOTIFY_CLIENT_SECRET="your_client_secret"
+     ```
+
+### Data Preparation
+
+#### Option 1: Spotify Data
+1. Request your [Spotify Extended Streaming History](https://www.spotify.com/account/privacy/)
+2. Place JSON file(s) in project directory (e.g., `StreamingHistory0.json`)
+3. Update `INPUT_FILENAME_SPOTIFY` in `configurations.txt`
+
+#### Option 2: Last.fm Data
+1. Export your data from [Last.fm Export Tool](https://lastfm.ghan.nl/export/)
+2. Save as `lastfm_data.csv` in project directory
+3. Set `SOURCE = lastfm` in `configurations.txt`
+
+### Running the Application
+
+```bash
+# Set encoding for international characters (required)
+export PYTHONIOENCODING=utf-8  # Linux/macOS
+set PYTHONIOENCODING=utf-8     # Windows CMD
+$env:PYTHONIOENCODING="utf-8"  # Windows PowerShell
+
+# Run the main animation
+python main_animator.py
+```
+
+## 📁 Project Structure
 
 ```
-spotify2024/
-├── .venv/                   # Virtual environment
-├── album_art_cache/         # Downloaded album cover art and MBIDs
-│   ├── mbid_cache.json
-│   └── dominant_color_cache.json
-├── fonts/                   # Fonts (helps with foreign characters)
-├── main_animator.py         # Main as well as runs the animation
-├── data_processor.py        # Data cleaning / preparation
-├── album_art_utils.py       # Functions for fetching album art and colors (done calling MusicBrainz api)
-├── lastfm_data.csv          # Your Last.fm listening history (UTF-8 encoded CSV)
-├── README.md                # This file
-└── (other generated files like .mp4 output)
+Spotify-Data-Visualizations/
+├── 📄 Core Application Files
+│   ├── main_animator.py              # Main application entry point
+│   ├── data_processor.py             # Data ingestion and transformation
+│   ├── config_loader.py              # Configuration management
+│   ├── album_art_utils.py            # Spotify API integration & artwork
+│   ├── rolling_stats.py              # Rolling window statistics
+│   ├── nightingale_chart.py          # Polar chart visualization
+│   ├── text_utils.py                 # Text rendering and fonts
+│   ├── time_aggregation.py           # Frame aggregation logic
+│   └── switch_mode.py                # Mode switching utility
+│
+├── 🧪 Testing & Utilities
+│   ├── tests/
+│   │   ├── test_phases_1_2.py        # Full test suite
+│   │   ├── quick_test.py             # Interactive testing
+│   │   ├── test_*.py                 # Component-specific tests
+│   │   └── TESTING_GUIDE.md          # Comprehensive testing guide
+│   └── summaries/                    # Implementation summaries
+│
+├── ⚙️ Configuration & Data
+│   ├── configurations.txt            # Main configuration file
+│   ├── requirements.txt              # Python dependencies
+│   ├── spotify_data.json             # Your Spotify data (not included)
+│   ├── lastfm_data.csv              # Your Last.fm data (not included)
+│   └── CLAUDE.md                     # Development guidance
+│
+├── 🎨 Assets & Cache
+│   ├── fonts/                        # International font files
+│   │   ├── DejaVuSans.ttf
+│   │   ├── NotoSansJP-Regular.ttf    # Japanese support
+│   │   ├── NotoSansKR-Regular.ttf    # Korean support
+│   │   └── ...                       # Other Unicode fonts
+│   ├── album_art_cache/              # Album artwork cache
+│   │   ├── *.jpg                     # Downloaded album covers
+│   │   ├── spotify_info_cache.json   # Track/album metadata
+│   │   ├── dominant_color_cache.json # Artwork color analysis
+│   │   └── negative_cache.json       # Failed searches
+│   └── artist_art_cache/             # Artist photos cache
+│       ├── artist_*.jpg              # Artist profile photos
+│       ├── spotify_artist_cache.json # Artist metadata
+│       └── artist_dominant_color_cache.json
+│
+├── 🎬 Output & Temporary Files
+│   ├── *.mp4                         # Generated video files
+│   │   ├── spotify_top_songs_race_4k.mp4
+│   │   └── spotify_top_artists_race_4k.mp4
+│   ├── temp_frames_*/                # Intermediate frame images
+│   │   └── frame_*.png               # Individual animation frames
+│   └── venv/                         # Python virtual environment
+│
+└── 📚 Documentation
+    ├── README.md                     # This file
+    └── bashrc                        # Shell configuration example
 ```
 
-## Issues
-*   Some album art not fetched properly (most notably 晴る - Yorushika in demo)
-*   Has "bandaid" solutions for the album cover art. It begins showing at 110 plays as that's when clipping stops for my scale, but this will be different depending on how many    plays your top song has. You can change this here in main_animator.py (if pil_image and values_for_actual_bars[i] >= 110:)
-*   Album cover art is also only fetched if more than 50 plays were found and not seen in January (part of another bandaid solution) Fetch threshold can be changed in `main_animator.py` (`def pre_fetch_album_art_and_colors(race_df, song_album_map, unique_song_ids_in_race, fetch_threshold=50):`), and checking the January part can be changed in the function (`for song_id in unique_song_ids_in_race:`). Technically this logic useless for me as there's no point in fetching album covers if they're not going to display at less than 110 plays but I'm too lazy to get rid of this. 
-*   If I fix this, it'll probably be for EOY 2025 so I can run this again for 2025 lmao
+### Key Directories Explained
 
-## Prerequisites/Requirements
+#### 🎨 **Cache Directories**
+- **album_art_cache/**: Stores downloaded album artwork, metadata, and color analysis
+- **artist_art_cache/**: Stores artist profile photos and artist-specific metadata
+- **Multiple JSON files**: Cache API responses to avoid re-fetching and respect rate limits
 
-1.  **FFmpeg**: needed to save animation as mp4
-    *   Download from [https://ffmpeg.org] and add to path
-2.  **Python Dependencies:**
-    pandas
-    matplotlib
-    Pillow
-    requests
-3.  **Last.fm Data:**
-    *   Download from [https://lastfm.ghan.nl/export/]
-    *   Name the file `lastfm_data.csv` and place it in the project directory
-4. **API Configuration:**
-    *   Make sure the `USER_AGENT` in `album_art_utils.py` is set to your own email address for API calls
-    *   So replace `lightningfalconyt@gmail.com` with your email
-5. **Run**
-    *   Make sure to use terminal (not "output" in VSCode)
-    *   utf-8 is necessary if music has foreign characters
+#### 🎬 **Output Files**
+- **Video files**: Final MP4 outputs named based on mode and resolution
+- **temp_frames_*/**: Intermediate PNG frames (auto-cleaned unless debugging)
+- **Parallel safe**: Multiple workers can generate frames simultaneously
 
-    Command Prompt (cmd):
-    ```shell
-    set PYTHONIOENCODING=utf-8
-    python "path\to\your\project\directory\main_animator.py"
-    ```
-    PowerShell:
-    ```shell
-    $env:PYTHONIOENCODING="utf-8"
-    python "path\to\your\project\directory\main_animator.py"
-    ```
+#### 🧪 **Testing Infrastructure**
+- **Comprehensive test suite**: Full functionality validation
+- **Interactive testing**: Menu-driven component testing
+- **Component tests**: Individual module validation
+- **Performance testing**: Frame rendering and animation speed
 
-    *   Rendering takes around 40 minutes on my machine (only uses cpu, no gpu encoding so its pretty unoptimized lol)
+#### ⚙️ **Configuration System**
+- **Single config file**: All settings in `configurations.txt`
+- **Type-safe loading**: Automatic validation and type conversion
+- **Mode switching**: Easy transition between tracks/artists visualization
 
-## Configuration
+## 🎛️ Configuration
 
-You can adjust some settings by changing the constants at the top of `main_animator.py` and `album_art_utils.py`.
+All settings are controlled through `configurations.txt`:
 
-### In `main_animator.py`:
+### Essential Settings
+```ini
+[DataSource]
+SOURCE = spotify                    # "spotify" or "lastfm"
+INPUT_FILENAME_SPOTIFY = spotify_data.json
 
-*   **N_BARS**: `10`  
-    Number of top songs to display in the bar chart
-*   **TARGET_FPS**: `30`  
-    FPS for video (higher means longer rendering time)
-*   **ANIMATION_INTERVAL**: `1000 / TARGET_FPS`  
-    Milliseconds between animation frames.
-*   **OUTPUT_FILENAME**: `"spotify_top_songs_2024_4k.mp4"`  
-    Name of video file.
-*   **VIDEO_RESOLUTION_WIDTH**: `3840`  
-    Width of output video (pixels)
-*   **VIDEO_RESOLUTION_HEIGHT**: `2160`  
-    Height of output video (pixels)
-*   **VIDEO_DPI**: `165`  
-    Dots Per Inch for the Matplotlib plot rendering; impacts relative size of graph and text
-*   **DEBUG_CACHE**: `True`  
-    Set to `False` to disable debug messages for album art pre-fetching
-*   **plt.rcParams['animation.ffmpeg_path']**: commented out  
-    Uncomment if having trouble setting ffmpeg to path
-*   **PREFERRED_FONTS**: `['DejaVu Sans', 'Noto Sans JP', ...]`  
-    Font list
+[VisualizationMode]
+MODE = tracks                       # "tracks", "artists", or "both"
 
-### In `album_art_utils.py`:
+[Timeframe]
+START_DATE = 2024-01-01            # YYYY-MM-DD or "all_time"
+END_DATE = 2024-12-31              # YYYY-MM-DD or "all_time"
 
-*   **DEBUG_CACHE**: `True`  
-    Set to `False` to disable console logging for MusicBrainz ID (MBID) caching, dominant color caching, and image download caching
+[AnimationOutput]
+RESOLUTION = 4k                     # "1080p" or "4k"
+N_BARS = 10                        # Number of tracks/artists to show
+TARGET_FPS = 30                    # Video frame rate
+FRAME_AGGREGATION_PERIOD = W       # D/W/M for daily/weekly/monthly
+```
 
-## How It Works
+### Performance Optimization
+```ini
+[AnimationOutput]
+MAX_PARALLEL_WORKERS = 0           # 0 = auto-detect CPU cores
+CLEANUP_INTERMEDIATE_FRAMES = True # Save disk space
+USE_NVENC_IF_AVAILABLE = True      # GPU encoding
 
-1.  **Data Loading & Cleaning (`data_processor.py`):**
-    *   Loads `lastfm_data.csv`.
-    *   Converts Unix timestamps to datetime objects.
-    *   Filters data for the year 2024.
-    *   Cleans data by dropping rows with missing essential information (artist, album, track).
+# Frame aggregation reduces render time significantly:
+# 'event' = Every play event (original, slowest)
+# 'D' = Daily (fast)
+# 'W' = Weekly (faster)  
+# 'M' = Monthly (fastest)
+FRAME_AGGREGATION_PERIOD = W
+```
 
-2.  **Data Preparation for Race (`data_processor.py`):**
-    *   Creates a unique `song_id` (Artist - Track).
-    *   Maps `song_id` to album names.
-    *   Generates a "race-ready" DataFrame where:
-        *   Index: Timestamps of each individual play event (for smooth animation).
-        *   Columns: Unique `song_id`s.
-        *   Values: Cumulative play counts for each song at that exact timestamp. This involves pivoting and forward-filling play counts.
+## 🔧 Mode Switching
 
-3.  **Album Art & Color Fetching (`album_art_utils.py`):**
-    *   For each unique album, it tries to find a MusicBrainz Release ID (`mbid`).
-    *   Uses the `mbid` to query the Cover Art Archive for an album art URL.
-    *   Downloads the album art and saves it to the `album_art_cache` directory.
-    *   Calculates the dominant color from the downloaded album art using Pillow.
-    *   MBIDs, image paths, and dominant colors are cached in JSON files (`mbid_cache.json`, `dominant_color_cache.json`) and the `album_art_cache` folder to avoid re-fetching on subsequent runs.
+Switch between visualization modes easily:
 
-4.  **Animation (`main_animator.py`):**
-    *   Initializes a Matplotlib figure and axes.
-    *   Pre-fetches album art and dominant colors for songs appearing in the race.
-    *   The `draw_frame` function is called for each frame (each play event timestamp):
-        *   It gets the top N songs by play count at that specific timestamp.
-        *   Draws horizontal bars for these songs.
-        *   Sets the bar color using the cached dominant color for the song's album.
-        *   Overlays album art (if found) next to the corresponding bar.
-        *   Updates the date/time counter on the animation.
-    *   Uses `matplotlib.animation.FuncAnimation` to create the animation.
-    *   Saves the animation as an MP4 file using FFmpeg.
+```bash
+# Switch to tracks mode
+python switch_mode.py tracks
+
+# Switch to artists mode  
+python switch_mode.py artists
+
+# Interactive mode selection
+python switch_mode.py
+```
+
+## 🧪 Testing
+
+### Quick Testing
+```bash
+# Run full test suite
+python test_phases_1_2.py
+
+# Interactive testing menu
+python quick_test.py
+
+# Test specific components
+python quick_test.py config                    # Configuration
+python quick_test.py data                      # Data processing
+python quick_test.py artist "Taylor Swift"     # Artist photos
+python quick_test.py cache                     # View cache files
+```
+
+### Component Testing
+```bash
+# Test individual components
+python data_processor.py           # Data processing
+python config_loader.py           # Configuration loading
+python nightingale_chart.py       # Rose chart rendering
+```
+
+## 🏗️ Architecture
+
+### Core Components
+
+- **main_animator.py**: Main application orchestrating the visualization pipeline
+- **data_processor.py**: Data ingestion, cleaning, and transformation for both Spotify and Last.fm
+- **config_loader.py**: Configuration management with type-safe getters
+- **album_art_utils.py**: Spotify API integration for artwork and metadata
+- **rolling_stats.py**: Rolling window statistics (7-day/30-day top tracks/artists)
+- **nightingale_chart.py**: Animated polar chart for monthly listening patterns
+- **text_utils.py**: International text rendering and font handling
+- **time_aggregation.py**: Frame aggregation for performance optimization
+
+### Data Flow
+
+1. **Configuration Loading**: Settings loaded from `configurations.txt`
+2. **Data Ingestion**: Raw data processed from Spotify JSON or Last.fm CSV
+3. **Data Transformation**: Cleaning, normalization, and time-series creation
+4. **Artwork Pre-fetching**: Album covers and artist photos downloaded via Spotify API
+5. **Frame Generation**: Parallel creation of animation frames with all visual elements
+6. **Video Compilation**: FFmpeg assembly of final MP4 with optional GPU acceleration
+
+### Cache Architecture
+
+- **album_art_cache/**: Album artwork, dominant colors, and track metadata
+- **artist_art_cache/**: Artist profile photos and artist metadata  
+- **Multiple JSON caches**: Spotify API responses, failed searches, MusicBrainz data
+- **Intelligent caching**: Avoids re-fetching and respects API rate limits
+
+## 🎨 Visual Components
+
+### Main Animation
+- **Bar Chart Race**: Smooth animated bars with artwork
+- **Dynamic Scaling**: Automatic Y-axis adjustment as values change
+- **Color Coordination**: Bars colored using dominant artwork colors
+- **Overtake Animations**: Optional smooth transitions during rank changes
+
+### Side Panels
+- **Rolling Statistics**: Real-time 7-day and 30-day top tracks/artists
+- **Live Updates**: Statistics update as animation progresses
+- **Artwork Integration**: Miniature album covers and artist photos
+- **Smart Text Truncation**: Handles long international track/artist names
+
+### Nightingale Rose Chart
+- **Monthly Distribution**: Polar chart showing listening patterns by month
+- **Smooth Animations**: Gradual transitions as data changes over time
+- **High/Low Tracking**: Displays peak and valley listening periods
+- **Configurable Display**: Enable/disable and customize appearance
+
+## 📊 Data Format Requirements
+
+### Spotify Extended Streaming History
+```json
+{
+  "ts": "2024-01-01T00:00:00Z",
+  "artistName": "Artist Name",
+  "trackName": "Track Name", 
+  "msPlayed": 240000
+}
+```
+
+### Last.fm CSV Export
+```csv
+uts,utc_time,artist,artist_mbid,album,album_mbid,track,track_mbid
+1704067200,01 Jan 2024 00:00,Artist Name,,Album Name,,Track Name,
+```
+
+## 🌍 International Support
+
+### Character Encoding
+- **Required**: Set `PYTHONIOENCODING=utf-8` before running
+- **Font Support**: Japanese, Korean, Chinese, Arabic, and other Unicode scripts
+- **Fallback Fonts**: Automatic selection from available system fonts
+
+### Font Configuration
+```ini
+[FontPreferences]
+PREFERRED_FONTS = DejaVu Sans, Noto Sans JP, Noto Sans KR, Noto Sans SC, Noto Sans TC, Arial Unicode MS
+OS_SPECIFIC_FONT_LOADING = True
+CUSTOM_FONT_DIR = fonts
+```
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+1. **"No data available"**
+   - Verify data file exists and path is correct in `configurations.txt`
+   - Check file encoding is UTF-8
+   - Ensure date range contains data
+
+2. **"Failed to get Spotify access token"**
+   - Verify Spotify API credentials in `configurations.txt` or environment variables
+   - Check credentials are active and not expired
+
+3. **Character encoding errors**
+   - Always set `PYTHONIOENCODING=utf-8` before running
+   - Verify data files are UTF-8 encoded
+   - Check font files exist in `fonts/` directory
+
+4. **Performance issues**
+   - Use `FRAME_AGGREGATION_PERIOD = W` or `M` for long time series
+   - Adjust `MAX_PARALLEL_WORKERS` based on available CPU cores
+   - Enable `CLEANUP_INTERMEDIATE_FRAMES = True` to save disk space
+
+### Debug Options
+```ini
+[Debugging]
+DEBUG_CACHE_ALBUM_ART_UTILS = True     # Detailed cache logging
+LOG_FRAME_TIMES = True                 # Frame rendering performance
+PARALLEL_LOG_COMPLETION_INTERVAL = 100 # Parallel processing updates
+```
+
+## 📈 Performance Tips
+
+- **Frame Aggregation**: Use weekly (`W`) or monthly (`M`) aggregation for datasets with >10,000 plays
+- **Parallel Processing**: Set `MAX_PARALLEL_WORKERS` to your CPU core count
+- **GPU Encoding**: Enable `USE_NVENC_IF_AVAILABLE = True` if you have an NVIDIA GPU
+- **Test Renders**: Use `MAX_FRAMES_FOR_TEST_RENDER = 100` for quick previews
+- **Cache Management**: Keep cache directories for faster subsequent runs
+
+## 🎯 Output Examples
+
+### Generated Files
+- `spotify_top_songs_race_4k.mp4` (tracks mode)
+- `spotify_top_artists_race_4k.mp4` (artists mode)
+- Cache directories with artwork and metadata
+- Optional intermediate frames for debugging

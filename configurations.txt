@@ -8,7 +8,7 @@ PYTHONIOENCODING_WARNING = True
 # --- Data Source ---
 [DataSource]
 # SOURCE: "lastfm" or "spotify"
-SOURCE = lastfm
+SOURCE = spotify
 INPUT_FILENAME_LASTFM = lastfm_data.csv
 # INPUT_FILENAME_SPOTIFY: Path to your Spotify JSON data (e.g., "StreamingHistory0.json")
 # Or use a pattern like "StreamingHistory*.json" if you have multiple files.
@@ -21,16 +21,17 @@ FILTER_SKIPPED_TRACKS = False
 # START_DATE: YYYY-MM-DD or "all_time"
 # 2024-01-01
 # 2024-12-31
-START_DATE = 2024-01-01
+START_DATE = all_time
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = 2024-12-31
+END_DATE = all_time
 
 # --- Visualization Mode ---
 [VisualizationMode]
-# MODE: "tracks" or "artists"
+# MODE: "tracks", "artists", or "both"
 # tracks: Show top tracks over time with album covers
-# artists: Show top artists over time with artist profile photos
-MODE = tracks
+# artists: Show top artists over time with artist profile photos  
+# both: Generate both track and artist visualizations (comprehensive mode for long renders)
+MODE = artists
 
 # --- Animation Output ---
 [AnimationOutput]

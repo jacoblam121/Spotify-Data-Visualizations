@@ -1803,158 +1803,186 @@ def main():
     else:
         print("FFMpegWriter is available.")
 
-
-    pipeline_start_time = time.time() # <--- ADDED TIMING
+    # Check if we're in "both" mode
+    original_mode = config.get('VisualizationMode', 'MODE', 'tracks').lower()
     
-    # --- Step 1: Clean and filter data ---
-    print(f"\nStep 1: Cleaning and filtering data based on configuration (Source: {config.get('DataSource', 'SOURCE')})...")
-    cleaned_df = clean_and_filter_data(config)
-    
-    if cleaned_df is None or cleaned_df.empty: 
-        print("Data cleaning and filtering resulted in no data. Exiting.")
-        return
-    print(f"Data cleaning successful. {len(cleaned_df)} relevant rows found.")
-
-    # --- Step 2: Prepare data for bar chart race (high-resolution timestamps) ---
-    print(f"\nStep 2: Preparing data for bar chart race (high-resolution timestamps) in {VISUALIZATION_MODE} mode...")
-    full_race_df, entity_details_map = prepare_data_for_bar_chart_race(cleaned_df, mode=VISUALIZATION_MODE) # Use cleaned_df from above
-    
-    if full_race_df is None or full_race_df.empty:
-        print("\nNo data available for animation after race preparation. Please check your data and processing steps.")
-        return
-        
-    print("Data preparation for race successful.")
-    entity_type = "songs" if VISUALIZATION_MODE == "tracks" else "artists"
-    print(f"Race DataFrame shape: {full_race_df.shape} (Play Events, Unique {entity_type.title()})")
-    print(f"Number of entries in entity_details_map: {len(entity_details_map)}")
-
-    pipeline_end_time = time.time() # <--- ADDED TIMING
-    print(f"--- Time taken for data processing (Steps 1 & 2): {pipeline_end_time - pipeline_start_time:.2f} seconds ---") # <--- ADDED TIMING
-
-
-    print("\n--- Data ready for Animation ---")
-    
-    race_df_for_animation = full_race_df.copy() # Start with the full df, copy to avoid modifying original full_race_df
-
-    # --- Apply FRAME_AGGREGATION_PERIOD ---    
-    aggregation_period_config = config.get('AnimationOutput', 'FRAME_AGGREGATION_PERIOD', 'event').strip() # Keep case for freq strings like '30T'
-    is_event_based = aggregation_period_config.upper() == 'EVENT' # Check against upper for 'event'
-
-    if not is_event_based and not race_df_for_animation.empty:
-        print(f"\n--- Applying Frame Aggregation ({aggregation_period_config}) ---")
-        # Ensure index is datetime for resampling
-        if not pd.api.types.is_datetime64_any_dtype(race_df_for_animation.index):
-            try:
-                race_df_for_animation.index = pd.to_datetime(race_df_for_animation.index, utc=True)
-                print("Converted race_df index to datetime for resampling.")
-            except Exception as e_dt_convert:
-                print(f"ERROR converting race_df index to datetime: {e_dt_convert}. Cannot apply time-based aggregation. Proceeding with event-based frames.")
-                is_event_based = True # Fallback to event-based
-
-        if not is_event_based: # Re-check after potential fallback
-            try:
-                # Group by the desired aggregation period, using the original event timestamps.
-                # For each period that has events, pick the *last event's data* from that period.
-                # The index of the resulting df will be the timestamp of that last event.
-                # This ensures that only periods with activity are included, and the timestamp is accurate.
-                aggregated_df = race_df_for_animation.groupby(pd.Grouper(freq=aggregation_period_config)).last()
-
-                # Drop rows that might have become all NaN if a period had no events
-                # (Grouper with .last() should only produce rows for periods that had data,
-                # but an explicit dropna ensures cleanliness).
-                aggregated_df.dropna(how='all', inplace=True)
-                
-                # Ensure remaining NaNs (e.g. for songs that weren't present in a last event) are 0 and type is int
-                race_df_for_animation = aggregated_df.fillna(0).astype(int)
-                
-                print(f"Aggregated race_df by '{aggregation_period_config}', keeping last event in each period. New shape: {race_df_for_animation.shape}")
-                if race_df_for_animation.empty:
-                    print("Warning: Aggregation resulted in an empty DataFrame. Check aggregation period and data density.")
-                    return # Cannot proceed with empty df
-            except ValueError as e_resample:
-                print(f"ERROR during aggregation with period '{aggregation_period_config}': {e_resample}.")
-                print("Ensure the aggregation period is a valid pandas offset alias (e.g., 'D', 'H', 'S', 'W', 'M', '30T'). Proceeding with event-based frames.")
-                race_df_for_animation = full_race_df # Fallback to original df if aggregation failed
-            except Exception as e_generic_resample:
-                print(f"An unexpected error occurred during aggregation: {e_generic_resample}. Proceeding with event-based frames.")
-                race_df_for_animation = full_race_df # Fallback
+    if original_mode == 'both':
+        print("\n=== BOTH MODE ENABLED ===")
+        print("Will generate both track and artist visualizations sequentially...")
+        modes_to_run = ['tracks', 'artists']
     else:
-        print("\n--- Using event-based frames (no aggregation selected or DataFrame was empty) ---")
+        modes_to_run = [original_mode]
     
-    # Use MAX_FRAMES_FOR_TEST_RENDER from config
-    # MAX_FRAMES_FOR_TEST_RENDER is already a global variable updated by load_configuration()
-    if MAX_FRAMES_FOR_TEST_RENDER > 0 and MAX_FRAMES_FOR_TEST_RENDER < len(race_df_for_animation): # Use len(race_df_for_animation)
-        print(f"WARNING: Using a SUBSET of data for animation (first {MAX_FRAMES_FOR_TEST_RENDER} frames of potentially aggregated data).")
-        race_df_for_animation = race_df_for_animation.head(MAX_FRAMES_FOR_TEST_RENDER)
-    elif MAX_FRAMES_FOR_TEST_RENDER > 0:
-         print(f"Note: MAX_FRAMES_FOR_TEST_RENDER ({MAX_FRAMES_FOR_TEST_RENDER}) is >= total frames ({len(race_df_for_animation)}). Rendering full video (or full aggregated video).")
-    
-    # --- Step 3: Calculate Rolling Window Stats ---
-    if race_df_for_animation.empty:
-        print("\nrace_df_for_animation is empty before calculating rolling stats. Exiting.")
-        return
+    # Run the pipeline for each mode
+    for mode_index, current_mode in enumerate(modes_to_run):
+        if len(modes_to_run) > 1:
+            print(f"\n{'='*50}")
+            print(f"RUNNING MODE {mode_index + 1} of {len(modes_to_run)}: {current_mode.upper()}")
+            print(f"{'='*50}")
         
-    animation_frame_timestamps = race_df_for_animation.index
-    # Rolling base frequency allows users to control granularity (e.g. 'D', 'H', '15T').
-    rolling_base_freq_cfg = config.get('RollingStats', 'BASE_FREQUENCY', 'D').strip() or 'D'
-    rolling_stats = calculate_rolling_window_stats(
-        cleaned_df,
-        animation_frame_timestamps,
-        base_freq=rolling_base_freq_cfg,
-        mode=VISUALIZATION_MODE
-    )
-    
-    # --- Step 4: Calculate Nightingale Chart Data (if enabled) ---
-    nightingale_data = {}
-    if ENABLE_NIGHTINGALE:
-        print("\nStep 4: Calculating nightingale rose chart data...")
+        # Set the global VISUALIZATION_MODE for this iteration
+        global VISUALIZATION_MODE
+        VISUALIZATION_MODE = current_mode
         
-        # Determine aggregation type
-        agg_type = NIGHTINGALE_AGGREGATION_TYPE
-        if agg_type == 'auto':
-            start_date = cleaned_df['timestamp'].min()
-            end_date = cleaned_df['timestamp'].max()
-            agg_type = determine_aggregation_type(start_date, end_date)
-            print(f"Auto-determined aggregation type: {agg_type}")
+        pipeline_start_time = time.time() # <--- ADDED TIMING
         
-        # Apply sampling rate for performance optimization
-        if NIGHTINGALE_SAMPLING_RATE.upper() in ['W', 'M']:
-            print(f"Applying nightingale sampling rate: {NIGHTINGALE_SAMPLING_RATE}")
-            # Sample frame timestamps for faster computation
-            sampled_timestamps = animation_frame_timestamps[::7] if NIGHTINGALE_SAMPLING_RATE.upper() == 'W' else animation_frame_timestamps[::30]
-            # Always include first and last timestamps
-            if sampled_timestamps[0] != animation_frame_timestamps[0]:
-                sampled_timestamps = pd.Index([animation_frame_timestamps[0]]).union(sampled_timestamps)
-            if sampled_timestamps[-1] != animation_frame_timestamps[-1]:
-                sampled_timestamps = sampled_timestamps.union(pd.Index([animation_frame_timestamps[-1]]))
-            print(f"Reduced nightingale frames: {len(animation_frame_timestamps)} → {len(sampled_timestamps)}")
+        # --- Step 1: Clean and filter data ---
+        print(f"\nStep 1: Cleaning and filtering data based on configuration (Source: {config.get('DataSource', 'SOURCE')})...")
+        cleaned_df = clean_and_filter_data(config)
+        
+        if cleaned_df is None or cleaned_df.empty: 
+            print("Data cleaning and filtering resulted in no data. Exiting.")
+            return
+        print(f"Data cleaning successful. {len(cleaned_df)} relevant rows found.")
+
+        # --- Step 2: Prepare data for bar chart race (high-resolution timestamps) ---
+        print(f"\nStep 2: Preparing data for bar chart race (high-resolution timestamps) in {VISUALIZATION_MODE} mode...")
+        full_race_df, entity_details_map = prepare_data_for_bar_chart_race(cleaned_df, mode=VISUALIZATION_MODE) # Use cleaned_df from above
+        
+        if full_race_df is None or full_race_df.empty:
+            print("\nNo data available for animation after race preparation. Please check your data and processing steps.")
+            continue # Skip to next mode if data is empty
+            
+        print("Data preparation for race successful.")
+        entity_type = "songs" if VISUALIZATION_MODE == "tracks" else "artists"
+        print(f"Race DataFrame shape: {full_race_df.shape} (Play Events, Unique {entity_type.title()})")
+        print(f"Number of entries in entity_details_map: {len(entity_details_map)}")
+
+        pipeline_end_time = time.time() # <--- ADDED TIMING
+        print(f"--- Time taken for data processing (Steps 1 & 2): {pipeline_end_time - pipeline_start_time:.2f} seconds ---") # <--- ADDED TIMING
+
+
+        print("\n--- Data ready for Animation ---")
+        
+        race_df_for_animation = full_race_df.copy() # Start with the full df, copy to avoid modifying original full_race_df
+
+        # --- Apply FRAME_AGGREGATION_PERIOD ---    
+        aggregation_period_config = config.get('AnimationOutput', 'FRAME_AGGREGATION_PERIOD', 'event').strip() # Keep case for freq strings like '30T'
+        is_event_based = aggregation_period_config.upper() == 'EVENT' # Check against upper for 'event'
+
+        if not is_event_based and not race_df_for_animation.empty:
+            print(f"\n--- Applying Frame Aggregation ({aggregation_period_config}) ---")
+            # Ensure index is datetime for resampling
+            if not pd.api.types.is_datetime64_any_dtype(race_df_for_animation.index):
+                try:
+                    race_df_for_animation.index = pd.to_datetime(race_df_for_animation.index, utc=True)
+                    print("Converted race_df index to datetime for resampling.")
+                except Exception as e_dt_convert:
+                    print(f"ERROR converting race_df index to datetime: {e_dt_convert}. Cannot apply time-based aggregation. Proceeding with event-based frames.")
+                    is_event_based = True # Fallback to event-based
+
+            if not is_event_based: # Re-check after potential fallback
+                try:
+                    # Group by the desired aggregation period, using the original event timestamps.
+                    # For each period that has events, pick the *last event's data* from that period.
+                    # The index of the resulting df will be the timestamp of that last event.
+                    # This ensures that only periods with activity are included, and the timestamp is accurate.
+                    aggregated_df = race_df_for_animation.groupby(pd.Grouper(freq=aggregation_period_config)).last()
+
+                    # Drop rows that might have become all NaN if a period had no events
+                    # (Grouper with .last() should only produce rows for periods that had data,
+                    # but an explicit dropna ensures cleanliness).
+                    aggregated_df.dropna(how='all', inplace=True)
+                    
+                    # Ensure remaining NaNs (e.g. for songs that weren't present in a last event) are 0 and type is int
+                    race_df_for_animation = aggregated_df.fillna(0).astype(int)
+                    
+                    print(f"Aggregated race_df by '{aggregation_period_config}', keeping last event in each period. New shape: {race_df_for_animation.shape}")
+                    if race_df_for_animation.empty:
+                        print("Warning: Aggregation resulted in an empty DataFrame. Check aggregation period and data density.")
+                        continue # Skip to next mode if aggregation fails
+                except ValueError as e_resample:
+                    print(f"ERROR during aggregation with period '{aggregation_period_config}': {e_resample}.")
+                    print("Ensure the aggregation period is a valid pandas offset alias (e.g., 'D', 'H', 'S', 'W', 'M', '30T'). Proceeding with event-based frames.")
+                    race_df_for_animation = full_race_df # Fallback to original df if aggregation failed
+                except Exception as e_generic_resample:
+                    print(f"An unexpected error occurred during aggregation: {e_generic_resample}. Proceeding with event-based frames.")
+                    race_df_for_animation = full_race_df # Fallback
         else:
-            sampled_timestamps = animation_frame_timestamps
+            print("\n--- Using event-based frames (no aggregation selected or DataFrame was empty) ---")
         
-        # Calculate raw nightingale time data (using sampled timestamps for performance)
-        nightingale_time_data = calculate_nightingale_time_data(
+        # Use MAX_FRAMES_FOR_TEST_RENDER from config
+        # MAX_FRAMES_FOR_TEST_RENDER is already a global variable updated by load_configuration()
+        if MAX_FRAMES_FOR_TEST_RENDER > 0 and MAX_FRAMES_FOR_TEST_RENDER < len(race_df_for_animation): # Use len(race_df_for_animation)
+            print(f"WARNING: Using a SUBSET of data for animation (first {MAX_FRAMES_FOR_TEST_RENDER} frames of potentially aggregated data).")
+            race_df_for_animation = race_df_for_animation.head(MAX_FRAMES_FOR_TEST_RENDER)
+        elif MAX_FRAMES_FOR_TEST_RENDER > 0:
+             print(f"Note: MAX_FRAMES_FOR_TEST_RENDER ({MAX_FRAMES_FOR_TEST_RENDER}) is >= total frames ({len(race_df_for_animation)}). Rendering full video (or full aggregated video).")
+        
+        # --- Step 3: Calculate Rolling Window Stats ---
+        if race_df_for_animation.empty:
+            print("\nrace_df_for_animation is empty before calculating rolling stats. Skipping this mode.")
+            continue
+            
+        animation_frame_timestamps = race_df_for_animation.index
+        # Rolling base frequency allows users to control granularity (e.g. 'D', 'H', '15T').
+        rolling_base_freq_cfg = config.get('RollingStats', 'BASE_FREQUENCY', 'D').strip() or 'D'
+        rolling_stats = calculate_rolling_window_stats(
             cleaned_df,
-            sampled_timestamps.tolist(),
-            aggregation_type=agg_type
+            animation_frame_timestamps,
+            base_freq=rolling_base_freq_cfg,
+            mode=VISUALIZATION_MODE
         )
         
-        # Prepare animation data with smooth transitions (interpolate for all frames)
-        nightingale_data = prepare_nightingale_animation_data(
-            nightingale_time_data,
-            animation_frame_timestamps.tolist(),  # Always use all frames for smooth animation
-            enable_smooth_transitions=NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
-            transition_duration_seconds=NIGHTINGALE_TRANSITION_DURATION_SECONDS,
-            target_fps=TARGET_FPS,
-            easing_function=NIGHTINGALE_ANIMATION_EASING_FUNCTION
-        )
-        
-        print(f"Nightingale data calculated for {len(nightingale_data)} frames")
-    else:
-        print("\nNightingale chart disabled in configuration, skipping calculation")
+        # --- Step 4: Calculate Nightingale Chart Data (if enabled) ---
+        nightingale_data = {}
+        if ENABLE_NIGHTINGALE:
+            print("\nStep 4: Calculating nightingale rose chart data...")
+            
+            # Determine aggregation type
+            agg_type = NIGHTINGALE_AGGREGATION_TYPE
+            if agg_type == 'auto':
+                start_date = cleaned_df['timestamp'].min()
+                end_date = cleaned_df['timestamp'].max()
+                agg_type = determine_aggregation_type(start_date, end_date)
+                print(f"Auto-determined aggregation type: {agg_type}")
+            
+            # Apply sampling rate for performance optimization
+            if NIGHTINGALE_SAMPLING_RATE.upper() in ['W', 'M']:
+                print(f"Applying nightingale sampling rate: {NIGHTINGALE_SAMPLING_RATE}")
+                # Sample frame timestamps for faster computation
+                sampled_timestamps = animation_frame_timestamps[::7] if NIGHTINGALE_SAMPLING_RATE.upper() == 'W' else animation_frame_timestamps[::30]
+                # Always include first and last timestamps
+                if sampled_timestamps[0] != animation_frame_timestamps[0]:
+                    sampled_timestamps = pd.Index([animation_frame_timestamps[0]]).union(sampled_timestamps)
+                if sampled_timestamps[-1] != animation_frame_timestamps[-1]:
+                    sampled_timestamps = sampled_timestamps.union(pd.Index([animation_frame_timestamps[-1]]))
+                print(f"Reduced nightingale frames: {len(animation_frame_timestamps)} → {len(sampled_timestamps)}")
+            else:
+                sampled_timestamps = animation_frame_timestamps
+            
+            # Calculate raw nightingale time data (using sampled timestamps for performance)
+            nightingale_time_data = calculate_nightingale_time_data(
+                cleaned_df,
+                sampled_timestamps.tolist(),
+                aggregation_type=agg_type
+            )
+            
+            # Prepare animation data with smooth transitions (interpolate for all frames)
+            nightingale_data = prepare_nightingale_animation_data(
+                nightingale_time_data,
+                animation_frame_timestamps.tolist(),  # Always use all frames for smooth animation
+                enable_smooth_transitions=NIGHTINGALE_ENABLE_SMOOTH_TRANSITIONS,
+                transition_duration_seconds=NIGHTINGALE_TRANSITION_DURATION_SECONDS,
+                target_fps=TARGET_FPS,
+                easing_function=NIGHTINGALE_ANIMATION_EASING_FUNCTION
+            )
+            
+            print(f"Nightingale data calculated for {len(nightingale_data)} frames")
+        else:
+            print("\nNightingale chart disabled in configuration, skipping calculation")
 
-    # Now, call create_bar_chart_race_animation with the potentially truncated and/or aggregated race_df_for_animation
-    # The pre_fetch logic is inside create_bar_chart_race_animation, so it will use the df passed to it.
-    create_bar_chart_race_animation(race_df_for_animation, entity_details_map, rolling_stats, nightingale_data) # Pass nightingale_data
+        # Now, call create_bar_chart_race_animation with the potentially truncated and/or aggregated race_df_for_animation
+        # The pre_fetch logic is inside create_bar_chart_race_animation, so it will use the df passed to it.
+        create_bar_chart_race_animation(race_df_for_animation, entity_details_map, rolling_stats, nightingale_data) # Pass nightingale_data
+        
+        if len(modes_to_run) > 1:
+            print(f"\n✓ Completed {current_mode.upper()} mode visualization")
+    
+    if len(modes_to_run) > 1:
+        print(f"\n{'='*50}")
+        print("✓ BOTH MODE COMPLETE - All visualizations generated successfully!")
+        print(f"{'='*50}")
 
 
 if __name__ == "__main__":

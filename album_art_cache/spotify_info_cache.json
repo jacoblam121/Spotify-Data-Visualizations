@@ -2684,5 +2684,695 @@
       "7eyudpSl4KF7iXun4H2PSh"
     ],
     "source": "spotify (Precise Search (Artist: andreas waldetoft))"
+  },
+  "spotify_tracklookup_4diKCx2EUg4CGvDTyCan5H": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273df756f52b91b4dcd656760b0",
+    "canonical_album_name": "The Witcher 3: Wild Hunt (Original Game Soundtrack)",
+    "spotify_album_id": "6pYNEn4tMc6gdv5fIZf5yn",
+    "spotify_artist_ids": [
+      "07vycW8ICLf5hKb22PFWXw"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_4qFIPftASj7it8cqKfl8KE": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27353b179bb193aa0fb34cb2c5a",
+    "canonical_album_name": "\u30e9\u30ba\u30e9\u30a4\u30c8\u306e\u5922",
+    "spotify_album_id": "7hG6XsPZPxj6Y6TYbHaz7t",
+    "spotify_artist_ids": [
+      "4vwJe968gHHZzL0or0gSZA"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_4SgrbIUnv66buOpGfbAKvV": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2738508d6e185a2accb82ca13d0",
+    "canonical_album_name": "haruhayuku marie",
+    "spotify_album_id": "5fooN8UdGlMRVe5avioodP",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3G7MgLuWLzUJQflWOCDZit": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e5cc60bec326c779d17ee76e",
+    "canonical_album_name": "Off The Record",
+    "spotify_album_id": "7qch1xWGWuU5VxZEYBF5KW",
+    "spotify_artist_ids": [
+      "6RHTUrRF63xao58xh9FXYJ"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5bdAmCz7rnCjhM0SJukRWo": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273cef6276592d6488fee5692e0",
+    "canonical_album_name": "Number Five",
+    "spotify_album_id": "5C5hQMgnexnlaLeOOS3NDV",
+    "spotify_artist_ids": [
+      "3w2HqkKa6upwuXEULtGvnY"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3hMpmmLUQJpr8cdvU4WURM": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27360c2200c6e96117f150b5cda",
+    "canonical_album_name": "Music from Final Fantasy",
+    "spotify_album_id": "7KMMSeHgQyqwfqeB1rJYUT",
+    "spotify_artist_ids": [
+      "3if8q00XuEyspVkdv755T1"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6IHWPY5iBUI1AOUclbtE6F": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27310f43930935721ca10de3173",
+    "canonical_album_name": "\u591c\u64ab\u3067\u308b\u30e1\u30ce\u30a6 / \u5e7d\u970a\u6771\u4eac",
+    "spotify_album_id": "2eGDVgL9Vbz6Pehc9Kz7hS",
+    "spotify_artist_ids": [
+      "1S8OQ9SqlLdD9l4paaZMuZ"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_60iSKGrGazRzICtMjADNSM": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273fc2101e6889d6ce9025f85f2",
+    "canonical_album_name": "Divinely Uninspired To A Hellish Extent",
+    "spotify_album_id": "5658aM19fA3JVwTK6eQX70",
+    "spotify_artist_ids": [
+      "4GNC7GD6oZMSxPGyXy4MNB"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2M53M7wYGFjUMlHIXhJoqW": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273eb2ca95e31a21a5fc8eb6197",
+    "canonical_album_name": "Studio Bar (Ao Vivo Em Uberl\u00e2ndia / 2018 / Vol. 2)",
+    "spotify_album_id": "5YFOpxwwKXO2HhbTsFzdpi",
+    "spotify_artist_ids": [
+      "5JXhkyafynxCvxtov7C1PV"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0GtSbIUxOgrIcQSp10fuhx": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273900a0ac082b6365cedbb6921",
+    "canonical_album_name": "Penny Rain",
+    "spotify_album_id": "0ngsFSfF9BBUSsDP47YrSM",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5SXsXjVJCWeJuf7FHvgBYR": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b0b9aaf0ef903add8f96ff6e",
+    "canonical_album_name": "The Avengers (Original Motion Picture Soundtrack)",
+    "spotify_album_id": "3wvpIkfl4oOgZLMaQBWadf",
+    "spotify_artist_ids": [
+      "0Xk15jHKly4c3AhPr5vjoA"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0JiVRyTJcJnmlwCZ854K4p": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273f00ade2f88d8223521bc7f76",
+    "canonical_album_name": "Alone",
+    "spotify_album_id": "4blCxKnK1sGo9D45trrqjt",
+    "spotify_artist_ids": [
+      "7vk5e3vY1uw9plTHJAMwjN"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_7sBNTjuERmSmn2grtPGa5q": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2730ddb12e561da6c7f431ea703",
+    "canonical_album_name": "Be Together",
+    "spotify_album_id": "1HAXoSwwhhAZ3FLRJV8th3",
+    "spotify_artist_ids": [
+      "3Uy2Qh1NmDU22YvCmmShVU"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_7v8wKvNQQIxkugCFFjrkaO": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27310179936604a42f16280835e",
+    "canonical_album_name": "\u6b8b\u97ff\u6563\u6b4c",
+    "spotify_album_id": "1gfSftIuafqkGu28ely5z6",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_24GYR6PqTi5zMy2DJXpKPw": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273aa0005a09c206daff4f2695b",
+    "canonical_album_name": "\u30a2\u30ca\u30af\u30ed\u30cb\u30ba\u30e0",
+    "spotify_album_id": "5vpXNx8rNnCnNy6JK64Kne",
+    "spotify_artist_ids": [
+      "4vwJe968gHHZzL0or0gSZA",
+      "6N4L6jhhiQKd4ZPWKxbXFL"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3sz0hi6mkqq0hfRMN8RGrs": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2730ceb00274ab3e634c68283c7",
+    "canonical_album_name": "Versus the night",
+    "spotify_album_id": "4R8cMdxOUDbHaHvwjEluEq",
+    "spotify_artist_ids": [
+      "7kOrrFIBIBc8uCu2zbxbLv"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6MxMqCgqmekcr0VwSU7AVH": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273942a0c9ac8f1def7c8805044",
+    "canonical_album_name": "The Search",
+    "spotify_album_id": "46xdC4Qcvscfs3Ai2RIHcv",
+    "spotify_artist_ids": [
+      "6fOMl44jA4Sp5b9PpYCkzz"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1ZkmPku85veww4fF66aUFF": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27302701cfe03aca6827b5c5449",
+    "canonical_album_name": "Top Gun: Maverick (Music From The Motion Picture)",
+    "spotify_album_id": "3tjIKRAPBy5Qu4z8F5HmBz",
+    "spotify_artist_ids": [
+      "7Cf73Z3RZQTH4V69GSDxnv",
+      "1HY2Jd0NmPuamShAr6KMms",
+      "0YC192cP3KPCRWx8zr8MfZ",
+      "6dU7gPN2BhEPfO5QHLt7es"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_52hEoJr9DL19p4BKGuvnfv": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2738146712bb74bb0189128617c",
+    "canonical_album_name": "ONE AND LAST",
+    "spotify_album_id": "5jc9kybeA4JeT6xucySNte",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6hqQPoB1yYKcLfByfxO8he": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2736ecd916783cbea386af0fefb",
+    "canonical_album_name": "Garota Vip Rio de Janeiro (ao Vivo)",
+    "spotify_album_id": "5QgnH5cBOdvtOA5YT7C1L7",
+    "spotify_artist_ids": [
+      "1AL2GKpmRrKXkYIcASuRFa",
+      "487N2T9nIPEHrlTZLL3SQs"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_7HX6O8k7gAHFzm9Dd50Kuz": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2736ce6585a61ca7b244535a92e",
+    "canonical_album_name": "Windfall",
+    "spotify_album_id": "0qiw065vcrB1tUYo286kaN",
+    "spotify_artist_ids": [
+      "3OKg7YbOIatODzkRIbLJR4"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_4JK1kDUdH9RTBQrrSO1QfR": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d0bd51668da5629aa0cc77d8",
+    "canonical_album_name": "\u58f1",
+    "spotify_album_id": "1YWoHzj5wHnG7m6gLlwBQd",
+    "spotify_artist_ids": [
+      "0ixzjrK1wkN2zWBXt3VW3W"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5jTUvy88f2ACRgFhhnXhbt": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273af2a2e8094e8b68bedcc2113",
+    "canonical_album_name": "Stories That Last Through The Sleepless Nights",
+    "spotify_album_id": "3QWB22qBGpDSwALq5mxnvQ",
+    "spotify_artist_ids": [
+      "133ZFcHur9ckcKLnJ0XNJS"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3oh6SCCeLuXhFpEyepla6G": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273545a714d4a7bf419b4adefc6",
+    "canonical_album_name": "Famous Cryp",
+    "spotify_album_id": "2gZmrByp6yiyePHi3dzZ1d",
+    "spotify_artist_ids": [
+      "3Fl1V19tmjt57oBdxXKAjJ"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3P3UA61WRQqwCXaoFOTENd": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c06f0e8b33ac2d246158253e",
+    "canonical_album_name": "Palette",
+    "spotify_album_id": "5V8n6fqyAPxvFTibPhQVcp",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6fxVffaTuwjgEk5h9QyRjy": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d08209944468440145f01524",
+    "canonical_album_name": "x (Wembley Edition)",
+    "spotify_album_id": "6NoBzYmh5gUusGPCfg0pct",
+    "spotify_artist_ids": [
+      "6eUKZXaKkcviH0Ku9w2n3V"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6emzRn11iO8a4lQGbyJg7i": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732ce14eb758fb07951b6d4ea4",
+    "canonical_album_name": "Gyakutengeki",
+    "spotify_album_id": "02B8FTElIyIMeHrHkHARbf",
+    "spotify_artist_ids": [
+      "2mcj8ajoE1eFlNkAihw5Cg"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_06QlZI2Paye9Tg9MmAbs9t": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d61bd7661e128cfc4059d40b",
+    "canonical_album_name": "\u900f\u660e",
+    "spotify_album_id": "2n1WpPbDStsq348p0KpXXj",
+    "spotify_artist_ids": [
+      "4vwJe968gHHZzL0or0gSZA",
+      "6N4L6jhhiQKd4ZPWKxbXFL"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1rr2DJOxV0sHXeUXCAz1yf": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273a19652713b50a721360c1775",
+    "canonical_album_name": "\u6625\u6ce5\u68d2",
+    "spotify_album_id": "4YKJk4juMZQr2sDnKzDlBz",
+    "spotify_artist_ids": [
+      "4UK2Lzi6fBfUi9rpDt6cik"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_53qIoIXhsOAI9T4YIfaQSo": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273a8831df201854efc928e21f6",
+    "canonical_album_name": "Zoon Baloomba (Majik Radio Mix)",
+    "spotify_album_id": "6ig2B7ln3yw1ZWngDENWgK",
+    "spotify_artist_ids": [
+      "7fc6URuip6672lCJwLO31s"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_4YhITuwINLCfXYB2WCXbCZ": null,
+  "spotify_search_alan walker_force_force": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e34414665b8055f9115ee38e",
+    "canonical_album_name": "Origins",
+    "spotify_album_id": "42Ea8EqPulXUcaO9tFPyyT",
+    "spotify_artist_ids": [
+      "7vk5e3vY1uw9plTHJAMwjN"
+    ],
+    "source": "spotify (Precise Search (Artist: alan walker))"
+  },
+  "spotify_tracklookup_6dLEKeBiTaEOzXz4pzSdde": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2733b4f224aa76f2e4c8ae5dd19",
+    "canonical_album_name": "Me",
+    "spotify_album_id": "69Mm03Zat831nuSvKJZxPJ",
+    "spotify_artist_ids": [
+      "4Lmo7h2Ik12QI3Ik0BvGbB"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5JlaPIRxVrZ6ZjJ8IZzSEk": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735581d67d32f077de8b0c4b9f",
+    "canonical_album_name": "Malokera (feat. Ludmilla, Ty Dolla $ign)",
+    "spotify_album_id": "4nr1Ih1dxl0fchKrre5Kel",
+    "spotify_artist_ids": [
+      "4mb1xtQVGSK5dh8AbtwBiR",
+      "5he5w2lnU9x7JFhnwcekXX",
+      "0tvpihdAsKiNnP6sWS3jUI",
+      "3CDoRporvSjdzTrm99a3gi",
+      "7c0XG5cIJTrrAgEC3ULPiq"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6tRrbAAOdMZtiSP22hMqqu": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27337e5cb69414c18408554c32c",
+    "canonical_album_name": "Free",
+    "spotify_album_id": "77NZuUABaXO5yiNkPYsr2l",
+    "spotify_artist_ids": [
+      "7qgorhDacy1FRz5HkAhDtu",
+      "79a4DDvkxUJy73sCJqrC8q"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_7AeBIxSXZZ6Ny6aO7ihdgD": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273160345ff376886c0d691e266",
+    "canonical_album_name": "\u30a4\u30ce\u30bb\u30f3\u30c8",
+    "spotify_album_id": "03eXDo7OUGxfvG4RtefzNU",
+    "spotify_artist_ids": [
+      "4vwJe968gHHZzL0or0gSZA",
+      "6N4L6jhhiQKd4ZPWKxbXFL"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1nqaSoiLuqevDes4S18sO7": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b19f6b6ee22cc1d1baae4b48",
+    "canonical_album_name": "Milu",
+    "spotify_album_id": "3oqVZoqdqNmaSQkJF9mMfI",
+    "spotify_artist_ids": [
+      "7MiDcPa6UiV3In7lIM71IN"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6SRWhUJcD2YKahCwHavz3X": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273a108e07c661f9fc54de9c43a",
+    "canonical_album_name": "Different World",
+    "spotify_album_id": "3nzuGtN3nXARvvecier4K0",
+    "spotify_artist_ids": [
+      "7vk5e3vY1uw9plTHJAMwjN",
+      "1eMmoIprPDWeFdB1FxU6ZV",
+      "6064pL9Hu3Wx2bwJMeOx6o"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5q3LwAHTqo9d3rET2EA9Nq": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d373d58ad02ede9bfba2dbb5",
+    "canonical_album_name": "The Weekend",
+    "spotify_album_id": "6zQD9g698P2LjEtKpoBXWq",
+    "spotify_artist_ids": [
+      "1AhjOkOLkbHUfcHDSErXQs",
+      "6UbmqUEgjLA6jAcXwbM1Z9"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3ZEno9fORwMA1HPecdLi0R": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ff8a4276b3be31c839557439",
+    "canonical_album_name": "HOPE",
+    "spotify_album_id": "6zaisPwfcIAfdUGPj3mmGY",
+    "spotify_artist_ids": [
+      "6fOMl44jA4Sp5b9PpYCkzz"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_7HAeJTbmJkEmqB2hNub05V": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273923d825d5f12d0cce3823a38",
+    "canonical_album_name": "I Got the Music in Me",
+    "spotify_album_id": "0y8OUFvf3yrqG4SShTYGtv",
+    "spotify_artist_ids": [
+      "4wUEr6UDdMay6muyymE3Pf",
+      "7fc6URuip6672lCJwLO31s",
+      "38CIolAvpeHHay7LlPzgIL"
+    ],
+    "album_type": "album",
+    "source": "spotify (secondary_search_main_album)"
+  },
+  "spotify_tracklookup_18czZN7uruOjftj71Kt8oj": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2737ce4ae27fdfb7809d9e2b3b4",
+    "canonical_album_name": "PAID MY DUES",
+    "spotify_album_id": "0VcbEnVaIMuWuw2hSCso4i",
+    "spotify_artist_ids": [
+      "6fOMl44jA4Sp5b9PpYCkzz"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2SYa5Lx1uoCvyDIW4oee9b": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273f9a16d4b6cd94eca041f00b8",
+    "canonical_album_name": "Love Yourself \u627f 'Her'",
+    "spotify_album_id": "2FTS6a6DLXMNp8flyA0HGO",
+    "spotify_artist_ids": [
+      "3Nrfpe0tUJi4K4DXYWgMUX"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1frGIyTaTjvksS8FhyoqYx": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273df756f52b91b4dcd656760b0",
+    "canonical_album_name": "The Witcher 3: Wild Hunt (Original Game Soundtrack)",
+    "spotify_album_id": "6pYNEn4tMc6gdv5fIZf5yn",
+    "spotify_artist_ids": [
+      "07vycW8ICLf5hKb22PFWXw"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0ZiO07cHvb675UDaKB1iix": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273189f203384af534b6b269e7d",
+    "canonical_album_name": "Sun Dance",
+    "spotify_album_id": "0FNWMFyb0nLCCHucsDfxmA",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2EPQXOr3VLvDImQnoHOYO3": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27338b7bc65f5de5135d6bda880",
+    "canonical_album_name": "One More Last Time",
+    "spotify_album_id": "7duK1Gh3RZxf0G306zMree",
+    "spotify_artist_ids": [
+      "7BFfb40nQrs3xKRMGK1GrC",
+      "63P6hjn73jNbnEFT0gKWKk"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0zvN9oq95bIEQjvfcdeZlX": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735ce0fbd16dba08ae792dc1cf",
+    "canonical_album_name": "Red Swan",
+    "spotify_album_id": "6I13Z2eInmybf3WZl4wduL",
+    "spotify_artist_ids": [
+      "2EWIKpC6npt0GTe1Cq1KDm",
+      "0ZXSQd2JNOfwJcLNbX0jpN"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6wuj7kT7v4pq9A7GhCnqhZ": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27339b39e4a8f99bcc230a7ccb6",
+    "canonical_album_name": "Reason for existence",
+    "spotify_album_id": "7I2jiA2X1oAmhQqgBuZcuG",
+    "spotify_artist_ids": [
+      "2mcj8ajoE1eFlNkAihw5Cg"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0zke8Vmo0bgbPjxL3pUhqk": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ccc3b356646cd2d89d880a0a",
+    "canonical_album_name": "The Elder Scrolls V: Skyrim: Original Game Soundtrack",
+    "spotify_album_id": "25r7pEf31viAbsoVHC6bQ4",
+    "spotify_artist_ids": [
+      "77yY2QmM6bYvjJ3y5L2R0v"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1VO8RJxFecb2flEEImb34o": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739fe009d0823852effd92d7f8",
+    "canonical_album_name": "Plant",
+    "spotify_album_id": "5KftzhKELNjc4oxGiGQvRf",
+    "spotify_artist_ids": [
+      "1lFLniFTaPjYCtQZvDXpqu"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0L1IszgjzIZRBENyHJTQms": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2737dea0aa103144aa9740835fd",
+    "canonical_album_name": "Dear Society",
+    "spotify_album_id": "0ufTtbuq00FDGauIfTUlNR",
+    "spotify_artist_ids": [
+      "2kRfqPViCqYdSGhYSM9R0Q"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0tBbt8CrmxbjRP0pueQkyU": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273307910d4242c0d6b1fedf955",
+    "canonical_album_name": "Wolves",
+    "spotify_album_id": "5gQZvWM1o8NkQndueJtZcP",
+    "spotify_artist_ids": [
+      "0C8ZW7ezQVs4URX5aX7Kqx",
+      "64KEffDW9EtZ1y2vBYgq8T"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0DrhapFEF5d9Yzg4v914dp": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ccc3b356646cd2d89d880a0a",
+    "canonical_album_name": "The Elder Scrolls V: Skyrim: Original Game Soundtrack",
+    "spotify_album_id": "25r7pEf31viAbsoVHC6bQ4",
+    "spotify_artist_ids": [
+      "77yY2QmM6bYvjJ3y5L2R0v"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5bdmWBCaiaHk2HbqKOXLyJ": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273122797eb8734fd01d47d24ec",
+    "canonical_album_name": "Lethality",
+    "spotify_album_id": "47TnhxiVVp5ZvvotLbFmKf",
+    "spotify_artist_ids": [
+      "0qr7Rhj0yU7BPySYecNUlm"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0uUNN1nSoUx1A4fkDCWDQ7": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b8dcf98474721fe404ad780d",
+    "canonical_album_name": "So Am I",
+    "spotify_album_id": "2XvFk3xrG7dV6GhqcJSQHX",
+    "spotify_artist_ids": [
+      "4npEfmQ6YuiwW1GpUmaq3F"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5bhZCxZo9ejcqInKNvbL73": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273df756f52b91b4dcd656760b0",
+    "canonical_album_name": "The Witcher 3: Wild Hunt (Original Game Soundtrack)",
+    "spotify_album_id": "6pYNEn4tMc6gdv5fIZf5yn",
+    "spotify_artist_ids": [
+      "07vycW8ICLf5hKb22PFWXw"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_37sINbJZcFdHFAsVNsPq1i": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27359d2079e141301ab89b6cbc5",
+    "canonical_album_name": "No Sound Without Silence",
+    "spotify_album_id": "6yd9yk8nFcHalXzy7mgaDx",
+    "spotify_artist_ids": [
+      "3AQRLZ9PuTAozP28Skbq8V"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_7F0MuIk5glqtowCUjbn9es": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273a991995542d50a691b9ae5be",
+    "canonical_album_name": "ANTIFRAGILE",
+    "spotify_album_id": "3u0ggfmK0vjuHMNdUbtaa9",
+    "spotify_artist_ids": [
+      "4SpbR6yFEvexJuaBpgAU5p"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6IO5nn84TKArsi3cjpIqaD": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c753d46683786eed63d41a90",
+    "canonical_album_name": "Mela!",
+    "spotify_album_id": "1a6MAP1V8kZfvmLFzhn0QG",
+    "spotify_artist_ids": [
+      "4SJ7qRgJYNXB9Yttzs4aSa"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1DqxoM9tJrH8VElhileZ2v": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27354fdffbdc1cb5fc9e82bcb93",
+    "canonical_album_name": "Ready To Be Loved",
+    "spotify_album_id": "0n154sm1hveOmE5VKenM9n",
+    "spotify_artist_ids": [
+      "3i94wxAKQqlJyiPLDmjNdH"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1p9VRiwyy2NsBSoNcGs9kP": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2738eda9b0fa7258287e7fbd698",
+    "canonical_album_name": "TV\u30a2\u30cb\u30e1\u300cRe:\u30bc\u30ed\u304b\u3089\u59cb\u3081\u308b\u7570\u4e16\u754c\u751f\u6d3b\u300d2nd season \u5f8c\u671f\u30aa\u30fc\u30d7\u30cb\u30f3\u30b0\u30c6\u30fc\u30de\u300cLong shot\u300d",
+    "spotify_album_id": "31fIhUR0mEe88DuK0eubAl",
+    "spotify_artist_ids": [
+      "0M0v61x8lN3rDLbmTnlYBg"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2dZP7UEXGIvn1HXgfWFA3Z": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b1b3b83ffee5925197e7ef2c",
+    "canonical_album_name": "\u3060\u304b\u3089\u50d5\u306f\u97f3\u697d\u3092\u8f9e\u3081\u305f",
+    "spotify_album_id": "4b9nOSXSf1LROzgfYFxdxI",
+    "spotify_artist_ids": [
+      "4UK2Lzi6fBfUi9rpDt6cik"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_6z1TvLTR0oOsWSJfDrERmj": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27318b1145d9883e5b140151fa9",
+    "canonical_album_name": "\u590f\u8349\u304c\u90aa\u9b54\u3092\u3059\u308b",
+    "spotify_album_id": "3o5yzVy1ZXMfyATfj9OjbV",
+    "spotify_artist_ids": [
+      "4UK2Lzi6fBfUi9rpDt6cik"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_25sgk305KZfyuqVBQIahim": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c5015d2a9270865a5979f56b",
+    "canonical_album_name": "Sweet but Psycho",
+    "spotify_album_id": "7CdLU3GgPy1PH5FVsrPlyA",
+    "spotify_artist_ids": [
+      "4npEfmQ6YuiwW1GpUmaq3F"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2n1PhZHxdiaCMs5xLtsH4j": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732244e9976343a6a34c5ab1b9",
+    "canonical_album_name": "N\u00e4r det b\u00f6rjar",
+    "spotify_album_id": "0IevxAdYzARtExqLuSGFYD",
+    "spotify_artist_ids": [
+      "6Uo3nC1ZbCL0bSeIlqgTN0"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_13yhhn6Cg9WrjusOTJfH3C": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734658d3ce54b0040227be05dc",
+    "canonical_album_name": "Highway",
+    "spotify_album_id": "5hT8DB8ID8oUu8CqCtSiPW",
+    "spotify_artist_ids": [
+      "1sgoKEz17EnuD6eb3nRk05"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1WvOzvyS18s649de8JPSai": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e68476836f5efa73ac01ac25",
+    "canonical_album_name": "Fake Spotlight",
+    "spotify_album_id": "2svrxNYt8qCNZmow1H3dnq",
+    "spotify_artist_ids": [
+      "6I4zig1oXcokmAxdryfzoI"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2owgvchbF6IJrxu4rLPBIl": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b9791a0a6efa800f285a7bab",
+    "canonical_album_name": "Walking the Wire (Piano Acoustic Instrumental)",
+    "spotify_album_id": "7vQuyVhO5ua2dJ1K91JDQc",
+    "spotify_artist_ids": [
+      "6NbfU62rDuIP4dSlfJFijF"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
   }
 }
