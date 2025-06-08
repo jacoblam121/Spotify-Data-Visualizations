@@ -2,5 +2,17 @@
   "neg_mb_album_nan": {
     "timestamp": 1749278129.8239453,
     "reason": "mb_http_error_400"
+  },
+  "spotify_tracklookup_0ug5NqcwcFR2x02gGFeV3Z": {
+    "timestamp": 1749361465.326693,
+    "reason": "spotify_uri_track_not_found_404"
+  },
+  "spotify_artist_search_nonexistenttestartist12345": {
+    "timestamp": 1749361490.7736573,
+    "reason": "no_spotify_artist_results_after_1_search_attempts"
+  },
+  "spotify_search_nonexistenttestartist12345_cruel summer_lover": {
+    "timestamp": 1749361491.1270154,
+    "reason": "no_spotify_results_after_1_search_attempts"
   }
 }

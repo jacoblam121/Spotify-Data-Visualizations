@@ -2309,5 +2309,43 @@
       "5kVZa4lFUmAQlBogl1fkd6"
     ],
     "source": "spotify (Precise Search (Artist: aimyon))"
-  }
+  },
+  "spotify_search_taylor swift_cruel summer_lover": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647",
+    "canonical_album_name": "Lover",
+    "spotify_album_id": "1NAmidJlEaVgA3MpcPFYGq",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "source": "spotify (Precise Search (Artist: Taylor Swift))"
+  },
+  "spotify_search_paramore_misery business_riot!": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
+    "canonical_album_name": "Riot!",
+    "spotify_album_id": "71rziY9eLo1tA2dBMxrwhc",
+    "spotify_artist_ids": [
+      "74XFHRwlV6OrjEM0A2NCMF"
+    ],
+    "source": "spotify (Precise Search (Artist: Paramore))"
+  },
+  "spotify_search_\u30e8\u30eb\u30b7\u30ab_\u6674\u308b_\u5e7b\u71c8": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e763f5fcb87919a7ae96f8b",
+    "canonical_album_name": "\u6674\u308b",
+    "spotify_album_id": "4O53dhmIctih3p2suAAgga",
+    "spotify_artist_ids": [
+      "4UK2Lzi6fBfUi9rpDt6cik"
+    ],
+    "source": "spotify (Precise Search (Artist: \u30e8\u30eb\u30b7\u30ab))"
+  },
+  "spotify_tracklookup_0ug5NqcwcFR2x02gGFeV3Z": null,
+  "spotify_search_taylor swift_style_1989 (taylor's version)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac",
+    "canonical_album_name": "1989 (Taylor's Version)",
+    "spotify_album_id": "64LU4c1nfjz1t4VnGhagcg",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "source": "spotify (Precise Search (Artist: Taylor Swift))"
+  },
+  "spotify_search_nonexistenttestartist12345_cruel summer_lover": null
 }

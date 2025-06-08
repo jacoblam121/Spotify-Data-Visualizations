@@ -21,6 +21,7 @@ import base64
 DEBUG_CACHE = False
 USER_AGENT = "SpotifyRaceChart/1.0 default_email@example.com"
 ART_CACHE_DIR = "album_art_cache" # Default, can be overridden
+ARTIST_ART_CACHE_DIR = "artist_art_cache" # Default, can be overridden
 SPOTIFY_CLIENT_ID = "eaf67929214947d19e34182fb20e96bc" # Default, can be overridden
 SPOTIFY_CLIENT_SECRET = "822e6e3f9d1149d4ad5520237d8385a3" # Default, can be overridden
 NEGATIVE_CACHE_HOURS = 24 # Default, can be overridden
@@ -33,12 +34,14 @@ SPOTIFY_API_BASE_URL = "https://api.spotify.com/v1/"
 mbid_cache_file = None
 dominant_color_cache_file = None
 spotify_info_cache_file = None
+spotify_artist_cache_file = None  # New cache file for Spotify artist info
 negative_cache_file = None
 mb_album_info_cache_file = None # New cache file for MB album info
 
 mbid_cache = {}
 dominant_color_cache = {}
 spotify_info_cache = {}
+spotify_artist_cache = {}  # New cache for Spotify artist info
 negative_cache = {}  # Cache for failed searches with timestamp
 mb_album_info_cache = {} # New cache for MB album info
 
@@ -51,10 +54,10 @@ _spotify_access_token_cache = {
 _config_initialized = False
 
 def initialize_from_config(config):
-    global DEBUG_CACHE, USER_AGENT, ART_CACHE_DIR
+    global DEBUG_CACHE, USER_AGENT, ART_CACHE_DIR, ARTIST_ART_CACHE_DIR
     global SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET, NEGATIVE_CACHE_HOURS
-    global mbid_cache_file, dominant_color_cache_file, spotify_info_cache_file, negative_cache_file, mb_album_info_cache_file
-    global mbid_cache, dominant_color_cache, spotify_info_cache, negative_cache, mb_album_info_cache
+    global mbid_cache_file, dominant_color_cache_file, spotify_info_cache_file, spotify_artist_cache_file, negative_cache_file, mb_album_info_cache_file
+    global mbid_cache, dominant_color_cache, spotify_info_cache, spotify_artist_cache, negative_cache, mb_album_info_cache
     global _config_initialized
 
     if _config_initialized:
@@ -64,6 +67,7 @@ def initialize_from_config(config):
     DEBUG_CACHE = config.get_bool('Debugging', 'DEBUG_CACHE_ALBUM_ART_UTILS', DEBUG_CACHE)
     USER_AGENT = config.get('General', 'USER_AGENT', USER_AGENT) # Use existing as fallback
     ART_CACHE_DIR = config.get('AlbumArtSpotify', 'ART_CACHE_DIR', ART_CACHE_DIR)
+    ARTIST_ART_CACHE_DIR = config.get('AlbumArtSpotify', 'ARTIST_ART_CACHE_DIR', ARTIST_ART_CACHE_DIR)
     NEGATIVE_CACHE_HOURS = config.get_int('AlbumArtSpotify', 'NEGATIVE_CACHE_HOURS', NEGATIVE_CACHE_HOURS)
 
     # Spotify Credentials: Env Var -> Config File -> Hardcoded Default
@@ -80,21 +84,30 @@ def initialize_from_config(config):
         print(f"[CONFIG DEBUG album_art_utils] Using SPOTIFY_CLIENT_ID: {'Loaded from Env/Config' if env_client_id or config_client_id else 'Using Default'}")
         print(f"[CONFIG DEBUG album_art_utils] NEGATIVE_CACHE_HOURS set to: {NEGATIVE_CACHE_HOURS}")
 
+    # Create both cache directories
     if not os.path.exists(ART_CACHE_DIR):
         os.makedirs(ART_CACHE_DIR)
         if DEBUG_CACHE: print(f"[CACHE DEBUG] Created ART_CACHE_DIR: {ART_CACHE_DIR}")
+    
+    if not os.path.exists(ARTIST_ART_CACHE_DIR):
+        os.makedirs(ARTIST_ART_CACHE_DIR)
+        if DEBUG_CACHE: print(f"[CACHE DEBUG] Created ARTIST_ART_CACHE_DIR: {ARTIST_ART_CACHE_DIR}")
 
-    # Update cache file paths
+    # Update cache file paths - Album art files stay in ART_CACHE_DIR
     mbid_cache_file = os.path.join(ART_CACHE_DIR, "mbid_cache.json")
     dominant_color_cache_file = os.path.join(ART_CACHE_DIR, "dominant_color_cache.json")
     spotify_info_cache_file = os.path.join(ART_CACHE_DIR, "spotify_info_cache.json")
     negative_cache_file = os.path.join(ART_CACHE_DIR, "negative_cache.json")
-    mb_album_info_cache_file = os.path.join(ART_CACHE_DIR, "mb_album_info_cache.json") # Path for new cache
+    mb_album_info_cache_file = os.path.join(ART_CACHE_DIR, "mb_album_info_cache.json")
+    
+    # Artist-specific cache files go in ARTIST_ART_CACHE_DIR
+    spotify_artist_cache_file = os.path.join(ARTIST_ART_CACHE_DIR, "spotify_artist_cache.json")
 
     # Load caches (after paths are set)
     mbid_cache = load_json_cache(mbid_cache_file)
     dominant_color_cache = load_json_cache(dominant_color_cache_file)
     spotify_info_cache = load_json_cache(spotify_info_cache_file)
+    spotify_artist_cache = load_json_cache(spotify_artist_cache_file)  # Load new artist cache
     negative_cache = load_json_cache(negative_cache_file)
     mb_album_info_cache = load_json_cache(mb_album_info_cache_file) # Load new cache
     
@@ -709,6 +722,173 @@ def get_spotify_track_album_info(artist_name, track_name, album_name_hint, spoti
     _debug_print(f"--- [SPOTIFY_TRACE] Exiting get_spotify_track_album_info (after API search attempt(s)) ---\\\n")
     return final_result_from_api
 
+
+def get_spotify_artist_info(artist_name):
+    """
+    Searches Spotify for an artist and returns their profile information including photo URL.
+    Uses Spotify's Artists API endpoint.
+    
+    Args:
+        artist_name (str): The artist name to search for
+        
+    Returns:
+        dict or None: Dictionary containing artist info:
+        {
+            "photo_url": "https://...",
+            "canonical_artist_name": "Artist Name",
+            "spotify_artist_id": "spotify_id",
+            "genres": ["genre1", "genre2"],
+            "popularity": 75,
+            "followers": 1000000,
+            "source": "spotify (artist_search)"
+        }
+        Returns None if no artist found or on error.
+    """
+    original_artist_name = artist_name
+    
+    _debug_print(f"\n--- [SPOTIFY_ARTIST_TRACE] Entering get_spotify_artist_info ---")
+    _debug_print(f"[SPOTIFY_ARTIST_TRACE] Called with: Artist='{original_artist_name}'")
+
+    access_token = _get_spotify_access_token()
+    if not access_token:
+        _debug_print(f"[SPOTIFY_ARTIST_TRACE] Failed to get Spotify access token. Cannot proceed.")
+        _debug_print(f"--- [SPOTIFY_ARTIST_TRACE] Exiting (no access token) ---\\\n")
+        return None
+
+    # Clean artist name for search
+    artist_variations = clean_artist_name_for_search(artist_name)
+    primary_clean_artist = artist_variations[0] if artist_variations else artist_name
+    
+    search_cache_key = f"spotify_artist_search_{primary_clean_artist.lower().strip()}"
+    
+    _debug_print(f"[SPOTIFY_ARTIST_TRACE] Search cache key: '{search_cache_key}'")
+
+    # Check cache first
+    if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Artist Info check for key: '{search_cache_key}'")
+    if search_cache_key in spotify_artist_cache:
+        cached_value = spotify_artist_cache[search_cache_key]
+        if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Artist Info Cache HIT. Value: {cached_value}")
+        _debug_print(f"[SPOTIFY_ARTIST_TRACE] Artist Cache HIT. Returning cached: {json.dumps(cached_value, indent=2, ensure_ascii=False) if cached_value is not None else 'None'}")
+        _debug_print(f"--- [SPOTIFY_ARTIST_TRACE] Exiting (from artist cache) ---\\\n")
+        return cached_value
+    
+    # Check negative cache
+    if is_negative_cache_valid(search_cache_key):
+        _debug_print(f"[SPOTIFY_ARTIST_TRACE] Negative cache HIT for artist search '{search_cache_key}'. This search failed recently. Skipping API call.")
+        _debug_print(f"--- [SPOTIFY_ARTIST_TRACE] Exiting (from artist negative cache) ---\\\n")
+        spotify_artist_cache[search_cache_key] = None 
+        save_json_cache(spotify_artist_cache, spotify_artist_cache_file)
+        return None
+
+    if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Artist Info Cache MISS for '{search_cache_key}'. Querying API.")
+
+    # Try different search strategies
+    search_queries_to_try = []
+    
+    # Strategy 1: Direct artist name search with each variation
+    for artist_var in artist_variations:
+        search_queries_to_try.append((artist_var, f"Direct Artist Search (Name: {artist_var})"))
+
+    # Strategy 2: Simplified artist name (remove special characters)
+    simplified_artist = primary_clean_artist
+    # Remove common suffixes and prefixes that might interfere
+    for to_remove in [" feat.", " ft.", " featuring", " & ", " and ", " vs ", " vs. "]:
+        if to_remove in simplified_artist.lower():
+            simplified_artist = simplified_artist.lower().split(to_remove)[0].strip()
+            break
+    
+    if simplified_artist.lower() != primary_clean_artist.lower():
+        search_queries_to_try.append((simplified_artist, f"Simplified Artist Search (Name: {simplified_artist})"))
+
+    final_result_from_api = None
+
+    for current_artist_to_search, search_type_label in search_queries_to_try:
+        _debug_print(f"\n[SPOTIFY_ARTIST_TRACE] --- Attempting {search_type_label} ---")
+        _debug_print(f"[SPOTIFY_ARTIST_TRACE] Using Artist for search: '{current_artist_to_search}'")
+
+        # Build search query
+        query_params = f'artist:"{quote(current_artist_to_search)}"'
+        url = f"{SPOTIFY_API_BASE_URL}search?q={query_params}&type=artist&limit=10"
+        
+        _debug_print(f"[SPOTIFY_ARTIST_TRACE] Constructed Spotify API URL ({search_type_label}): {url}")
+        headers = {'Authorization': f"Bearer {access_token}", 'User-Agent': USER_AGENT}
+        _debug_print(f"Spotify Artist API call ({search_type_label}) for: Artist='{current_artist_to_search}'")
+
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+
+            _debug_print(f"[SPOTIFY_ARTIST_TRACE] Spotify Artist API call successful ({search_type_label}, HTTP Status: {response.status_code}).")
+
+            if data.get('artists') and data['artists'].get('items'):
+                items = data['artists']['items']
+                best_match = None
+                normalized_search_name = current_artist_to_search.lower().strip()
+
+                # Find best match by name similarity
+                for i, item in enumerate(items):
+                    spotify_artist_name = item.get('name', '').lower().strip()
+                    
+                    # Exact match first
+                    if spotify_artist_name == normalized_search_name:
+                        best_match = item
+                        _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) EXACT MATCH Item {i}. Selected.")
+                        break
+                    # Containment match as fallback
+                    elif (normalized_search_name in spotify_artist_name or 
+                          spotify_artist_name in normalized_search_name):
+                        if not best_match:  # Only take first containment match
+                            best_match = item
+                            _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) CONTAINMENT MATCH Item {i}. Selected.")
+
+                # If no name match, take first result (highest popularity)
+                if not best_match and items:
+                    best_match = items[0] 
+                    _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) No name match. Taking first result (Item 0).")
+
+                if best_match:
+                    artist_images = best_match.get('images', [])
+                    photo_url = artist_images[0].get('url') if artist_images else None
+                    
+                    if photo_url:  # Found artist with photo!
+                        _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) SUCCESS! Found photo_url: {photo_url}")
+                        final_result_from_api = {
+                            "photo_url": photo_url,
+                            "canonical_artist_name": best_match.get('name'),
+                            "spotify_artist_id": best_match.get('id'),
+                            "genres": best_match.get('genres', []),
+                            "popularity": best_match.get('popularity', 0),
+                            "followers": best_match.get('followers', {}).get('total', 0),
+                            "source": f"spotify ({search_type_label})"
+                        }
+                        break  # Exit the loop, we found a good result
+                    else:
+                        _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) Found artist '{best_match.get('name')}', but no profile photo.")
+            else:
+                _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) No 'items' in Spotify artists response.")
+        
+        except requests.exceptions.RequestException as e:
+            _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) RequestException: {e}")
+        except json.JSONDecodeError as e_json:
+            _debug_print(f"[SPOTIFY_ARTIST_TRACE] ({search_type_label}) JSONDecodeError: {e_json}")
+        
+        time.sleep(0.2)  # Respect API limits between different search attempts
+
+    # Cache and return result
+    if final_result_from_api:
+        print(f"Found Spotify artist info via {final_result_from_api['source']}: Artist='{final_result_from_api['canonical_artist_name']}', Photo URL: {'Yes' if final_result_from_api['photo_url'] else 'No'}")
+        _debug_print(f"[SPOTIFY_ARTIST_TRACE] Caching and returning artist result (from {final_result_from_api['source']}): {json.dumps(final_result_from_api, indent=2, ensure_ascii=False)}")
+    else:
+        print(f"No suitable artist found on Spotify after all search attempts for: Original Artist='{original_artist_name}'")
+        _debug_print(f"[SPOTIFY_ARTIST_TRACE] Caching None to '{search_cache_key}' after all artist search attempts failed.")
+        add_to_negative_cache(search_cache_key, f"no_spotify_artist_results_after_{len(search_queries_to_try)}_search_attempts")
+    
+    spotify_artist_cache[search_cache_key] = final_result_from_api 
+    save_json_cache(spotify_artist_cache, spotify_artist_cache_file)
+    _debug_print(f"--- [SPOTIFY_ARTIST_TRACE] Exiting get_spotify_artist_info (after API search attempt(s)) ---\\\n")
+    return final_result_from_api
+
 # --- MusicBrainz Functions (Now Legacy/Fallback - Commented out primary usage) ---
 def get_canonical_album_name_from_mbid(album_mbid):
     """
@@ -925,6 +1105,57 @@ def download_image_to_cache(image_url, album_name_for_file, artist_name_for_file
                 print(f"Error removing partially downloaded file {cached_image_path}: {oe}")
         return None
 
+
+def download_artist_image_to_cache(image_url, artist_name_for_file):
+    """
+    Downloads an artist profile photo from image_url and saves it to the ARTIST_ART_CACHE_DIR.
+    Uses artist_name_for_file to create a unique filename with "_artist_" identifier.
+    Returns the local path to the downloaded image, or None on failure.
+    """
+    if not image_url:
+        return None
+
+    # Sanitize artist name for filename (using canonical name from Spotify)
+    safe_artist_name = "".join(c if c.isalnum() or c in " .-_" else "_" for c in str(artist_name_for_file).strip())[:50]
+    
+    # Use distinctive naming pattern for artist photos: artist_{name}_artist.jpg
+    filename_base = f"artist_{safe_artist_name}_artist"
+    try:
+        # Attempt to get extension from URL, fallback to .jpg
+        extension = os.path.splitext(image_url.split('?')[0])[-1].lower()
+        if not extension or len(extension) > 5 or len(extension) < 2 or not extension.startswith('.'):
+            extension = ".jpg"
+    except:
+        extension = ".jpg"
+
+    cached_image_path = os.path.join(ARTIST_ART_CACHE_DIR, filename_base + extension)
+    if DEBUG_CACHE: print(f"[ARTIST CACHE DEBUG] Artist image check for path: '{cached_image_path}' (URL: {image_url})")
+
+    if os.path.exists(cached_image_path):
+        if DEBUG_CACHE: print(f"[ARTIST CACHE DEBUG] Artist Image Cache HIT: '{cached_image_path}'")
+        return cached_image_path
+    
+    if DEBUG_CACHE: print(f"[ARTIST CACHE DEBUG] Artist Image Cache MISS: '{cached_image_path}'. Downloading artist image.")
+    _debug_print(f"Downloading artist image: {image_url} to {cached_image_path}")
+    headers = {'User-Agent': USER_AGENT} # Some image hosts might check User-Agent
+    try:
+        response = requests.get(image_url, headers=headers, stream=True, timeout=15)
+        response.raise_for_status()
+        with open(cached_image_path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        if DEBUG_CACHE: print(f"[ARTIST CACHE DEBUG] Successfully downloaded artist image: '{cached_image_path}'")
+        return cached_image_path
+    except requests.exceptions.RequestException as e:
+        print(f"Error downloading artist image {image_url}: {e}")
+        if os.path.exists(cached_image_path): # Clean up partial download
+            try:
+                os.remove(cached_image_path)
+            except OSError as oe:
+                print(f"Error removing partially downloaded file {cached_image_path}: {oe}")
+        return None
+
+
 def get_dominant_color(image_path, palette_size=1):
     # This function remains largely unchanged, but ensure its cache key is robust
     # It uses the basename of the image_path, which should be fine as download_image_to_cache creates unique names
@@ -1093,6 +1324,224 @@ def get_album_art_path_and_spotify_info(artist_name, track_name, identifier_info
         else:
             print(f"[ART_PATH_LOGIC] No Spotify info or art URL found for '{artist_name} - {track_name}' after all attempts.")
         return None, spotify_data # Return None for path, but still return spotify_data if it was found
+
+
+def get_spotify_artist_info_from_track_uri(track_uri):
+    """
+    Get artist information by using a Spotify track URI to get exact artist ID.
+    This is more reliable than name-based search.
+    
+    Args:
+        track_uri (str): Spotify track URI like "spotify:track:..."
+    
+    Returns:
+        dict or None: Artist info similar to get_spotify_artist_info()
+    """
+    if not track_uri or not track_uri.startswith('spotify:track:'):
+        return None
+    
+    track_id = track_uri.split(':')[-1]
+    cache_key = f"spotify_artist_from_track_{track_id}"
+    
+    _debug_print(f"\n--- [SPOTIFY_ARTIST_URI_TRACE] Entering get_spotify_artist_info_from_track_uri ---")
+    _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] Track URI: {track_uri}, Track ID: {track_id}")
+
+    # Check cache first
+    if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Artist from Track URI check for key: '{cache_key}'")
+    if cache_key in spotify_artist_cache:
+        cached_value = spotify_artist_cache[cache_key]
+        if DEBUG_CACHE: print(f"[CACHE DEBUG] Spotify Artist from Track URI Cache HIT. Value: {cached_value}")
+        _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] Cache HIT. Returning cached: {json.dumps(cached_value, indent=2, ensure_ascii=False) if cached_value is not None else 'None'}")
+        return cached_value
+
+    # Check negative cache
+    if is_negative_cache_valid(cache_key):
+        _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] Negative cache HIT for '{cache_key}'. Skipping API call.")
+        spotify_artist_cache[cache_key] = None
+        save_json_cache(spotify_artist_cache, spotify_artist_cache_file)
+        return None
+
+    access_token = _get_spotify_access_token()
+    if not access_token:
+        _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] No access token available.")
+        return None
+
+    try:
+        # Get track details to extract artist ID
+        track_url = f"{SPOTIFY_API_BASE_URL}tracks/{track_id}"
+        headers = {'Authorization': f"Bearer {access_token}", 'User-Agent': USER_AGENT}
+        
+        _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] Getting track details: {track_url}")
+        track_response = requests.get(track_url, headers=headers, timeout=10)
+        track_response.raise_for_status()
+        track_data = track_response.json()
+
+        # Extract primary artist ID
+        if track_data.get('artists') and len(track_data['artists']) > 0:
+            primary_artist = track_data['artists'][0]  # Use first/primary artist
+            artist_id = primary_artist.get('id')
+            
+            if not artist_id:
+                _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] No artist ID found in track data.")
+                add_to_negative_cache(cache_key, "no_artist_id_in_track")
+                spotify_artist_cache[cache_key] = None
+                save_json_cache(spotify_artist_cache, spotify_artist_cache_file)
+                return None
+
+            _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] Found artist ID: {artist_id}")
+
+            # Get detailed artist information
+            artist_url = f"{SPOTIFY_API_BASE_URL}artists/{artist_id}"
+            _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] Getting artist details: {artist_url}")
+            
+            artist_response = requests.get(artist_url, headers=headers, timeout=10)
+            artist_response.raise_for_status()
+            artist_data = artist_response.json()
+
+            # Extract artist photo and info
+            artist_images = artist_data.get('images', [])
+            photo_url = artist_images[0].get('url') if artist_images else None
+
+            if photo_url:
+                result = {
+                    "photo_url": photo_url,
+                    "canonical_artist_name": artist_data.get('name'),
+                    "spotify_artist_id": artist_data.get('id'),
+                    "genres": artist_data.get('genres', []),
+                    "popularity": artist_data.get('popularity', 0),
+                    "followers": artist_data.get('followers', {}).get('total', 0),
+                    "source": f"spotify (track_uri_lookup)"
+                }
+                
+                _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] SUCCESS! Artist: {result['canonical_artist_name']}, Photo: {photo_url}")
+                spotify_artist_cache[cache_key] = result
+                save_json_cache(spotify_artist_cache, spotify_artist_cache_file)
+                return result
+            else:
+                _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] Artist found but no photo: {artist_data.get('name')}")
+                # Cache the fact that this artist has no photo
+                result = {
+                    "photo_url": None,
+                    "canonical_artist_name": artist_data.get('name'),
+                    "spotify_artist_id": artist_data.get('id'),
+                    "genres": artist_data.get('genres', []),
+                    "popularity": artist_data.get('popularity', 0),
+                    "followers": artist_data.get('followers', {}).get('total', 0),
+                    "source": f"spotify (track_uri_lookup_no_photo)"
+                }
+                spotify_artist_cache[cache_key] = result
+                save_json_cache(spotify_artist_cache, spotify_artist_cache_file)
+                return result
+        else:
+            _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] No artists found in track data.")
+            add_to_negative_cache(cache_key, "no_artists_in_track")
+            spotify_artist_cache[cache_key] = None
+            save_json_cache(spotify_artist_cache, spotify_artist_cache_file)
+            return None
+
+    except requests.exceptions.RequestException as e:
+        _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] Request error: {e}")
+        # Don't add to negative cache for network errors
+        return None
+    except Exception as e:
+        _debug_print(f"[SPOTIFY_ARTIST_URI_TRACE] Unexpected error: {e}")
+        add_to_negative_cache(cache_key, f"error_{str(e)[:50]}")
+        spotify_artist_cache[cache_key] = None
+        save_json_cache(spotify_artist_cache, spotify_artist_cache_file)
+        return None
+
+
+def get_artist_profile_photo_and_spotify_info(artist_name, fallback_track_info=None):
+    """
+    Main function to get artist profile photo path and the spotify_info data used.
+    Implements improved strategy: Track URI → Artist ID → Profile Photo → Name Search → Album Art Fallback
+    
+    Args:
+        artist_name (str): The artist name to search for
+        fallback_track_info (dict, optional): Fallback track info for album art:
+            {
+                "track_name": "Track Name",
+                "album_name": "Album Name", 
+                "track_uri": "spotify:track:..."  # Optional but preferred for accuracy
+            }
+    
+    Returns:
+        tuple: (local_photo_path, spotify_artist_info_dict) or (None, spotify_artist_info_dict_if_found_else_None)
+               spotify_artist_info_dict is the dict returned by get_spotify_artist_info
+    """
+    print(f"Attempting to get artist profile photo for: Artist='{artist_name}'")
+    
+    artist_info = None
+    
+    # Strategy 1: Use Spotify Track URI to get exact artist (most reliable)
+    if fallback_track_info and fallback_track_info.get("track_uri"):
+        print(f"[ARTIST_PHOTO_LOGIC] Using track URI for accurate artist lookup: {fallback_track_info['track_uri']}")
+        artist_info = get_spotify_artist_info_from_track_uri(fallback_track_info["track_uri"])
+        
+        if artist_info:
+            print(f"[ARTIST_PHOTO_LOGIC] Found artist via track URI: {artist_info.get('canonical_artist_name')} (popularity: {artist_info.get('popularity', 'N/A')})")
+        else:
+            print(f"[ARTIST_PHOTO_LOGIC] Track URI lookup failed, will try name search")
+    
+    # Strategy 2: Fallback to name-based search if no URI or URI failed
+    if not artist_info:
+        print(f"[ARTIST_PHOTO_LOGIC] Attempting name-based search for: {artist_name}")
+        artist_info = get_spotify_artist_info(artist_name)
+        
+        if artist_info:
+            print(f"[ARTIST_PHOTO_LOGIC] Found artist via name search: {artist_info.get('canonical_artist_name')} (popularity: {artist_info.get('popularity', 'N/A')})")
+            
+            # Warn if there might be name mismatch
+            canonical_name = artist_info.get('canonical_artist_name', '').lower()
+            search_name = artist_name.lower()
+            if canonical_name != search_name and canonical_name not in search_name and search_name not in canonical_name:
+                print(f"[ARTIST_PHOTO_LOGIC] ⚠️  WARNING: Name mismatch detected!")
+                print(f"[ARTIST_PHOTO_LOGIC]    Searched for: '{artist_name}'")
+                print(f"[ARTIST_PHOTO_LOGIC]    Found: '{artist_info.get('canonical_artist_name')}'")
+                print(f"[ARTIST_PHOTO_LOGIC]    This might be the wrong artist. Consider providing track_uri for accuracy.")
+    
+    # Strategy 3: Try to get profile photo if we found artist info
+    if artist_info and artist_info.get("photo_url"):
+        photo_url = artist_info["photo_url"]
+        canonical_artist_name = artist_info.get("canonical_artist_name", artist_name)
+        
+        print(f"[ARTIST_PHOTO_LOGIC] Spotify returned artist photo URL: {photo_url}. Artist: '{canonical_artist_name}'")
+        downloaded_path = download_artist_image_to_cache(photo_url, canonical_artist_name)
+        return downloaded_path, artist_info
+    
+    # Strategy 4: Fallback to album art if we have fallback track info
+    if fallback_track_info:
+        print(f"[ARTIST_PHOTO_LOGIC] No artist profile photo found. Attempting fallback to album art from track: '{fallback_track_info.get('track_name', 'Unknown')}'")
+        
+        # Create identifier_info for album art lookup
+        identifier_info = {
+            "album_name_hint": fallback_track_info.get("album_name", ""),
+            "album_mbid": None,  # We don't have MBID for artist mode typically
+            "track_uri": fallback_track_info.get("track_uri"),
+            "source_data_type": "spotify" if fallback_track_info.get("track_uri") else "unknown"
+        }
+        
+        # Use existing album art logic as fallback
+        fallback_art_path, _ = get_album_art_path_and_spotify_info(
+            artist_name, 
+            fallback_track_info.get("track_name", ""), 
+            identifier_info
+        )
+        
+        if fallback_art_path:
+            print(f"[ARTIST_PHOTO_LOGIC] Successfully retrieved fallback album art for artist '{artist_name}' from track '{fallback_track_info.get('track_name')}'")
+            # Return the album art path, but keep the artist_info (even if it was None or had no photo)
+            return fallback_art_path, artist_info
+        else:
+            print(f"[ARTIST_PHOTO_LOGIC] Fallback album art retrieval also failed for artist '{artist_name}'")
+    
+    # No photo found through any strategy
+    if artist_info:
+        print(f"[ARTIST_PHOTO_LOGIC] Found Spotify artist info for '{artist_name}' (Source: {artist_info.get('source')}) but no photo URL and no successful fallback.")
+    else:
+        print(f"[ARTIST_PHOTO_LOGIC] No Spotify artist info found for '{artist_name}' and no successful fallback.")
+    
+    return None, artist_info
 
 
 if __name__ == "__main__":
@@ -1270,7 +1719,76 @@ if __name__ == "__main__":
             print(f"Spotify Info for test 5: Canonical Album='{spotify_info_5.get('canonical_album_name')}', Source='{spotify_info_5.get('source')}'")
 
 
+    # Test 6: Artist Profile Photo Tests (New Phase 2 functionality)
+    print("\n=== PHASE 2: TESTING ARTIST PROFILE PHOTO FUNCTIONALITY ===")
+    
+    # Test 6A: Well-known artist with profile photo
+    test_artist_6a = "Taylor Swift"
+    print(f"\n[STANDALONE TEST 6A] Artist Profile Photo: {test_artist_6a}")
+    artist_photo_path_6a, artist_info_6a = get_artist_profile_photo_and_spotify_info(test_artist_6a)
+    
+    print(f"Artist photo path for {test_artist_6a}: {artist_photo_path_6a}")
+    if artist_photo_path_6a and os.path.exists(artist_photo_path_6a):
+        dom_color_6a = get_dominant_color(artist_photo_path_6a)
+        print(f"Dominant color for {test_artist_6a} photo (RGB): {dom_color_6a}")
+        if artist_info_6a:
+            print(f"Artist Info: Name='{artist_info_6a.get('canonical_artist_name')}', Popularity={artist_info_6a.get('popularity', 0)}, Source='{artist_info_6a.get('source')}'")
+    elif artist_photo_path_6a:
+        print(f"Warning: Artist photo path {artist_photo_path_6a} was returned but file does not exist.")
+    
+    # Test 6B: Artist with fallback to album art
+    test_artist_6b = "Paramore"
+    fallback_track_info_6b = {
+        "track_name": "Misery Business",
+        "album_name": "Riot!",
+        "track_uri": None  # Test without URI
+    }
+    print(f"\n[STANDALONE TEST 6B] Artist with Fallback: {test_artist_6b}")
+    artist_photo_path_6b, artist_info_6b = get_artist_profile_photo_and_spotify_info(
+        test_artist_6b, 
+        fallback_track_info=fallback_track_info_6b
+    )
+    
+    print(f"Artist photo/art path for {test_artist_6b}: {artist_photo_path_6b}")
+    if artist_photo_path_6b and os.path.exists(artist_photo_path_6b):
+        dom_color_6b = get_dominant_color(artist_photo_path_6b)
+        print(f"Dominant color for {test_artist_6b} photo/art (RGB): {dom_color_6b}")
+        if artist_info_6b:
+            print(f"Artist Info: Name='{artist_info_6b.get('canonical_artist_name')}', Source='{artist_info_6b.get('source')}'")
+    
+    # Test 6C: Non-existent or very obscure artist
+    test_artist_6c = "NonExistentArtistTestName12345"
+    print(f"\n[STANDALONE TEST 6C] Non-existent Artist: {test_artist_6c}")
+    artist_photo_path_6c, artist_info_6c = get_artist_profile_photo_and_spotify_info(test_artist_6c)
+    
+    print(f"Artist photo path for {test_artist_6c}: {artist_photo_path_6c}")
+    print(f"Artist info for {test_artist_6c}: {artist_info_6c}")
+    
+    # Test 6D: Artist with special characters (test name cleaning)
+    test_artist_6d = "ヨルシカ"  # Japanese artist name
+    print(f"\n[STANDALONE TEST 6D] Special Characters Artist: {test_artist_6d}")
+    artist_photo_path_6d, artist_info_6d = get_artist_profile_photo_and_spotify_info(test_artist_6d)
+    
+    print(f"Artist photo path for {test_artist_6d}: {artist_photo_path_6d}")
+    if artist_photo_path_6d and os.path.exists(artist_photo_path_6d):
+        dom_color_6d = get_dominant_color(artist_photo_path_6d)
+        print(f"Dominant color for {test_artist_6d} photo (RGB): {dom_color_6d}")
+        if artist_info_6d:
+            print(f"Artist Info: Name='{artist_info_6d.get('canonical_artist_name')}', Genres={artist_info_6d.get('genres', [])[:3]}")
+    
+    # Test 6E: Cache hit test (re-run Test 6A)
+    print(f"\n[STANDALONE TEST 6E] Cache Re-Test for: {test_artist_6a}")
+    artist_photo_path_6e, artist_info_6e = get_artist_profile_photo_and_spotify_info(test_artist_6a)
+    
+    print(f"Artist photo path (2nd call): {artist_photo_path_6e}")
+    if artist_photo_path_6e and os.path.exists(artist_photo_path_6e):
+        dom_color_6e = get_dominant_color(artist_photo_path_6e)  # Should hit dominant color cache
+        print(f"Dominant color (2nd call): {dom_color_6e}")
+        print(f"Cache verification: {'SUCCESS' if artist_photo_path_6e == artist_photo_path_6a else 'FAILED'}")
+
+    print("\n=== PHASE 2 TESTING COMPLETE ===")
     print("\n--- Standalone Test Complete ---")
     print(f"Check the '{ART_CACHE_DIR}' folder for new images and JSON cache files.")
-    print("Review console output for [CACHE DEBUG], [SPOTIFY AUTH DEBUG], etc., messages.")
+    print("New files should include: spotify_artist_cache.json and artist profile photos.")
+    print("Review console output for [CACHE DEBUG], [SPOTIFY AUTH DEBUG], [SPOTIFY_ARTIST_TRACE], etc., messages.")
     print("Ensure these messages respect the DEBUG_CACHE_ALBUM_ART_UTILS setting in configurations.txt.")

@@ -1,0 +1,36 @@
+{
+  "spotify_artist_search_*luna": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb45d443b065a66c92d166f598",
+    "canonical_artist_name": "Lunay",
+    "spotify_artist_id": "47MpMsUfWtgyIIBEFOr4FE",
+    "genres": [
+      "reggaeton"
+    ],
+    "popularity": 72,
+    "followers": 9837222,
+    "source": "spotify (Direct Artist Search (Name: *Luna))"
+  },
+  "spotify_artist_search_taylor swift": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676",
+    "canonical_artist_name": "Taylor Swift",
+    "spotify_artist_id": "06HL4z0CvFAxyc27GXpf02",
+    "genres": [],
+    "popularity": 98,
+    "followers": 138593554,
+    "source": "spotify (Direct Artist Search (Name: Taylor Swift))"
+  },
+  "spotify_artist_search_\u30e8\u30eb\u30b7\u30ab": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab",
+    "canonical_artist_name": "\u30e8\u30eb\u30b7\u30ab",
+    "spotify_artist_id": "4UK2Lzi6fBfUi9rpDt6cik",
+    "genres": [
+      "j-pop",
+      "j-rock",
+      "japanese indie",
+      "anime"
+    ],
+    "popularity": 74,
+    "followers": 3117025,
+    "source": "spotify (Direct Artist Search (Name: \u30e8\u30eb\u30b7\u30ab))"
+  }
+}

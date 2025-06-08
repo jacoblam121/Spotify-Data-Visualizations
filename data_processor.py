@@ -303,52 +303,93 @@ def clean_and_filter_data(config):
     return df_time_filtered
 
 
-def prepare_data_for_bar_chart_race(cleaned_df):
+def prepare_data_for_bar_chart_race(cleaned_df, mode="tracks"):
     """
     Transforms cleaned data (from any source) to prepare it for a bar chart race.
-    (No changes needed to this function itself, as it expects a standard DataFrame format)
+    Supports both tracks and artists visualization modes.
+    
+    Args:
+        cleaned_df: DataFrame with play events
+        mode: "tracks" for track-based race, "artists" for artist-based race
+    
+    Returns:
+        tuple: (race_df, details_map) where details_map structure depends on mode
     """
     if cleaned_df is None or cleaned_df.empty:
-        print("Input DataFrame for 'prepare_data_for_bar_chart_race' is empty or None.")
+        print(f"Input DataFrame for 'prepare_data_for_bar_chart_race' ({mode} mode) is empty or None.")
         return None, {}
 
-    print("\nStarting data preparation for high-resolution bar chart race...")
+    print(f"\nStarting data preparation for high-resolution bar chart race ({mode} mode)...")
     df = cleaned_df.sort_values(by='timestamp').copy()
 
-    # song_id uses the normalized (lowercase) artist and track names
-    df['song_id'] = df['artist'] + " - " + df['track']
-    print(f"Created 'song_id'. Total unique songs found: {df['song_id'].nunique()}")
+    if mode == "tracks":
+        # Original track-based logic
+        df['entity_id'] = df['artist'] + " - " + df['track']
+        entity_type = "songs"
+        print(f"Created 'song_id'. Total unique songs found: {df['entity_id'].nunique()}")
+    elif mode == "artists":
+        # New artist-based logic
+        df['entity_id'] = df['artist']  # Use just the artist name
+        entity_type = "artists"
+        print(f"Created 'artist_id'. Total unique artists found: {df['entity_id'].nunique()}")
+    else:
+        raise ValueError(f"Unsupported mode: {mode}. Must be 'tracks' or 'artists'.")
+
     print(f"Total play events to process for frames: {len(df)}")
 
-    # song_album_map = df.groupby('song_id')['album'].first().to_dict()
-    # Updated song_details_map creation:
-    song_details_map = {}
-    # Prioritize first occurrence of a song_id to get its details, as album might change over time for same track (e.g. compilations)
-    # Though for URI/MBID based lookup, this specific album association from the event is what we want.
-
-    # To handle potential missing columns depending on source, check existence
+    # Create entity details map (structure depends on mode)
+    entity_details_map = {}
     has_uri = 'spotify_track_uri' in df.columns
     has_mbid = 'album_mbid' in df.columns
 
-    for _, row in df.drop_duplicates(subset=['song_id'], keep='first').iterrows():
-        song_id = row['song_id']
-        details = {
-            'name': row['album'], # This is the normalized album name
-            'track_uri': row['spotify_track_uri'] if has_uri else None,
-            'mbid': row['album_mbid'] if has_mbid else None,
-            'display_artist': row['original_artist'], # Original case artist
-            'display_track': row['original_track']   # Original case track
-        }
-        song_details_map[song_id] = details
+    for _, row in df.drop_duplicates(subset=['entity_id'], keep='first').iterrows():
+        entity_id = row['entity_id']
+        
+        if mode == "tracks":
+            # Track mode: include album info and track URI for album art lookup
+            details = {
+                'name': row['album'], # Album name for art lookup
+                'track_uri': row['spotify_track_uri'] if has_uri else None,
+                'mbid': row['album_mbid'] if has_mbid else None,
+                'display_artist': row['original_artist'], 
+                'display_track': row['original_track']
+            }
+        elif mode == "artists":
+            # Artist mode: store artist info for profile photo lookup
+            details = {
+                'display_artist': row['original_artist'],
+                'normalized_artist': row['artist'],  # For consistent lookups
+                # We'll add most_played_track info later for fallback album art
+                'most_played_track': None,
+                'most_played_album': None,
+                'most_played_track_uri': None
+            }
+        
+        entity_details_map[entity_id] = details
 
-    print(f"Created song_details_map with {len(song_details_map)} entries including display names.")
+    # For artist mode, we need to find the most played track per artist for fallback album art
+    if mode == "artists":
+        for artist_id in entity_details_map.keys():
+            artist_tracks = df[df['entity_id'] == artist_id]
+            # Find most played track for this artist (by frequency)
+            track_counts = artist_tracks['track'].value_counts()
+            if not track_counts.empty:
+                most_played_track = track_counts.index[0]
+                # Get the first occurrence of this track for this artist
+                track_row = artist_tracks[artist_tracks['track'] == most_played_track].iloc[0]
+                entity_details_map[artist_id]['most_played_track'] = track_row['original_track']
+                entity_details_map[artist_id]['most_played_album'] = track_row['album']
+                if has_uri:
+                    entity_details_map[artist_id]['most_played_track_uri'] = track_row['spotify_track_uri']
+
+    print(f"Created {entity_type}_details_map with {len(entity_details_map)} entries including display names.")
 
     df['play_count_increment'] = 1
-    df['cumulative_plays_for_song_at_event'] = df.groupby('song_id')['play_count_increment'].cumsum()
+    df['cumulative_plays_for_entity_at_event'] = df.groupby('entity_id')['play_count_increment'].cumsum()
     
     race_df_sparse = df.pivot_table(index='timestamp',
-                                    columns='song_id',
-                                    values='cumulative_plays_for_song_at_event')
+                                    columns='entity_id',
+                                    values='cumulative_plays_for_entity_at_event')
     print(f"Pivoted data based on individual play events. Shape: {race_df_sparse.shape}")
 
     race_df_filled = race_df_sparse.ffill()
@@ -358,47 +399,68 @@ def prepare_data_for_bar_chart_race(cleaned_df):
     race_df = race_df.sort_index(axis=1)
 
     print(f"Data preparation for high-resolution race complete. Final race_df shape: {race_df.shape}")
-    return race_df, song_details_map # Return new map name
+    return race_df, entity_details_map
 
 
-def calculate_rolling_window_stats(cleaned_df_for_rolling_stats, animation_frame_timestamps):
+def calculate_rolling_window_stats(cleaned_df_for_rolling_stats, animation_frame_timestamps, mode="tracks"):
     """
-    Calculates the top track for a 7-day and 30-day rolling window for each animation frame timestamp.
+    Calculates the top track/artist for a 7-day and 30-day rolling window for each animation frame timestamp.
 
     Args:
         cleaned_df_for_rolling_stats (pd.DataFrame): DataFrame containing all play events,
-                                                     must have 'timestamp' and 'song_id' columns.
+                                                     must have 'timestamp' and entity ID column.
                                                      Timestamps should be timezone-aware (UTC).
         animation_frame_timestamps (pd.DatetimeIndex or list): A list or DatetimeIndex of timestamps
                                                                for which animation frames will be generated.
                                                                These are the "current day" for each rolling window.
+        mode (str): "tracks" or "artists" to determine what entity to calculate stats for.
 
     Returns:
         dict: A dictionary where keys are the animation_frame_timestamps and values are dicts
-              containing 'top_7_day': {'song_id': str, 'plays': int, 'original_artist': str, 'original_track': str} or None
-              and 'top_30_day': {'song_id': str, 'plays': int, 'original_artist': str, 'original_track': str} or None.
+              containing rolling window stats for the specified mode.
     """
-    print("\n--- Calculating Rolling Window Stats (7-day and 30-day) ---")
+    mode_label = "track" if mode == "tracks" else "artist"
+    entity_id_col = "song_id" if mode == "tracks" else "artist_id"
+    
+    print(f"\n--- Calculating Rolling Window Stats (7-day and 30-day) for {mode} mode ---")
     if cleaned_df_for_rolling_stats is None or cleaned_df_for_rolling_stats.empty:
-        print("Warning: cleaned_df_for_rolling_stats is empty. Cannot calculate rolling window stats.")
+        print(f"Warning: cleaned_df_for_rolling_stats is empty. Cannot calculate rolling window stats for {mode}.")
         return {ts: {'top_7_day': None, 'top_30_day': None} for ts in animation_frame_timestamps}
 
-    if 'timestamp' not in cleaned_df_for_rolling_stats.columns or 'song_id' not in cleaned_df_for_rolling_stats.columns:
-        print("Error: 'timestamp' or 'song_id' not in cleaned_df_for_rolling_stats. Cannot calculate rolling stats.")
+    # We need to create the entity_id column if it doesn't exist
+    df_for_stats = cleaned_df_for_rolling_stats.copy()
+    
+    if mode == "tracks":
+        if 'song_id' not in df_for_stats.columns:
+            if 'artist' in df_for_stats.columns and 'track' in df_for_stats.columns:
+                df_for_stats['song_id'] = df_for_stats['artist'] + " - " + df_for_stats['track']
+            else:
+                print("Error: Cannot create 'song_id' column. Missing 'artist' or 'track' columns.")
+                return {ts: {'top_7_day': None, 'top_30_day': None} for ts in animation_frame_timestamps}
+        entity_id_col = 'song_id'
+    elif mode == "artists":
+        if 'artist_id' not in df_for_stats.columns:
+            if 'artist' in df_for_stats.columns:
+                df_for_stats['artist_id'] = df_for_stats['artist']
+            else:
+                print("Error: Cannot create 'artist_id' column. Missing 'artist' column.")
+                return {ts: {'top_7_day': None, 'top_30_day': None} for ts in animation_frame_timestamps}
+        entity_id_col = 'artist_id'
+
+    if 'timestamp' not in df_for_stats.columns or entity_id_col not in df_for_stats.columns:
+        print(f"Error: 'timestamp' or '{entity_id_col}' not in df_for_stats. Cannot calculate rolling stats.")
         return {ts: {'top_7_day': None, 'top_30_day': None} for ts in animation_frame_timestamps}
 
-    # Ensure cleaned_df_for_rolling_stats is sorted by timestamp for potentially faster windowing, though not strictly necessary for filtering.
-    # cleaned_df_for_rolling_stats = cleaned_df_for_rolling_stats.sort_values(by='timestamp') # Already sorted in prepare_data_for_bar_chart_race
-
-    # Create a mapping from song_id to original artist and track names for display
-    # This avoids repeated lookups if song_details_map isn't directly passed or available here easily.
-    # We only need this for songs that become top songs in windows.
-    # It's assumed 'original_artist' and 'original_track' are present.
-    song_id_to_originals = {}
-    if 'original_artist' in cleaned_df_for_rolling_stats.columns and \
-       'original_track' in cleaned_df_for_rolling_stats.columns:
-        song_id_to_originals = cleaned_df_for_rolling_stats.drop_duplicates(subset=['song_id']) \
-                                .set_index('song_id')[['original_artist', 'original_track']].to_dict('index')
+    # Create a mapping from entity_id to original names for display
+    entity_id_to_originals = {}
+    if mode == "tracks":
+        if 'original_artist' in df_for_stats.columns and 'original_track' in df_for_stats.columns:
+            entity_id_to_originals = df_for_stats.drop_duplicates(subset=['song_id']) \
+                                    .set_index('song_id')[['original_artist', 'original_track']].to_dict('index')
+    elif mode == "artists":
+        if 'original_artist' in df_for_stats.columns:
+            entity_id_to_originals = df_for_stats.drop_duplicates(subset=['artist_id']) \
+                                    .set_index('artist_id')[['original_artist']].to_dict('index')
 
     rolling_stats_by_frame_timestamp = {}
     processed_timestamps = 0
@@ -426,37 +488,44 @@ def calculate_rolling_window_stats(cleaned_df_for_rolling_stats, animation_frame
             start_date = current_ts_dt - pd.Timedelta(days=period_days)
             
             # Filter plays within the window [start_date, current_ts_dt]
-            # Ensure timestamps in cleaned_df are comparable (should be UTC from processing)
-            window_df = cleaned_df_for_rolling_stats[
-                (cleaned_df_for_rolling_stats['timestamp'] >= start_date) &
-                (cleaned_df_for_rolling_stats['timestamp'] <= current_ts_dt)
+            window_df = df_for_stats[
+                (df_for_stats['timestamp'] >= start_date) &
+                (df_for_stats['timestamp'] <= current_ts_dt)
             ]
 
             if not window_df.empty:
-                top_song_in_window = window_df['song_id'].mode() # mode() gives most frequent
+                top_entity_in_window = window_df[entity_id_col].mode() # mode() gives most frequent
                 
-                if not top_song_in_window.empty:
+                if not top_entity_in_window.empty:
                     # mode() can return multiple if ties; pick the first one.
-                    top_song_id = top_song_in_window.iloc[0] 
-                    # Count plays for this specific top song_id in the window
-                    plays_count = window_df[window_df['song_id'] == top_song_id].shape[0]
+                    top_entity_id = top_entity_in_window.iloc[0] 
+                    # Count plays for this specific top entity_id in the window
+                    plays_count = window_df[window_df[entity_id_col] == top_entity_id].shape[0]
                     
-                    original_names = song_id_to_originals.get(top_song_id, 
-                                                              {'original_artist': 'Unknown Artist', 'original_track': 'Unknown Track'})
-                    
-                    frame_stats[period_key] = {
-                        'song_id': top_song_id,
-                        'plays': plays_count,
-                        'original_artist': original_names['original_artist'],
-                        'original_track': original_names['original_track']
-                    }
+                    if mode == "tracks":
+                        original_names = entity_id_to_originals.get(top_entity_id, 
+                                                                  {'original_artist': 'Unknown Artist', 'original_track': 'Unknown Track'})
+                        frame_stats[period_key] = {
+                            'song_id': top_entity_id,
+                            'plays': plays_count,
+                            'original_artist': original_names['original_artist'],
+                            'original_track': original_names['original_track']
+                        }
+                    elif mode == "artists":
+                        original_names = entity_id_to_originals.get(top_entity_id, 
+                                                                  {'original_artist': 'Unknown Artist'})
+                        frame_stats[period_key] = {
+                            'artist_id': top_entity_id,
+                            'plays': plays_count,
+                            'original_artist': original_names['original_artist']
+                        }
         
         rolling_stats_by_frame_timestamp[current_ts] = frame_stats
         processed_timestamps +=1
         if processed_timestamps % 100 == 0 or processed_timestamps == len(animation_frame_timestamps):
             print(f"Processed rolling stats for {processed_timestamps}/{len(animation_frame_timestamps)} animation timestamps.")
 
-    print("--- Rolling Window Stats Calculation Complete ---")
+    print(f"--- Rolling Window Stats Calculation Complete for {mode} mode ---")
     return rolling_stats_by_frame_timestamp
 
 
@@ -565,7 +634,11 @@ END_DATE = 2023-12-31
         print(cleaned_data_spotify.head())
         print(f"Columns in cleaned_data_spotify: {cleaned_data_spotify.columns.tolist()}") # Show columns
         
-        race_data_spotify, s_details_map_spotify = prepare_data_for_bar_chart_race(cleaned_data_spotify)
+        race_data_spotify, s_details_map_spotify = prepare_data_for_bar_chart_race(cleaned_data_spotify, mode="tracks")
+        
+        # Test artist mode as well
+        print("\n--- Testing Artist Mode Data Preparation (Spotify) ---")
+        race_data_spotify_artists, artist_details_map_spotify = prepare_data_for_bar_chart_race(cleaned_data_spotify, mode="artists")
         
         if race_data_spotify is not None and not race_data_spotify.empty:
             print("\n--- Race Data (Spotify Source) ---")
@@ -575,6 +648,15 @@ END_DATE = 2023-12-31
             for i, (song, details) in enumerate(s_details_map_spotify.items()):
                 if i >= 2: break
                 print(f"'{song}': {details}")
+                
+        if race_data_spotify_artists is not None and not race_data_spotify_artists.empty:
+            print("\n--- Artist Race Data (Spotify Source) ---")
+            print(race_data_spotify_artists.head())
+            print(f"Shape of artist race_data: {race_data_spotify_artists.shape}")
+            print("\n--- Artist Details Map (Spotify Source, first 2) ---")
+            for i, (artist, details) in enumerate(artist_details_map_spotify.items()):
+                if i >= 2: break
+                print(f"'{artist}': {details}")
         else:
             print("Spotify race data preparation resulted in empty or None DataFrame.")
     else:
@@ -605,7 +687,11 @@ END_DATE = 2023-12-31
         print(cleaned_data_lastfm.head())
         print(f"Columns in cleaned_data_lastfm: {cleaned_data_lastfm.columns.tolist()}") # Show columns
 
-        race_data_lastfm, s_details_map_lastfm = prepare_data_for_bar_chart_race(cleaned_data_lastfm)
+        race_data_lastfm, s_details_map_lastfm = prepare_data_for_bar_chart_race(cleaned_data_lastfm, mode="tracks")
+        
+        # Test artist mode for Last.fm as well
+        print("\n--- Testing Artist Mode Data Preparation (Last.fm) ---")
+        race_data_lastfm_artists, artist_details_map_lastfm = prepare_data_for_bar_chart_race(cleaned_data_lastfm, mode="artists")
         if race_data_lastfm is not None and not race_data_lastfm.empty:
             print("\n--- Race Data (Last.fm Source) ---")
             print(race_data_lastfm.head())
@@ -614,6 +700,15 @@ END_DATE = 2023-12-31
             for i, (song, details) in enumerate(s_details_map_lastfm.items()):
                 if i >= 2: break
                 print(f"'{song}': {details}")
+                
+        if race_data_lastfm_artists is not None and not race_data_lastfm_artists.empty:
+            print("\n--- Artist Race Data (Last.fm Source) ---")
+            print(race_data_lastfm_artists.head())
+            print(f"Shape of artist race_data: {race_data_lastfm_artists.shape}")
+            print("\n--- Artist Details Map (Last.fm Source, first 2) ---")
+            for i, (artist, details) in enumerate(artist_details_map_lastfm.items()):
+                if i >= 2: break
+                print(f"'{artist}': {details}")
         else:
             print("Last.fm race data preparation resulted in empty or None DataFrame.")
     else:
