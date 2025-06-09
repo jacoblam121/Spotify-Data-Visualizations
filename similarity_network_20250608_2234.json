@@ -1,0 +1,189 @@
+{
+  "nodes": [
+    {
+      "id": "taylor swift",
+      "name": "Taylor Swift",
+      "play_count": 5216,
+      "rank": 1,
+      "size": 5216
+    },
+    {
+      "id": "paramore",
+      "name": "Paramore",
+      "play_count": 3460,
+      "rank": 2,
+      "size": 3460
+    },
+    {
+      "id": "iu",
+      "name": "IU",
+      "play_count": 2265,
+      "rank": 3,
+      "size": 2265
+    },
+    {
+      "id": "ヨルシカ",
+      "name": "ヨルシカ",
+      "play_count": 1282,
+      "rank": 4,
+      "size": 1282
+    },
+    {
+      "id": "twice",
+      "name": "TWICE",
+      "play_count": 1057,
+      "rank": 5,
+      "size": 1057
+    },
+    {
+      "id": "aimer",
+      "name": "Aimer",
+      "play_count": 885,
+      "rank": 6,
+      "size": 885
+    },
+    {
+      "id": "tonight alive",
+      "name": "Tonight Alive",
+      "play_count": 852,
+      "rank": 7,
+      "size": 852
+    },
+    {
+      "id": "ive",
+      "name": "IVE",
+      "play_count": 662,
+      "rank": 8,
+      "size": 662
+    },
+    {
+      "id": "blackpink",
+      "name": "BLACKPINK",
+      "play_count": 481,
+      "rank": 9,
+      "size": 481
+    },
+    {
+      "id": "dreamcatcher",
+      "name": "Dreamcatcher",
+      "play_count": 462,
+      "rank": 10,
+      "size": 462
+    },
+    {
+      "id": "bring me the horizon",
+      "name": "Bring Me The Horizon",
+      "play_count": 446,
+      "rank": 11,
+      "size": 446
+    },
+    {
+      "id": "anyujin",
+      "name": "ANYUJIN",
+      "play_count": 411,
+      "rank": 12,
+      "size": 411
+    },
+    {
+      "id": "the killers",
+      "name": "The Killers",
+      "play_count": 406,
+      "rank": 13,
+      "size": 406
+    },
+    {
+      "id": "bol4",
+      "name": "BOL4",
+      "play_count": 354,
+      "rank": 14,
+      "size": 354
+    },
+    {
+      "id": "the oral cigarettes",
+      "name": "THE ORAL CIGARETTES",
+      "play_count": 323,
+      "rank": 15,
+      "size": 323
+    }
+  ],
+  "edges": [
+    {
+      "source": "paramore",
+      "target": "tonight alive",
+      "weight": 0.19963,
+      "similarity_score": 0.19963
+    },
+    {
+      "source": "iu",
+      "target": "bol4",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "iu",
+      "target": "ive",
+      "weight": 0.548231,
+      "similarity_score": 0.548231
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "aimer",
+      "weight": 0.438745,
+      "similarity_score": 0.438745
+    },
+    {
+      "source": "twice",
+      "target": "ive",
+      "weight": 0.179055,
+      "similarity_score": 0.179055
+    },
+    {
+      "source": "twice",
+      "target": "blackpink",
+      "weight": 0.122538,
+      "similarity_score": 0.122538
+    },
+    {
+      "source": "aimer",
+      "target": "ヨルシカ",
+      "weight": 0.46033,
+      "similarity_score": 0.46033
+    },
+    {
+      "source": "tonight alive",
+      "target": "paramore",
+      "weight": 0.321823,
+      "similarity_score": 0.321823
+    },
+    {
+      "source": "blackpink",
+      "target": "ive",
+      "weight": 0.362861,
+      "similarity_score": 0.362861
+    },
+    {
+      "source": "blackpink",
+      "target": "twice",
+      "weight": 0.27826,
+      "similarity_score": 0.27826
+    },
+    {
+      "source": "dreamcatcher",
+      "target": "ive",
+      "weight": 0.183165,
+      "similarity_score": 0.183165
+    },
+    {
+      "source": "bol4",
+      "target": "iu",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    }
+  ],
+  "metadata": {
+    "created": "2025-06-08T22:34:02.004947",
+    "artist_count": 15,
+    "data_source": "spotify",
+    "similarity_source": "lastfm"
+  }
+}

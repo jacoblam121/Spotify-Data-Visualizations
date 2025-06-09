@@ -1,0 +1,646 @@
+{
+  "nodes": [
+    {
+      "id": "taylor swift",
+      "name": "Taylor Swift",
+      "play_count": 5216,
+      "rank": 1,
+      "size": 5216
+    },
+    {
+      "id": "paramore",
+      "name": "Paramore",
+      "play_count": 3460,
+      "rank": 2,
+      "size": 3460
+    },
+    {
+      "id": "iu",
+      "name": "IU",
+      "play_count": 2265,
+      "rank": 3,
+      "size": 2265
+    },
+    {
+      "id": "ヨルシカ",
+      "name": "ヨルシカ",
+      "play_count": 1282,
+      "rank": 4,
+      "size": 1282
+    },
+    {
+      "id": "twice",
+      "name": "TWICE",
+      "play_count": 1057,
+      "rank": 5,
+      "size": 1057
+    },
+    {
+      "id": "aimer",
+      "name": "Aimer",
+      "play_count": 885,
+      "rank": 6,
+      "size": 885
+    },
+    {
+      "id": "tonight alive",
+      "name": "Tonight Alive",
+      "play_count": 852,
+      "rank": 7,
+      "size": 852
+    },
+    {
+      "id": "ive",
+      "name": "IVE",
+      "play_count": 662,
+      "rank": 8,
+      "size": 662
+    },
+    {
+      "id": "blackpink",
+      "name": "BLACKPINK",
+      "play_count": 481,
+      "rank": 9,
+      "size": 481
+    },
+    {
+      "id": "dreamcatcher",
+      "name": "Dreamcatcher",
+      "play_count": 462,
+      "rank": 10,
+      "size": 462
+    },
+    {
+      "id": "bring me the horizon",
+      "name": "Bring Me The Horizon",
+      "play_count": 446,
+      "rank": 11,
+      "size": 446
+    },
+    {
+      "id": "anyujin",
+      "name": "ANYUJIN",
+      "play_count": 411,
+      "rank": 12,
+      "size": 411
+    },
+    {
+      "id": "the killers",
+      "name": "The Killers",
+      "play_count": 406,
+      "rank": 13,
+      "size": 406
+    },
+    {
+      "id": "bol4",
+      "name": "BOL4",
+      "play_count": 354,
+      "rank": 14,
+      "size": 354
+    },
+    {
+      "id": "the oral cigarettes",
+      "name": "THE ORAL CIGARETTES",
+      "play_count": 323,
+      "rank": 15,
+      "size": 323
+    },
+    {
+      "id": "gyubin",
+      "name": "Gyubin",
+      "play_count": 320,
+      "rank": 16,
+      "size": 320
+    },
+    {
+      "id": "seori",
+      "name": "Seori",
+      "play_count": 320,
+      "rank": 17,
+      "size": 320
+    },
+    {
+      "id": "kobasolo",
+      "name": "kobasolo",
+      "play_count": 296,
+      "rank": 18,
+      "size": 296
+    },
+    {
+      "id": "alia",
+      "name": "AliA",
+      "play_count": 294,
+      "rank": 19,
+      "size": 294
+    },
+    {
+      "id": "wooah",
+      "name": "WOOAH",
+      "play_count": 256,
+      "rank": 20,
+      "size": 256
+    },
+    {
+      "id": "muse",
+      "name": "Muse",
+      "play_count": 237,
+      "rank": 21,
+      "size": 237
+    },
+    {
+      "id": "yerin baek",
+      "name": "Yerin Baek",
+      "play_count": 231,
+      "rank": 22,
+      "size": 231
+    },
+    {
+      "id": "kiss of life",
+      "name": "KISS OF LIFE",
+      "play_count": 206,
+      "rank": 23,
+      "size": 206
+    },
+    {
+      "id": "evanescence",
+      "name": "Evanescence",
+      "play_count": 186,
+      "rank": 24,
+      "size": 186
+    },
+    {
+      "id": "justine skye",
+      "name": "Justine Skye",
+      "play_count": 184,
+      "rank": 25,
+      "size": 184
+    },
+    {
+      "id": "paul blanco",
+      "name": "Paul Blanco",
+      "play_count": 164,
+      "rank": 26,
+      "size": 164
+    },
+    {
+      "id": "bbno$",
+      "name": "bbno$",
+      "play_count": 141,
+      "rank": 27,
+      "size": 141
+    },
+    {
+      "id": "against the current",
+      "name": "Against The Current",
+      "play_count": 105,
+      "rank": 28,
+      "size": 105
+    },
+    {
+      "id": "*luna",
+      "name": "*Luna",
+      "play_count": 100,
+      "rank": 29,
+      "size": 100
+    },
+    {
+      "id": "jeon somi",
+      "name": "JEON SOMI",
+      "play_count": 92,
+      "rank": 30,
+      "size": 92
+    },
+    {
+      "id": "linkin park",
+      "name": "Linkin Park",
+      "play_count": 91,
+      "rank": 31,
+      "size": 91
+    },
+    {
+      "id": "ariana grande",
+      "name": "Ariana Grande",
+      "play_count": 88,
+      "rank": 32,
+      "size": 88
+    },
+    {
+      "id": "camellia",
+      "name": "Camellia",
+      "play_count": 83,
+      "rank": 33,
+      "size": 83
+    },
+    {
+      "id": "artms",
+      "name": "ARTMS",
+      "play_count": 73,
+      "rank": 34,
+      "size": 73
+    },
+    {
+      "id": "passcode",
+      "name": "PassCode",
+      "play_count": 58,
+      "rank": 35,
+      "size": 58
+    },
+    {
+      "id": "kanaria",
+      "name": "Kanaria",
+      "play_count": 56,
+      "rank": 36,
+      "size": 56
+    },
+    {
+      "id": "taeyeon",
+      "name": "TAEYEON",
+      "play_count": 50,
+      "rank": 37,
+      "size": 50
+    },
+    {
+      "id": "green day",
+      "name": "Green Day",
+      "play_count": 50,
+      "rank": 38,
+      "size": 50
+    },
+    {
+      "id": "tate mcrae",
+      "name": "Tate McRae",
+      "play_count": 49,
+      "rank": 39,
+      "size": 49
+    },
+    {
+      "id": "konomi suzuki",
+      "name": "Konomi Suzuki",
+      "play_count": 44,
+      "rank": 40,
+      "size": 44
+    }
+  ],
+  "edges": [
+    {
+      "source": "taylor swift",
+      "target": "tate mcrae",
+      "weight": 0.408214,
+      "similarity_score": 0.408214
+    },
+    {
+      "source": "taylor swift",
+      "target": "ariana grande",
+      "weight": 0.366299,
+      "similarity_score": 0.366299
+    },
+    {
+      "source": "paramore",
+      "target": "tonight alive",
+      "weight": 0.19963,
+      "similarity_score": 0.19963
+    },
+    {
+      "source": "paramore",
+      "target": "against the current",
+      "weight": 0.105281,
+      "similarity_score": 0.105281
+    },
+    {
+      "source": "paramore",
+      "target": "evanescence",
+      "weight": 0.104417,
+      "similarity_score": 0.104417
+    },
+    {
+      "source": "paramore",
+      "target": "green day",
+      "weight": 0.08738,
+      "similarity_score": 0.08738
+    },
+    {
+      "source": "paramore",
+      "target": "linkin park",
+      "weight": 0.080428,
+      "similarity_score": 0.080428
+    },
+    {
+      "source": "iu",
+      "target": "bol4",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "iu",
+      "target": "yerin baek",
+      "weight": 0.714366,
+      "similarity_score": 0.714366
+    },
+    {
+      "source": "iu",
+      "target": "ive",
+      "weight": 0.548231,
+      "similarity_score": 0.548231
+    },
+    {
+      "source": "iu",
+      "target": "gyubin",
+      "weight": 0.540873,
+      "similarity_score": 0.540873
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "aimer",
+      "weight": 0.438745,
+      "similarity_score": 0.438745
+    },
+    {
+      "source": "twice",
+      "target": "ive",
+      "weight": 0.179055,
+      "similarity_score": 0.179055
+    },
+    {
+      "source": "twice",
+      "target": "kiss of life",
+      "weight": 0.144802,
+      "similarity_score": 0.144802
+    },
+    {
+      "source": "twice",
+      "target": "jeon somi",
+      "weight": 0.144158,
+      "similarity_score": 0.144158
+    },
+    {
+      "source": "twice",
+      "target": "blackpink",
+      "weight": 0.122538,
+      "similarity_score": 0.122538
+    },
+    {
+      "source": "aimer",
+      "target": "ヨルシカ",
+      "weight": 0.46033,
+      "similarity_score": 0.46033
+    },
+    {
+      "source": "aimer",
+      "target": "kobasolo",
+      "weight": 0.397525,
+      "similarity_score": 0.397525
+    },
+    {
+      "source": "tonight alive",
+      "target": "against the current",
+      "weight": 0.726391,
+      "similarity_score": 0.726391
+    },
+    {
+      "source": "tonight alive",
+      "target": "paramore",
+      "weight": 0.321823,
+      "similarity_score": 0.321823
+    },
+    {
+      "source": "blackpink",
+      "target": "jeon somi",
+      "weight": 0.639437,
+      "similarity_score": 0.639437
+    },
+    {
+      "source": "blackpink",
+      "target": "ive",
+      "weight": 0.362861,
+      "similarity_score": 0.362861
+    },
+    {
+      "source": "blackpink",
+      "target": "twice",
+      "weight": 0.27826,
+      "similarity_score": 0.27826
+    },
+    {
+      "source": "blackpink",
+      "target": "kiss of life",
+      "weight": 0.268119,
+      "similarity_score": 0.268119
+    },
+    {
+      "source": "dreamcatcher",
+      "target": "ive",
+      "weight": 0.183165,
+      "similarity_score": 0.183165
+    },
+    {
+      "source": "the killers",
+      "target": "muse",
+      "weight": 0.16689,
+      "similarity_score": 0.16689
+    },
+    {
+      "source": "bol4",
+      "target": "iu",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "bol4",
+      "target": "gyubin",
+      "weight": 0.522105,
+      "similarity_score": 0.522105
+    },
+    {
+      "source": "bol4",
+      "target": "yerin baek",
+      "weight": 0.501367,
+      "similarity_score": 0.501367
+    },
+    {
+      "source": "bol4",
+      "target": "seori",
+      "weight": 0.476138,
+      "similarity_score": 0.476138
+    },
+    {
+      "source": "gyubin",
+      "target": "wooah",
+      "weight": 0.712344,
+      "similarity_score": 0.712344
+    },
+    {
+      "source": "gyubin",
+      "target": "iu",
+      "weight": 0.573729,
+      "similarity_score": 0.573729
+    },
+    {
+      "source": "gyubin",
+      "target": "ive",
+      "weight": 0.56471,
+      "similarity_score": 0.56471
+    },
+    {
+      "source": "seori",
+      "target": "yerin baek",
+      "weight": 0.62121,
+      "similarity_score": 0.62121
+    },
+    {
+      "source": "seori",
+      "target": "bol4",
+      "weight": 0.570138,
+      "similarity_score": 0.570138
+    },
+    {
+      "source": "kobasolo",
+      "target": "aimer",
+      "weight": 0.665056,
+      "similarity_score": 0.665056
+    },
+    {
+      "source": "kobasolo",
+      "target": "ヨルシカ",
+      "weight": 0.321377,
+      "similarity_score": 0.321377
+    },
+    {
+      "source": "alia",
+      "target": "ヨルシカ",
+      "weight": 0.492466,
+      "similarity_score": 0.492466
+    },
+    {
+      "source": "muse",
+      "target": "the killers",
+      "weight": 0.543765,
+      "similarity_score": 0.543765
+    },
+    {
+      "source": "muse",
+      "target": "linkin park",
+      "weight": 0.323092,
+      "similarity_score": 0.323092
+    },
+    {
+      "source": "muse",
+      "target": "green day",
+      "weight": 0.308102,
+      "similarity_score": 0.308102
+    },
+    {
+      "source": "yerin baek",
+      "target": "iu",
+      "weight": 0.284807,
+      "similarity_score": 0.284807
+    },
+    {
+      "source": "yerin baek",
+      "target": "seori",
+      "weight": 0.206834,
+      "similarity_score": 0.206834
+    },
+    {
+      "source": "yerin baek",
+      "target": "bol4",
+      "weight": 0.199887,
+      "similarity_score": 0.199887
+    },
+    {
+      "source": "evanescence",
+      "target": "linkin park",
+      "weight": 0.173345,
+      "similarity_score": 0.173345
+    },
+    {
+      "source": "evanescence",
+      "target": "paramore",
+      "weight": 0.144178,
+      "similarity_score": 0.144178
+    },
+    {
+      "source": "against the current",
+      "target": "tonight alive",
+      "weight": 0.523847,
+      "similarity_score": 0.523847
+    },
+    {
+      "source": "*luna",
+      "target": "ヨルシカ",
+      "weight": 0.314669,
+      "similarity_score": 0.314669
+    },
+    {
+      "source": "linkin park",
+      "target": "evanescence",
+      "weight": 0.183691,
+      "similarity_score": 0.183691
+    },
+    {
+      "source": "linkin park",
+      "target": "green day",
+      "weight": 0.144813,
+      "similarity_score": 0.144813
+    },
+    {
+      "source": "linkin park",
+      "target": "muse",
+      "weight": 0.123866,
+      "similarity_score": 0.123866
+    },
+    {
+      "source": "ariana grande",
+      "target": "tate mcrae",
+      "weight": 0.640668,
+      "similarity_score": 0.640668
+    },
+    {
+      "source": "ariana grande",
+      "target": "taylor swift",
+      "weight": 0.336891,
+      "similarity_score": 0.336891
+    },
+    {
+      "source": "taeyeon",
+      "target": "iu",
+      "weight": 0.408943,
+      "similarity_score": 0.408943
+    },
+    {
+      "source": "taeyeon",
+      "target": "ive",
+      "weight": 0.280032,
+      "similarity_score": 0.280032
+    },
+    {
+      "source": "taeyeon",
+      "target": "yerin baek",
+      "weight": 0.269523,
+      "similarity_score": 0.269523
+    },
+    {
+      "source": "taeyeon",
+      "target": "dreamcatcher",
+      "weight": 0.258425,
+      "similarity_score": 0.258425
+    },
+    {
+      "source": "tate mcrae",
+      "target": "ariana grande",
+      "weight": 0.660284,
+      "similarity_score": 0.660284
+    },
+    {
+      "source": "tate mcrae",
+      "target": "taylor swift",
+      "weight": 0.386936,
+      "similarity_score": 0.386936
+    }
+  ],
+  "metadata": {
+    "created": "2025-06-08T23:08:25.324780",
+    "artist_count": 40,
+    "data_source": "spotify",
+    "similarity_source": "lastfm"
+  }
+}

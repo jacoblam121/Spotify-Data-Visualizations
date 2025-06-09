@@ -1,0 +1,291 @@
+{
+  "nodes": [
+    {
+      "id": "taylor swift",
+      "play_count": 5216,
+      "in_library": true
+    },
+    {
+      "id": "paramore",
+      "play_count": 3460,
+      "in_library": true
+    },
+    {
+      "id": "iu",
+      "play_count": 2265,
+      "in_library": true
+    },
+    {
+      "id": "ヨルシカ",
+      "play_count": 1282,
+      "in_library": true
+    },
+    {
+      "id": "twice",
+      "play_count": 1057,
+      "in_library": true
+    },
+    {
+      "id": "aimer",
+      "play_count": 885,
+      "in_library": true
+    },
+    {
+      "id": "tonight alive",
+      "play_count": 852,
+      "in_library": true
+    },
+    {
+      "id": "ive",
+      "play_count": 662,
+      "in_library": true
+    },
+    {
+      "id": "blackpink",
+      "play_count": 481,
+      "in_library": true
+    },
+    {
+      "id": "dreamcatcher",
+      "play_count": 462,
+      "in_library": true
+    },
+    {
+      "id": "bring me the horizon",
+      "play_count": 446,
+      "in_library": true
+    },
+    {
+      "id": "anyujin",
+      "play_count": 411,
+      "in_library": true
+    },
+    {
+      "id": "the killers",
+      "play_count": 406,
+      "in_library": true
+    },
+    {
+      "id": "bol4",
+      "play_count": 354,
+      "in_library": true
+    },
+    {
+      "id": "the oral cigarettes",
+      "play_count": 323,
+      "in_library": true
+    },
+    {
+      "id": "gyubin",
+      "play_count": 320,
+      "in_library": true
+    },
+    {
+      "id": "seori",
+      "play_count": 320,
+      "in_library": true
+    },
+    {
+      "id": "kobasolo",
+      "play_count": 296,
+      "in_library": true
+    },
+    {
+      "id": "alia",
+      "play_count": 294,
+      "in_library": true
+    },
+    {
+      "id": "wooah",
+      "play_count": 256,
+      "in_library": true
+    },
+    {
+      "id": "muse",
+      "play_count": 237,
+      "in_library": true
+    },
+    {
+      "id": "yerin baek",
+      "play_count": 231,
+      "in_library": true
+    },
+    {
+      "id": "kiss of life",
+      "play_count": 206,
+      "in_library": true
+    },
+    {
+      "id": "evanescence",
+      "play_count": 186,
+      "in_library": true
+    },
+    {
+      "id": "justine skye",
+      "play_count": 184,
+      "in_library": true
+    },
+    {
+      "id": "paul blanco",
+      "play_count": 164,
+      "in_library": true
+    },
+    {
+      "id": "bbno$",
+      "play_count": 141,
+      "in_library": true
+    },
+    {
+      "id": "against the current",
+      "play_count": 105,
+      "in_library": true
+    },
+    {
+      "id": "*luna",
+      "play_count": 100,
+      "in_library": true
+    },
+    {
+      "id": "jeon somi",
+      "play_count": 92,
+      "in_library": true
+    },
+    {
+      "id": "linkin park",
+      "play_count": 91,
+      "in_library": true
+    },
+    {
+      "id": "ariana grande",
+      "play_count": 88,
+      "in_library": true
+    },
+    {
+      "id": "camellia",
+      "play_count": 83,
+      "in_library": true
+    },
+    {
+      "id": "artms",
+      "play_count": 73,
+      "in_library": true
+    },
+    {
+      "id": "passcode",
+      "play_count": 58,
+      "in_library": true
+    },
+    {
+      "id": "kanaria",
+      "play_count": 56,
+      "in_library": true
+    },
+    {
+      "id": "taeyeon",
+      "play_count": 50,
+      "in_library": true
+    },
+    {
+      "id": "green day",
+      "play_count": 50,
+      "in_library": true
+    },
+    {
+      "id": "tate mcrae",
+      "play_count": 49,
+      "in_library": true
+    },
+    {
+      "id": "konomi suzuki",
+      "play_count": 44,
+      "in_library": true
+    },
+    {
+      "id": "前島麻由",
+      "play_count": 42,
+      "in_library": true
+    },
+    {
+      "id": "henry young",
+      "play_count": 41,
+      "in_library": true
+    },
+    {
+      "id": "alan walker",
+      "play_count": 41,
+      "in_library": true
+    },
+    {
+      "id": "(g)i-dle",
+      "play_count": 39,
+      "in_library": true
+    },
+    {
+      "id": "rosé",
+      "play_count": 38,
+      "in_library": true
+    },
+    {
+      "id": "『ユイカ』",
+      "play_count": 37,
+      "in_library": true
+    },
+    {
+      "id": "onerepublic",
+      "play_count": 36,
+      "in_library": true
+    },
+    {
+      "id": "benson boone",
+      "play_count": 34,
+      "in_library": true
+    },
+    {
+      "id": "illit",
+      "play_count": 31,
+      "in_library": true
+    },
+    {
+      "id": "le sserafim",
+      "play_count": 29,
+      "in_library": true
+    }
+  ],
+  "edges": [
+    {
+      "source": "ヨルシカ",
+      "target": "『ユイカ』",
+      "weight": 0.447766
+    },
+    {
+      "source": "aimer",
+      "target": "ヨルシカ",
+      "weight": 0.46033
+    },
+    {
+      "source": "kobasolo",
+      "target": "『ユイカ』",
+      "weight": 0.614253
+    },
+    {
+      "source": "alia",
+      "target": "ヨルシカ",
+      "weight": 0.492466
+    },
+    {
+      "source": "konomi suzuki",
+      "target": "前島麻由",
+      "weight": 0.898209
+    },
+    {
+      "source": "『ユイカ』",
+      "target": "ヨルシカ",
+      "weight": 0.439633
+    }
+  ],
+  "metadata": {
+    "generated": "2025-06-08T21:20:35.275272",
+    "total_artists": 335,
+    "artists_included": 50
+  }
+}

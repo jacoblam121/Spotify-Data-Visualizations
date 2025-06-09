@@ -1,0 +1,146 @@
+{
+  "nodes": [
+    {
+      "id": "taylor swift",
+      "name": "Taylor Swift",
+      "play_count": 5216,
+      "rank": 1,
+      "is_anyujin": false
+    },
+    {
+      "id": "paramore",
+      "name": "Paramore",
+      "play_count": 3460,
+      "rank": 2,
+      "is_anyujin": false
+    },
+    {
+      "id": "iu",
+      "name": "IU",
+      "play_count": 2265,
+      "rank": 3,
+      "is_anyujin": false
+    },
+    {
+      "id": "ヨルシカ",
+      "name": "ヨルシカ",
+      "play_count": 1282,
+      "rank": 4,
+      "is_anyujin": false
+    },
+    {
+      "id": "twice",
+      "name": "TWICE",
+      "play_count": 1057,
+      "rank": 5,
+      "is_anyujin": false
+    },
+    {
+      "id": "aimer",
+      "name": "Aimer",
+      "play_count": 885,
+      "rank": 6,
+      "is_anyujin": false
+    },
+    {
+      "id": "tonight alive",
+      "name": "Tonight Alive",
+      "play_count": 852,
+      "rank": 7,
+      "is_anyujin": false
+    },
+    {
+      "id": "ive",
+      "name": "IVE",
+      "play_count": 662,
+      "rank": 8,
+      "is_anyujin": false
+    },
+    {
+      "id": "blackpink",
+      "name": "BLACKPINK",
+      "play_count": 481,
+      "rank": 9,
+      "is_anyujin": false
+    },
+    {
+      "id": "dreamcatcher",
+      "name": "Dreamcatcher",
+      "play_count": 462,
+      "rank": 10,
+      "is_anyujin": false
+    },
+    {
+      "id": "bring me the horizon",
+      "name": "Bring Me The Horizon",
+      "play_count": 446,
+      "rank": 11,
+      "is_anyujin": false
+    },
+    {
+      "id": "anyujin",
+      "name": "ANYUJIN",
+      "play_count": 411,
+      "rank": 12,
+      "is_anyujin": true
+    },
+    {
+      "id": "the killers",
+      "name": "The Killers",
+      "play_count": 406,
+      "rank": 13,
+      "is_anyujin": false
+    },
+    {
+      "id": "bol4",
+      "name": "BOL4",
+      "play_count": 354,
+      "rank": 14,
+      "is_anyujin": false
+    },
+    {
+      "id": "the oral cigarettes",
+      "name": "THE ORAL CIGARETTES",
+      "play_count": 323,
+      "rank": 15,
+      "is_anyujin": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "paramore",
+      "target": "tonight alive",
+      "weight": 0.19963,
+      "similarity_score": 0.19963
+    },
+    {
+      "source": "iu",
+      "target": "bol4",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "iu",
+      "target": "ive",
+      "weight": 0.548231,
+      "similarity_score": 0.548231
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "aimer",
+      "weight": 0.438745,
+      "similarity_score": 0.438745
+    },
+    {
+      "source": "twice",
+      "target": "ive",
+      "weight": 0.179055,
+      "similarity_score": 0.179055
+    }
+  ],
+  "metadata": {
+    "created": "2025-06-08T22:55:42.684482",
+    "artist_count": 15,
+    "test_type": "anyujin_validation"
+  }
+}

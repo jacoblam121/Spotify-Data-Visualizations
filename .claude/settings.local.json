@@ -26,7 +26,8 @@
       "Bash(chmod:*)",
       "Bash(mv:*)",
       "Bash(mkdir:*)",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "Bash(sed:*)"
     ],
     "deny": []
   }
