@@ -1,0 +1,442 @@
+{
+  "spotify_artist_from_track_0NoeYUnwpb9R26mpylHcR9": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb5227c0582a86838a0942d9f3",
+    "canonical_artist_name": "KISS OF LIFE",
+    "spotify_artist_id": "4TEK9tIkcoxib4GxT3O4ky",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 70,
+    "followers": 2213709,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_0KAe8Hh67OXolVlcsZDCIy": {
+    "photo_url": "https://i.scdn.co/image/ab67616d0000b27394f40c707b710aa7f07e9b4c",
+    "canonical_artist_name": "ANYUJIN",
+    "spotify_artist_id": "3schR1HLbYu3RqqPDiDFrE",
+    "genres": [],
+    "popularity": 43,
+    "followers": 37629,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_003vvx7Niy0yvhvHt4a68B": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb207b21f3ed0ee96adce3166a",
+    "canonical_artist_name": "The Killers",
+    "spotify_artist_id": "0C0XlULifJtAgn6ZNCW2eu",
+    "genres": [
+      "alternative rock"
+    ],
+    "popularity": 79,
+    "followers": 7838381,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_1TiZWEsxN85yLJBq56K8mG": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb044a552ffb724baab8293b2",
+    "canonical_artist_name": "J.Tajor",
+    "spotify_artist_id": "0VpMOC5IZU06u29fWjv3qJ",
+    "genres": [],
+    "popularity": 59,
+    "followers": 107909,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_1JdKrFyoU05abww0Zv0ayQ": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb10c34546a4ca2d7faeb8865",
+    "canonical_artist_name": "Paramore",
+    "spotify_artist_id": "74XFHRwlV6OrjEM0A2NCMF",
+    "genres": [
+      "pop punk",
+      "emo"
+    ],
+    "popularity": 82,
+    "followers": 9456477,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_5z0QlOV93W6Yo7DG2SYOJP": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb469aba515a0815396f1c432c",
+    "canonical_artist_name": "Against The Current",
+    "spotify_artist_id": "6yhD1KjhLxIETFF7vIRf8B",
+    "genres": [
+      "pop punk"
+    ],
+    "popularity": 64,
+    "followers": 532536,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_5Wll1i0Y8GGjyePcP83L3x": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7fd277fc83d7670dadb45790",
+    "canonical_artist_name": "PENTAGON",
+    "spotify_artist_id": "1wKpMkucynaTfG8lyPprYV",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 51,
+    "followers": 2236044,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_56v8WEnGzLByGsDAXDiv4d": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb80668ba2b15094d083780ea9",
+    "canonical_artist_name": "NewJeans",
+    "spotify_artist_id": "6HvZYsbFfjnjFrWF950C9d",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 79,
+    "followers": 10809837,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_5eY7692tmgHB9dbmq6wa2M": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab",
+    "canonical_artist_name": "\u30e8\u30eb\u30b7\u30ab",
+    "spotify_artist_id": "4UK2Lzi6fBfUi9rpDt6cik",
+    "genres": [
+      "j-pop",
+      "j-rock",
+      "japanese indie",
+      "anime"
+    ],
+    "popularity": 74,
+    "followers": 3117025,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_3UZ46DvXvB2R7sBUZornlv": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb639dc73ec795e329d064dbb2",
+    "canonical_artist_name": "Seori",
+    "spotify_artist_id": "2bWTIIQP9zaVc55RaMGu7e",
+    "genres": [],
+    "popularity": 58,
+    "followers": 333870,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_1c6kkrWnpy68eYDfBdxNtF": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb789f38042e5ef8911fc3826b",
+    "canonical_artist_name": "IU",
+    "spotify_artist_id": "3HqSLMAZ3g3d5poNaI7GOU",
+    "genres": [
+      "k-pop",
+      "k-ballad"
+    ],
+    "popularity": 72,
+    "followers": 9236746,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_2VnVfGZuVCQKm9xBTuWM7N": {
+    "photo_url": null,
+    "canonical_artist_name": "Chorus - Pocahontas",
+    "spotify_artist_id": "5DH8cLYXVTknLlSRzzkRc4",
+    "genres": [],
+    "popularity": 43,
+    "followers": 4279,
+    "source": "spotify (track_uri_lookup_no_photo)"
+  },
+  "spotify_artist_from_track_7jzOZuWgZ5gaMet9V5Ix1d": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8acf72a6c3da24a6483255fa",
+    "canonical_artist_name": "JEON SOMI",
+    "spotify_artist_id": "7zYj9S9SdIunYCfSm7vzAR",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 59,
+    "followers": 3210359,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_2hloaUoRonYssMuqLCBLTX": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb6725802588d7dc1aba076ca5",
+    "canonical_artist_name": "Ariana Grande",
+    "spotify_artist_id": "66CXWjxzNUsdJxJ2JdwvnR",
+    "genres": [
+      "pop"
+    ],
+    "popularity": 93,
+    "followers": 105624897,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_2wLDS3oCMufFrvwN2IK3Bt": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb50bc256e017a5dfc38bd41a7",
+    "canonical_artist_name": "Awkwafina",
+    "spotify_artist_id": "3SmyWs7ou3udD8gtM0Z6Vx",
+    "genres": [],
+    "popularity": 40,
+    "followers": 133915,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_5zhuhNkILzHm585h104JlI": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb2e75abbdf622da095f8b21cd",
+    "canonical_artist_name": "Dreamcatcher",
+    "spotify_artist_id": "5V1qsQHdXNm4ZEZHWvFnqQ",
+    "genres": [
+      "k-pop",
+      "k-rock"
+    ],
+    "popularity": 58,
+    "followers": 1392872,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_3rUGC1vUpkDG9CZFHMur1t": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb590259e859082dc3b661b8ac",
+    "canonical_artist_name": "Tate McRae",
+    "spotify_artist_id": "45dkTj5sMRSjrmBSBeiHym",
+    "genres": [],
+    "popularity": 91,
+    "followers": 7945330,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_663Karu2rvKLdnY0eo1n3M": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7ecf213c7dd78e0049379c5b",
+    "canonical_artist_name": "Evanescence",
+    "spotify_artist_id": "5nGIFgo0shDenQYSE0Sn7c",
+    "genres": [
+      "alternative metal"
+    ],
+    "popularity": 78,
+    "followers": 5620883,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_00vy9aiFjxMfnKniQAYzrC": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb1605bb0e3881cfc8f63c2c6a",
+    "canonical_artist_name": "JO YURI",
+    "spotify_artist_id": "3LFFf4EpKn2krneZ9vozyz",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 52,
+    "followers": 505390,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_0HIr8uSRGF14DHO1sckYx0": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb36c142243f2dd58b8544f673",
+    "canonical_artist_name": "Michael Learns To Rock",
+    "spotify_artist_id": "7zMVPOJPs5jgU8NorRxqJe",
+    "genres": [],
+    "popularity": 67,
+    "followers": 1632890,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_210JJAa9nJOgNa0YNrsT5g": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe80d1ffb81aa6503ad41c574",
+    "canonical_artist_name": "League of Legends",
+    "spotify_artist_id": "47mIJdHORyRerp4os813jD",
+    "genres": [],
+    "popularity": 80,
+    "followers": 2069903,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_2pRy6Ll8ZPDoDKZeNt5BO6": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eba79525b9ac20723026b614eb",
+    "canonical_artist_name": "Andreas Waldetoft",
+    "spotify_artist_id": "7eyudpSl4KF7iXun4H2PSh",
+    "genres": [
+      "space music",
+      "medieval"
+    ],
+    "popularity": 45,
+    "followers": 9299,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_13On7DYsJ3IrWxBWuOwM8t": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf02894a4871ab241313e59e1",
+    "canonical_artist_name": "Yerin Baek",
+    "spotify_artist_id": "6dhfy4ByARPJdPtMyrUYJK",
+    "genres": [
+      "k-ballad"
+    ],
+    "popularity": 59,
+    "followers": 733342,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_4y5bvROuBDPr5fuwXbIBZR": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676",
+    "canonical_artist_name": "Taylor Swift",
+    "spotify_artist_id": "06HL4z0CvFAxyc27GXpf02",
+    "genres": [],
+    "popularity": 98,
+    "followers": 138593554,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_3jsYQw78lrxJA2ysnmOIf9": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4a970fe13b80298b5621d657",
+    "canonical_artist_name": "BOL4",
+    "spotify_artist_id": "4k5fFEYgkWYrYvtOK3zVBl",
+    "genres": [
+      "k-pop",
+      "k-ballad"
+    ],
+    "popularity": 62,
+    "followers": 2089991,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_0fBrOyJj7gEAyXevVq69xv": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf605f6c661815b71d4bcc2ea",
+    "canonical_artist_name": "Tonight Alive",
+    "spotify_artist_id": "5pjCYG6hPLBO3y4swxu3dh",
+    "genres": [
+      "pop punk"
+    ],
+    "popularity": 48,
+    "followers": 338330,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_35dhwUoJNlxrPyEIJkfDnx": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebca6c145421fa9ceb58d6f9d4",
+    "canonical_artist_name": "TWICE",
+    "spotify_artist_id": "7n2Ycct7Beij7Dj7meI4X0",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 80,
+    "followers": 21939492,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_0achc2JEdzkJQXRl0LbUox": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb385c830d0c36d70376aa2d26",
+    "canonical_artist_name": "Gyubin",
+    "spotify_artist_id": "7nScMbyBG94XsSpe7yrImS",
+    "genres": [],
+    "popularity": 48,
+    "followers": 69975,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_3fgehc497TFqKH1zBL2YNK": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eba49c7eec5131a21a0bfb737b",
+    "canonical_artist_name": "Linkin Park",
+    "spotify_artist_id": "6XyY86QOPPrYVGvF9ch6wz",
+    "genres": [
+      "nu metal",
+      "rap metal",
+      "rock",
+      "alternative metal"
+    ],
+    "popularity": 91,
+    "followers": 30264013,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_7uwNVnaOswnVGJ5v8e2bQk": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf45456a6207be90a847e952d",
+    "canonical_artist_name": "WOOAH",
+    "spotify_artist_id": "7mgY992t7YTx6UELsoIMRa",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 42,
+    "followers": 315200,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_0InqZvX2yR28fcnNN8F1A6": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb775869f50e1369fbea0c559a",
+    "canonical_artist_name": "\u300e\u30e6\u30a4\u30ab\u300f",
+    "spotify_artist_id": "2EqaSEa0WkE59Aca9iXSYj",
+    "genres": [
+      "j-pop"
+    ],
+    "popularity": 60,
+    "followers": 352338,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_3F2QRtNpPBWPnFrn0TWJ3P": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8",
+    "canonical_artist_name": "Aimer",
+    "spotify_artist_id": "0bAsR2unSRpn6BQPEnNlZm",
+    "genres": [
+      "anime",
+      "j-pop",
+      "j-rock"
+    ],
+    "popularity": 66,
+    "followers": 2652264,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_2O4Bb2WCkjlTPO827OnBMI": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb593f35db6f6837e1047a5e33",
+    "canonical_artist_name": "LE SSERAFIM",
+    "spotify_artist_id": "4SpbR6yFEvexJuaBpgAU5p",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 80,
+    "followers": 7199346,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_4ieJnnMvbQBKHuYwIY76UR": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb41d06008db6aff64378b802",
+    "canonical_artist_name": "THE ORAL CIGARETTES",
+    "spotify_artist_id": "4rqJz9fE9prZvQd8WsQv6q",
+    "genres": [
+      "j-rock",
+      "anime",
+      "j-pop"
+    ],
+    "popularity": 59,
+    "followers": 638046,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_4Zhuv5znO4SFdhPBVKoOs1": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb531364c94ec00ac6077dfac5",
+    "canonical_artist_name": "AliA",
+    "spotify_artist_id": "4Lmo7h2Ik12QI3Ik0BvGbB",
+    "genres": [
+      "j-pop",
+      "j-rock",
+      "anime"
+    ],
+    "popularity": 48,
+    "followers": 95701,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_2gYj9lubBorOPIVWsTXugG": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb538dad5b42d963e338726c26",
+    "canonical_artist_name": "IVE",
+    "spotify_artist_id": "6RHTUrRF63xao58xh9FXYJ",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 74,
+    "followers": 5676867,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_36VoVeLLFDFp6id0v8T2Fy": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebd34fe8b6854a93a79dcf9236",
+    "canonical_artist_name": "kobasolo",
+    "spotify_artist_id": "4n2W84plMrq8WttT18Npwi",
+    "genres": [
+      "j-pop"
+    ],
+    "popularity": 46,
+    "followers": 219114,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_4ZxOuNHhpyOj4gv52MtQpT": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb667b1c37aac06716daa5fe92",
+    "canonical_artist_name": "BLACKPINK",
+    "spotify_artist_id": "41MozSoPIsD1dJM0CLPjZF",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 80,
+    "followers": 54049647,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_22I3h5AOENlH4CqXJsEbFR": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb690b6f30c0c6cac2a94e3bb",
+    "canonical_artist_name": "Justine Skye",
+    "spotify_artist_id": "0jUQSUOcM7lxVn5eVGTkzQ",
+    "genres": [],
+    "popularity": 65,
+    "followers": 921041,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_0M3adYbGtyRHACP86dey1H": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe7c9399d0b5d813c20cbec65",
+    "canonical_artist_name": "Bring Me The Horizon",
+    "spotify_artist_id": "1Ffb6ejR6Fe5IamqA5oRUF",
+    "genres": [
+      "metalcore",
+      "emo",
+      "screamo",
+      "rock",
+      "post-hardcore",
+      "metal"
+    ],
+    "popularity": 79,
+    "followers": 6438901,
+    "source": "spotify (track_uri_lookup)"
+  }
+}

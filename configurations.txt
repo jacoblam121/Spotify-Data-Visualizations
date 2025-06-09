@@ -21,9 +21,9 @@ FILTER_SKIPPED_TRACKS = False
 # START_DATE: YYYY-MM-DD or "all_time"
 # 2024-01-01
 # 2024-12-31
-START_DATE = all_time
+START_DATE = 2024-01-01
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = all_time
+END_DATE = 2024-12-31
 
 # --- Visualization Mode ---
 [VisualizationMode]
@@ -31,7 +31,7 @@ END_DATE = all_time
 # tracks: Show top tracks over time with album covers
 # artists: Show top artists over time with artist profile photos  
 # both: Generate both track and artist visualizations (comprehensive mode for long renders)
-MODE = artists
+MODE = both
 
 # --- Animation Output ---
 [AnimationOutput]
@@ -47,13 +47,13 @@ MAX_FRAMES_FOR_TEST_RENDER = 0
 # ANIMATION_TRANSITION_DURATION_SECONDS: Duration of the overtake animation in seconds.
 ANIMATION_TRANSITION_DURATION_SECONDS = 0.2
 # ENABLE_OVERTAKE_ANIMATIONS: Set to True to enable smooth overtake animations, False for static transitions.
-ENABLE_OVERTAKE_ANIMATIONS = False
+ENABLE_OVERTAKE_ANIMATIONS = True
 
 # FRAME_AGGREGATION_PERIOD: Aggregate frames by time period. Options:
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), '12H' (12-hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = W
+FRAME_AGGREGATION_PERIOD = H
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
@@ -113,7 +113,7 @@ LOG_PARALLEL_PROCESS_START = False
 # BASE_FREQUENCY controls how play events are bucketed before rolling.
 # Examples: 15T (15-minute), 30T, H (hourly), D (daily)
 # Note: Weekly (W) can cause pandas errors, use D (daily) instead for stable operation
-BASE_FREQUENCY = D
+BASE_FREQUENCY = H
 
 # --- Rolling Stats Display ---
 [RollingStatsDisplay]
@@ -239,6 +239,20 @@ ANIMATION_STYLE = cubic
 # 'W' = Weekly (7x faster, samples every 7th frame)
 # 'M' = Monthly (30x faster, samples every 30th frame)
 # Note: Animation stays smooth due to interpolation between sampled points
-SAMPLING_RATE = D
+SAMPLING_RATE = H
 # Debug output
 DEBUG_MODE = False
+
+# --- Last.fm API ---
+[LastfmAPI]
+# API credentials
+API_KEY = 1e8f179baf2593c1ec228bf7eba1bfa4
+API_SECRET = 2b04ee3940408d3c13ff58ee5567ebd4
+# Enable Last.fm integration
+ENABLE_LASTFM = True
+# Maximum number of similar artists to fetch
+SIMILAR_ARTISTS_LIMIT = 100
+# Cache directory for Last.fm data
+CACHE_DIR = lastfm_cache
+# Cache expiry in days
+CACHE_EXPIRY_DAYS = 30

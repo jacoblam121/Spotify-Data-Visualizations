@@ -44,6 +44,17 @@ class AppConfig:
         except (configparser.NoOptionError, configparser.NoSectionError):
             return fallback
     
+    def get_lastfm_config(self):
+        """Get Last.fm API configuration."""
+        return {
+            'api_key': self.get('LastfmAPI', 'API_KEY', ''),
+            'api_secret': self.get('LastfmAPI', 'API_SECRET', ''),
+            'enabled': self.get_bool('LastfmAPI', 'ENABLE_LASTFM', False),
+            'limit': self.get_int('LastfmAPI', 'SIMILAR_ARTISTS_LIMIT', 100),
+            'cache_dir': self.get('LastfmAPI', 'CACHE_DIR', 'lastfm_cache'),
+            'cache_expiry_days': self.get_int('LastfmAPI', 'CACHE_EXPIRY_DAYS', 30)
+        }
+    
     def validate_visualization_mode(self):
         """Validate the visualization mode setting and return the normalized mode."""
         mode = self.get('VisualizationMode', 'MODE', 'tracks').lower().strip()

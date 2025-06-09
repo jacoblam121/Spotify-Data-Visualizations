@@ -13,6 +13,9 @@ import sys
 # Set encoding
 os.environ['PYTHONIOENCODING'] = 'utf-8'
 
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 def test_data_modes():
     """Quick test of data processing modes."""
     print("🔍 Testing Data Processing Modes...")
@@ -134,11 +137,12 @@ def interactive_menu():
         print("5. Test Artist Photo (Japanese Artist)")
         print("6. Test Artist Photo with MBID (Taylor Swift)")
         print("7. Test Artist Photo with Custom MBID")
-        print("8. Show Cache Files")
-        print("9. Exit")
+        print("8. Test Last.fm API Integration")
+        print("9. Show Cache Files")
+        print("10. Exit")
         print("-"*50)
         
-        choice = input("Select option (1-9): ").strip()
+        choice = input("Select option (1-10): ").strip()
         
         if choice == "1":
             test_config_modes()
@@ -173,62 +177,113 @@ def interactive_menu():
                 print("❌ Both artist name and MBID are required")
                 
         elif choice == "8":
-            show_cache_files()
+            test_lastfm_integration()
             
         elif choice == "9":
+            show_cache_files()
+            
+        elif choice == "10":
             print("👋 Goodbye!")
             break
             
         else:
-            print("❌ Invalid choice. Please select 1-9.")
+            print("❌ Invalid choice. Please select 1-10.")
+
+def test_lastfm_integration():
+    """Test Last.fm API integration."""
+    print("🎵 Testing Last.fm API Integration...")
+    
+    try:
+        from config_loader import AppConfig
+        from lastfm_utils import LastfmAPI
+        
+        # Load configuration
+        config = AppConfig()
+        lastfm_config = config.get_lastfm_config()
+        
+        if not lastfm_config['enabled']:
+            print("❌ Last.fm integration is disabled in configuration")
+            return
+            
+        if not lastfm_config['api_key']:
+            print("❌ No Last.fm API key configured")
+            return
+            
+        print(f"✅ Last.fm API key configured")
+        print(f"   Cache directory: {lastfm_config['cache_dir']}")
+        print(f"   Similarity limit: {lastfm_config['limit']}")
+        
+        # Initialize API
+        api = LastfmAPI(
+            lastfm_config['api_key'], 
+            lastfm_config['api_secret'], 
+            lastfm_config['cache_dir']
+        )
+        
+        # Test with popular artist
+        test_artist = "Taylor Swift"
+        print(f"\n🔍 Testing with: {test_artist}")
+        
+        # Get similar artists
+        similar = api.get_similar_artists(artist_name=test_artist, limit=5)
+        
+        if similar:
+            print(f"✅ Found {len(similar)} similar artists:")
+            for i, artist in enumerate(similar, 1):
+                print(f"   {i}. {artist['name']} (score: {artist['match']:.3f})")
+        else:
+            print("❌ No similar artists found")
+            
+        # Get artist info
+        info = api.get_artist_info(artist_name=test_artist)
+        if info:
+            print(f"\n📊 Artist Info:")
+            print(f"   Name: {info['name']}")
+            print(f"   Listeners: {info['listeners']:,}")
+            print(f"   Play count: {info['playcount']:,}")
+            if info['tags']:
+                tags = ', '.join([tag['name'] for tag in info['tags'][:3]])
+                print(f"   Tags: {tags}")
+        else:
+            print("❌ No artist info found")
+            
+    except Exception as e:
+        print(f"❌ Error testing Last.fm: {e}")
 
 def show_cache_files():
     """Show contents of cache directory."""
     print("📁 Cache Directory Contents...")
     
     try:
+        # Show album art cache
         cache_dir = "album_art_cache"
-        if not os.path.exists(cache_dir):
-            print("❌ Cache directory doesn't exist yet")
-            return
+        if os.path.exists(cache_dir):
+            files = os.listdir(cache_dir)
+            
+            # Categorize files
+            json_files = [f for f in files if f.endswith('.json')]
+            artist_photos = [f for f in files if 'artist_' in f and f.endswith(('.jpg', '.png'))]
+            album_art = [f for f in files if f.endswith(('.jpg', '.png')) and 'artist_' not in f]
+            
+            print(f"\n📊 Album Art Cache:")
+            print(f"   JSON cache files: {len(json_files)}")
+            print(f"   Artist photos: {len(artist_photos)}")
+            print(f"   Album art: {len(album_art)}")
+            print(f"   Total files: {len(files)}")
         
-        files = os.listdir(cache_dir)
-        
-        # Categorize files
-        json_files = [f for f in files if f.endswith('.json')]
-        artist_photos = [f for f in files if 'artist_' in f and f.endswith(('.jpg', '.png'))]
-        album_art = [f for f in files if f.endswith(('.jpg', '.png')) and 'artist_' not in f]
-        
-        print(f"\n📊 Summary:")
-        print(f"   JSON cache files: {len(json_files)}")
-        print(f"   Artist photos: {len(artist_photos)}")
-        print(f"   Album art: {len(album_art)}")
-        print(f"   Total files: {len(files)}")
-        
-        if json_files:
-            print(f"\n📄 JSON Cache Files:")
-            for f in json_files:
-                file_path = os.path.join(cache_dir, f)
+        # Show Last.fm cache
+        lastfm_cache_dir = "lastfm_cache"
+        if os.path.exists(lastfm_cache_dir):
+            lastfm_files = os.listdir(lastfm_cache_dir)
+            print(f"\n🎵 Last.fm Cache:")
+            print(f"   Cache files: {len(lastfm_files)}")
+            
+            for f in lastfm_files:
+                file_path = os.path.join(lastfm_cache_dir, f)
                 size = os.path.getsize(file_path)
                 print(f"   {f} ({size:,} bytes)")
-        
-        if artist_photos:
-            print(f"\n🎭 Artist Photos:")
-            for f in artist_photos[:5]:  # Show first 5
-                file_path = os.path.join(cache_dir, f)
-                size = os.path.getsize(file_path)
-                print(f"   {f} ({size:,} bytes)")
-            if len(artist_photos) > 5:
-                print(f"   ... and {len(artist_photos) - 5} more")
-        
-        if album_art:
-            print(f"\n🎵 Album Art (first 5):")
-            for f in album_art[:5]:
-                file_path = os.path.join(cache_dir, f)
-                size = os.path.getsize(file_path)
-                print(f"   {f} ({size:,} bytes)")
-            if len(album_art) > 5:
-                print(f"   ... and {len(album_art) - 5} more")
+        else:
+            print(f"\n🎵 Last.fm Cache: Not created yet")
                 
     except Exception as e:
         print(f"❌ Error reading cache: {e}")
@@ -255,6 +310,8 @@ def main():
             test_artist_photo(artist_name, artist_mbid=artist_mbid)
         elif command == "cache":
             show_cache_files()
+        elif command == "lastfm":
+            test_lastfm_integration()
         else:
             print("Usage:")
             print("  python quick_test.py config                    # Test configuration")
@@ -262,11 +319,13 @@ def main():
             print("  python quick_test.py artist <name>             # Test artist photo")
             print("  python quick_test.py mbid <name> <mbid>        # Test artist photo with MBID")
             print("  python quick_test.py cache                     # Show cache files")
+            print("  python quick_test.py lastfm                    # Test Last.fm integration")
             print("  python quick_test.py                           # Interactive menu")
             print("")
             print("Examples:")
             print("  python quick_test.py artist \"Taylor Swift\"")
             print("  python quick_test.py mbid \"Taylor Swift\" \"20244d07-534f-4eff-b4d4-930878889970\"")
+            print("  python quick_test.py lastfm")
     else:
         # Interactive mode
         interactive_menu()
