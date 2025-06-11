@@ -180,11 +180,15 @@ class ArtistNetworkAnalyzer:
         for i, artist in enumerate(artists, 1):
             print(f"  {i}/{len(artists)}: {artist}")
             
-            # Get similar artists from Last.fm
-            similar_artists = self.lastfm_api.get_similar_artists(
-                artist_name=artist, 
-                limit=limit_per_artist
-            )
+            try:
+                # Get similar artists from Last.fm
+                similar_artists = self.lastfm_api.get_similar_artists(
+                    artist_name=artist, 
+                    limit=limit_per_artist
+                )
+            except Exception as e:
+                print(f"    Error getting similar artists for {artist}: {e}")
+                similar_artists = []
             
             # Add similarities to matrix
             for similar in similar_artists:

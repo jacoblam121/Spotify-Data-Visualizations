@@ -308,6 +308,78 @@ def clean_and_filter_data(config):
     return df_time_filtered
 
 
+def split_artist_collaborations(artist_string):
+    """
+    Split artist collaborations into individual artists.
+    Handles various collaboration formats: feat., ft., &, with, x, etc.
+    
+    Args:
+        artist_string: String containing one or more artist names
+        
+    Returns:
+        List of individual artist names
+    """
+    if not artist_string or pd.isna(artist_string):
+        return []
+    
+    # Convert to string and clean
+    artist_str = str(artist_string).strip()
+    
+    # Define separators in order of priority (more specific first)
+    # We'll handle case-insensitive matching for some separators
+    import re
+    
+    # First, handle case-insensitive feat/ft/featuring
+    feat_pattern = re.compile(r'\s+(feat\.?|ft\.?|featuring)\s+', re.IGNORECASE)
+    artist_str = feat_pattern.sub(' feat. ', artist_str)
+    
+    # Now use standardized separators
+    separators = [
+        ' feat. ', ' with ', ' With ', ' x ', ' X ', ' vs. ', ' Vs. ', ' VS ',
+        ' & ', ', ', ' and ', ' And ', ' AND '
+    ]
+    
+    # Start with the full string
+    artists = [artist_str]
+    
+    # Iteratively split by each separator
+    for separator in separators:
+        new_artists = []
+        for artist in artists:
+            if separator in artist:
+                # Split and clean each part
+                parts = [part.strip() for part in artist.split(separator) if part.strip()]
+                new_artists.extend(parts)
+            else:
+                new_artists.append(artist)
+        artists = new_artists
+    
+    # Clean up any parenthetical information (e.g., "(Korean)" or "(feat. someone)")
+    cleaned_artists = []
+    for artist in artists:
+        # Remove parenthetical info that's not part of the artist name
+        if '(' in artist and ')' in artist:
+            # Keep common valid parentheticals like (G)I-DLE
+            if artist.upper() not in ['(G)I-DLE', '(G)I-DLE ((여자)아이들)']:
+                # Remove content in parentheses if it looks like metadata
+                import re
+                cleaned = re.sub(r'\s*\([^)]*(?:feat|ft|with|korean|k-pop|remix)[^)]*\)', '', artist, flags=re.IGNORECASE)
+                if cleaned.strip():
+                    artist = cleaned.strip()
+        cleaned_artists.append(artist)
+    
+    # Remove duplicates while preserving order
+    seen = set()
+    unique_artists = []
+    for artist in cleaned_artists:
+        artist_lower = artist.lower()
+        if artist_lower not in seen and artist:
+            seen.add(artist_lower)
+            unique_artists.append(artist)
+    
+    return unique_artists
+
+
 def prepare_data_for_bar_chart_race(cleaned_df, mode="tracks"):
     """
     Transforms cleaned data (from any source) to prepare it for a bar chart race.
@@ -333,9 +405,33 @@ def prepare_data_for_bar_chart_race(cleaned_df, mode="tracks"):
         entity_type = "songs"
         print(f"Created 'song_id'. Total unique songs found: {df['entity_id'].nunique()}")
     elif mode == "artists":
-        # New artist-based logic
-        df['entity_id'] = df['artist']  # Use just the artist name
+        # New artist-based logic with collaboration support
+        # Split collaborations and create separate rows for each artist
+        print("Splitting artist collaborations...")
+        expanded_rows = []
+        
+        for idx, row in df.iterrows():
+            # Split artists from both normalized and original artist fields
+            artists_normalized = split_artist_collaborations(row['artist'])
+            artists_original = split_artist_collaborations(row.get('original_artist', row['artist']))
+            
+            # Ensure we have the same number of artists in both lists
+            if len(artists_normalized) != len(artists_original):
+                # Fallback: use the normalized version for both
+                artists_original = artists_normalized
+            
+            # Create a row for each individual artist
+            for i, artist_norm in enumerate(artists_normalized):
+                new_row = row.copy()
+                new_row['artist'] = artist_norm.lower().strip()  # Normalized version
+                new_row['original_artist'] = artists_original[i] if i < len(artists_original) else artist_norm
+                new_row['entity_id'] = new_row['artist']  # Use normalized for entity_id
+                expanded_rows.append(new_row)
+        
+        # Create new dataframe with expanded rows
+        df = pd.DataFrame(expanded_rows)
         entity_type = "artists"
+        print(f"Expanded {len(cleaned_df)} plays to {len(df)} artist entries after splitting collaborations")
         print(f"Created 'artist_id'. Total unique artists found: {df['entity_id'].nunique()}")
     else:
         raise ValueError(f"Unsupported mode: {mode}. Must be 'tracks' or 'artists'.")

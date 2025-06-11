@@ -147,127 +147,40 @@ class LastfmAPI:
     
     def _generate_name_variants(self, artist_name: str) -> List[str]:
         """
-        Generate different name variants to try for failed lookups.
+        Generate intelligent name variants with priority ordering.
         
         Args:
             artist_name: Original artist name
             
         Returns:
-            List of name variants to try
+            List of name variants ordered by likelihood of success
         """
-        variants = [artist_name]  # Always try original first
-        
-        # Common K-pop name patterns
-        kpop_patterns = {
-            'IVE': ['IVE (아이브)', '아이브', 'IVE (K-pop)', 'IVE (girl group)'],
-            'TWICE': ['TWICE (트와이스)', '트와이스'],
-            'BLACKPINK': ['BLACKPINK (블랙핑크)', '블랙핑크'],
-            'BTS': ['BTS (방탄소년단)', '방탄소년단', 'BTS (Korean group)'],
-            'STRAY KIDS': ['Stray Kids (스트레이 키즈)', '스트레이 키즈'],
-            'NEWJEANS': ['NewJeans (뉴진스)', '뉴진스'],
-            'LE SSERAFIM': ['LE SSERAFIM (르세라핌)', '르세라핌'],
-            'aespa': ['aespa (에스파)', '에스파'],
-            'ITZY': ['ITZY (있지)', '있지'],
-            '(G)I-DLE': ['(G)I-DLE ((여자)아이들)', '(여자)아이들'],
-            'SEVENTEEN': ['SEVENTEEN (세븐틴)', '세븐틴'],
-            'ENHYPEN': ['ENHYPEN (엔하이픈)', '엔하이픈'],
-            'TXT': ['TXT (투모로우바이투게더)', '투모로우바이투게더', 'TOMORROW X TOGETHER'],
-            'ANYUJIN': ['An Yujin', 'ANYUJIN (IVE)', 'AnYujin (IVE)', 'AN YUJIN'],
-            'KISS OF LIFE': ['KOL', 'Kiss Of Life (키스 오브 라이프)', 'KISS OF LIFE (키스 오브 라이프)'],
-            'JEON SOMI': ['SOMI', 'Somi', 'somi', '전소미'],
-        }
-        
-        # Check if this artist has known variants
-        artist_upper = artist_name.upper().strip()
-        if artist_upper in kpop_patterns:
-            variants.extend(kpop_patterns[artist_upper])
-        
-        # Comprehensive general patterns for any artist
+        variants = []
         name_clean = artist_name.strip()
-        name_words = name_clean.split()
+        name_upper = name_clean.upper()
         
-        # Basic case variations
-        variants.extend([
-            name_clean.title(),  # Title Case
-            name_clean.lower(),  # lowercase  
-            name_clean.upper()   # UPPERCASE
-        ])
+        # Priority 1: Exact match (always try first)
+        variants.append(name_clean)
         
-        # Try with/without common prefixes
-        if name_clean.lower().startswith('the '):
-            variants.append(name_clean[4:])  # Remove "The "
-        else:
-            variants.append(f"The {name_clean}")  # Add "The "
+        # Priority 2: Known successful patterns (curated database)
+        known_patterns = self._get_known_artist_patterns()
+        if name_upper in known_patterns:
+            variants.extend(known_patterns[name_upper])
         
-        # Common suffixes for disambiguation
-        suffixes = ['(band)', '(artist)', '(group)', '(singer)', '(K-pop)', '(soloist)']
-        for suffix in suffixes:
-            variants.extend([
-                f"{name_clean} {suffix}",
-                f"{name_clean.title()} {suffix}",
-                f"{name_clean.lower()} {suffix}"
-            ])
+        # Priority 3: High-probability variants based on artist type detection
+        artist_type = self._detect_artist_type(name_clean)
+        if artist_type == 'kpop':
+            variants.extend(self._generate_kpop_variants(name_clean))
+        elif artist_type == 'jpop':
+            variants.extend(self._generate_jpop_variants(name_clean))
+        elif artist_type == 'western':
+            variants.extend(self._generate_western_variants(name_clean))
         
-        # Advanced patterns for multi-word names
-        if len(name_words) > 1:
-            # Try abbreviations
-            abbrev = ''.join(word[0].upper() for word in name_words if word and word[0].isalpha())
-            if 2 <= len(abbrev) <= 6:
-                variants.append(abbrev)
-            
-            # Try first name only (for person names)
-            if len(name_words) == 2 and all(word.replace('-', '').isalpha() for word in name_words):
-                first_name = name_words[0]
-                variants.extend([
-                    first_name,
-                    first_name.upper(),
-                    first_name.lower(),
-                    first_name.title()
-                ])
-            
-            # Try reversing word order for some Asian names
-            if len(name_words) == 2:
-                reversed_name = f"{name_words[1]} {name_words[0]}"
-                variants.extend([
-                    reversed_name,
-                    reversed_name.title(),
-                    reversed_name.lower(),
-                    reversed_name.upper()
-                ])
+        # Priority 4: Common abbreviations and stylizations
+        variants.extend(self._generate_common_abbreviations(name_clean))
         
-        # Special character handling
-        if '&' in name_clean:
-            # Try replacing & with 'and'
-            variants.append(name_clean.replace('&', 'and'))
-            variants.append(name_clean.replace('&', 'And'))
-        
-        if ' and ' in name_clean.lower():
-            # Try replacing 'and' with &
-            variants.append(name_clean.replace(' and ', ' & '))
-            variants.append(name_clean.replace(' And ', ' & '))
-        
-        # Handle special punctuation
-        if any(char in name_clean for char in '!@#$%^*()[]{}'):
-            # Try without special characters
-            import re
-            clean_name = re.sub(r'[!@#$%^*()[\]{}]', '', name_clean)
-            if clean_name.strip() != name_clean:
-                variants.append(clean_name.strip())
-                variants.append(clean_name.strip().title())
-        
-        # Handle numbers in names
-        if any(char.isdigit() for char in name_clean):
-            # Try spelling out numbers
-            number_words = {
-                '1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five',
-                '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine', '0': 'zero'
-            }
-            spelled_name = name_clean
-            for digit, word in number_words.items():
-                spelled_name = spelled_name.replace(digit, word)
-            if spelled_name != name_clean:
-                variants.append(spelled_name)
-                variants.append(spelled_name.title())
+        # Priority 5: Basic transformations (last resort)
+        variants.extend(self._generate_basic_transformations(name_clean))
         
         # Remove duplicates while preserving order
         seen = set()
@@ -278,6 +191,405 @@ class LastfmAPI:
                 unique_variants.append(variant)
         
         return unique_variants
+    
+    def _get_known_artist_patterns(self) -> Dict[str, List[str]]:
+        """Get database of known working patterns for specific artists."""
+        return {
+            # K-pop groups
+            'IVE': ['IVE (아이브)', '아이브'],
+            'TWICE': ['TWICE (트와이스)', '트와이스'],
+            'BLACKPINK': ['BLACKPINK (블랙핑크)', '블랙핑크'],
+            'BTS': ['BTS (방탄소년단)', '방탄소년단'],
+            'STRAY KIDS': ['Stray Kids (스트레이 키즈)', '스트레이 키즈'],
+            'NEWJEANS': ['NewJeans (뉴진스)', '뉴진스'],
+            'LE SSERAFIM': ['LE SSERAFIM (르세라핌)', '르세라핌'],
+            'AESPA': ['aespa (에스파)', '에스파'],
+            'ITZY': ['ITZY (있지)', '있지'],
+            '(G)I-DLE': ['(G)I-DLE ((여자)아이들)', '(여자)아이들'],
+            'SEVENTEEN': ['SEVENTEEN (세븐틴)', '세븐틴'],
+            'ENHYPEN': ['ENHYPEN (엔하이픈)', '엔하이픈'],
+            'TXT': ['TXT (투모로우바이투게더)', 'TOMORROW X TOGETHER', 'TOP'],
+            'ARTMS': ['ARTMS (아르테미스)', '아르테미스'],
+            'ILLIT': ['ILLIT (아일릿)', '아일릿'],
+            
+            # K-pop soloists
+            'ANYUJIN': ['An Yujin', 'ANYUJIN (IVE)', 'Ahn Yujin', 'Ahn Yu-jin'],
+            'JEON SOMI': ['SOMI', 'Somi'],
+            'KISS OF LIFE': ['KOL', 'Kiss Of Life'],
+            'SUNMI': ['Lee Sun-mi', 'SUNMI (선미)', '선미'],
+            'MIYEON': ['Cho Mi-yeon', '미연', 'MIYEON ((G)I-DLE)', 'Mi-yeon'],
+            
+            # Japanese artists
+            'AIMYON': ['Aimyon', 'あいみょん', 'aimyon'],
+            
+            # J-pop / Japanese artists
+            'YOASOBI': ['YOASOBI (ヨアソビ)', 'ヨアソビ', 'yoasobi'],
+            'ヨルシカ': ['Yorushika', 'YORUSHIKA'],
+            'YORUSHIKA': ['ヨルシカ', 'Yorushika'],
+            
+            # Western artists with common issues
+            'TWENTY ONE PILOTS': ['twenty one pilots', 'TOP', '21 Pilots', 'Twenty One Pilots'],
+            'BRING ME THE HORIZON': ['BMTH', 'Bring Me the Horizon'],
+            'LINKIN PARK': ['Linkin Park', 'LP'],
+            'MY CHEMICAL ROMANCE': ['MCR', 'My Chemical Romance'],
+            'FALL OUT BOY': ['FOB', 'Fall Out Boy'],
+            'PANIC! AT THE DISCO': ['P!ATD', 'Panic at the Disco', 'Panic! At The Disco'],
+            
+            # Artists with special characters
+            'P!NK': ['Pink', 'P!nk'],
+            'KE$HA': ['Kesha', 'Ke$ha'],
+            'BBNO$': ['bbno$', 'BBNO$', 'Baby No Money'],
+            
+            # Hip-hop/Rap artists (case sensitive & full names)
+            'MGK': ['Machine Gun Kelly', 'MGK', 'mgk'],
+            'MACHINE GUN KELLY': ['Machine Gun Kelly', 'MGK'],
+            'XXXTENTACION': ['XXXTentacion', 'xxxtentacion', 'XXXTENTACION'],
+            'BLACKBEAR': ['blackbear', 'Blackbear'],
+            
+            # Common abbreviation patterns
+            'LIL WAYNE': ['Lil Wayne', 'lil wayne'],
+            'LIL PEEP': ['Lil Peep', 'lil peep'],
+            'A$AP ROCKY': ['ASAP Rocky', 'A$AP Rocky'],
+            '21 SAVAGE': ['21 Savage', '21savage'],
+            'NBA YOUNGBOY': ['YoungBoy Never Broke Again', 'NBA YoungBoy'],
+            'JUICE WRLD': ['Juice WRLD', 'JuiceWRLD'],
+            
+            # Hip-hop collectives & labels
+            '88RISING': ['88rising', '88 Rising', 'eighty eight rising'],
+        }
+    
+    def _detect_artist_type(self, name: str) -> str:
+        """Detect the likely origin/type of artist for targeted variant generation."""
+        name_upper = name.upper()
+        
+        # Korean indicators
+        korean_indicators = [
+            'IVE', 'BTS', 'TWICE', 'BLACKPINK', 'STRAY', 'NEWJEANS', 'AESPA',
+            'SEVENTEEN', 'ENHYPEN', 'ITZY', 'SSERAFIM', 'ARTMS', 'ILLIT',
+            'SOMI', 'YUJIN', 'KISS OF LIFE'
+        ]
+        if any(indicator in name_upper for indicator in korean_indicators):
+            return 'kpop'
+        
+        # Japanese indicators
+        japanese_indicators = ['YOASOBI', 'YORUSHIKA', 'BABYMETAL', 'PERFUME']
+        if any(indicator in name_upper for indicator in japanese_indicators):
+            return 'jpop'
+        
+        # Check for Japanese characters
+        if any('\u3040' <= char <= '\u309F' or '\u30A0' <= char <= '\u30FF' or '\u4E00' <= char <= '\u9FAF' for char in name):
+            return 'jpop'
+        
+        # Korean characters
+        if any('\uAC00' <= char <= '\uD7AF' for char in name):
+            return 'kpop'
+        
+        return 'western'
+    
+    def _generate_kpop_variants(self, name: str) -> List[str]:
+        """Generate K-pop specific variants."""
+        variants = []
+        name_clean = name.strip()
+        
+        # Common K-pop formatting patterns
+        variants.extend([
+            f"{name_clean} (K-pop)",
+            f"{name_clean} (girl group)",
+            f"{name_clean} (boy group)",
+            f"{name_clean} (Korean)",
+            name_clean.title(),
+            name_clean.lower()
+        ])
+        
+        return variants
+    
+    def _generate_jpop_variants(self, name: str) -> List[str]:
+        """Generate J-pop specific variants."""
+        variants = []
+        name_clean = name.strip()
+        
+        # Common J-pop formatting patterns
+        variants.extend([
+            f"{name_clean} (Japanese)",
+            f"{name_clean} (J-pop)",
+            name_clean.lower(),
+            name_clean.title()
+        ])
+        
+        return variants
+    
+    def _generate_western_variants(self, name: str) -> List[str]:
+        """Generate Western artist variants."""
+        variants = []
+        name_clean = name.strip()
+        
+        # Case variations
+        variants.extend([
+            name_clean.title(),
+            name_clean.lower(),
+            name_clean.upper()
+        ])
+        
+        return variants
+    
+    def _generate_common_abbreviations(self, name: str) -> List[str]:
+        """Generate common abbreviation patterns."""
+        variants = []
+        words = name.strip().split()
+        
+        if len(words) > 1:
+            # Initials
+            initials = ''.join(word[0].upper() for word in words if word)
+            variants.append(initials)
+            
+            # First word only
+            variants.append(words[0])
+            
+            # Last word only
+            variants.append(words[-1])
+        
+        return variants
+    
+    def _generate_basic_transformations(self, name: str) -> List[str]:
+        """Generate basic transformations as last resort."""
+        variants = []
+        name_clean = name.strip()
+        
+        # The/without The
+        if name_clean.lower().startswith('the '):
+            variants.append(name_clean[4:])
+        else:
+            variants.append(f"The {name_clean}")
+        
+        # With/without punctuation
+        import re
+        no_punct = re.sub(r'[^\w\s]', '', name_clean)
+        if no_punct != name_clean:
+            variants.append(no_punct)
+        
+        # Replace & with and
+        if '&' in name_clean:
+            variants.append(name_clean.replace('&', 'and'))
+        
+        return variants
+
+    def _is_relevant_artist_match(self, original: str, candidate: str) -> bool:
+        """
+        Check if a candidate artist name is relevant to the original query.
+        Avoids matching completely different artists (e.g., 'blackbear' vs 'Blackbeard').
+        Much stricter matching to prevent false positives like SUNMI -> SunMin.
+        """
+        original_clean = original.lower().strip()
+        candidate_clean = candidate.lower().strip()
+        
+        # Extract the main artist name from collaborations
+        def extract_main_artist(name):
+            # Remove common collaboration indicators
+            for separator in [' & ', ', ', ' feat. ', ' ft. ', ' featuring ', ' x ']:
+                if separator in name:
+                    parts = name.split(separator)
+                    # Return the part that best matches original
+                    for part in parts:
+                        if any(word in part.lower() for word in original_clean.split()):
+                            return part.strip()
+                    # If no match, return first part
+                    return parts[0].strip()
+            return name
+        
+        main_candidate = extract_main_artist(candidate_clean)
+        
+        # FIRST: Check blacklist of obvious false positives
+        false_positives = {
+            'blackbear': ['blackbeard', "blackbeard's tea party", 'blackbeards'],
+            'sunmi': ['sunmin', 'sun min', 'sunmee', 'sun-min'],
+            'aimyon': ['aiman', 'aimon', 'aimee'],
+            # Note: XXXTENTACION removed from blacklist to allow valid variants
+        }
+        
+        if original_clean in false_positives:
+            for false_positive in false_positives[original_clean]:
+                if false_positive in candidate_clean.lower():
+                    return False
+        
+        # Exact or very close match
+        if original_clean == main_candidate:
+            return True
+        
+        # Special case: collaboration with original artist (check for exact word match)
+        # Avoid "blackbear" matching "blackbeard" by requiring word boundaries
+        if original_clean in candidate_clean:
+            # Verify it's a real match by checking if it's surrounded by separators
+            import re
+            pattern = r'\b' + re.escape(original_clean) + r'\b'
+            if re.search(pattern, candidate_clean):
+                return True
+        
+        # Check if original is a substantial substring of candidate (much stricter)
+        # Only allow if it's EXACTLY the same or differs by 1 character max
+        if len(original_clean) >= 4 and original_clean in main_candidate and len(main_candidate) - len(original_clean) <= 1:
+            # Additional check: ensure it's not a completely different name
+            # e.g., 'sunmi' in 'sunmin' passes length check but is different artist
+            if self._levenshtein_distance(original_clean, main_candidate) <= 1:
+                return True
+        
+        # Check if candidate contains original as a word
+        original_words = set(original_clean.split())
+        candidate_words = set(main_candidate.split())
+        
+        # Very high word overlap (100% of original words must be present for single-word artists)
+        if len(original_words) == 1:
+            # For single-word artists, require exact match or known variant
+            if original_clean not in candidate_words:
+                return False
+        elif original_words and len(original_words & candidate_words) / len(original_words) >= 0.8:
+            return True
+        
+        # Special case: very similar names (edit distance)
+        # But be more careful - require very close match
+        if len(original_clean) >= 5 and len(main_candidate) >= 5:
+            # Only use edit distance for reasonably long names
+            if self._similar_strings(original_clean, main_candidate):
+                return True
+        elif original_clean == main_candidate:
+            # For short names, require exact match
+            return True
+        
+        return False
+    
+    def _similar_strings(self, s1: str, s2: str) -> bool:
+        """Check if two strings are very similar (strict matching)."""
+        # Must be very close in length (max 2 character difference)
+        if abs(len(s1) - len(s2)) > 2:
+            return False
+        
+        # Both must be reasonably long to avoid false positives
+        if len(s1) < 3 or len(s2) < 3:
+            return False
+        
+        # Check character overlap - much stricter
+        s1_chars = set(s1.replace(' ', '').replace('-', ''))
+        s2_chars = set(s2.replace(' ', '').replace('-', ''))
+        
+        if not s1_chars or not s2_chars:
+            return False
+        
+        overlap = len(s1_chars & s2_chars)
+        total = len(s1_chars | s2_chars)
+        
+        # Very strict: 95% character overlap required AND similar length
+        return (overlap / total >= 0.95) and (abs(len(s1_chars) - len(s2_chars)) <= 1)
+    
+    def _levenshtein_distance(self, s1: str, s2: str) -> int:
+        """Calculate Levenshtein distance between two strings."""
+        if len(s1) < len(s2):
+            return self._levenshtein_distance(s2, s1)
+        
+        if len(s2) == 0:
+            return len(s1)
+        
+        previous_row = range(len(s2) + 1)
+        for i, c1 in enumerate(s1):
+            current_row = [i + 1]
+            for j, c2 in enumerate(s2):
+                insertions = previous_row[j + 1] + 1
+                deletions = current_row[j] + 1
+                substitutions = previous_row[j] + (c1 != c2)
+                current_row.append(min(insertions, deletions, substitutions))
+            previous_row = current_row
+        
+        return previous_row[-1]
+
+    def _search_artist_variations(self, artist_name: str, limit: int = 5) -> List[Dict]:
+        """
+        Advanced search strategy: Find all artist variations and test for similar artists.
+        
+        Args:
+            artist_name: Original artist name
+            limit: Number of similar artists to fetch for testing
+            
+        Returns:
+            List of similar artists from best working variation, or empty list
+        """
+        logger.debug(f"🔍 Advanced search for '{artist_name}' variations...")
+        
+        # Use Last.fm's search API to find all possible matches
+        params = {'artist': artist_name, 'limit': '10'}
+        response = self._make_request('artist.search', params)
+        
+        if not response or 'results' not in response:
+            logger.debug("❌ Artist search API returned no results")
+            return []
+        
+        matches = response['results'].get('artistmatches', {}).get('artist', [])
+        if isinstance(matches, dict):
+            matches = [matches]
+        
+        if not matches:
+            logger.debug("❌ No artist matches found in search results")
+            return []
+        
+        logger.debug(f"🔎 Found {len(matches)} search matches, testing for similar artists...")
+        
+        # Test each match for similar artists data
+        best_result = None
+        best_score = 0
+        
+        for match in matches[:5]:  # Test top 5 matches
+            name = match.get('name', '')
+            listeners = int(match.get('listeners', 0))
+            mbid = match.get('mbid', '')
+            
+            # Skip if too few listeners (likely not the right artist)
+            if listeners < 1000:
+                continue
+            
+            # Relevance filtering - avoid completely different artists
+            if not self._is_relevant_artist_match(artist_name, name):
+                logger.debug(f"   Skipping irrelevant match: '{name}'")
+                continue
+            
+            logger.debug(f"   Testing '{name}' ({listeners:,} listeners)")
+            
+            # Test for similar artists (without enhanced matching to avoid recursion)
+            similar = self.get_similar_artists(name, limit=limit, use_enhanced_matching=False)
+            
+            # If no similar artists with name, try MBID
+            if not similar and mbid:
+                similar_mbid = self.get_similar_artists(mbid=mbid, limit=limit)
+                if similar_mbid:
+                    similar = similar_mbid
+            
+            # Score based on: has_similar_artists (MASSIVE boost) + listener_count
+            # We HEAVILY prioritize having similar artists data over raw popularity
+            # Use a boost so large that even tiny collaborations beat huge solo artists
+            score = (1000000000 if similar else 0) + listeners
+            
+            if score > best_score:
+                best_score = score
+                best_result = {
+                    'name': name,
+                    'listeners': listeners,
+                    'similar': similar,
+                    'mbid': mbid
+                }
+                logger.debug(f"   ✅ New best match: '{name}' ({len(similar)} similar artists)")
+            else:
+                logger.debug(f"   ❌ No similar artists found for '{name}'")
+        
+        if best_result and best_result['similar']:
+            logger.info(f"🎯 Advanced search found working variation: '{best_result['name']}' "
+                       f"({best_result['listeners']:,} listeners, {len(best_result['similar'])} similar)")
+            # Add metadata about which variation worked
+            for artist in best_result['similar']:
+                artist['_matched_variant'] = best_result['name']
+                artist['_original_query'] = artist_name
+                artist['_search_method'] = 'advanced_search'
+            return best_result['similar']
+        
+        logger.debug(f"❌ Advanced search found no variations with similar artists")
+        if best_result:
+            logger.debug(f"   Best candidate was '{best_result['name']}' with {best_result['listeners']:,} listeners but no similar artists")
+        return []
 
     def get_similar_artists(self, artist_name: str = None, mbid: str = None, 
                           limit: int = 100, use_enhanced_matching: bool = True) -> List[Dict]:
@@ -309,12 +621,24 @@ class LastfmAPI:
             logger.debug(f"Trying {len(name_variants)} name variants for '{artist_name}'")
             
             attempted_variants = []
-            fallback_candidates = []  # Store candidates that have artist info but no similar artists
+            fallback_candidates = []
+            errors_count = 0
+            max_consecutive_errors = 5  # Stop after too many consecutive API errors
             
-            for variant in name_variants:
+            for i, variant in enumerate(name_variants):
                 params = {'limit': str(limit), 'artist': variant}
                 response = self._make_request('artist.getsimilar', params)
                 attempted_variants.append(variant)
+                
+                # Check for API errors
+                if response is None:
+                    errors_count += 1
+                    if errors_count >= max_consecutive_errors:
+                        logger.warning(f"🛑 Stopping search after {max_consecutive_errors} consecutive API errors")
+                        break
+                    continue
+                else:
+                    errors_count = 0  # Reset error count on successful API call
                 
                 similar_artists = self._parse_similar_artists_response(response)
                 
@@ -328,23 +652,30 @@ class LastfmAPI:
                 else:
                     logger.debug(f"❌ No similar artists found for variant '{variant}'")
                     
-                    # Check if this variant at least has artist info (fallback validation)
-                    try:
-                        artist_info = self.get_artist_info(variant, use_enhanced_matching=False)
-                        if artist_info and artist_info.get('listeners', 0) > 1000:  # Reasonable threshold
-                            fallback_candidates.append((variant, artist_info['listeners']))
-                    except:
-                        pass  # Ignore errors in fallback validation
+                    # For first few variants, check if artist exists (fallback validation)
+                    if i < 3:  # Only validate first 3 variants to save API calls
+                        try:
+                            artist_info = self.get_artist_info(variant, use_enhanced_matching=False)
+                            if artist_info and artist_info.get('listeners', 0) > 1000:
+                                fallback_candidates.append((variant, artist_info['listeners']))
+                        except:
+                            pass
             
-            # Log comprehensive failure with fallback info
+            # Step 4: Advanced search as final attempt
+            logger.info(f"🚀 Attempting advanced search for '{artist_name}'...")
+            advanced_results = self._search_artist_variations(artist_name, limit)
+            if advanced_results:
+                return advanced_results
+            
+            # Enhanced failure reporting
             if fallback_candidates:
-                fallback_candidates.sort(key=lambda x: x[1], reverse=True)  # Sort by listener count
+                fallback_candidates.sort(key=lambda x: x[1], reverse=True)
                 best_fallback = fallback_candidates[0]
-                logger.warning(f"🔍 No similar artists found for '{artist_name}' after trying {len(attempted_variants)} variants")
+                logger.warning(f"🔍 No similar artists found for '{artist_name}' after trying {len(attempted_variants)} variants + advanced search")
                 logger.warning(f"   However, artist exists as '{best_fallback[0]}' with {best_fallback[1]:,} listeners")
                 logger.warning(f"   This suggests the artist exists but Last.fm's similar artists endpoint may be incomplete")
             else:
-                logger.warning(f"🔍 No similar artists found for '{artist_name}' after trying {len(attempted_variants)} variants: {attempted_variants}")
+                logger.warning(f"🔍 No similar artists found for '{artist_name}' after trying {len(attempted_variants)} variants + advanced search: {attempted_variants}")
             
             return []
         else:

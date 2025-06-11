@@ -1,0 +1,2716 @@
+{
+  "nodes": [
+    {
+      "id": "taylor swift",
+      "name": "Taylor Swift",
+      "play_count": 12824,
+      "rank": 1,
+      "size": 12824
+    },
+    {
+      "id": "paramore",
+      "name": "Paramore",
+      "play_count": 6821,
+      "rank": 2,
+      "size": 6821
+    },
+    {
+      "id": "ive",
+      "name": "IVE",
+      "play_count": 6143,
+      "rank": 3,
+      "size": 6143
+    },
+    {
+      "id": "ヨルシカ",
+      "name": "ヨルシカ",
+      "play_count": 5130,
+      "rank": 4,
+      "size": 5130
+    },
+    {
+      "id": "iu",
+      "name": "IU",
+      "play_count": 5047,
+      "rank": 5,
+      "size": 5047
+    },
+    {
+      "id": "aimer",
+      "name": "Aimer",
+      "play_count": 4802,
+      "rank": 6,
+      "size": 4802
+    },
+    {
+      "id": "*luna",
+      "name": "*Luna",
+      "play_count": 4534,
+      "rank": 7,
+      "size": 4534
+    },
+    {
+      "id": "rosé",
+      "name": "ROSÉ",
+      "play_count": 3046,
+      "rank": 8,
+      "size": 3046
+    },
+    {
+      "id": "younha",
+      "name": "Younha",
+      "play_count": 2547,
+      "rank": 9,
+      "size": 2547
+    },
+    {
+      "id": "yoasobi",
+      "name": "YOASOBI",
+      "play_count": 2441,
+      "rank": 10,
+      "size": 2441
+    },
+    {
+      "id": "twice",
+      "name": "TWICE",
+      "play_count": 1776,
+      "rank": 11,
+      "size": 1776
+    },
+    {
+      "id": "jeon somi",
+      "name": "JEON SOMI",
+      "play_count": 1589,
+      "rank": 12,
+      "size": 1589
+    },
+    {
+      "id": "onerepublic",
+      "name": "OneRepublic",
+      "play_count": 1571,
+      "rank": 13,
+      "size": 1571
+    },
+    {
+      "id": "imagine dragons",
+      "name": "Imagine Dragons",
+      "play_count": 1476,
+      "rank": 14,
+      "size": 1476
+    },
+    {
+      "id": "yama",
+      "name": "yama",
+      "play_count": 1382,
+      "rank": 15,
+      "size": 1382
+    },
+    {
+      "id": "nf",
+      "name": "NF",
+      "play_count": 1342,
+      "rank": 16,
+      "size": 1342
+    },
+    {
+      "id": "ed sheeran",
+      "name": "Ed Sheeran",
+      "play_count": 1137,
+      "rank": 17,
+      "size": 1137
+    },
+    {
+      "id": "the chainsmokers",
+      "name": "The Chainsmokers",
+      "play_count": 1033,
+      "rank": 18,
+      "size": 1033
+    },
+    {
+      "id": "(g)i-dle",
+      "name": "(G)I-DLE",
+      "play_count": 1011,
+      "rank": 19,
+      "size": 1011
+    },
+    {
+      "id": "berlinist",
+      "name": "Berlinist",
+      "play_count": 992,
+      "rank": 20,
+      "size": 992
+    },
+    {
+      "id": "alia",
+      "name": "ALIA",
+      "play_count": 967,
+      "rank": 21,
+      "size": 967
+    },
+    {
+      "id": "le sserafim",
+      "name": "LE SSERAFIM",
+      "play_count": 876,
+      "rank": 22,
+      "size": 876
+    },
+    {
+      "id": "tonight alive",
+      "name": "Tonight Alive",
+      "play_count": 855,
+      "rank": 23,
+      "size": 855
+    },
+    {
+      "id": "alan walker",
+      "name": "Alan Walker",
+      "play_count": 848,
+      "rank": 24,
+      "size": 848
+    },
+    {
+      "id": "walk off the earth",
+      "name": "Walk off the Earth",
+      "play_count": 812,
+      "rank": 25,
+      "size": 812
+    },
+    {
+      "id": "blackpink",
+      "name": "BLACKPINK",
+      "play_count": 796,
+      "rank": 26,
+      "size": 796
+    },
+    {
+      "id": "st. lundi",
+      "name": "St. Lundi",
+      "play_count": 762,
+      "rank": 27,
+      "size": 762
+    },
+    {
+      "id": "ava max",
+      "name": "Ava Max",
+      "play_count": 760,
+      "rank": 28,
+      "size": 760
+    },
+    {
+      "id": "tsukuyomi",
+      "name": "Tsukuyomi",
+      "play_count": 728,
+      "rank": 29,
+      "size": 728
+    },
+    {
+      "id": "jo yuri",
+      "name": "JO YURI",
+      "play_count": 673,
+      "rank": 30,
+      "size": 673
+    },
+    {
+      "id": "ariana grande",
+      "name": "Ariana Grande",
+      "play_count": 655,
+      "rank": 31,
+      "size": 655
+    },
+    {
+      "id": "the killers",
+      "name": "The Killers",
+      "play_count": 644,
+      "rank": 32,
+      "size": 644
+    },
+    {
+      "id": "henry young",
+      "name": "Henry Young",
+      "play_count": 633,
+      "rank": 33,
+      "size": 633
+    },
+    {
+      "id": "kyo hanabasami",
+      "name": "Kyo Hanabasami",
+      "play_count": 630,
+      "rank": 34,
+      "size": 630
+    },
+    {
+      "id": "taeyeon",
+      "name": "TAEYEON",
+      "play_count": 627,
+      "rank": 35,
+      "size": 627
+    },
+    {
+      "id": "openside",
+      "name": "Openside",
+      "play_count": 622,
+      "rank": 36,
+      "size": 622
+    },
+    {
+      "id": "seori",
+      "name": "Seori",
+      "play_count": 616,
+      "rank": 37,
+      "size": 616
+    },
+    {
+      "id": "saya",
+      "name": "SAya",
+      "play_count": 603,
+      "rank": 38,
+      "size": 603
+    },
+    {
+      "id": "foreground eclipse",
+      "name": "Foreground Eclipse",
+      "play_count": 579,
+      "rank": 39,
+      "size": 579
+    },
+    {
+      "id": "harry styles",
+      "name": "Harry Styles",
+      "play_count": 572,
+      "rank": 40,
+      "size": 572
+    },
+    {
+      "id": "maroon 5",
+      "name": "Maroon 5",
+      "play_count": 497,
+      "rank": 41,
+      "size": 497
+    },
+    {
+      "id": "harold faltermeyer",
+      "name": "Harold Faltermeyer",
+      "play_count": 485,
+      "rank": 42,
+      "size": 485
+    },
+    {
+      "id": "dreamcatcher",
+      "name": "Dreamcatcher",
+      "play_count": 481,
+      "rank": 43,
+      "size": 481
+    },
+    {
+      "id": "avicii",
+      "name": "Avicii",
+      "play_count": 458,
+      "rank": 44,
+      "size": 458
+    },
+    {
+      "id": "bring me the horizon",
+      "name": "Bring Me The Horizon",
+      "play_count": 454,
+      "rank": 45,
+      "size": 454
+    },
+    {
+      "id": "kimsejeong",
+      "name": "KIMSEJEONG",
+      "play_count": 437,
+      "rank": 46,
+      "size": 437
+    },
+    {
+      "id": "anyujin",
+      "name": "ANYUJIN",
+      "play_count": 427,
+      "rank": 47,
+      "size": 427
+    },
+    {
+      "id": "bts",
+      "name": "BTS",
+      "play_count": 417,
+      "rank": 48,
+      "size": 417
+    },
+    {
+      "id": "bbno$",
+      "name": "bbno$",
+      "play_count": 407,
+      "rank": 49,
+      "size": 407
+    },
+    {
+      "id": "the script",
+      "name": "The Script",
+      "play_count": 394,
+      "rank": 50,
+      "size": 394
+    },
+    {
+      "id": "ryokuoushoku shakai",
+      "name": "Ryokuoushoku Shakai",
+      "play_count": 389,
+      "rank": 51,
+      "size": 389
+    },
+    {
+      "id": "sra",
+      "name": "SRA",
+      "play_count": 373,
+      "rank": 52,
+      "size": 373
+    },
+    {
+      "id": "tate mcrae",
+      "name": "Tate McRae",
+      "play_count": 358,
+      "rank": 53,
+      "size": 358
+    },
+    {
+      "id": "bol4",
+      "name": "BOL4",
+      "play_count": 356,
+      "rank": 54,
+      "size": 356
+    },
+    {
+      "id": "前島麻由",
+      "name": "前島麻由",
+      "play_count": 347,
+      "rank": 55,
+      "size": 347
+    },
+    {
+      "id": "kygo",
+      "name": "Kygo",
+      "play_count": 343,
+      "rank": 56,
+      "size": 343
+    },
+    {
+      "id": "mary",
+      "name": "MARY",
+      "play_count": 340,
+      "rank": 57,
+      "size": 340
+    },
+    {
+      "id": "mina okabe",
+      "name": "Mina Okabe",
+      "play_count": 339,
+      "rank": 58,
+      "size": 339
+    },
+    {
+      "id": "yeji",
+      "name": "YEJI",
+      "play_count": 334,
+      "rank": 59,
+      "size": 334
+    },
+    {
+      "id": "the oral cigarettes",
+      "name": "THE ORAL CIGARETTES",
+      "play_count": 333,
+      "rank": 60,
+      "size": 333
+    },
+    {
+      "id": "gyubin",
+      "name": "Gyubin",
+      "play_count": 323,
+      "rank": 61,
+      "size": 323
+    },
+    {
+      "id": "sam ryder",
+      "name": "Sam Ryder",
+      "play_count": 309,
+      "rank": 62,
+      "size": 309
+    },
+    {
+      "id": "rothy",
+      "name": "Rothy",
+      "play_count": 302,
+      "rank": 63,
+      "size": 302
+    },
+    {
+      "id": "kobasolo",
+      "name": "kobasolo",
+      "play_count": 297,
+      "rank": 64,
+      "size": 297
+    },
+    {
+      "id": "uru",
+      "name": "Uru",
+      "play_count": 289,
+      "rank": 65,
+      "size": 289
+    },
+    {
+      "id": "b.i",
+      "name": "B.I",
+      "play_count": 278,
+      "rank": 66,
+      "size": 278
+    },
+    {
+      "id": "muse",
+      "name": "Muse",
+      "play_count": 269,
+      "rank": 67,
+      "size": 269
+    },
+    {
+      "id": "sunmi",
+      "name": "SUNMI",
+      "play_count": 266,
+      "rank": 68,
+      "size": 266
+    },
+    {
+      "id": "wooah",
+      "name": "WOOAH",
+      "play_count": 257,
+      "rank": 69,
+      "size": 257
+    },
+    {
+      "id": "aisha",
+      "name": "AISHA",
+      "play_count": 252,
+      "rank": 70,
+      "size": 252
+    },
+    {
+      "id": "the rose",
+      "name": "The Rose",
+      "play_count": 243,
+      "rank": 71,
+      "size": 243
+    },
+    {
+      "id": "fellowship",
+      "name": "Fellowship",
+      "play_count": 237,
+      "rank": 72,
+      "size": 237
+    },
+    {
+      "id": "yerin baek",
+      "name": "Yerin Baek",
+      "play_count": 232,
+      "rank": 73,
+      "size": 232
+    },
+    {
+      "id": "shawn mendes",
+      "name": "Shawn Mendes",
+      "play_count": 230,
+      "rank": 74,
+      "size": 230
+    },
+    {
+      "id": "kiss of life",
+      "name": "KISS OF LIFE",
+      "play_count": 228,
+      "rank": 75,
+      "size": 228
+    },
+    {
+      "id": "miyeon",
+      "name": "MIYEON",
+      "play_count": 227,
+      "rank": 76,
+      "size": 227
+    },
+    {
+      "id": "lewis capaldi",
+      "name": "Lewis Capaldi",
+      "play_count": 227,
+      "rank": 77,
+      "size": 227
+    },
+    {
+      "id": "mikolai stroinski",
+      "name": "Mikolai Stroinski",
+      "play_count": 221,
+      "rank": 78,
+      "size": 221
+    },
+    {
+      "id": "simple plan",
+      "name": "Simple Plan",
+      "play_count": 217,
+      "rank": 79,
+      "size": 217
+    },
+    {
+      "id": "twenty one pilots",
+      "name": "Twenty One Pilots",
+      "play_count": 216,
+      "rank": 80,
+      "size": 216
+    },
+    {
+      "id": "miley cyrus",
+      "name": "Miley Cyrus",
+      "play_count": 216,
+      "rank": 81,
+      "size": 216
+    },
+    {
+      "id": "jennie",
+      "name": "JENNIE",
+      "play_count": 208,
+      "rank": 82,
+      "size": 208
+    },
+    {
+      "id": "aimyon",
+      "name": "Aimyon",
+      "play_count": 197,
+      "rank": 83,
+      "size": 197
+    },
+    {
+      "id": "88rising",
+      "name": "88rising",
+      "play_count": 196,
+      "rank": 84,
+      "size": 196
+    },
+    {
+      "id": "evanescence",
+      "name": "Evanescence",
+      "play_count": 188,
+      "rank": 85,
+      "size": 188
+    },
+    {
+      "id": "david longoria",
+      "name": "David Longoria",
+      "play_count": 188,
+      "rank": 86,
+      "size": 188
+    },
+    {
+      "id": "marcin przybyłowicz",
+      "name": "Marcin Przybyłowicz",
+      "play_count": 187,
+      "rank": 87,
+      "size": 187
+    },
+    {
+      "id": "olivia rodrigo",
+      "name": "Olivia Rodrigo",
+      "play_count": 186,
+      "rank": 88,
+      "size": 186
+    },
+    {
+      "id": "justine skye",
+      "name": "Justine Skye",
+      "play_count": 184,
+      "rank": 89,
+      "size": 184
+    },
+    {
+      "id": "jisoo",
+      "name": "JISOO",
+      "play_count": 184,
+      "rank": 90,
+      "size": 184
+    },
+    {
+      "id": "knox",
+      "name": "Knox",
+      "play_count": 182,
+      "rank": 91,
+      "size": 182
+    },
+    {
+      "id": "konomi suzuki",
+      "name": "Konomi Suzuki",
+      "play_count": 180,
+      "rank": 92,
+      "size": 180
+    },
+    {
+      "id": "sheppard",
+      "name": "Sheppard",
+      "play_count": 178,
+      "rank": 93,
+      "size": 178
+    },
+    {
+      "id": "percy grainger",
+      "name": "Percy Grainger",
+      "play_count": 176,
+      "rank": 94,
+      "size": 176
+    },
+    {
+      "id": "the backseat lovers",
+      "name": "The Backseat Lovers",
+      "play_count": 173,
+      "rank": 95,
+      "size": 173
+    },
+    {
+      "id": "kwon eunbi",
+      "name": "KWON EUNBI",
+      "play_count": 171,
+      "rank": 96,
+      "size": 171
+    },
+    {
+      "id": "hoobastank",
+      "name": "Hoobastank",
+      "play_count": 169,
+      "rank": 97,
+      "size": 169
+    },
+    {
+      "id": "『ユイカ』",
+      "name": "『ユイカ』",
+      "play_count": 166,
+      "rank": 98,
+      "size": 166
+    },
+    {
+      "id": "paul blanco",
+      "name": "Paul Blanco",
+      "play_count": 164,
+      "rank": 99,
+      "size": 164
+    },
+    {
+      "id": "newjeans",
+      "name": "NewJeans",
+      "play_count": 160,
+      "rank": 100,
+      "size": 160
+    }
+  ],
+  "edges": [
+    {
+      "source": "taylor swift",
+      "target": "olivia rodrigo",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "taylor swift",
+      "target": "harry styles",
+      "weight": 0.45906,
+      "similarity_score": 0.45906
+    },
+    {
+      "source": "taylor swift",
+      "target": "tate mcrae",
+      "weight": 0.408214,
+      "similarity_score": 0.408214
+    },
+    {
+      "source": "taylor swift",
+      "target": "ariana grande",
+      "weight": 0.366299,
+      "similarity_score": 0.366299
+    },
+    {
+      "source": "taylor swift",
+      "target": "miley cyrus",
+      "weight": 0.300623,
+      "similarity_score": 0.300623
+    },
+    {
+      "source": "taylor swift",
+      "target": "shawn mendes",
+      "weight": 0.285416,
+      "similarity_score": 0.285416
+    },
+    {
+      "source": "taylor swift",
+      "target": "rosé",
+      "weight": 0.247419,
+      "similarity_score": 0.247419
+    },
+    {
+      "source": "taylor swift",
+      "target": "ed sheeran",
+      "weight": 0.230986,
+      "similarity_score": 0.230986
+    },
+    {
+      "source": "paramore",
+      "target": "tonight alive",
+      "weight": 0.19963,
+      "similarity_score": 0.19963
+    },
+    {
+      "source": "paramore",
+      "target": "simple plan",
+      "weight": 0.115099,
+      "similarity_score": 0.115099
+    },
+    {
+      "source": "paramore",
+      "target": "evanescence",
+      "weight": 0.104417,
+      "similarity_score": 0.104417
+    },
+    {
+      "source": "paramore",
+      "target": "twenty one pilots",
+      "weight": 0.095481,
+      "similarity_score": 0.095481
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "『ユイカ』",
+      "weight": 0.447766,
+      "similarity_score": 0.447766
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "aimer",
+      "weight": 0.438745,
+      "similarity_score": 0.438745
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.374488,
+      "similarity_score": 0.374488
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "uru",
+      "weight": 0.373842,
+      "similarity_score": 0.373842
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "yoasobi",
+      "weight": 0.369295,
+      "similarity_score": 0.369295
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "tsukuyomi",
+      "weight": 0.29645,
+      "similarity_score": 0.29645
+    },
+    {
+      "source": "iu",
+      "target": "bol4",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "iu",
+      "target": "kimsejeong",
+      "weight": 0.782577,
+      "similarity_score": 0.782577
+    },
+    {
+      "source": "iu",
+      "target": "younha",
+      "weight": 0.715533,
+      "similarity_score": 0.715533
+    },
+    {
+      "source": "iu",
+      "target": "yerin baek",
+      "weight": 0.714366,
+      "similarity_score": 0.714366
+    },
+    {
+      "source": "iu",
+      "target": "miyeon",
+      "weight": 0.64274,
+      "similarity_score": 0.64274
+    },
+    {
+      "source": "iu",
+      "target": "jo yuri",
+      "weight": 0.60276,
+      "similarity_score": 0.60276
+    },
+    {
+      "source": "iu",
+      "target": "(g)i-dle",
+      "weight": 0.555935,
+      "similarity_score": 0.555935
+    },
+    {
+      "source": "iu",
+      "target": "ive",
+      "weight": 0.548231,
+      "similarity_score": 0.548231
+    },
+    {
+      "source": "iu",
+      "target": "sunmi",
+      "weight": 0.547701,
+      "similarity_score": 0.547701
+    },
+    {
+      "source": "iu",
+      "target": "rothy",
+      "weight": 0.547269,
+      "similarity_score": 0.547269
+    },
+    {
+      "source": "iu",
+      "target": "gyubin",
+      "weight": 0.540873,
+      "similarity_score": 0.540873
+    },
+    {
+      "source": "aimer",
+      "target": "uru",
+      "weight": 0.846598,
+      "similarity_score": 0.846598
+    },
+    {
+      "source": "aimer",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.470763,
+      "similarity_score": 0.470763
+    },
+    {
+      "source": "aimer",
+      "target": "yoasobi",
+      "weight": 0.462574,
+      "similarity_score": 0.462574
+    },
+    {
+      "source": "aimer",
+      "target": "ヨルシカ",
+      "weight": 0.46033,
+      "similarity_score": 0.46033
+    },
+    {
+      "source": "aimer",
+      "target": "kobasolo",
+      "weight": 0.397525,
+      "similarity_score": 0.397525
+    },
+    {
+      "source": "*luna",
+      "target": "ヨルシカ",
+      "weight": 0.314669,
+      "similarity_score": 0.314669
+    },
+    {
+      "source": "rosé",
+      "target": "jisoo",
+      "weight": 0.956625,
+      "similarity_score": 0.956625
+    },
+    {
+      "source": "rosé",
+      "target": "jennie",
+      "weight": 0.813048,
+      "similarity_score": 0.813048
+    },
+    {
+      "source": "rosé",
+      "target": "blackpink",
+      "weight": 0.655268,
+      "similarity_score": 0.655268
+    },
+    {
+      "source": "rosé",
+      "target": "yeji",
+      "weight": 0.230054,
+      "similarity_score": 0.230054
+    },
+    {
+      "source": "rosé",
+      "target": "le sserafim",
+      "weight": 0.214933,
+      "similarity_score": 0.214933
+    },
+    {
+      "source": "rosé",
+      "target": "kiss of life",
+      "weight": 0.206291,
+      "similarity_score": 0.206291
+    },
+    {
+      "source": "rosé",
+      "target": "jeon somi",
+      "weight": 0.183706,
+      "similarity_score": 0.183706
+    },
+    {
+      "source": "rosé",
+      "target": "ive",
+      "weight": 0.182538,
+      "similarity_score": 0.182538
+    },
+    {
+      "source": "rosé",
+      "target": "olivia rodrigo",
+      "weight": 0.137517,
+      "similarity_score": 0.137517
+    },
+    {
+      "source": "rosé",
+      "target": "(g)i-dle",
+      "weight": 0.132874,
+      "similarity_score": 0.132874
+    },
+    {
+      "source": "rosé",
+      "target": "newjeans",
+      "weight": 0.130206,
+      "similarity_score": 0.130206
+    },
+    {
+      "source": "rosé",
+      "target": "ariana grande",
+      "weight": 0.107959,
+      "similarity_score": 0.107959
+    },
+    {
+      "source": "rosé",
+      "target": "miyeon",
+      "weight": 0.106788,
+      "similarity_score": 0.106788
+    },
+    {
+      "source": "younha",
+      "target": "rothy",
+      "weight": 0.852086,
+      "similarity_score": 0.852086
+    },
+    {
+      "source": "younha",
+      "target": "kimsejeong",
+      "weight": 0.814627,
+      "similarity_score": 0.814627
+    },
+    {
+      "source": "younha",
+      "target": "gyubin",
+      "weight": 0.808824,
+      "similarity_score": 0.808824
+    },
+    {
+      "source": "younha",
+      "target": "iu",
+      "weight": 0.695728,
+      "similarity_score": 0.695728
+    },
+    {
+      "source": "younha",
+      "target": "bol4",
+      "weight": 0.656754,
+      "similarity_score": 0.656754
+    },
+    {
+      "source": "younha",
+      "target": "seori",
+      "weight": 0.602978,
+      "similarity_score": 0.602978
+    },
+    {
+      "source": "younha",
+      "target": "jo yuri",
+      "weight": 0.594224,
+      "similarity_score": 0.594224
+    },
+    {
+      "source": "younha",
+      "target": "kwon eunbi",
+      "weight": 0.575895,
+      "similarity_score": 0.575895
+    },
+    {
+      "source": "younha",
+      "target": "dreamcatcher",
+      "weight": 0.557201,
+      "similarity_score": 0.557201
+    },
+    {
+      "source": "younha",
+      "target": "wooah",
+      "weight": 0.521637,
+      "similarity_score": 0.521637
+    },
+    {
+      "source": "twice",
+      "target": "(g)i-dle",
+      "weight": 0.191158,
+      "similarity_score": 0.191158
+    },
+    {
+      "source": "twice",
+      "target": "ive",
+      "weight": 0.179055,
+      "similarity_score": 0.179055
+    },
+    {
+      "source": "twice",
+      "target": "le sserafim",
+      "weight": 0.172266,
+      "similarity_score": 0.172266
+    },
+    {
+      "source": "twice",
+      "target": "kiss of life",
+      "weight": 0.144802,
+      "similarity_score": 0.144802
+    },
+    {
+      "source": "twice",
+      "target": "jeon somi",
+      "weight": 0.144158,
+      "similarity_score": 0.144158
+    },
+    {
+      "source": "twice",
+      "target": "yeji",
+      "weight": 0.141973,
+      "similarity_score": 0.141973
+    },
+    {
+      "source": "twice",
+      "target": "sunmi",
+      "weight": 0.135795,
+      "similarity_score": 0.135795
+    },
+    {
+      "source": "twice",
+      "target": "jo yuri",
+      "weight": 0.129861,
+      "similarity_score": 0.129861
+    },
+    {
+      "source": "twice",
+      "target": "miyeon",
+      "weight": 0.129714,
+      "similarity_score": 0.129714
+    },
+    {
+      "source": "twice",
+      "target": "newjeans",
+      "weight": 0.127983,
+      "similarity_score": 0.127983
+    },
+    {
+      "source": "twice",
+      "target": "blackpink",
+      "weight": 0.122538,
+      "similarity_score": 0.122538
+    },
+    {
+      "source": "jeon somi",
+      "target": "sunmi",
+      "weight": 0.438832,
+      "similarity_score": 0.438832
+    },
+    {
+      "source": "onerepublic",
+      "target": "the script",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "onerepublic",
+      "target": "imagine dragons",
+      "weight": 0.986732,
+      "similarity_score": 0.986732
+    },
+    {
+      "source": "onerepublic",
+      "target": "maroon 5",
+      "weight": 0.83471,
+      "similarity_score": 0.83471
+    },
+    {
+      "source": "onerepublic",
+      "target": "lewis capaldi",
+      "weight": 0.331908,
+      "similarity_score": 0.331908
+    },
+    {
+      "source": "imagine dragons",
+      "target": "onerepublic",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "imagine dragons",
+      "target": "twenty one pilots",
+      "weight": 0.561002,
+      "similarity_score": 0.561002
+    },
+    {
+      "source": "imagine dragons",
+      "target": "the killers",
+      "weight": 0.415196,
+      "similarity_score": 0.415196
+    },
+    {
+      "source": "imagine dragons",
+      "target": "maroon 5",
+      "weight": 0.399782,
+      "similarity_score": 0.399782
+    },
+    {
+      "source": "imagine dragons",
+      "target": "the script",
+      "weight": 0.318057,
+      "similarity_score": 0.318057
+    },
+    {
+      "source": "imagine dragons",
+      "target": "muse",
+      "weight": 0.317102,
+      "similarity_score": 0.317102
+    },
+    {
+      "source": "yama",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.246994,
+      "similarity_score": 0.246994
+    },
+    {
+      "source": "yama",
+      "target": "yoasobi",
+      "weight": 0.204825,
+      "similarity_score": 0.204825
+    },
+    {
+      "source": "yama",
+      "target": "tsukuyomi",
+      "weight": 0.146636,
+      "similarity_score": 0.146636
+    },
+    {
+      "source": "yama",
+      "target": "ヨルシカ",
+      "weight": 0.12338,
+      "similarity_score": 0.12338
+    },
+    {
+      "source": "yama",
+      "target": "aimer",
+      "weight": 0.12023,
+      "similarity_score": 0.12023
+    },
+    {
+      "source": "ed sheeran",
+      "target": "lewis capaldi",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "ed sheeran",
+      "target": "shawn mendes",
+      "weight": 0.809995,
+      "similarity_score": 0.809995
+    },
+    {
+      "source": "ed sheeran",
+      "target": "taylor swift",
+      "weight": 0.418051,
+      "similarity_score": 0.418051
+    },
+    {
+      "source": "ed sheeran",
+      "target": "harry styles",
+      "weight": 0.39302,
+      "similarity_score": 0.39302
+    },
+    {
+      "source": "the chainsmokers",
+      "target": "kygo",
+      "weight": 0.841432,
+      "similarity_score": 0.841432
+    },
+    {
+      "source": "the chainsmokers",
+      "target": "avicii",
+      "weight": 0.78724,
+      "similarity_score": 0.78724
+    },
+    {
+      "source": "the chainsmokers",
+      "target": "alan walker",
+      "weight": 0.511625,
+      "similarity_score": 0.511625
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "miyeon",
+      "weight": 0.903397,
+      "similarity_score": 0.903397
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "ive",
+      "weight": 0.348032,
+      "similarity_score": 0.348032
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "dreamcatcher",
+      "weight": 0.341407,
+      "similarity_score": 0.341407
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "kiss of life",
+      "weight": 0.322599,
+      "similarity_score": 0.322599
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "jeon somi",
+      "weight": 0.308215,
+      "similarity_score": 0.308215
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "le sserafim",
+      "weight": 0.270656,
+      "similarity_score": 0.270656
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "blackpink",
+      "weight": 0.26023,
+      "similarity_score": 0.26023
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "sunmi",
+      "weight": 0.257914,
+      "similarity_score": 0.257914
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "twice",
+      "weight": 0.255824,
+      "similarity_score": 0.255824
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "kwon eunbi",
+      "weight": 0.215896,
+      "similarity_score": 0.215896
+    },
+    {
+      "source": "berlinist",
+      "target": "marcin przybyłowicz",
+      "weight": 0.320194,
+      "similarity_score": 0.320194
+    },
+    {
+      "source": "berlinist",
+      "target": "mikolai stroinski",
+      "weight": 0.291629,
+      "similarity_score": 0.291629
+    },
+    {
+      "source": "alia",
+      "target": "ヨルシカ",
+      "weight": 0.492466,
+      "similarity_score": 0.492466
+    },
+    {
+      "source": "alia",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.491652,
+      "similarity_score": 0.491652
+    },
+    {
+      "source": "le sserafim",
+      "target": "ive",
+      "weight": 0.662612,
+      "similarity_score": 0.662612
+    },
+    {
+      "source": "le sserafim",
+      "target": "kiss of life",
+      "weight": 0.534861,
+      "similarity_score": 0.534861
+    },
+    {
+      "source": "le sserafim",
+      "target": "newjeans",
+      "weight": 0.448043,
+      "similarity_score": 0.448043
+    },
+    {
+      "source": "le sserafim",
+      "target": "yeji",
+      "weight": 0.431772,
+      "similarity_score": 0.431772
+    },
+    {
+      "source": "le sserafim",
+      "target": "(g)i-dle",
+      "weight": 0.354724,
+      "similarity_score": 0.354724
+    },
+    {
+      "source": "le sserafim",
+      "target": "jennie",
+      "weight": 0.304701,
+      "similarity_score": 0.304701
+    },
+    {
+      "source": "le sserafim",
+      "target": "twice",
+      "weight": 0.30215,
+      "similarity_score": 0.30215
+    },
+    {
+      "source": "le sserafim",
+      "target": "jisoo",
+      "weight": 0.295718,
+      "similarity_score": 0.295718
+    },
+    {
+      "source": "le sserafim",
+      "target": "jo yuri",
+      "weight": 0.286576,
+      "similarity_score": 0.286576
+    },
+    {
+      "source": "le sserafim",
+      "target": "blackpink",
+      "weight": 0.260796,
+      "similarity_score": 0.260796
+    },
+    {
+      "source": "le sserafim",
+      "target": "rosé",
+      "weight": 0.253352,
+      "similarity_score": 0.253352
+    },
+    {
+      "source": "le sserafim",
+      "target": "jeon somi",
+      "weight": 0.249957,
+      "similarity_score": 0.249957
+    },
+    {
+      "source": "le sserafim",
+      "target": "kwon eunbi",
+      "weight": 0.244064,
+      "similarity_score": 0.244064
+    },
+    {
+      "source": "tonight alive",
+      "target": "paramore",
+      "weight": 0.321823,
+      "similarity_score": 0.321823
+    },
+    {
+      "source": "alan walker",
+      "target": "kygo",
+      "weight": 0.273748,
+      "similarity_score": 0.273748
+    },
+    {
+      "source": "alan walker",
+      "target": "the chainsmokers",
+      "weight": 0.255897,
+      "similarity_score": 0.255897
+    },
+    {
+      "source": "alan walker",
+      "target": "avicii",
+      "weight": 0.249998,
+      "similarity_score": 0.249998
+    },
+    {
+      "source": "walk off the earth",
+      "target": "imagine dragons",
+      "weight": 0.238807,
+      "similarity_score": 0.238807
+    },
+    {
+      "source": "blackpink",
+      "target": "rosé",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "blackpink",
+      "target": "jisoo",
+      "weight": 0.964988,
+      "similarity_score": 0.964988
+    },
+    {
+      "source": "blackpink",
+      "target": "jennie",
+      "weight": 0.73804,
+      "similarity_score": 0.73804
+    },
+    {
+      "source": "blackpink",
+      "target": "jeon somi",
+      "weight": 0.639437,
+      "similarity_score": 0.639437
+    },
+    {
+      "source": "blackpink",
+      "target": "(g)i-dle",
+      "weight": 0.441561,
+      "similarity_score": 0.441561
+    },
+    {
+      "source": "blackpink",
+      "target": "ive",
+      "weight": 0.362861,
+      "similarity_score": 0.362861
+    },
+    {
+      "source": "blackpink",
+      "target": "le sserafim",
+      "weight": 0.337645,
+      "similarity_score": 0.337645
+    },
+    {
+      "source": "blackpink",
+      "target": "twice",
+      "weight": 0.27826,
+      "similarity_score": 0.27826
+    },
+    {
+      "source": "blackpink",
+      "target": "newjeans",
+      "weight": 0.268986,
+      "similarity_score": 0.268986
+    },
+    {
+      "source": "blackpink",
+      "target": "kiss of life",
+      "weight": 0.268119,
+      "similarity_score": 0.268119
+    },
+    {
+      "source": "blackpink",
+      "target": "sunmi",
+      "weight": 0.256984,
+      "similarity_score": 0.256984
+    },
+    {
+      "source": "blackpink",
+      "target": "yeji",
+      "weight": 0.206245,
+      "similarity_score": 0.206245
+    },
+    {
+      "source": "st. lundi",
+      "target": "onerepublic",
+      "weight": 0.573566,
+      "similarity_score": 0.573566
+    },
+    {
+      "source": "st. lundi",
+      "target": "sheppard",
+      "weight": 0.527012,
+      "similarity_score": 0.527012
+    },
+    {
+      "source": "ava max",
+      "target": "tate mcrae",
+      "weight": 0.400251,
+      "similarity_score": 0.400251
+    },
+    {
+      "source": "ava max",
+      "target": "miley cyrus",
+      "weight": 0.282868,
+      "similarity_score": 0.282868
+    },
+    {
+      "source": "tsukuyomi",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.833241,
+      "similarity_score": 0.833241
+    },
+    {
+      "source": "tsukuyomi",
+      "target": "ヨルシカ",
+      "weight": 0.436007,
+      "similarity_score": 0.436007
+    },
+    {
+      "source": "tsukuyomi",
+      "target": "kobasolo",
+      "weight": 0.358201,
+      "similarity_score": 0.358201
+    },
+    {
+      "source": "tsukuyomi",
+      "target": "the oral cigarettes",
+      "weight": 0.279839,
+      "similarity_score": 0.279839
+    },
+    {
+      "source": "jo yuri",
+      "target": "kwon eunbi",
+      "weight": 0.922755,
+      "similarity_score": 0.922755
+    },
+    {
+      "source": "jo yuri",
+      "target": "ive",
+      "weight": 0.485996,
+      "similarity_score": 0.485996
+    },
+    {
+      "source": "jo yuri",
+      "target": "miyeon",
+      "weight": 0.362296,
+      "similarity_score": 0.362296
+    },
+    {
+      "source": "jo yuri",
+      "target": "wooah",
+      "weight": 0.348827,
+      "similarity_score": 0.348827
+    },
+    {
+      "source": "jo yuri",
+      "target": "kimsejeong",
+      "weight": 0.345057,
+      "similarity_score": 0.345057
+    },
+    {
+      "source": "ariana grande",
+      "target": "tate mcrae",
+      "weight": 0.640668,
+      "similarity_score": 0.640668
+    },
+    {
+      "source": "ariana grande",
+      "target": "olivia rodrigo",
+      "weight": 0.462333,
+      "similarity_score": 0.462333
+    },
+    {
+      "source": "ariana grande",
+      "target": "taylor swift",
+      "weight": 0.336891,
+      "similarity_score": 0.336891
+    },
+    {
+      "source": "ariana grande",
+      "target": "miley cyrus",
+      "weight": 0.307097,
+      "similarity_score": 0.307097
+    },
+    {
+      "source": "the killers",
+      "target": "muse",
+      "weight": 0.16689,
+      "similarity_score": 0.16689
+    },
+    {
+      "source": "the killers",
+      "target": "imagine dragons",
+      "weight": 0.165175,
+      "similarity_score": 0.165175
+    },
+    {
+      "source": "kyo hanabasami",
+      "target": "tsukuyomi",
+      "weight": 0.440944,
+      "similarity_score": 0.440944
+    },
+    {
+      "source": "taeyeon",
+      "target": "iu",
+      "weight": 0.408943,
+      "similarity_score": 0.408943
+    },
+    {
+      "source": "taeyeon",
+      "target": "sunmi",
+      "weight": 0.335682,
+      "similarity_score": 0.335682
+    },
+    {
+      "source": "taeyeon",
+      "target": "ive",
+      "weight": 0.280032,
+      "similarity_score": 0.280032
+    },
+    {
+      "source": "taeyeon",
+      "target": "younha",
+      "weight": 0.273406,
+      "similarity_score": 0.273406
+    },
+    {
+      "source": "taeyeon",
+      "target": "yerin baek",
+      "weight": 0.269523,
+      "similarity_score": 0.269523
+    },
+    {
+      "source": "taeyeon",
+      "target": "dreamcatcher",
+      "weight": 0.258425,
+      "similarity_score": 0.258425
+    },
+    {
+      "source": "taeyeon",
+      "target": "(g)i-dle",
+      "weight": 0.252227,
+      "similarity_score": 0.252227
+    },
+    {
+      "source": "taeyeon",
+      "target": "miyeon",
+      "weight": 0.252005,
+      "similarity_score": 0.252005
+    },
+    {
+      "source": "seori",
+      "target": "younha",
+      "weight": 0.742573,
+      "similarity_score": 0.742573
+    },
+    {
+      "source": "seori",
+      "target": "kimsejeong",
+      "weight": 0.722063,
+      "similarity_score": 0.722063
+    },
+    {
+      "source": "seori",
+      "target": "yerin baek",
+      "weight": 0.62121,
+      "similarity_score": 0.62121
+    },
+    {
+      "source": "seori",
+      "target": "bol4",
+      "weight": 0.570138,
+      "similarity_score": 0.570138
+    },
+    {
+      "source": "saya",
+      "target": "ヨルシカ",
+      "weight": 0.46548,
+      "similarity_score": 0.46548
+    },
+    {
+      "source": "saya",
+      "target": "前島麻由",
+      "weight": 0.433916,
+      "similarity_score": 0.433916
+    },
+    {
+      "source": "harry styles",
+      "target": "olivia rodrigo",
+      "weight": 0.340816,
+      "similarity_score": 0.340816
+    },
+    {
+      "source": "harry styles",
+      "target": "shawn mendes",
+      "weight": 0.264797,
+      "similarity_score": 0.264797
+    },
+    {
+      "source": "harry styles",
+      "target": "taylor swift",
+      "weight": 0.261174,
+      "similarity_score": 0.261174
+    },
+    {
+      "source": "harry styles",
+      "target": "lewis capaldi",
+      "weight": 0.150568,
+      "similarity_score": 0.150568
+    },
+    {
+      "source": "harry styles",
+      "target": "maroon 5",
+      "weight": 0.13098,
+      "similarity_score": 0.13098
+    },
+    {
+      "source": "harry styles",
+      "target": "ed sheeran",
+      "weight": 0.123547,
+      "similarity_score": 0.123547
+    },
+    {
+      "source": "harry styles",
+      "target": "miley cyrus",
+      "weight": 0.112662,
+      "similarity_score": 0.112662
+    },
+    {
+      "source": "harry styles",
+      "target": "twenty one pilots",
+      "weight": 0.09731,
+      "similarity_score": 0.09731
+    },
+    {
+      "source": "harry styles",
+      "target": "the script",
+      "weight": 0.09573,
+      "similarity_score": 0.09573
+    },
+    {
+      "source": "maroon 5",
+      "target": "onerepublic",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "maroon 5",
+      "target": "the script",
+      "weight": 0.802018,
+      "similarity_score": 0.802018
+    },
+    {
+      "source": "maroon 5",
+      "target": "the chainsmokers",
+      "weight": 0.56687,
+      "similarity_score": 0.56687
+    },
+    {
+      "source": "maroon 5",
+      "target": "imagine dragons",
+      "weight": 0.472593,
+      "similarity_score": 0.472593
+    },
+    {
+      "source": "maroon 5",
+      "target": "harry styles",
+      "weight": 0.330925,
+      "similarity_score": 0.330925
+    },
+    {
+      "source": "maroon 5",
+      "target": "lewis capaldi",
+      "weight": 0.31228,
+      "similarity_score": 0.31228
+    },
+    {
+      "source": "dreamcatcher",
+      "target": "(g)i-dle",
+      "weight": 0.315059,
+      "similarity_score": 0.315059
+    },
+    {
+      "source": "dreamcatcher",
+      "target": "sunmi",
+      "weight": 0.223326,
+      "similarity_score": 0.223326
+    },
+    {
+      "source": "dreamcatcher",
+      "target": "kwon eunbi",
+      "weight": 0.211785,
+      "similarity_score": 0.211785
+    },
+    {
+      "source": "dreamcatcher",
+      "target": "ive",
+      "weight": 0.183165,
+      "similarity_score": 0.183165
+    },
+    {
+      "source": "avicii",
+      "target": "kygo",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "avicii",
+      "target": "the chainsmokers",
+      "weight": 0.69518,
+      "similarity_score": 0.69518
+    },
+    {
+      "source": "avicii",
+      "target": "alan walker",
+      "weight": 0.441382,
+      "similarity_score": 0.441382
+    },
+    {
+      "source": "kimsejeong",
+      "target": "younha",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "kimsejeong",
+      "target": "iu",
+      "weight": 0.934066,
+      "similarity_score": 0.934066
+    },
+    {
+      "source": "kimsejeong",
+      "target": "jo yuri",
+      "weight": 0.849443,
+      "similarity_score": 0.849443
+    },
+    {
+      "source": "kimsejeong",
+      "target": "bol4",
+      "weight": 0.734385,
+      "similarity_score": 0.734385
+    },
+    {
+      "source": "kimsejeong",
+      "target": "seori",
+      "weight": 0.719745,
+      "similarity_score": 0.719745
+    },
+    {
+      "source": "kimsejeong",
+      "target": "kwon eunbi",
+      "weight": 0.696589,
+      "similarity_score": 0.696589
+    },
+    {
+      "source": "kimsejeong",
+      "target": "rothy",
+      "weight": 0.607742,
+      "similarity_score": 0.607742
+    },
+    {
+      "source": "kimsejeong",
+      "target": "jeon somi",
+      "weight": 0.607718,
+      "similarity_score": 0.607718
+    },
+    {
+      "source": "kimsejeong",
+      "target": "miyeon",
+      "weight": 0.60365,
+      "similarity_score": 0.60365
+    },
+    {
+      "source": "bts",
+      "target": "younha",
+      "weight": 0.105637,
+      "similarity_score": 0.105637
+    },
+    {
+      "source": "bts",
+      "target": "iu",
+      "weight": 0.046915,
+      "similarity_score": 0.046915
+    },
+    {
+      "source": "bbno$",
+      "target": "nf",
+      "weight": 0.09619,
+      "similarity_score": 0.09619
+    },
+    {
+      "source": "the script",
+      "target": "onerepublic",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "the script",
+      "target": "maroon 5",
+      "weight": 0.669452,
+      "similarity_score": 0.669452
+    },
+    {
+      "source": "the script",
+      "target": "lewis capaldi",
+      "weight": 0.337637,
+      "similarity_score": 0.337637
+    },
+    {
+      "source": "the script",
+      "target": "imagine dragons",
+      "weight": 0.313837,
+      "similarity_score": 0.313837
+    },
+    {
+      "source": "ryokuoushoku shakai",
+      "target": "aimyon",
+      "weight": 0.75538,
+      "similarity_score": 0.75538
+    },
+    {
+      "source": "ryokuoushoku shakai",
+      "target": "yoasobi",
+      "weight": 0.724588,
+      "similarity_score": 0.724588
+    },
+    {
+      "source": "ryokuoushoku shakai",
+      "target": "tsukuyomi",
+      "weight": 0.713885,
+      "similarity_score": 0.713885
+    },
+    {
+      "source": "ryokuoushoku shakai",
+      "target": "uru",
+      "weight": 0.570444,
+      "similarity_score": 0.570444
+    },
+    {
+      "source": "ryokuoushoku shakai",
+      "target": "aimer",
+      "weight": 0.565385,
+      "similarity_score": 0.565385
+    },
+    {
+      "source": "ryokuoushoku shakai",
+      "target": "ヨルシカ",
+      "weight": 0.471886,
+      "similarity_score": 0.471886
+    },
+    {
+      "source": "tate mcrae",
+      "target": "ariana grande",
+      "weight": 0.660284,
+      "similarity_score": 0.660284
+    },
+    {
+      "source": "tate mcrae",
+      "target": "ava max",
+      "weight": 0.406441,
+      "similarity_score": 0.406441
+    },
+    {
+      "source": "tate mcrae",
+      "target": "taylor swift",
+      "weight": 0.386936,
+      "similarity_score": 0.386936
+    },
+    {
+      "source": "bol4",
+      "target": "iu",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "bol4",
+      "target": "younha",
+      "weight": 0.67545,
+      "similarity_score": 0.67545
+    },
+    {
+      "source": "bol4",
+      "target": "rothy",
+      "weight": 0.618786,
+      "similarity_score": 0.618786
+    },
+    {
+      "source": "bol4",
+      "target": "kimsejeong",
+      "weight": 0.61528,
+      "similarity_score": 0.61528
+    },
+    {
+      "source": "bol4",
+      "target": "gyubin",
+      "weight": 0.522105,
+      "similarity_score": 0.522105
+    },
+    {
+      "source": "bol4",
+      "target": "yerin baek",
+      "weight": 0.501367,
+      "similarity_score": 0.501367
+    },
+    {
+      "source": "bol4",
+      "target": "seori",
+      "weight": 0.476138,
+      "similarity_score": 0.476138
+    },
+    {
+      "source": "bol4",
+      "target": "jo yuri",
+      "weight": 0.42462,
+      "similarity_score": 0.42462
+    },
+    {
+      "source": "前島麻由",
+      "target": "aimer",
+      "weight": 0.284183,
+      "similarity_score": 0.284183
+    },
+    {
+      "source": "kygo",
+      "target": "avicii",
+      "weight": 0.841544,
+      "similarity_score": 0.841544
+    },
+    {
+      "source": "kygo",
+      "target": "the chainsmokers",
+      "weight": 0.625297,
+      "similarity_score": 0.625297
+    },
+    {
+      "source": "kygo",
+      "target": "alan walker",
+      "weight": 0.406729,
+      "similarity_score": 0.406729
+    },
+    {
+      "source": "mary",
+      "target": "tsukuyomi",
+      "weight": 0.266459,
+      "similarity_score": 0.266459
+    },
+    {
+      "source": "mary",
+      "target": "*luna",
+      "weight": 0.191624,
+      "similarity_score": 0.191624
+    },
+    {
+      "source": "mary",
+      "target": "kyo hanabasami",
+      "weight": 0.131198,
+      "similarity_score": 0.131198
+    },
+    {
+      "source": "yeji",
+      "target": "jisoo",
+      "weight": 0.694148,
+      "similarity_score": 0.694148
+    },
+    {
+      "source": "yeji",
+      "target": "jennie",
+      "weight": 0.576295,
+      "similarity_score": 0.576295
+    },
+    {
+      "source": "yeji",
+      "target": "le sserafim",
+      "weight": 0.486852,
+      "similarity_score": 0.486852
+    },
+    {
+      "source": "yeji",
+      "target": "ive",
+      "weight": 0.436103,
+      "similarity_score": 0.436103
+    },
+    {
+      "source": "yeji",
+      "target": "kiss of life",
+      "weight": 0.307745,
+      "similarity_score": 0.307745
+    },
+    {
+      "source": "yeji",
+      "target": "rosé",
+      "weight": 0.306163,
+      "similarity_score": 0.306163
+    },
+    {
+      "source": "yeji",
+      "target": "kwon eunbi",
+      "weight": 0.283301,
+      "similarity_score": 0.283301
+    },
+    {
+      "source": "yeji",
+      "target": "twice",
+      "weight": 0.281985,
+      "similarity_score": 0.281985
+    },
+    {
+      "source": "yeji",
+      "target": "gyubin",
+      "weight": 0.271186,
+      "similarity_score": 0.271186
+    },
+    {
+      "source": "the oral cigarettes",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.27743,
+      "similarity_score": 0.27743
+    },
+    {
+      "source": "gyubin",
+      "target": "younha",
+      "weight": 0.848743,
+      "similarity_score": 0.848743
+    },
+    {
+      "source": "gyubin",
+      "target": "wooah",
+      "weight": 0.712344,
+      "similarity_score": 0.712344
+    },
+    {
+      "source": "gyubin",
+      "target": "jo yuri",
+      "weight": 0.620035,
+      "similarity_score": 0.620035
+    },
+    {
+      "source": "gyubin",
+      "target": "iu",
+      "weight": 0.573729,
+      "similarity_score": 0.573729
+    },
+    {
+      "source": "gyubin",
+      "target": "yeji",
+      "weight": 0.572028,
+      "similarity_score": 0.572028
+    },
+    {
+      "source": "gyubin",
+      "target": "kwon eunbi",
+      "weight": 0.571831,
+      "similarity_score": 0.571831
+    },
+    {
+      "source": "gyubin",
+      "target": "ive",
+      "weight": 0.56471,
+      "similarity_score": 0.56471
+    },
+    {
+      "source": "rothy",
+      "target": "younha",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "rothy",
+      "target": "bol4",
+      "weight": 0.7061,
+      "similarity_score": 0.7061
+    },
+    {
+      "source": "rothy",
+      "target": "iu",
+      "weight": 0.624491,
+      "similarity_score": 0.624491
+    },
+    {
+      "source": "rothy",
+      "target": "gyubin",
+      "weight": 0.598827,
+      "similarity_score": 0.598827
+    },
+    {
+      "source": "rothy",
+      "target": "kimsejeong",
+      "weight": 0.581024,
+      "similarity_score": 0.581024
+    },
+    {
+      "source": "rothy",
+      "target": "jo yuri",
+      "weight": 0.558185,
+      "similarity_score": 0.558185
+    },
+    {
+      "source": "kobasolo",
+      "target": "aimer",
+      "weight": 0.665056,
+      "similarity_score": 0.665056
+    },
+    {
+      "source": "kobasolo",
+      "target": "uru",
+      "weight": 0.649011,
+      "similarity_score": 0.649011
+    },
+    {
+      "source": "kobasolo",
+      "target": "『ユイカ』",
+      "weight": 0.614253,
+      "similarity_score": 0.614253
+    },
+    {
+      "source": "kobasolo",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.476298,
+      "similarity_score": 0.476298
+    },
+    {
+      "source": "kobasolo",
+      "target": "tsukuyomi",
+      "weight": 0.427501,
+      "similarity_score": 0.427501
+    },
+    {
+      "source": "kobasolo",
+      "target": "yoasobi",
+      "weight": 0.361742,
+      "similarity_score": 0.361742
+    },
+    {
+      "source": "kobasolo",
+      "target": "ヨルシカ",
+      "weight": 0.321377,
+      "similarity_score": 0.321377
+    },
+    {
+      "source": "uru",
+      "target": "aimer",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "uru",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.56104,
+      "similarity_score": 0.56104
+    },
+    {
+      "source": "uru",
+      "target": "aimyon",
+      "weight": 0.468521,
+      "similarity_score": 0.468521
+    },
+    {
+      "source": "uru",
+      "target": "ヨルシカ",
+      "weight": 0.463307,
+      "similarity_score": 0.463307
+    },
+    {
+      "source": "uru",
+      "target": "kobasolo",
+      "weight": 0.458227,
+      "similarity_score": 0.458227
+    },
+    {
+      "source": "uru",
+      "target": "yoasobi",
+      "weight": 0.435064,
+      "similarity_score": 0.435064
+    },
+    {
+      "source": "muse",
+      "target": "the killers",
+      "weight": 0.543765,
+      "similarity_score": 0.543765
+    },
+    {
+      "source": "muse",
+      "target": "imagine dragons",
+      "weight": 0.411027,
+      "similarity_score": 0.411027
+    },
+    {
+      "source": "wooah",
+      "target": "kwon eunbi",
+      "weight": 0.703555,
+      "similarity_score": 0.703555
+    },
+    {
+      "source": "the rose",
+      "target": "bol4",
+      "weight": 0.251603,
+      "similarity_score": 0.251603
+    },
+    {
+      "source": "the rose",
+      "target": "dreamcatcher",
+      "weight": 0.219106,
+      "similarity_score": 0.219106
+    },
+    {
+      "source": "the rose",
+      "target": "b.i",
+      "weight": 0.042783,
+      "similarity_score": 0.042783
+    },
+    {
+      "source": "yerin baek",
+      "target": "iu",
+      "weight": 0.284807,
+      "similarity_score": 0.284807
+    },
+    {
+      "source": "yerin baek",
+      "target": "jo yuri",
+      "weight": 0.210274,
+      "similarity_score": 0.210274
+    },
+    {
+      "source": "yerin baek",
+      "target": "seori",
+      "weight": 0.206834,
+      "similarity_score": 0.206834
+    },
+    {
+      "source": "yerin baek",
+      "target": "bol4",
+      "weight": 0.199887,
+      "similarity_score": 0.199887
+    },
+    {
+      "source": "yerin baek",
+      "target": "sunmi",
+      "weight": 0.187036,
+      "similarity_score": 0.187036
+    },
+    {
+      "source": "shawn mendes",
+      "target": "harry styles",
+      "weight": 0.468603,
+      "similarity_score": 0.468603
+    },
+    {
+      "source": "shawn mendes",
+      "target": "ed sheeran",
+      "weight": 0.4506,
+      "similarity_score": 0.4506
+    },
+    {
+      "source": "shawn mendes",
+      "target": "olivia rodrigo",
+      "weight": 0.323758,
+      "similarity_score": 0.323758
+    },
+    {
+      "source": "shawn mendes",
+      "target": "taylor swift",
+      "weight": 0.287363,
+      "similarity_score": 0.287363
+    },
+    {
+      "source": "shawn mendes",
+      "target": "lewis capaldi",
+      "weight": 0.265216,
+      "similarity_score": 0.265216
+    },
+    {
+      "source": "shawn mendes",
+      "target": "ariana grande",
+      "weight": 0.219238,
+      "similarity_score": 0.219238
+    },
+    {
+      "source": "shawn mendes",
+      "target": "tate mcrae",
+      "weight": 0.217948,
+      "similarity_score": 0.217948
+    },
+    {
+      "source": "lewis capaldi",
+      "target": "ed sheeran",
+      "weight": 0.4139,
+      "similarity_score": 0.4139
+    },
+    {
+      "source": "lewis capaldi",
+      "target": "the script",
+      "weight": 0.210798,
+      "similarity_score": 0.210798
+    },
+    {
+      "source": "lewis capaldi",
+      "target": "onerepublic",
+      "weight": 0.207221,
+      "similarity_score": 0.207221
+    },
+    {
+      "source": "lewis capaldi",
+      "target": "harry styles",
+      "weight": 0.19825,
+      "similarity_score": 0.19825
+    },
+    {
+      "source": "lewis capaldi",
+      "target": "shawn mendes",
+      "weight": 0.197326,
+      "similarity_score": 0.197326
+    },
+    {
+      "source": "mikolai stroinski",
+      "target": "marcin przybyłowicz",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "simple plan",
+      "target": "hoobastank",
+      "weight": 0.234365,
+      "similarity_score": 0.234365
+    },
+    {
+      "source": "miley cyrus",
+      "target": "ariana grande",
+      "weight": 0.222055,
+      "similarity_score": 0.222055
+    },
+    {
+      "source": "miley cyrus",
+      "target": "ava max",
+      "weight": 0.201529,
+      "similarity_score": 0.201529
+    },
+    {
+      "source": "jennie",
+      "target": "jisoo",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "jennie",
+      "target": "rosé",
+      "weight": 0.714869,
+      "similarity_score": 0.714869
+    },
+    {
+      "source": "jennie",
+      "target": "blackpink",
+      "weight": 0.425215,
+      "similarity_score": 0.425215
+    },
+    {
+      "source": "jennie",
+      "target": "yeji",
+      "weight": 0.381234,
+      "similarity_score": 0.381234
+    },
+    {
+      "source": "jennie",
+      "target": "le sserafim",
+      "weight": 0.227281,
+      "similarity_score": 0.227281
+    },
+    {
+      "source": "jennie",
+      "target": "ive",
+      "weight": 0.200584,
+      "similarity_score": 0.200584
+    },
+    {
+      "source": "jennie",
+      "target": "newjeans",
+      "weight": 0.171802,
+      "similarity_score": 0.171802
+    },
+    {
+      "source": "jennie",
+      "target": "kiss of life",
+      "weight": 0.159461,
+      "similarity_score": 0.159461
+    },
+    {
+      "source": "jennie",
+      "target": "jeon somi",
+      "weight": 0.127263,
+      "similarity_score": 0.127263
+    },
+    {
+      "source": "jennie",
+      "target": "(g)i-dle",
+      "weight": 0.112515,
+      "similarity_score": 0.112515
+    },
+    {
+      "source": "aimyon",
+      "target": "ヨルシカ",
+      "weight": 0.52978,
+      "similarity_score": 0.52978
+    },
+    {
+      "source": "aimyon",
+      "target": "uru",
+      "weight": 0.424735,
+      "similarity_score": 0.424735
+    },
+    {
+      "source": "evanescence",
+      "target": "paramore",
+      "weight": 0.144178,
+      "similarity_score": 0.144178
+    },
+    {
+      "source": "evanescence",
+      "target": "hoobastank",
+      "weight": 0.077372,
+      "similarity_score": 0.077372
+    },
+    {
+      "source": "marcin przybyłowicz",
+      "target": "mikolai stroinski",
+      "weight": 1.0,
+      "similarity_score": 1.0
+    },
+    {
+      "source": "olivia rodrigo",
+      "target": "taylor swift",
+      "weight": 0.927375,
+      "similarity_score": 0.927375
+    },
+    {
+      "source": "olivia rodrigo",
+      "target": "harry styles",
+      "weight": 0.555539,
+      "similarity_score": 0.555539
+    },
+    {
+      "source": "olivia rodrigo",
+      "target": "ariana grande",
+      "weight": 0.466184,
+      "similarity_score": 0.466184
+    },
+    {
+      "source": "olivia rodrigo",
+      "target": "rosé",
+      "weight": 0.343546,
+      "similarity_score": 0.343546
+    },
+    {
+      "source": "olivia rodrigo",
+      "target": "shawn mendes",
+      "weight": 0.29821,
+      "similarity_score": 0.29821
+    },
+    {
+      "source": "olivia rodrigo",
+      "target": "miley cyrus",
+      "weight": 0.218995,
+      "similarity_score": 0.218995
+    },
+    {
+      "source": "olivia rodrigo",
+      "target": "paramore",
+      "weight": 0.164196,
+      "similarity_score": 0.164196
+    },
+    {
+      "source": "knox",
+      "target": "simple plan",
+      "weight": 0.279216,
+      "similarity_score": 0.279216
+    },
+    {
+      "source": "konomi suzuki",
+      "target": "前島麻由",
+      "weight": 0.898209,
+      "similarity_score": 0.898209
+    },
+    {
+      "source": "『ユイカ』",
+      "target": "ヨルシカ",
+      "weight": 0.439633,
+      "similarity_score": 0.439633
+    },
+    {
+      "source": "『ユイカ』",
+      "target": "kobasolo",
+      "weight": 0.343585,
+      "similarity_score": 0.343585
+    },
+    {
+      "source": "『ユイカ』",
+      "target": "uru",
+      "weight": 0.25163,
+      "similarity_score": 0.25163
+    },
+    {
+      "source": "『ユイカ』",
+      "target": "yoasobi",
+      "weight": 0.174211,
+      "similarity_score": 0.174211
+    },
+    {
+      "source": "『ユイカ』",
+      "target": "aimer",
+      "weight": 0.170625,
+      "similarity_score": 0.170625
+    },
+    {
+      "source": "newjeans",
+      "target": "le sserafim",
+      "weight": 0.529992,
+      "similarity_score": 0.529992
+    },
+    {
+      "source": "newjeans",
+      "target": "kiss of life",
+      "weight": 0.442979,
+      "similarity_score": 0.442979
+    },
+    {
+      "source": "newjeans",
+      "target": "ive",
+      "weight": 0.429847,
+      "similarity_score": 0.429847
+    },
+    {
+      "source": "newjeans",
+      "target": "jennie",
+      "weight": 0.272452,
+      "similarity_score": 0.272452
+    },
+    {
+      "source": "newjeans",
+      "target": "twice",
+      "weight": 0.265536,
+      "similarity_score": 0.265536
+    },
+    {
+      "source": "newjeans",
+      "target": "blackpink",
+      "weight": 0.245765,
+      "similarity_score": 0.245765
+    },
+    {
+      "source": "newjeans",
+      "target": "(g)i-dle",
+      "weight": 0.239956,
+      "similarity_score": 0.239956
+    },
+    {
+      "source": "newjeans",
+      "target": "yeji",
+      "weight": 0.200895,
+      "similarity_score": 0.200895
+    },
+    {
+      "source": "newjeans",
+      "target": "jisoo",
+      "weight": 0.195234,
+      "similarity_score": 0.195234
+    },
+    {
+      "source": "newjeans",
+      "target": "jo yuri",
+      "weight": 0.193566,
+      "similarity_score": 0.193566
+    }
+  ],
+  "metadata": {
+    "created": "2025-06-09T23:01:18.862833",
+    "artist_count": 100,
+    "data_source": "spotify",
+    "similarity_source": "lastfm"
+  }
+}

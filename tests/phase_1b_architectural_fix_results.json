@@ -1,0 +1,82 @@
+{
+  "test_date": "2025-06-09T23:39:31.233690",
+  "test_version": "architectural_fix_v2",
+  "input_events": 262,
+  "processed_artists": 14,
+  "lastfm_success_rate": 100.0,
+  "successful_fetches": 14,
+  "failed_artists": [],
+  "node_count": 14,
+  "sample_nodes": [
+    {
+      "id": "88rising",
+      "name": "88rising",
+      "personal_plays": 12,
+      "personal_tracks": 4,
+      "first_played": "2025-04-10T23:39:24.989326",
+      "last_played": "2025-06-08T14:39:24.989326",
+      "date_span_days": 58.625,
+      "play_frequency": 0.2046908315565032,
+      "global_listeners": 883841,
+      "global_playcount": 26578354,
+      "lastfm_url": "https://www.last.fm/music/88Rising",
+      "tags": [
+        "Hip-Hop",
+        "rnb",
+        "soul",
+        "rap",
+        "seen live"
+      ],
+      "similar_artists": [
+        "Bibi",
+        "DPR IAN, DPR LIVE, CL",
+        "JUNNY, Gaeko",
+        "LOCO, Hwasa",
+        "BIBI, Jackson Wang"
+      ],
+      "has_lastfm_data": true,
+      "matching_success": true,
+      "matching_method": "advanced_search",
+      "working_variant": "88rising, BIBI",
+      "size": 10,
+      "color": "#666666"
+    },
+    {
+      "id": "blackpink",
+      "name": "BLACKPINK",
+      "personal_plays": 33,
+      "personal_tracks": 11,
+      "first_played": "2025-04-10T23:39:24.989326",
+      "last_played": "2025-06-08T14:39:24.989326",
+      "date_span_days": 58.625,
+      "play_frequency": 0.5628997867803838,
+      "global_listeners": 1556638,
+      "global_playcount": 269425976,
+      "lastfm_url": "https://www.last.fm/music/BLACKPINK",
+      "tags": [
+        "k-pop",
+        "Kpop",
+        "pop",
+        "Korean",
+        "girl group"
+      ],
+      "similar_artists": [
+        "Rosé",
+        "JiSoo",
+        "Baby Monster",
+        "Jennie",
+        "Jeon Somi"
+      ],
+      "has_lastfm_data": true,
+      "matching_success": true,
+      "matching_method": "direct",
+      "working_variant": "BLACKPINK",
+      "size": 10,
+      "color": "#666666"
+    }
+  ],
+  "pipeline_working": true,
+  "personal_metrics_working": true,
+  "lastfm_integration_working": true,
+  "test_passed": true
+}
