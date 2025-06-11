@@ -7,7 +7,7 @@ This program creates animated bar chart "race" videos from your Spotify or Last.
 ## Top Tracks Demo
 [![Top Tracks](https://img.youtube.com/vi/M-diXuEgmPo/hqdefault.jpg)](https://www.youtube.com/watch?v=M-diXuEgmPo)
 ## Top Artists Demo
-[![Top Artists](https://img.youtube.com/vi/jVZtuSqZK3Q/default.jpg)](https://www.youtube.com/watch?v=jVZtuSqZK3Q)
+[![Top Artists](https://img.youtube.com/vi/jVZtuSqZK3Q/hqdefault.jpg)](https://www.youtube.com/watch?v=jVZtuSqZK3Q)
 
 ## Features
 
