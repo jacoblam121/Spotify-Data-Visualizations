@@ -1,6 +1,10 @@
 # config_loader.py
 import configparser
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 class AppConfig:
     def __init__(self, filepath="configurations.txt"):
@@ -45,14 +49,41 @@ class AppConfig:
             return fallback
     
     def get_lastfm_config(self):
-        """Get Last.fm API configuration."""
+        """Get Last.fm API configuration with .env override support."""
+        # Check environment variables first, fallback to config file
+        api_key = os.getenv('LASTFM_API_KEY') or self.get('LastfmAPI', 'API_KEY', '')
+        api_secret = os.getenv('LASTFM_API_SECRET') or self.get('LastfmAPI', 'API_SECRET', '')
+        
         return {
-            'api_key': self.get('LastfmAPI', 'API_KEY', ''),
-            'api_secret': self.get('LastfmAPI', 'API_SECRET', ''),
+            'api_key': api_key,
+            'api_secret': api_secret,
             'enabled': self.get_bool('LastfmAPI', 'ENABLE_LASTFM', False),
             'limit': self.get_int('LastfmAPI', 'SIMILAR_ARTISTS_LIMIT', 100),
             'cache_dir': self.get('LastfmAPI', 'CACHE_DIR', 'lastfm_cache'),
             'cache_expiry_days': self.get_int('LastfmAPI', 'CACHE_EXPIRY_DAYS', 30)
+        }
+    
+    def get_spotify_config(self):
+        """Get Spotify API configuration with .env override support."""
+        # Check environment variables first, fallback to config file
+        client_id = os.getenv('SPOTIFY_CLIENT_ID') or self.get('AlbumArtSpotify', 'SPOTIFY_CLIENT_ID', '')
+        client_secret = os.getenv('SPOTIFY_CLIENT_SECRET') or self.get('AlbumArtSpotify', 'SPOTIFY_CLIENT_SECRET', '')
+        
+        return {
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'art_cache_dir': self.get('AlbumArtSpotify', 'ART_CACHE_DIR', 'album_art_cache'),
+            'artist_art_cache_dir': self.get('AlbumArtSpotify', 'ARTIST_ART_CACHE_DIR', 'artist_art_cache'),
+            'negative_cache_hours': self.get_int('AlbumArtSpotify', 'NEGATIVE_CACHE_HOURS', 24)
+        }
+    
+    def get_musicbrainz_config(self):
+        """Get MusicBrainz API configuration."""
+        return {
+            'enabled': self.get_bool('MusicBrainzAPI', 'ENABLE_MUSICBRAINZ', True),
+            'user_agent': self.get('General', 'USER_AGENT', 'SpotifyRaceChart/1.0'),
+            'cache_dir': self.get('MusicBrainzAPI', 'CACHE_DIR', 'musicbrainz_cache'),
+            'cache_expiry_days': self.get_int('MusicBrainzAPI', 'CACHE_EXPIRY_DAYS', 30)
         }
     
     def validate_visualization_mode(self):

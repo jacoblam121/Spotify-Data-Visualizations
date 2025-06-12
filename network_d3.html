@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Artist Network - D3.js</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        .node { fill: steelblue; stroke: white; stroke-width: 2px; cursor: pointer; }
+        .link { stroke: #999; stroke-opacity: 0.6; }
+        .node text { font: 12px sans-serif; text-anchor: middle; fill: white; }
+        .tooltip { position: absolute; padding: 10px; background: rgba(0,0,0,0.8); color: white; border-radius: 5px; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <h2>Artist Similarity Network</h2>
+    <svg width="900" height="600"></svg>
+    <div class="tooltip" style="opacity: 0;"></div>
+    
+    <script>
+        const nodes = [{"id": "taylor-swift", "name": "Taylor Swift", "listeners": 5160232, "genre": "pop", "size": 5}, {"id": "paramore", "name": "Paramore", "listeners": 4779115, "genre": "rock", "size": 5}, {"id": "blackpink", "name": "BLACKPINK", "listeners": 1558082, "genre": "k-pop", "size": 5}, {"id": "twice", "name": "TWICE", "listeners": 1388675, "genre": "k-pop", "size": 5}, {"id": "the-killers", "name": "The Killers", "listeners": 6183625, "genre": "rock", "size": 5}, {"id": "bmth", "name": "Bring Me The Horizon", "listeners": 2441949, "genre": "metal", "size": 5}, {"id": "dreamcatcher", "name": "Dreamcatcher", "listeners": 494541, "genre": "k-pop", "size": 5}, {"id": "iu", "name": "IU", "listeners": 913058, "genre": "k-pop", "size": 5}];
+        const links = [{"source": "paramore", "target": "the-killers", "weight": 0.75}, {"source": "paramore", "target": "bmth", "weight": 0.65}, {"source": "blackpink", "target": "twice", "weight": 0.85}, {"source": "blackpink", "target": "dreamcatcher", "weight": 0.55}, {"source": "twice", "target": "iu", "weight": 0.7}, {"source": "the-killers", "target": "bmth", "weight": 0.45}];
+        
+        const svg = d3.select("svg");
+        const width = +svg.attr("width");
+        const height = +svg.attr("height");
+        
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+        
+        const simulation = d3.forceSimulation(nodes)
+            .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-300))
+            .force("center", d3.forceCenter(width / 2, height / 2));
+        
+        const tooltip = d3.select(".tooltip");
+        
+        const link = svg.append("g")
+            .selectAll("line")
+            .data(links)
+            .enter().append("line")
+            .attr("class", "link")
+            .attr("stroke-width", d => Math.sqrt(d.weight) * 3);
+        
+        const node = svg.append("g")
+            .selectAll("circle")
+            .data(nodes)
+            .enter().append("circle")
+            .attr("class", "node")
+            .attr("r", d => d.size)
+            .attr("fill", d => color(d.genre))
+            .on("mouseover", function(event, d) {
+                tooltip.transition().duration(200).style("opacity", .9);
+                tooltip.html(d.name + "<br/>Listeners: " + d.listeners.toLocaleString() + "<br/>Genre: " + d.genre)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(d) {
+                tooltip.transition().duration(500).style("opacity", 0);
+            });
+        
+        const text = svg.append("g")
+            .selectAll("text")
+            .data(nodes)
+            .enter().append("text")
+            .text(d => d.name)
+            .attr("font-size", "10px")
+            .attr("text-anchor", "middle");
+        
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+            
+            node
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+            
+            text
+                .attr("x", d => d.x)
+                .attr("y", d => d.y + 4);
+        });
+        
+        // Drag functionality
+        node.call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+        
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+        
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+        
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+    </script>
+</body>
+</html>

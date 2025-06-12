@@ -14,7 +14,10 @@
       "Bash(sudo apt install:*)",
       "Bash(snap list)",
       "Bash(find:*)",
-      "Bash(/mnt/c/ffmpeg-2025-06-11-git-f019dd69f0-full_build/ffmpeg-2025-06-11-git-f019dd69f0-full_build/bin/ffmpeg.exe -version)"
+      "Bash(/mnt/c/ffmpeg-2025-06-11-git-f019dd69f0-full_build/ffmpeg-2025-06-11-git-f019dd69f0-full_build/bin/ffmpeg.exe -version)",
+      "Bash(chmod:*)",
+      "Bash(pip install:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }

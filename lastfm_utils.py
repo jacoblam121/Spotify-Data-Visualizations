@@ -128,7 +128,11 @@ class LastfmAPI:
             if 'error' in data:
                 error_code = data.get('error', 'unknown')
                 error_message = data.get('message', 'No message provided')
-                logger.error(f"Last.fm API error {error_code}: {error_message}")
+                # Only log as error for unexpected API issues, not "artist not found"
+                if error_code == 6:
+                    logger.debug(f"Last.fm API: {error_message} (trying next variant)")
+                else:
+                    logger.error(f"Last.fm API error {error_code}: {error_message}")
                 return None
             
             # Cache successful response
@@ -161,13 +165,14 @@ class LastfmAPI:
         name_clean = artist_name.strip()
         name_upper = name_clean.upper()
         
-        # Priority 1: Exact match (always try first)
-        variants.append(name_clean)
-        
-        # Priority 2: Known successful patterns (curated database)
+        # Priority 1: Known successful patterns FIRST (highest success rate)
         known_patterns = self._get_known_artist_patterns()
         if name_upper in known_patterns:
             variants.extend(known_patterns[name_upper])
+        
+        # Priority 2: Exact match (if not already added)
+        if name_clean not in variants:
+            variants.append(name_clean)
         
         # Priority 3: High-probability variants based on artist type detection
         artist_type = self._detect_artist_type(name_clean)
@@ -686,6 +691,12 @@ class LastfmAPI:
                 })
                 
                 logger.debug(f"✅ Found {len(similar_artists)} similar artists for variant '{variant}' ({listeners:,} listeners)")
+                
+                # Early success detection: if we have many similar artists and good listener count, use this variant
+                if len(similar_artists) >= 5 and listeners >= 1000:
+                    logger.debug(f"🎯 Early success: variant '{variant}' has {len(similar_artists)} similar artists and {listeners:,} listeners")
+                    # Still collect other variants but this is a strong candidate
+                    
             else:
                 logger.debug(f"❌ No similar artists found for variant '{variant}'")
         

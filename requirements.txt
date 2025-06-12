@@ -4,3 +4,7 @@ matplotlib>=3.5.0
 Pillow>=9.0.0
 requests>=2.25.0
 configparser>=5.0.0
+networkx>=3.0
+python-dotenv>=1.0.0
+requests-cache>=1.0.0
+tenacity>=8.0.0

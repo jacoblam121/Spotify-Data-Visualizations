@@ -1,6 +1,6 @@
 """
 Network analysis utilities for artist similarity and co-listening analysis.
-Creates artist networks based on both Last.fm similarity and user listening patterns.
+Creates artist networks based on Last.fm similarity data.
 """
 
 import pandas as pd
@@ -10,8 +10,13 @@ from typing import Dict, List, Tuple, Optional, Set
 from collections import defaultdict, Counter
 import json
 import os
+import networkx as nx
+from dotenv import load_dotenv
 from config_loader import AppConfig
 from lastfm_utils import LastfmAPI
+
+# Load environment variables
+load_dotenv()
 
 
 def prepare_dataframe_for_network_analysis(df: pd.DataFrame) -> pd.DataFrame:
@@ -208,18 +213,16 @@ class ArtistNetworkAnalyzer:
     
     def create_network_data(self, df: pd.DataFrame, 
                           top_n_artists: int = 50,
-                          include_lastfm: bool = True,
-                          include_colistening: bool = True,
-                          min_plays_threshold: int = 5) -> Dict:
+                          min_plays_threshold: int = 5,
+                          min_similarity_threshold: float = 0.1) -> Dict:
         """
-        Create network data structure combining similarity and co-listening.
+        Create network data structure using only Last.fm similarity data.
         
         Args:
             df: DataFrame with listening history
             top_n_artists: Number of top artists to include
-            include_lastfm: Whether to include Last.fm similarities
-            include_colistening: Whether to include co-listening scores
             min_plays_threshold: Minimum plays to include artist
+            min_similarity_threshold: Minimum Last.fm similarity to include edge
             
         Returns:
             Network data dict with nodes and edges
@@ -255,57 +258,31 @@ class ArtistNetworkAnalyzer:
         edges = []
         artist_list = list(top_artists.index)
         
-        # Get Last.fm similarities
+        # Get Last.fm similarities (ONLY data source for network)
         lastfm_similarities = {}
-        if include_lastfm and self.lastfm_api:
+        if self.lastfm_api:
             lastfm_similarities = self.get_lastfm_similarity_matrix(artist_list)
+        else:
+            print("❌ Last.fm API not available - cannot create network without similarity data")
+            return {'nodes': nodes, 'edges': [], 'metadata': {}}
         
-        # Get co-listening scores
-        colistening_scores = {}
-        if include_colistening:
-            colistening_scores = self.calculate_co_listening_scores(df)
-        
-        # Combine into edges
-        all_pairs = set()
-        all_pairs.update(lastfm_similarities.keys())
-        all_pairs.update(colistening_scores.keys())
-        
-        for pair in all_pairs:
+        # Create edges from Last.fm similarities only
+        for pair, lastfm_score in lastfm_similarities.items():
             artist1, artist2 = pair
             
             # Skip if either artist not in top list
             if artist1 not in artist_list or artist2 not in artist_list:
                 continue
             
-            # Get scores
-            lastfm_score = lastfm_similarities.get(pair, 0.0)
-            colistening_score = colistening_scores.get(pair, 0.0)
-            
-            # Combine scores (weighted average)
-            combined_score = 0.0
-            weight_sum = 0.0
-            
-            if lastfm_score > 0:
-                combined_score += lastfm_score * 0.7  # Last.fm weight
-                weight_sum += 0.7
-            
-            if colistening_score > 0:
-                combined_score += colistening_score * 0.3  # Co-listening weight
-                weight_sum += 0.3
-            
-            if weight_sum > 0:
-                combined_score /= weight_sum
-                
-                # Only include significant relationships
-                if combined_score > 0.1:  # Threshold for inclusion
-                    edges.append({
-                        'source': artist1,
-                        'target': artist2,
-                        'weight': combined_score,
-                        'lastfm_similarity': lastfm_score,
-                        'colistening_score': colistening_score,
-                        'relationship_type': self._classify_relationship(lastfm_score, colistening_score)
-                    })
+            # Only include relationships above threshold
+            if lastfm_score >= min_similarity_threshold:
+                edges.append({
+                    'source': artist1,
+                    'target': artist2,
+                    'weight': lastfm_score,
+                    'lastfm_similarity': lastfm_score,
+                    'relationship_type': 'lastfm_similarity'
+                })
         
         # Create metadata
         metadata = {
@@ -318,15 +295,13 @@ class ArtistNetworkAnalyzer:
                 'end': df.index.max().isoformat() if hasattr(df.index, 'max') else None
             },
             'edge_types': {
-                'lastfm_only': len([e for e in edges if e['relationship_type'] == 'lastfm_only']),
-                'colistening_only': len([e for e in edges if e['relationship_type'] == 'colistening_only']),
-                'both': len([e for e in edges if e['relationship_type'] == 'both'])
+                'lastfm_similarity': len(edges)
             },
             'parameters': {
                 'top_n_artists': top_n_artists,
                 'min_plays_threshold': min_plays_threshold,
-                'include_lastfm': include_lastfm,
-                'include_colistening': include_colistening
+                'min_similarity_threshold': min_similarity_threshold,
+                'data_source': 'lastfm_similarity_only'
             }
         }
         
@@ -340,19 +315,6 @@ class ArtistNetworkAnalyzer:
         
         return network_data
     
-    def _classify_relationship(self, lastfm_score: float, colistening_score: float) -> str:
-        """Classify the type of relationship between artists."""
-        has_lastfm = lastfm_score > 0.1
-        has_colistening = colistening_score > 0.1
-        
-        if has_lastfm and has_colistening:
-            return 'both'
-        elif has_lastfm:
-            return 'lastfm_only'
-        elif has_colistening:
-            return 'colistening_only'
-        else:
-            return 'weak'
     
     def save_network_data(self, network_data: Dict, filename: str = 'artist_network.json') -> str:
         """Save network data to JSON file."""

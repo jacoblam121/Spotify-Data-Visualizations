@@ -64,9 +64,8 @@ CLEANUP_INTERMEDIATE_FRAMES = True
 # --- Album Art & Artist Photos & Spotify API ---
 [AlbumArtSpotify]
 # SPOTIFY_CLIENT_ID and SPOTIFY_CLIENT_SECRET can be set here,
-# but environment variables are generally preferred for security.
-# The script will attempt to use environment variables 'SPOTIFY_CLIENT_ID' and 'SPOTIFY_CLIENT_SECRET' first.
-# If not found, it will look for them here. If still not found, it will use hardcoded values in album_art_utils.py (if any).
+# but .env file is preferred for security (will override these values).
+# Priority: .env file > configurations.txt > hardcoded fallbacks
 SPOTIFY_CLIENT_ID = eaf67929214947d19e34182fb20e96bc
 SPOTIFY_CLIENT_SECRET = 822e6e3f9d1149d4ad5520237d8385a3
 ART_CACHE_DIR = album_art_cache
@@ -245,7 +244,7 @@ DEBUG_MODE = False
 
 # --- Last.fm API ---
 [LastfmAPI]
-# API credentials
+# API credentials (can be overridden by LASTFM_API_KEY/LASTFM_API_SECRET in .env)
 API_KEY = 1e8f179baf2593c1ec228bf7eba1bfa4
 API_SECRET = 2b04ee3940408d3c13ff58ee5567ebd4
 # Enable Last.fm integration
@@ -254,5 +253,16 @@ ENABLE_LASTFM = True
 SIMILAR_ARTISTS_LIMIT = 100
 # Cache directory for Last.fm data
 CACHE_DIR = lastfm_cache
+# Cache expiry in days
+CACHE_EXPIRY_DAYS = 30
+
+# --- MusicBrainz API ---
+[MusicBrainzAPI]
+# MusicBrainz doesn't require API keys but needs a proper User-Agent
+# USER_AGENT is already set in [General] section
+# Rate limit: 1 request per second (automatically handled)
+ENABLE_MUSICBRAINZ = True
+# Cache directory for MusicBrainz data
+CACHE_DIR = musicbrainz_cache
 # Cache expiry in days
 CACHE_EXPIRY_DAYS = 30

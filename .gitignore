@@ -2,3 +2,13 @@ __pycache__/
 *.pyc
 
 .venv/
+
+# Environment variables (API keys)
+.env
+
+# Network visualization outputs
+network_data/
+artist_network*.json
+artist_network*.html
+*.gexf
+*.graphml
