@@ -126,7 +126,9 @@ class LastfmAPI:
             
             # Check for Last.fm error response
             if 'error' in data:
-                logger.error(f"Last.fm API error: {data['message']}")
+                error_code = data.get('error', 'unknown')
+                error_message = data.get('message', 'No message provided')
+                logger.error(f"Last.fm API error {error_code}: {error_message}")
                 return None
             
             # Cache successful response
@@ -226,6 +228,8 @@ class LastfmAPI:
             'YOASOBI': ['YOASOBI (ヨアソビ)', 'ヨアソビ', 'yoasobi'],
             'ヨルシカ': ['Yorushika', 'YORUSHIKA'],
             'YORUSHIKA': ['ヨルシカ', 'Yorushika'],
+            'ユイカ': ['YUIKA', 'Yuika', 'yuika'],
+            'YUIKA': ['ユイカ', 'Yuika', 'yuika'],
             
             # Western artists with common issues
             'TWENTY ONE PILOTS': ['twenty one pilots', 'TOP', '21 Pilots', 'Twenty One Pilots'],
@@ -244,7 +248,8 @@ class LastfmAPI:
             'MGK': ['Machine Gun Kelly', 'MGK', 'mgk'],
             'MACHINE GUN KELLY': ['Machine Gun Kelly', 'MGK'],
             'XXXTENTACION': ['XXXTentacion', 'xxxtentacion', 'XXXTENTACION'],
-            'BLACKBEAR': ['blackbear', 'Blackbear'],
+            'BLACKBEAR': ['blackbear', 'Blackbear', 'black bear'],
+            'BOYWITHUKE': ['BoyWithUke', 'boy with uke', 'Boy with Uke'],
             
             # Common abbreviation patterns
             'LIL WAYNE': ['Lil Wayne', 'lil wayne'],
@@ -379,8 +384,8 @@ class LastfmAPI:
         Avoids matching completely different artists (e.g., 'blackbear' vs 'Blackbeard').
         Much stricter matching to prevent false positives like SUNMI -> SunMin.
         """
-        original_clean = original.lower().strip()
-        candidate_clean = candidate.lower().strip()
+        original_clean = original.casefold().strip()
+        candidate_clean = candidate.casefold().strip()
         
         # Extract the main artist name from collaborations
         def extract_main_artist(name):
@@ -398,6 +403,11 @@ class LastfmAPI:
         
         main_candidate = extract_main_artist(candidate_clean)
         
+        # SPECIAL CASE: Handle exact matches that are being filtered incorrectly
+        # e.g., 'blackbear' should match 'blackbear' exactly
+        if original_clean == main_candidate or original_clean == candidate_clean:
+            return True
+        
         # FIRST: Check blacklist of obvious false positives
         false_positives = {
             'blackbear': ['blackbeard', "blackbeard's tea party", 'blackbeards'],
@@ -406,10 +416,15 @@ class LastfmAPI:
             # Note: XXXTENTACION removed from blacklist to allow valid variants
         }
         
-        if original_clean in false_positives:
+        # ENHANCED: Only apply blacklist if it's not an exact match
+        # This prevents legitimate artists from being blocked
+        if original_clean != main_candidate and original_clean in false_positives:
             for false_positive in false_positives[original_clean]:
                 if false_positive in candidate_clean.lower():
+                    logger.debug(f"Blacklist triggered: '{original}' vs '{candidate}' - rejected due to '{false_positive}'")
                     return False
+        
+        # Blacklist logic moved above to prevent exact match blocking
         
         # Exact or very close match
         if original_clean == main_candidate:
@@ -457,18 +472,22 @@ class LastfmAPI:
         return False
     
     def _similar_strings(self, s1: str, s2: str) -> bool:
-        """Check if two strings are very similar (strict matching)."""
+        """Check if two strings are very similar (strict matching with Unicode awareness)."""
+        # Use Unicode-aware normalization
+        s1_norm = s1.casefold().strip()
+        s2_norm = s2.casefold().strip()
+        
         # Must be very close in length (max 2 character difference)
-        if abs(len(s1) - len(s2)) > 2:
+        if abs(len(s1_norm) - len(s2_norm)) > 2:
             return False
         
         # Both must be reasonably long to avoid false positives
-        if len(s1) < 3 or len(s2) < 3:
+        if len(s1_norm) < 3 or len(s2_norm) < 3:
             return False
         
         # Check character overlap - much stricter
-        s1_chars = set(s1.replace(' ', '').replace('-', ''))
-        s2_chars = set(s2.replace(' ', '').replace('-', ''))
+        s1_chars = set(s1_norm.replace(' ', '').replace('-', ''))
+        s2_chars = set(s2_norm.replace(' ', '').replace('-', ''))
         
         if not s1_chars or not s2_chars:
             return False
@@ -615,74 +634,94 @@ class LastfmAPI:
             response = self._make_request('artist.getsimilar', params)
             return self._parse_similar_artists_response(response)
         
-        # Try enhanced matching for name-based lookups
+        # Try enhanced matching for name-based lookups with canonical resolution
         if use_enhanced_matching:
-            name_variants = self._generate_name_variants(artist_name)
-            logger.debug(f"Trying {len(name_variants)} name variants for '{artist_name}'")
-            
-            attempted_variants = []
-            fallback_candidates = []
-            errors_count = 0
-            max_consecutive_errors = 5  # Stop after too many consecutive API errors
-            
-            for i, variant in enumerate(name_variants):
-                params = {'limit': str(limit), 'artist': variant}
-                response = self._make_request('artist.getsimilar', params)
-                attempted_variants.append(variant)
-                
-                # Check for API errors
-                if response is None:
-                    errors_count += 1
-                    if errors_count >= max_consecutive_errors:
-                        logger.warning(f"🛑 Stopping search after {max_consecutive_errors} consecutive API errors")
-                        break
-                    continue
-                else:
-                    errors_count = 0  # Reset error count on successful API call
-                
-                similar_artists = self._parse_similar_artists_response(response)
-                
-                if similar_artists:
-                    logger.info(f"✅ Found {len(similar_artists)} similar artists for '{artist_name}' using variant '{variant}'")
-                    # Add metadata about which variant worked
-                    for artist in similar_artists:
-                        artist['_matched_variant'] = variant
-                        artist['_original_query'] = artist_name
-                    return similar_artists
-                else:
-                    logger.debug(f"❌ No similar artists found for variant '{variant}'")
-                    
-                    # For first few variants, check if artist exists (fallback validation)
-                    if i < 3:  # Only validate first 3 variants to save API calls
-                        try:
-                            artist_info = self.get_artist_info(variant, use_enhanced_matching=False)
-                            if artist_info and artist_info.get('listeners', 0) > 1000:
-                                fallback_candidates.append((variant, artist_info['listeners']))
-                        except:
-                            pass
-            
-            # Step 4: Advanced search as final attempt
-            logger.info(f"🚀 Attempting advanced search for '{artist_name}'...")
-            advanced_results = self._search_artist_variations(artist_name, limit)
-            if advanced_results:
-                return advanced_results
-            
-            # Enhanced failure reporting
-            if fallback_candidates:
-                fallback_candidates.sort(key=lambda x: x[1], reverse=True)
-                best_fallback = fallback_candidates[0]
-                logger.warning(f"🔍 No similar artists found for '{artist_name}' after trying {len(attempted_variants)} variants + advanced search")
-                logger.warning(f"   However, artist exists as '{best_fallback[0]}' with {best_fallback[1]:,} listeners")
-                logger.warning(f"   This suggests the artist exists but Last.fm's similar artists endpoint may be incomplete")
-            else:
-                logger.warning(f"🔍 No similar artists found for '{artist_name}' after trying {len(attempted_variants)} variants + advanced search: {attempted_variants}")
-            
-            return []
+            return self._get_canonical_similar_artists(artist_name, limit)
         else:
             # Standard lookup without enhanced matching
             params = {'limit': str(limit), 'artist': artist_name}
             response = self._make_request('artist.getsimilar', params)
             return self._parse_similar_artists_response(response)
+    
+    def _get_canonical_similar_artists(self, artist_name: str, limit: int) -> List[Dict]:
+        """
+        Get similar artists using canonical artist resolution.
+        Tests multiple variants and chooses the one with the highest listener count.
+        """
+        name_variants = self._generate_name_variants(artist_name)
+        logger.debug(f"Trying {len(name_variants)} name variants for '{artist_name}' with canonical resolution")
+        
+        variant_results = []  # Store all successful results with metadata
+        attempted_variants = []
+        errors_count = 0
+        max_consecutive_errors = 5
+        
+        for i, variant in enumerate(name_variants):
+            params = {'limit': str(limit), 'artist': variant}
+            response = self._make_request('artist.getsimilar', params)
+            attempted_variants.append(variant)
+            
+            # Check for API errors
+            if response is None:
+                errors_count += 1
+                if errors_count >= max_consecutive_errors:
+                    logger.warning(f"🛑 Stopping search after {max_consecutive_errors} consecutive API errors")
+                    break
+                continue
+            else:
+                errors_count = 0
+            
+            similar_artists = self._parse_similar_artists_response(response)
+            
+            if similar_artists:
+                # Get artist info to determine listener count for this variant
+                artist_info = self.get_artist_info(variant, use_enhanced_matching=False)
+                listeners = artist_info.get('listeners', 0) if artist_info else 0
+                
+                variant_results.append({
+                    'variant': variant,
+                    'similar_artists': similar_artists,
+                    'listeners': listeners,
+                    'artist_info': artist_info
+                })
+                
+                logger.debug(f"✅ Found {len(similar_artists)} similar artists for variant '{variant}' ({listeners:,} listeners)")
+            else:
+                logger.debug(f"❌ No similar artists found for variant '{variant}'")
+        
+        # Choose the canonical result (highest listener count)
+        if variant_results:
+            # Sort by listener count (descending) and take the best one
+            best_result = max(variant_results, key=lambda x: x['listeners'])
+            best_variant = best_result['variant']
+            best_listeners = best_result['listeners']
+            similar_artists = best_result['similar_artists']
+            
+            # Log the canonical resolution decision
+            if len(variant_results) > 1:
+                other_counts = [f"'{r['variant']}' ({r['listeners']:,})" for r in variant_results if r['variant'] != best_variant]
+                logger.info(f"🎯 Canonical resolution: chose '{best_variant}' ({best_listeners:,} listeners) over {', '.join(other_counts)}")
+            else:
+                logger.info(f"✅ Found {len(similar_artists)} similar artists for '{artist_name}' using variant '{best_variant}' ({best_listeners:,} listeners)")
+            
+            # Add metadata about canonical resolution
+            for artist in similar_artists:
+                artist['_matched_variant'] = best_variant
+                artist['_original_query'] = artist_name
+                artist['_canonical_listeners'] = best_listeners
+                artist['_resolution_method'] = 'canonical_similar_artists'
+            
+            return similar_artists
+            
+        # Step 4: Advanced search as final attempt
+        logger.info(f"🚀 Attempting advanced search for '{artist_name}'...")
+        advanced_results = self._search_artist_variations(artist_name, limit)
+        if advanced_results:
+            return advanced_results
+        
+        # No results found
+        logger.warning(f"🔍 No similar artists found for '{artist_name}' after trying {len(attempted_variants)} variants + advanced search")
+        return []
 
     def _parse_similar_artists_response(self, response: Optional[Dict]) -> List[Dict]:
         """
@@ -746,28 +785,9 @@ class LastfmAPI:
             response = self._make_request('artist.getinfo', params)
             return self._parse_artist_info_response(response)
         
-        # Try enhanced matching for name-based lookups
+        # Try enhanced matching with multi-stage verification
         if use_enhanced_matching:
-            name_variants = self._generate_name_variants(artist_name)
-            logger.debug(f"Trying {len(name_variants)} name variants for artist info '{artist_name}'")
-            
-            for variant in name_variants:
-                params = {'artist': variant}
-                response = self._make_request('artist.getinfo', params)
-                
-                artist_info = self._parse_artist_info_response(response)
-                
-                if artist_info:
-                    logger.info(f"✅ Found artist info for '{artist_name}' using variant '{variant}'")
-                    # Add metadata about which variant worked
-                    artist_info['_matched_variant'] = variant
-                    artist_info['_original_query'] = artist_name
-                    return artist_info
-                else:
-                    logger.debug(f"❌ No artist info found for variant '{variant}'")
-            
-            logger.warning(f"🔍 No artist info found for '{artist_name}' after trying variants")
-            return None
+            return self._get_canonical_artist_info_with_verification(artist_name)
         else:
             # Standard lookup without enhanced matching
             params = {'artist': artist_name}
@@ -827,6 +847,119 @@ class LastfmAPI:
                 
         return artist_info
     
+    def get_artist_top_tracks(self, artist_name: str = None, mbid: str = None, limit: int = 10) -> List[Dict]:
+        """
+        Get top tracks for an artist for verification purposes.
+        
+        Args:
+            artist_name: Artist name (required if mbid not provided)
+            mbid: MusicBrainz ID (optional, takes precedence over name)
+            limit: Number of top tracks to fetch
+            
+        Returns:
+            List of top track names (normalized for comparison)
+        """
+        if not artist_name and not mbid:
+            logger.error("Either artist_name or mbid must be provided")
+            return []
+        
+        params = {'limit': str(limit)}
+        if mbid:
+            params['mbid'] = mbid
+        else:
+            params['artist'] = artist_name
+            
+        response = self._make_request('artist.gettoptracks', params)
+        
+        if response and 'toptracks' in response:
+            tracks = response['toptracks'].get('track', [])
+            if isinstance(tracks, dict):
+                tracks = [tracks]
+                
+            # Return normalized track names for comparison
+            track_names = []
+            for track in tracks:
+                track_name = track.get('name', '').strip()
+                if track_name:
+                    normalized_name = self._normalize_track_name(track_name)
+                    if normalized_name:  # Only add non-empty normalized names
+                        track_names.append(normalized_name)
+            
+            return track_names
+    
+    def _normalize_track_name(self, track_name: str) -> str:
+        """Normalize track name for comparison (more aggressive than artist names)."""
+        if not track_name:
+            return ""
+        
+        import re
+        
+        # Start with basic normalization
+        normalized = track_name.casefold().strip()
+        
+        # Remove content in parentheses/brackets (live, remix, feat., etc.)
+        normalized = re.sub(r'[\(\[].*?[\)\]]', '', normalized)
+        
+        # Remove common modifiers
+        normalized = re.sub(r'\b(feat\.?|ft\.?|featuring|with|remix|live|acoustic|version)\b.*', '', normalized)
+        
+        # Remove punctuation except for meaningful characters
+        normalized = re.sub(r'[^\w\s\-&]', '', normalized)
+        
+        # Collapse multiple spaces and trim
+        normalized = re.sub(r'\s+', ' ', normalized).strip()
+        
+        return normalized
+    
+    def _verify_same_artist_by_songs(self, artist1_name: str, artist2_name: str, 
+                                    min_common_tracks: int = 3) -> bool:
+        """
+        Verify if two artist names refer to the same artist by comparing their top tracks.
+        
+        Args:
+            artist1_name: First artist name
+            artist2_name: Second artist name  
+            min_common_tracks: Minimum number of common tracks to consider same artist
+            
+        Returns:
+            True if they appear to be the same artist based on shared songs
+        """
+        try:
+            tracks1 = self.get_artist_top_tracks(artist1_name, limit=15)
+            tracks2 = self.get_artist_top_tracks(artist2_name, limit=15)
+            
+            if not tracks1 or not tracks2:
+                logger.debug(f"Could not get tracks for comparison: '{artist1_name}' vs '{artist2_name}'")
+                return False
+            
+            # Find common tracks
+            common_tracks = set(tracks1) & set(tracks2)
+            common_count = len(common_tracks)
+            
+            # Calculate similarity percentage
+            total_unique_tracks = len(set(tracks1) | set(tracks2))
+            similarity_ratio = common_count / total_unique_tracks if total_unique_tracks > 0 else 0
+            
+            logger.debug(f"Song verification: '{artist1_name}' vs '{artist2_name}'")
+            logger.debug(f"   Common tracks: {common_count}/{min(len(tracks1), len(tracks2))} ({similarity_ratio:.2f} similarity)")
+            
+            # Consider same artist if:
+            # 1. At least min_common_tracks in common, AND
+            # 2. High similarity ratio (>60%) OR many common tracks (>5)
+            is_same_artist = (common_count >= min_common_tracks and 
+                            (similarity_ratio > 0.6 or common_count > 5))
+            
+            if is_same_artist:
+                logger.debug(f"   ✅ Verified as same artist")
+            else:
+                logger.debug(f"   ❌ Appear to be different artists")
+            
+            return is_same_artist
+            
+        except Exception as e:
+            logger.debug(f"Error in song verification: {e}")
+            return False
+    
     def get_artist_tags(self, artist_name: str = None, mbid: str = None) -> List[Dict]:
         """
         Get top tags for an artist.
@@ -860,6 +993,160 @@ class LastfmAPI:
                     'url': tag.get('url', '')} for tag in tags]
         
         return []
+    
+    def _get_canonical_artist_info_with_verification(self, artist_name: str) -> Optional[Dict]:
+        """
+        Get artist info using multi-stage verification:
+        1. MBID Check (if same MBID, definitely same artist)
+        2. Song-based verification (if same songs, same artist)
+        3. Listener count tiebreaker (choose most popular page)
+        """
+        name_variants = self._generate_name_variants(artist_name)
+        logger.debug(f"Multi-stage verification for '{artist_name}' with {len(name_variants)} variants")
+        
+        # Collect all valid artist pages
+        artist_pages = []
+        
+        for variant in name_variants:
+            params = {'artist': variant}
+            response = self._make_request('artist.getinfo', params)
+            artist_info = self._parse_artist_info_response(response)
+            
+            if artist_info:
+                artist_pages.append({
+                    'variant': variant,
+                    'info': artist_info,
+                    'listeners': artist_info.get('listeners', 0),
+                    'mbid': artist_info.get('mbid', '')
+                })
+                logger.debug(f"✅ Found page for '{variant}': {artist_info.get('listeners', 0):,} listeners")
+        
+        if not artist_pages:
+            logger.warning(f"🔍 No artist pages found for '{artist_name}'")
+            return None
+        
+        if len(artist_pages) == 1:
+            # Only one page found, use it
+            page = artist_pages[0]
+            page['info']['_matched_variant'] = page['variant']
+            page['info']['_original_query'] = artist_name
+            page['info']['_resolution_method'] = 'single_page'
+            return page['info']
+        
+        # Multiple pages found - apply multi-stage verification
+        logger.info(f"🔍 Multiple pages found for '{artist_name}': {[p['variant'] for p in artist_pages]}")
+        
+        # Stage 1: MBID Check (Gemini's suggestion)
+        mbid_groups = self._group_by_mbid(artist_pages)
+        if len(mbid_groups) == 1 and list(mbid_groups.keys())[0] != 'no_mbid':  # All have same valid MBID
+            mbid = list(mbid_groups.keys())[0]
+            pages_with_mbid = mbid_groups[mbid]
+            best_page = max(pages_with_mbid, key=lambda x: x['listeners'])
+            logger.info(f"🎯 MBID verification: All pages share MBID {mbid}, choosing highest listener count")
+            
+            best_page['info']['_resolution_method'] = 'mbid_verified'
+            best_page['info']['_matched_variant'] = best_page['variant']
+            best_page['info']['_original_query'] = artist_name
+            return best_page['info']
+        
+        # Stage 2: Song-based verification
+        verified_groups = self._group_by_song_similarity(artist_pages)
+        if verified_groups:
+            # Find the group with the highest total listener count
+            best_group = max(verified_groups, key=lambda group: sum(p['listeners'] for p in group))
+            best_page = max(best_group, key=lambda x: x['listeners'])
+            
+            if len(best_group) > 1:
+                other_variants = [p['variant'] for p in best_group if p['variant'] != best_page['variant']]
+                logger.info(f"🎯 Song verification: '{best_page['variant']}' ({best_page['listeners']:,} listeners) verified same as {other_variants}")
+            
+            best_page['info']['_resolution_method'] = 'song_verified'
+            best_page['info']['_matched_variant'] = best_page['variant']
+            best_page['info']['_original_query'] = artist_name
+            return best_page['info']
+        
+        # Stage 3: Fallback to highest listener count
+        best_page = max(artist_pages, key=lambda x: x['listeners'])
+        logger.warning(f"⚠️ No verification possible, choosing highest listener count: '{best_page['variant']}' ({best_page['listeners']:,} listeners)")
+        
+        best_page['info']['_resolution_method'] = 'listener_count_fallback'
+        best_page['info']['_matched_variant'] = best_page['variant']
+        best_page['info']['_original_query'] = artist_name
+        return best_page['info']
+    
+    def _group_by_mbid(self, artist_pages: List[Dict]) -> Dict[str, List[Dict]]:
+        """Group artist pages by their MusicBrainz ID."""
+        mbid_groups = {}
+        for page in artist_pages:
+            mbid = page['mbid'] or 'no_mbid'
+            if mbid not in mbid_groups:
+                mbid_groups[mbid] = []
+            mbid_groups[mbid].append(page)
+        return mbid_groups
+    
+    def _group_by_song_similarity(self, artist_pages: List[Dict]) -> List[List[Dict]]:
+        """
+        Group artist pages by song similarity using Jaccard similarity.
+        Returns groups of pages that appear to be the same artist.
+        """
+        if len(artist_pages) < 2:
+            return [artist_pages]
+        
+        # Get top tracks for each page
+        page_tracks = []
+        for page in artist_pages:
+            tracks = self.get_artist_top_tracks(page['variant'], limit=12)
+            page_tracks.append({
+                'page': page,
+                'tracks': set(tracks),
+                'track_count': len(tracks)
+            })
+        
+        # Group pages by similarity
+        groups = []
+        used_indices = set()
+        
+        for i, page_data in enumerate(page_tracks):
+            if i in used_indices:
+                continue
+            
+            current_group = [page_data['page']]
+            used_indices.add(i)
+            
+            for j, other_page_data in enumerate(page_tracks[i+1:], i+1):
+                if j in used_indices:
+                    continue
+                
+                # Calculate Jaccard similarity (Gemini's suggestion)
+                common_tracks = page_data['tracks'] & other_page_data['tracks']
+                total_tracks = page_data['tracks'] | other_page_data['tracks']
+                
+                if total_tracks:
+                    jaccard_similarity = len(common_tracks) / len(total_tracks)
+                    
+                    # Verify as same artist if:
+                    # - High Jaccard similarity (>0.4) OR
+                    # - Many common tracks (>4) with decent similarity (>0.25)
+                    is_same_artist = (jaccard_similarity > 0.4 or 
+                                    (len(common_tracks) > 4 and jaccard_similarity > 0.25))
+                    
+                    logger.debug(f"Song similarity: '{page_data['page']['variant']}' vs '{other_page_data['page']['variant']}': "
+                               f"{len(common_tracks)} common, {jaccard_similarity:.3f} Jaccard -> {'Same' if is_same_artist else 'Different'}")
+                    
+                    if is_same_artist:
+                        current_group.append(other_page_data['page'])
+                        used_indices.add(j)
+            
+            if current_group:
+                groups.append(current_group)
+        
+        # Only return groups with multiple pages (verified duplicates)
+        verified_groups = [group for group in groups if len(group) > 1]
+        
+        if verified_groups:
+            logger.info(f"🎧 Song verification found {len(verified_groups)} groups of duplicate artist pages")
+        
+        return verified_groups
 
 
 # Convenience functions for direct usage

@@ -312,12 +312,18 @@ def split_artist_collaborations(artist_string):
     """
     Split artist collaborations into individual artists.
     Handles various collaboration formats: feat., ft., &, with, x, etc.
+    Enhanced to handle parenthetical collaborations like "(with blackbear)".
     
     Args:
         artist_string: String containing one or more artist names
         
     Returns:
         List of individual artist names
+    
+    Examples:
+        "BoyWithUke (with blackbear)" -> ["BoyWithUke", "blackbear"]
+        "Taylor Swift feat. Ed Sheeran" -> ["Taylor Swift", "Ed Sheeran"]
+        "Artist A, Artist B & Artist C" -> ["Artist A", "Artist B", "Artist C"]
     """
     if not artist_string or pd.isna(artist_string):
         return []
@@ -329,9 +335,16 @@ def split_artist_collaborations(artist_string):
     # We'll handle case-insensitive matching for some separators
     import re
     
-    # First, handle case-insensitive feat/ft/featuring
+    # First, handle parenthetical collaborations like "(with blackbear)" or "(feat. Artist)"
+    paren_collab_pattern = re.compile(r'\s*\(\s*(?:with|feat\.?|featuring)\s+([^)]+)\)', re.IGNORECASE)
+    paren_matches = paren_collab_pattern.findall(artist_str)
+    
+    # Remove parenthetical collaborations from main string
+    main_artist_str = paren_collab_pattern.sub('', artist_str).strip()
+    
+    # Handle case-insensitive feat/ft/featuring in the main string
     feat_pattern = re.compile(r'\s+(feat\.?|ft\.?|featuring)\s+', re.IGNORECASE)
-    artist_str = feat_pattern.sub(' feat. ', artist_str)
+    main_artist_str = feat_pattern.sub(' feat. ', main_artist_str)
     
     # Now use standardized separators
     separators = [
@@ -339,8 +352,8 @@ def split_artist_collaborations(artist_string):
         ' & ', ', ', ' and ', ' And ', ' AND '
     ]
     
-    # Start with the full string
-    artists = [artist_str]
+    # Start with the main string (parenthetical collaborations removed)
+    artists = [main_artist_str] if main_artist_str else []
     
     # Iteratively split by each separator
     for separator in separators:
@@ -354,28 +367,37 @@ def split_artist_collaborations(artist_string):
                 new_artists.append(artist)
         artists = new_artists
     
-    # Clean up any parenthetical information (e.g., "(Korean)" or "(feat. someone)")
+    # Add artists from parenthetical collaborations
+    for paren_artist in paren_matches:
+        # Split parenthetical artists if they contain multiple names
+        paren_split = [part.strip() for part in paren_artist.split(',') if part.strip()]
+        artists.extend(paren_split)
+    
+    # Clean up any remaining parenthetical information (e.g., "(Korean)" or other metadata)
     cleaned_artists = []
     for artist in artists:
+        if not artist or not artist.strip():
+            continue
         # Remove parenthetical info that's not part of the artist name
         if '(' in artist and ')' in artist:
             # Keep common valid parentheticals like (G)I-DLE
             if artist.upper() not in ['(G)I-DLE', '(G)I-DLE ((여자)아이들)']:
                 # Remove content in parentheses if it looks like metadata
-                import re
-                cleaned = re.sub(r'\s*\([^)]*(?:feat|ft|with|korean|k-pop|remix)[^)]*\)', '', artist, flags=re.IGNORECASE)
+                cleaned = re.sub(r'\s*\([^)]*(?:korean|k-pop|remix|official)[^)]*\)', '', artist, flags=re.IGNORECASE)
                 if cleaned.strip():
                     artist = cleaned.strip()
         cleaned_artists.append(artist)
     
-    # Remove duplicates while preserving order
+    # Remove duplicates while preserving order (use casefold for Unicode)
     seen = set()
     unique_artists = []
     for artist in cleaned_artists:
-        artist_lower = artist.lower()
-        if artist_lower not in seen and artist:
-            seen.add(artist_lower)
-            unique_artists.append(artist)
+        if not artist or not artist.strip():
+            continue
+        artist_normalized = artist.strip().casefold()
+        if artist_normalized not in seen:
+            seen.add(artist_normalized)
+            unique_artists.append(artist.strip())
     
     return unique_artists
 

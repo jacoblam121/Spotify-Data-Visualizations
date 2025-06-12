@@ -81,6 +81,18 @@ python switch_mode.py tracks         # Switch to tracks mode
 python switch_mode.py               # Interactive mode selection
 ```
 
+### Network Analysis
+```bash
+# Generate artist similarity networks from listening data
+python network_utils.py              # Direct network analysis
+python tests/test_network_analysis.py # Test network functionality
+python tests/test_full_network_robust.py # Comprehensive network tests
+
+# Test specific network features
+python tests/test_similarity_visualization.py  # Test similarity visualization
+python tests/manual_test_network.py          # Manual network testing
+```
+
 ## Architecture
 
 ### Core Components
@@ -125,6 +137,19 @@ python switch_mode.py               # Interactive mode selection
 - Frame aggregation by time periods (daily, weekly, monthly)
 - Reduces computational load for long time series
 
+**network_utils.py**: Artist similarity network analysis:
+- Creates artist relationship networks based on listening patterns and Last.fm similarity data
+- Calculates co-listening scores using temporal proximity of plays
+- Integrates Last.fm API for artist similarity relationships
+- Generates JSON network data for visualization (nodes and edges)
+- Supports filtering by play count thresholds and top N artists
+
+**lastfm_utils.py**: Last.fm API integration:
+- Fetches artist similarity data from Last.fm API
+- Provides caching mechanism for API responses
+- Rate limiting to respect API quotas
+- Supports artist metadata and similar artist lookups
+
 ### Data Flow
 
 1. Configuration loaded from `configurations.txt`
@@ -146,6 +171,7 @@ All behavior is controlled through `configurations.txt`:
 - **RollingStats**: 7/30-day window calculations
 - **NightingaleChart**: Enable/disable and configure the polar chart visualization
 - **RollingStatsDisplay**: Layout and styling for rolling statistics panels
+- **LastfmAPI**: API credentials and configuration for artist similarity data (optional)
 
 ### Performance Features
 
@@ -176,6 +202,24 @@ The application supports two distinct visualization modes:
 
 All visualization elements are fully configurable through `configurations.txt` and support smooth animations, parallel frame generation, and multiple output formats.
 
+### Artist Network Analysis
+
+The application includes sophisticated network analysis capabilities for understanding artist relationships:
+
+- **Co-listening Analysis**: Identifies artists frequently played together by analyzing temporal proximity of plays (configurable time windows)
+- **Last.fm Integration**: Fetches official artist similarity scores from Last.fm API to complement listening patterns
+- **Network Generation**: Creates weighted graphs combining both co-listening patterns and external similarity data
+- **Export Formats**: Generates JSON network data files suitable for visualization tools (D3.js, Gephi, etc.)
+- **Configurable Filtering**: Supports minimum play count thresholds, top N artist limits, and relationship strength filters
+
+#### Network Data Structure
+
+Generated network files contain:
+- **Nodes**: Artists with play counts, rankings, and metadata
+- **Edges**: Relationships with weights combining Last.fm similarity (70%) and co-listening scores (30%)
+- **Metadata**: Generation timestamps, parameters used, and network statistics
+- **Relationship Types**: Classified as 'lastfm_only', 'colistening_only', or 'both'
+
 ## Data Sources
 
 ### Spotify Data Format
@@ -189,6 +233,13 @@ Alternative data source using CSV export from Last.fm:
 - File should be named `lastfm_data.csv` (UTF-8 encoded)
 - Contains listening history with timestamps and track metadata
 - Available from https://lastfm.ghan.nl/export/
+
+### Last.fm API Configuration
+For network analysis, Last.fm API credentials can be configured:
+- API key and secret required for similarity data fetching
+- Configurable cache directory (`lastfm_cache/`) with 30-day expiry
+- Rate limiting (200ms between requests) to respect API quotas
+- Automatic retry logic and error handling for API failures
 
 ## Common Issues & Solutions
 
@@ -207,3 +258,9 @@ Alternative data source using CSV export from Last.fm:
 - Check cache directories have write permissions
 - Album art cache stored in `album_art_cache/` with multiple JSON metadata files
 - Artist photos cache stored in `artist_art_cache/` directory for artists mode
+
+### Network Analysis Issues
+- **Last.fm API Limits**: API has rate limits (200 requests per hour), network generation for large artist lists may take time
+- **Cache Management**: Network cache files can become large; periodically clean `lastfm_cache/` directory
+- **Data Quality**: Co-listening scores depend on temporal proximity; adjust `time_window_hours` parameter for different listening patterns
+- **Missing Relationships**: Not all artists have Last.fm similarity data; network will be sparser for less popular artists
