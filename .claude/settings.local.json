@@ -6,7 +6,15 @@
       "mcp__gemini__thinkdeep",
       "Bash(grep:*)",
       "Bash(python:*)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(export PYTHONIOENCODING=utf-8)",
+      "Bash(timeout:*)",
+      "Bash(ffmpeg:*)",
+      "Bash(sudo apt:*)",
+      "Bash(sudo apt install:*)",
+      "Bash(snap list)",
+      "Bash(find:*)",
+      "Bash(/mnt/c/ffmpeg-2025-06-11-git-f019dd69f0-full_build/ffmpeg-2025-06-11-git-f019dd69f0-full_build/bin/ffmpeg.exe -version)"
     ],
     "deny": []
   }

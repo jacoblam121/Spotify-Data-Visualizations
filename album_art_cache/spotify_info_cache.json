@@ -696,5 +696,45 @@
     ],
     "album_type": "single",
     "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2n1PhZHxdiaCMs5xLtsH4j": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732244e9976343a6a34c5ab1b9",
+    "canonical_album_name": "N\u00e4r det b\u00f6rjar",
+    "spotify_album_id": "0IevxAdYzARtExqLuSGFYD",
+    "spotify_artist_ids": [
+      "6Uo3nC1ZbCL0bSeIlqgTN0"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1WvOzvyS18s649de8JPSai": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e68476836f5efa73ac01ac25",
+    "canonical_album_name": "Fake Spotlight",
+    "spotify_album_id": "2svrxNYt8qCNZmow1H3dnq",
+    "spotify_artist_ids": [
+      "6I4zig1oXcokmAxdryfzoI"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_13yhhn6Cg9WrjusOTJfH3C": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734658d3ce54b0040227be05dc",
+    "canonical_album_name": "Highway",
+    "spotify_album_id": "5hT8DB8ID8oUu8CqCtSiPW",
+    "spotify_artist_ids": [
+      "1sgoKEz17EnuD6eb3nRk05"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2owgvchbF6IJrxu4rLPBIl": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b9791a0a6efa800f285a7bab",
+    "canonical_album_name": "Walking the Wire (Piano Acoustic Instrumental)",
+    "spotify_album_id": "7vQuyVhO5ua2dJ1K91JDQc",
+    "spotify_artist_ids": [
+      "6NbfU62rDuIP4dSlfJFijF"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
   }
 }

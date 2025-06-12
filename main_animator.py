@@ -20,6 +20,7 @@ from PIL import Image
 import os
 import sys
 import time # Added for timing
+import platform # Added for OS detection
 import concurrent.futures # Added for parallel processing
 import subprocess # Added for calling ffmpeg
 import shutil # Added for directory operations
@@ -122,6 +123,29 @@ NIGHTINGALE_SHOW_BOUNDARY_CIRCLE = True
 # --- Global for tracking worker process startup logging ---
 worker_pids_reported = set()
 
+def find_ffmpeg_executable():
+    """Find the correct ffmpeg executable for the current system"""
+    # Try standard system ffmpeg first
+    if shutil.which('ffmpeg'):
+        return 'ffmpeg'
+    
+    # For WSL systems, check for Windows ffmpeg
+    if platform.system() == 'Linux':
+        # Check for Windows FFmpeg in common WSL mount locations
+        windows_ffmpeg_paths = [
+            '/mnt/c/ffmpeg-2025-06-11-git-f019dd69f0-full_build/ffmpeg-2025-06-11-git-f019dd69f0-full_build/bin/ffmpeg.exe',
+            '/mnt/c/ffmpeg/bin/ffmpeg.exe',
+            '/mnt/c/Program Files/ffmpeg/bin/ffmpeg.exe'
+        ]
+        
+        for path in windows_ffmpeg_paths:
+            if os.path.exists(path):
+                print(f"Found Windows FFmpeg at: {path}")
+                return path
+    
+    # If nothing found, return 'ffmpeg' and let the error happen with better message
+    return 'ffmpeg'
+
 def setup_fonts():
     """Setup fonts based on OS and configuration"""
     global config, PREFERRED_FONTS
@@ -145,18 +169,52 @@ def setup_fonts():
             print(f"Looking for fonts in: {fonts_dir}")
             
             # Register each font file with matplotlib
+            registered_fonts = []
             for font_file in os.listdir(fonts_dir):
                 if font_file.endswith(('.ttf', '.otf')):
                     font_path = os.path.join(fonts_dir, font_file)
                     try:
                         fm.fontManager.addfont(font_path)
-                        print(f"Registered font: {font_file}")
+                        
+                        # Get the actual font family name
+                        font_props = fm.FontProperties(fname=font_path)
+                        family_name = font_props.get_name()
+                        registered_fonts.append(family_name)
+                        print(f"Registered font: {font_file} -> '{family_name}'")
                     except Exception as e:
                         print(f"Warning: Could not register font {font_file}: {e}")
             
-            # Clear font cache to ensure new fonts are recognized
-            fm._load_fontmanager(try_read_cache=False)
-            print("Font cache cleared and reloaded")
+            # Force matplotlib to rebuild its font cache completely
+            try:
+                # Clear the font cache directory if it exists
+                import matplotlib as mpl
+                cache_dir = mpl.get_cachedir()
+                font_cache_files = ['fontlist-v330.json', 'fontlist-v300.json', 'fontList.cache']
+                for cache_file in font_cache_files:
+                    cache_path = os.path.join(cache_dir, cache_file)
+                    if os.path.exists(cache_path):
+                        os.remove(cache_path)
+                        print(f"Removed font cache file: {cache_file}")
+                
+                # Force reload of font manager
+                fm._load_fontmanager(try_read_cache=False)
+                print("Font cache completely rebuilt")
+                
+                # Verify fonts are available
+                print("Verifying registered fonts:")
+                for family_name in registered_fonts:
+                    try:
+                        font_prop = fm.FontProperties(family=family_name)
+                        found_path = fm.findfont(font_prop)
+                        if fonts_dir in found_path:
+                            print(f"  ✓ {family_name}: Available")
+                        else:
+                            print(f"  ⚠ {family_name}: Found but using system font at {found_path}")
+                    except Exception as e:
+                        print(f"  ✗ {family_name}: Not available - {e}")
+                        
+            except Exception as e:
+                print(f"Warning: Error rebuilding font cache: {e}")
         else:
             print(f"Warning: Fonts directory not found: {fonts_dir}")
     
@@ -1573,9 +1631,13 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
     # --- Define path for ffmpeg progress file ---
     progress_file_path = os.path.join(temp_frame_dir, "ffmpeg_progress.txt")
 
+    # Detect the correct ffmpeg executable for this system
+    ffmpeg_executable = find_ffmpeg_executable()
+    print(f"Using FFmpeg executable: {ffmpeg_executable}")
+
     # ffmpeg command construction
     base_ffmpeg_args = [
-        'ffmpeg',
+        ffmpeg_executable,
         '-framerate', str(target_fps_for_video),
         '-i', os.path.join(temp_frame_dir, f"frame_%0{len(str(num_total_output_frames))}d.png"), # Input pattern
     ]
@@ -1679,6 +1741,14 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
                 raise subprocess.CalledProcessError(process_nvenc.returncode, ffmpeg_cmd_nvenc, output=stdout, stderr=stderr)
             print("Video successfully compiled using NVENC.")
             
+        except PermissionError as e_perm:
+            print(f"\nERROR: Permission denied when trying to execute FFmpeg: {e_perm}")
+            print(f"FFmpeg executable: {ffmpeg_executable}")
+            print("Possible solutions:")
+            print("1. Install FFmpeg: sudo apt install ffmpeg")
+            print("2. Or install via snap: sudo snap install ffmpeg")
+            print("3. Make sure FFmpeg is in your PATH")
+            raise e_perm
         except subprocess.CalledProcessError as e_nvenc:
             print(f"\nWARNING: ffmpeg (NVENC) failed. Return code: {e_nvenc.returncode}")
             if e_nvenc.stdout: print(f"NVENC STDOUT: {e_nvenc.stdout.decode(errors='replace')}")
@@ -1787,6 +1857,7 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
 
 def main():
     load_configuration() # Load config first, sets up MAX_FRAMES_FOR_TEST_RENDER
+    setup_fonts() # Setup fonts after config is loaded but before any matplotlib operations
 
     # Check for PYTHONIOENCODING_WARNING from config
     if config.get_bool('General', 'PYTHONIOENCODING_WARNING', True):
