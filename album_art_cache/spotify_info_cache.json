@@ -1,396 +1,10 @@
 {
-  "spotify_tracklookup_36VoVeLLFDFp6id0v8T2Fy": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273f91db309f9cfe624a0033a95",
-    "canonical_album_name": "Clumsy",
-    "spotify_album_id": "7j7ZXUzBluCKBXemgRHo6g",
+  "spotify_tracklookup_0achc2JEdzkJQXRl0LbUox": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2730bc117f77e7e3bc316498fde",
+    "canonical_album_name": "Really Like You",
+    "spotify_album_id": "0igq7n1dpRcshD0CX0Gtxu",
     "spotify_artist_ids": [
-      "4n2W84plMrq8WttT18Npwi",
-      "565RlgvCEeBHqybr221qBs"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_7n2FZQsaLb7ZRfRPfEeIvr": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273da343b21617aac0c57e332bb",
-    "canonical_album_name": "ELEVEN",
-    "spotify_album_id": "1XMYvsHRt52sMi6wittWqI",
-    "spotify_artist_ids": [
-      "6RHTUrRF63xao58xh9FXYJ"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_2hloaUoRonYssMuqLCBLTX": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b27356ac7b86e090f307e218e9c8",
-    "canonical_album_name": "thank u, next",
-    "spotify_album_id": "2fYhqwDWXjbpjaIJPEfKFw",
-    "spotify_artist_ids": [
-      "66CXWjxzNUsdJxJ2JdwvnR"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_1c6kkrWnpy68eYDfBdxNtF": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2735048ed32fafe7b9a50d0e410",
-    "canonical_album_name": "The Winning",
-    "spotify_album_id": "08CvAj58nVMpq1Nw7T6maj",
-    "spotify_artist_ids": [
-      "3HqSLMAZ3g3d5poNaI7GOU"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_4Zhuv5znO4SFdhPBVKoOs1": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2731d19f0f1ff26230ef6ceca7a",
-    "canonical_album_name": "AliVe",
-    "spotify_album_id": "2XMOWnYPyNxhIhj4bQeomY",
-    "spotify_artist_ids": [
-      "4Lmo7h2Ik12QI3Ik0BvGbB"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_0NwGC0v03ysCYINtg6ns58": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2730b04da4f224b51ff86e0a481",
-    "canonical_album_name": "Speak Now (Taylor's Version)",
-    "spotify_album_id": "5AEDGbliTTfjOB8TSm1sxt",
-    "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_0fBrOyJj7gEAyXevVq69xv": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2732bfa74be7288986e88513fa9",
-    "canonical_album_name": "The Other Side",
-    "spotify_album_id": "0jWzcec3ugHZoQpogj6PrD",
-    "spotify_artist_ids": [
-      "5pjCYG6hPLBO3y4swxu3dh"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_3hUxzQpSfdDqwM3ZTFQY0K": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b27395f754318336a07e85ec59bc",
-    "canonical_album_name": "folklore",
-    "spotify_album_id": "2fenSS68JI1h4Fo296JfGr",
-    "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_003vvx7Niy0yvhvHt4a68B": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273ccdddd46119a4ff53eaf1f5d",
-    "canonical_album_name": "Hot Fuss",
-    "spotify_album_id": "4piJq7R3gjUOxnYs6lDCTg",
-    "spotify_artist_ids": [
-      "0C0XlULifJtAgn6ZNCW2eu"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_4lIxdJw6W3Fg4vUIYCB0S5": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2739abdf14e6058bd3903686148",
-    "canonical_album_name": "1989",
-    "spotify_album_id": "2QJmrSgbdM35R67eoGQo4j",
-    "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_12M5uqx0ZuwkpLp5rJim1a": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647",
-    "canonical_album_name": "Lover",
-    "spotify_album_id": "1NAmidJlEaVgA3MpcPFYGq",
-    "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_00vy9aiFjxMfnKniQAYzrC": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e24e844f2650c498fa703c91",
-    "canonical_album_name": "Op.22 Y-Waltz : in Major",
-    "spotify_album_id": "1EAzLUzatSBIs8tA047f5f",
-    "spotify_artist_ids": [
-      "3LFFf4EpKn2krneZ9vozyz"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_1JdKrFyoU05abww0Zv0ayQ": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
-    "canonical_album_name": "Riot!",
-    "spotify_album_id": "71rziY9eLo1tA2dBMxrwhc",
-    "spotify_artist_ids": [
-      "74XFHRwlV6OrjEM0A2NCMF"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_5zhuhNkILzHm585h104JlI": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e1603681f6a329a8bdab32ad",
-    "canonical_album_name": "\uc545\ubabd\u00b7Fall asleep in the mirror",
-    "spotify_album_id": "2YqAwFCBP4alKyQShJeFcd",
-    "spotify_artist_ids": [
-      "5V1qsQHdXNm4ZEZHWvFnqQ"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_7Mts0OfPorF4iwOomvfqn1": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2738ecc33f195df6aa257c39eaa",
-    "canonical_album_name": "THE TORTURED POETS DEPARTMENT: THE ANTHOLOGY",
-    "spotify_album_id": "5H7ixXZfsNMGbIE5OBSpcb",
-    "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_0djkJ3iAARXRCbfbwwVc3o": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273b79a12d47af18d1d83a5caf9",
-    "canonical_album_name": "Love wins all",
-    "spotify_album_id": "2bwwRhKbLeD3LvNDXauV2T",
-    "spotify_artist_ids": [
-      "3HqSLMAZ3g3d5poNaI7GOU"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_0w5Bdu51Ka25Pf3hojsKHh": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273dbd83e179619408e5d05cc99",
-    "canonical_album_name": "After Laughter",
-    "spotify_album_id": "1c9Sx7XdXuMptGyfCB6hHs",
-    "spotify_artist_ids": [
-      "74XFHRwlV6OrjEM0A2NCMF"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_3WtIXrla0ovC9MOIY78Vr8": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2731016d8fb6928dfdc580ad102",
-    "canonical_album_name": "\u53c8\u4e09\u90ce",
-    "spotify_album_id": "4AwuTLeiuyjx93I05ZBS82",
-    "spotify_artist_ids": [
-      "4UK2Lzi6fBfUi9rpDt6cik"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_210JJAa9nJOgNa0YNrsT5g": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e4179b3fb74beaf0cdfa7a13",
-    "canonical_album_name": "GODS",
-    "spotify_album_id": "0rAaP1OBxVCn2cIUZNjGRs",
-    "spotify_artist_ids": [
-      "47mIJdHORyRerp4os813jD",
-      "6HvZYsbFfjnjFrWF950C9d"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_1a9YW7fATU351ok4zWjU7a": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e01d7d558032457b0e4883f6",
-    "canonical_album_name": "Brand New Eyes",
-    "spotify_album_id": "27UqZoE1kV6sIV6uQcI28A",
-    "spotify_artist_ids": [
-      "74XFHRwlV6OrjEM0A2NCMF"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_4R2kfaDFhslZEMJqAFNpdd": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b27395f754318336a07e85ec59bc",
-    "canonical_album_name": "folklore",
-    "spotify_album_id": "2fenSS68JI1h4Fo296JfGr",
-    "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_35dhwUoJNlxrPyEIJkfDnx": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273d112b7516a0a23058a819764",
-    "canonical_album_name": "I GOT YOU (Voyage ver.)",
-    "spotify_album_id": "5cnrcbdcdt6BJgAig9Tn3P",
-    "spotify_artist_ids": [
-      "7n2Ycct7Beij7Dj7meI4X0"
-    ],
-    "album_type": "album",
-    "source": "spotify (secondary_search_main_album)"
-  },
-  "spotify_tracklookup_0pYacDCZuRhcrwGUA5nTBe": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273c63be04ae902b1da7a54d247",
-    "canonical_album_name": "eight",
-    "spotify_album_id": "5vJNAlQeTf9lsulO1YlmSt",
-    "spotify_artist_ids": [
-      "3HqSLMAZ3g3d5poNaI7GOU",
-      "0ebNdVaOfp6N0oZ1guIxM8"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_1Iq8oo9XkmmvCQiGOfORiz": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac",
-    "canonical_album_name": "1989 (Taylor's Version)",
-    "spotify_album_id": "64LU4c1nfjz1t4VnGhagcg",
-    "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_1j8z4TTjJ1YOdoFEDwJTQa": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273532033d0d90736f661c13d35",
-    "canonical_album_name": "Paramore",
-    "spotify_album_id": "4sgYpkIASM1jVlNC8Wp9oF",
-    "spotify_artist_ids": [
-      "74XFHRwlV6OrjEM0A2NCMF"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_2dgFqt3w9xIQRjhPtwNk3D": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647",
-    "canonical_album_name": "Lover",
-    "spotify_album_id": "1NAmidJlEaVgA3MpcPFYGq",
-    "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_5Q1tv4GTxP3IJeGMOKdrFO": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2732bca95a658fdf653a35a3710",
-    "canonical_album_name": "ROCK-STAR",
-    "spotify_album_id": "0aJnGEZWIc1VCYlZOXv05a",
-    "spotify_artist_ids": [
-      "2dIgFjalVxs4ThymZ67YCE"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_04Q6BGr8XdDJ7oDZ4iCI9G": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273f9cfbf4187cef596c5f8df9c",
-    "canonical_album_name": "Tera I / O",
-    "spotify_album_id": "5EN6xmUJMeavkDzC1Pz1VJ",
-    "spotify_artist_ids": [
-      "4bwIf0yXJf0F9AmOl2J78M"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_6tLEYkMGG4mEIwmOMf86rk": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273a92db1af5fbf56e951024926",
-    "canonical_album_name": "Consider This",
-    "spotify_album_id": "5gS3MVe3fpX0bZpkiTWg2T",
-    "spotify_artist_ids": [
-      "5pjCYG6hPLBO3y4swxu3dh"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_2gYj9lubBorOPIVWsTXugG": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b27387f53da5fb4ab1171766b2d5",
-    "canonical_album_name": "After LIKE",
-    "spotify_album_id": "0nzRF7khA2UDSZa9T0B6Da",
-    "spotify_artist_ids": [
-      "6RHTUrRF63xao58xh9FXYJ"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_5z0QlOV93W6Yo7DG2SYOJP": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273186660bbf3b0dd9a5195e182",
-    "canonical_album_name": "fever",
-    "spotify_album_id": "4MwOuqjdK7OP1xaRPo83xT",
-    "spotify_artist_ids": [
-      "6yhD1KjhLxIETFF7vIRf8B"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_0NoeYUnwpb9R26mpylHcR9": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2732ff7c76b0790cd3ad63cfc0c",
-    "canonical_album_name": "KISS OF LIFE",
-    "spotify_album_id": "5k34rAvlw3WV7Kh6dAZnxG",
-    "spotify_artist_ids": [
-      "4TEK9tIkcoxib4GxT3O4ky"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_2VnVfGZuVCQKm9xBTuWM7N": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273281dfd7af2ee99a124404623",
-    "canonical_album_name": "Pocahontas",
-    "spotify_album_id": "7L6kEZVkWh7OEI71b1JHZd",
-    "spotify_artist_ids": [
-      "5DH8cLYXVTknLlSRzzkRc4",
-      "0N0dbr5s2y20PAo2cDAeVP",
-      "3OIPwMAZipDCLQwHmxS5EG"
-    ],
-    "album_type": "compilation",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_1TiZWEsxN85yLJBq56K8mG": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e649cde12610c45e05a10d44",
-    "canonical_album_name": "Like I Do",
-    "spotify_album_id": "4AT7V0zZ0B3xWDef7sPCyJ",
-    "spotify_artist_ids": [
-      "0VpMOC5IZU06u29fWjv3qJ"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_1Bv3h7Vc4AaYA2BcSM3rVd": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e01d7d558032457b0e4883f6",
-    "canonical_album_name": "Brand New Eyes",
-    "spotify_album_id": "27UqZoE1kV6sIV6uQcI28A",
-    "spotify_artist_ids": [
-      "74XFHRwlV6OrjEM0A2NCMF"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_22I3h5AOENlH4CqXJsEbFR": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273adadb86bf3555eb27a383c76",
-    "canonical_album_name": "Collide (feat. Tyga)",
-    "spotify_album_id": "2LbrGt2oc08xV8IDJvLzYi",
-    "spotify_artist_ids": [
-      "0jUQSUOcM7lxVn5eVGTkzQ",
-      "5LHRHt1k9lMyONurDHEdrp"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_663Karu2rvKLdnY0eo1n3M": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2737b8aabae10ab5bbe7c7f11c5",
-    "canonical_album_name": "The Open Door",
-    "spotify_album_id": "3lFQ9ihSNR5YD0yi0yTzdC",
-    "spotify_artist_ids": [
-      "5nGIFgo0shDenQYSE0Sn7c"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_3wJHCry960drNlAUGrJLmz": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b27328b535c92629e3c8d20ec242",
-    "canonical_album_name": "\u8ca0\u3051\u72ac\u306b\u30a2\u30f3\u30b3\u30fc\u30eb\u306f\u3044\u3089\u306a\u3044",
-    "spotify_album_id": "4jEsFbcpgjHiu0rsTdlaOy",
-    "spotify_artist_ids": [
-      "4UK2Lzi6fBfUi9rpDt6cik"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_0Q5VnK2DYzRyfqQRJuUtvi": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2739016f58cc49e6473e1207093",
-    "canonical_album_name": "LOVE DIVE",
-    "spotify_album_id": "1AFVTHHm7kKoQ6Rgb25x3p",
-    "spotify_artist_ids": [
-      "6RHTUrRF63xao58xh9FXYJ"
+      "7nScMbyBG94XsSpe7yrImS"
     ],
     "album_type": "single",
     "source": "spotify (uri_lookup)"
@@ -407,222 +21,12 @@
     "album_type": "album",
     "source": "spotify (uri_lookup)"
   },
-  "spotify_tracklookup_5eY7692tmgHB9dbmq6wa2M": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e763f5fcb87919a7ae96f8b",
-    "canonical_album_name": "\u6674\u308b",
-    "spotify_album_id": "4O53dhmIctih3p2suAAgga",
-    "spotify_artist_ids": [
-      "4UK2Lzi6fBfUi9rpDt6cik"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_5Wll1i0Y8GGjyePcP83L3x": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273de5a12fc93022c4f7b8030b3",
-    "canonical_album_name": "IN:VITE U",
-    "spotify_album_id": "5vxZM8rFJiNvjtAThYnwek",
-    "spotify_artist_ids": [
-      "1wKpMkucynaTfG8lyPprYV"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_4TbweJbbB80M74w8jdiqLp": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273d066a4eafb4e6edfbe918ba2",
-    "canonical_album_name": "realize",
-    "spotify_album_id": "475dwmD4lTQ89RHnVA8yE1",
-    "spotify_artist_ids": [
-      "4Lmo7h2Ik12QI3Ik0BvGbB"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_7mczLeiFeYKRb7vtiPjuMb": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273df51a3d66223e5b01813e0c4",
-    "canonical_album_name": "POST HUMAN: NeX GEn",
-    "spotify_album_id": "1k7OXnGQPV4zF3seDwRroD",
-    "spotify_artist_ids": [
-      "1Ffb6ejR6Fe5IamqA5oRUF"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_3jsYQw78lrxJA2ysnmOIf9": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2732cfb66b63fe85ccfff4109b1",
-    "canonical_album_name": "Red Diary Page.1",
-    "spotify_album_id": "0d3mf5fBaIBbozCgeEI9AE",
-    "spotify_artist_ids": [
-      "4k5fFEYgkWYrYvtOK3zVBl"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_0achc2JEdzkJQXRl0LbUox": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2730bc117f77e7e3bc316498fde",
-    "canonical_album_name": "Really Like You",
-    "spotify_album_id": "0igq7n1dpRcshD0CX0Gtxu",
-    "spotify_artist_ids": [
-      "7nScMbyBG94XsSpe7yrImS"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_5xrtzzzikpG3BLbo4q1Yul": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2734ed058b71650a6ca2c04adff",
-    "canonical_album_name": "IU 5th Album 'LILAC'",
-    "spotify_album_id": "01dPJcwyht77brL4JQiR8R",
-    "spotify_artist_ids": [
-      "3HqSLMAZ3g3d5poNaI7GOU"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_1yjY7rpaAQvKwpdUliHx0d": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273532033d0d90736f661c13d35",
-    "canonical_album_name": "Paramore",
-    "spotify_album_id": "4sgYpkIASM1jVlNC8Wp9oF",
+  "spotify_tracklookup_1Bv3h7Vc4AaYA2BcSM3rVd": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e01d7d558032457b0e4883f6",
+    "canonical_album_name": "Brand New Eyes",
+    "spotify_album_id": "27UqZoE1kV6sIV6uQcI28A",
     "spotify_artist_ids": [
       "74XFHRwlV6OrjEM0A2NCMF"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_56v8WEnGzLByGsDAXDiv4d": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2730744690248ef3ba7b776ea7b",
-    "canonical_album_name": "NewJeans 2nd EP 'Get Up'",
-    "spotify_album_id": "4N1fROq2oeyLGAlQ1C1j18",
-    "spotify_artist_ids": [
-      "6HvZYsbFfjnjFrWF950C9d"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_4ieJnnMvbQBKHuYwIY76UR": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273d1d8c6f08fd3cba8ca6fe863",
-    "canonical_album_name": "Kisses and Kills",
-    "spotify_album_id": "3pepTeuEGPpmGF3oOwboo0",
-    "spotify_artist_ids": [
-      "4rqJz9fE9prZvQd8WsQv6q"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_0InqZvX2yR28fcnNN8F1A6": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2739bba46fb362df4d33a0a8b3f",
-    "canonical_album_name": "\u904b\u547d\u306e\u4eba",
-    "spotify_album_id": "0eNmYuy5xTFFwfdwfyGQLL",
-    "spotify_artist_ids": [
-      "2EqaSEa0WkE59Aca9iXSYj"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_1by335nfR5gaSk4Nw1I5jn": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2739288676513aeb8244df573e5",
-    "canonical_album_name": "Hearts of Iron IV (Original Game Soundtrack)",
-    "spotify_album_id": "2EhDqRjaxd6HCdTu3PikCt",
-    "spotify_artist_ids": [
-      "7eyudpSl4KF7iXun4H2PSh"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_4ZxOuNHhpyOj4gv52MtQpT": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273ac93d8b1bd84fa6b5291ba21",
-    "canonical_album_name": "As If It's Your Last",
-    "spotify_album_id": "7ikmjsvRzDRzxHN0KXSQdv",
-    "spotify_artist_ids": [
-      "41MozSoPIsD1dJM0CLPjZF"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_7uwNVnaOswnVGJ5v8e2bQk": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2734119e198ca7e3bbc2a7b5685",
-    "canonical_album_name": "Pit-a-Pat",
-    "spotify_album_id": "4ivrWy4dTl3eOAEOfFXnM0",
-    "spotify_artist_ids": [
-      "7mgY992t7YTx6UELsoIMRa"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_13On7DYsJ3IrWxBWuOwM8t": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273dbf9cd8fc6b41cfbe7c1d2fb",
-    "canonical_album_name": "Every letter I sent you.",
-    "spotify_album_id": "20hW2P3VSNJ1A7MwjIJ0Up",
-    "spotify_artist_ids": [
-      "6dhfy4ByARPJdPtMyrUYJK"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_3F2QRtNpPBWPnFrn0TWJ3P": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2735f8edd201c2dbeb1a10af3b1",
-    "canonical_album_name": "Ref:rain / \u7729\u3044\u3070\u304b\u308a",
-    "spotify_album_id": "15rOdvntK571e7m4okaSok",
-    "spotify_artist_ids": [
-      "0bAsR2unSRpn6BQPEnNlZm"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_74X2u8JMVooG2QbjRxXwR8": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e352f6eccf8cb96d0b247cc",
-    "canonical_album_name": "Perfect Night",
-    "spotify_album_id": "6Msc3BwzKZ5f5FXmKuUSu6",
-    "spotify_artist_ids": [
-      "4SpbR6yFEvexJuaBpgAU5p"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_3UZ46DvXvB2R7sBUZornlv": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273ffd2d252ce504dac86a25efc",
-    "canonical_album_name": "?depacse ohw",
-    "spotify_album_id": "0srUbfZOMUBwUitQGQeUca",
-    "spotify_artist_ids": [
-      "2bWTIIQP9zaVc55RaMGu7e"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_4y5bvROuBDPr5fuwXbIBZR": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647",
-    "canonical_album_name": "Lover",
-    "spotify_album_id": "1NAmidJlEaVgA3MpcPFYGq",
-    "spotify_artist_ids": [
-      "06HL4z0CvFAxyc27GXpf02"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_0M3adYbGtyRHACP86dey1H": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273413697269620e16f4466f543",
-    "canonical_album_name": "That's The Spirit",
-    "spotify_album_id": "7FqHuAvmREiIwVXVpZ9ooP",
-    "spotify_artist_ids": [
-      "1Ffb6ejR6Fe5IamqA5oRUF"
-    ],
-    "album_type": "album",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_7jzOZuWgZ5gaMet9V5Ix1d": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2737da22ba88dfc26a18122ee2d",
-    "canonical_album_name": "GAME PLAN",
-    "spotify_album_id": "7xMXoWstClAzBIo5lOAASu",
-    "spotify_artist_ids": [
-      "7zYj9S9SdIunYCfSm7vzAR"
-    ],
-    "album_type": "single",
-    "source": "spotify (uri_lookup)"
-  },
-  "spotify_tracklookup_5o3LSzu8xCMDpbAwm4dZ46": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2732794743c6eb13addc2b01420",
-    "canonical_album_name": "\u76d7\u4f5c",
-    "spotify_album_id": "6pZ0SrZCP8Bm28L6JhMtBy",
-    "spotify_artist_ids": [
-      "4UK2Lzi6fBfUi9rpDt6cik"
     ],
     "album_type": "album",
     "source": "spotify (uri_lookup)"
@@ -637,7 +41,17 @@
     "album_type": "single",
     "source": "spotify (uri_lookup)"
   },
-  "spotify_tracklookup_2pRy6Ll8ZPDoDKZeNt5BO6": {
+  "spotify_tracklookup_5zhuhNkILzHm585h104JlI": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e1603681f6a329a8bdab32ad",
+    "canonical_album_name": "\uc545\ubabd\u00b7Fall asleep in the mirror",
+    "spotify_album_id": "2YqAwFCBP4alKyQShJeFcd",
+    "spotify_artist_ids": [
+      "5V1qsQHdXNm4ZEZHWvFnqQ"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1by335nfR5gaSk4Nw1I5jn": {
     "art_url": "https://i.scdn.co/image/ab67616d0000b2739288676513aeb8244df573e5",
     "canonical_album_name": "Hearts of Iron IV (Original Game Soundtrack)",
     "spotify_album_id": "2EhDqRjaxd6HCdTu3PikCt",
@@ -645,6 +59,66 @@
       "7eyudpSl4KF7iXun4H2PSh"
     ],
     "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3jsYQw78lrxJA2ysnmOIf9": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732cfb66b63fe85ccfff4109b1",
+    "canonical_album_name": "Red Diary Page.1",
+    "spotify_album_id": "0d3mf5fBaIBbozCgeEI9AE",
+    "spotify_artist_ids": [
+      "4k5fFEYgkWYrYvtOK3zVBl"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1c6kkrWnpy68eYDfBdxNtF": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735048ed32fafe7b9a50d0e410",
+    "canonical_album_name": "The Winning",
+    "spotify_album_id": "08CvAj58nVMpq1Nw7T6maj",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_13On7DYsJ3IrWxBWuOwM8t": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273dbf9cd8fc6b41cfbe7c1d2fb",
+    "canonical_album_name": "Every letter I sent you.",
+    "spotify_album_id": "20hW2P3VSNJ1A7MwjIJ0Up",
+    "spotify_artist_ids": [
+      "6dhfy4ByARPJdPtMyrUYJK"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_35dhwUoJNlxrPyEIJkfDnx": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d112b7516a0a23058a819764",
+    "canonical_album_name": "I GOT YOU (Voyage ver.)",
+    "spotify_album_id": "5cnrcbdcdt6BJgAig9Tn3P",
+    "spotify_artist_ids": [
+      "7n2Ycct7Beij7Dj7meI4X0"
+    ],
+    "album_type": "album",
+    "source": "spotify (secondary_search_main_album)"
+  },
+  "spotify_tracklookup_2gYj9lubBorOPIVWsTXugG": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27387f53da5fb4ab1171766b2d5",
+    "canonical_album_name": "After LIKE",
+    "spotify_album_id": "0nzRF7khA2UDSZa9T0B6Da",
+    "spotify_artist_ids": [
+      "6RHTUrRF63xao58xh9FXYJ"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0NoeYUnwpb9R26mpylHcR9": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732ff7c76b0790cd3ad63cfc0c",
+    "canonical_album_name": "KISS OF LIFE",
+    "spotify_album_id": "5k34rAvlw3WV7Kh6dAZnxG",
+    "spotify_artist_ids": [
+      "4TEK9tIkcoxib4GxT3O4ky"
+    ],
+    "album_type": "single",
     "source": "spotify (uri_lookup)"
   },
   "spotify_tracklookup_3rUGC1vUpkDG9CZFHMur1t": {
@@ -657,6 +131,97 @@
     "album_type": "single",
     "source": "spotify (uri_lookup)"
   },
+  "spotify_tracklookup_00vy9aiFjxMfnKniQAYzrC": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e24e844f2650c498fa703c91",
+    "canonical_album_name": "Op.22 Y-Waltz : in Major",
+    "spotify_album_id": "1EAzLUzatSBIs8tA047f5f",
+    "spotify_artist_ids": [
+      "3LFFf4EpKn2krneZ9vozyz"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_22I3h5AOENlH4CqXJsEbFR": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273adadb86bf3555eb27a383c76",
+    "canonical_album_name": "Collide (feat. Tyga)",
+    "spotify_album_id": "2LbrGt2oc08xV8IDJvLzYi",
+    "spotify_artist_ids": [
+      "0jUQSUOcM7lxVn5eVGTkzQ",
+      "5LHRHt1k9lMyONurDHEdrp"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3wJHCry960drNlAUGrJLmz": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27328b535c92629e3c8d20ec242",
+    "canonical_album_name": "\u8ca0\u3051\u72ac\u306b\u30a2\u30f3\u30b3\u30fc\u30eb\u306f\u3044\u3089\u306a\u3044",
+    "spotify_album_id": "4jEsFbcpgjHiu0rsTdlaOy",
+    "spotify_artist_ids": [
+      "4UK2Lzi6fBfUi9rpDt6cik"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3UZ46DvXvB2R7sBUZornlv": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ffd2d252ce504dac86a25efc",
+    "canonical_album_name": "?depacse ohw",
+    "spotify_album_id": "0srUbfZOMUBwUitQGQeUca",
+    "spotify_artist_ids": [
+      "2bWTIIQP9zaVc55RaMGu7e"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0djkJ3iAARXRCbfbwwVc3o": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b79a12d47af18d1d83a5caf9",
+    "canonical_album_name": "Love wins all",
+    "spotify_album_id": "2bwwRhKbLeD3LvNDXauV2T",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_04Q6BGr8XdDJ7oDZ4iCI9G": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273f9cfbf4187cef596c5f8df9c",
+    "canonical_album_name": "Tera I / O",
+    "spotify_album_id": "5EN6xmUJMeavkDzC1Pz1VJ",
+    "spotify_artist_ids": [
+      "4bwIf0yXJf0F9AmOl2J78M"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_4ieJnnMvbQBKHuYwIY76UR": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d1d8c6f08fd3cba8ca6fe863",
+    "canonical_album_name": "Kisses and Kills",
+    "spotify_album_id": "3pepTeuEGPpmGF3oOwboo0",
+    "spotify_artist_ids": [
+      "4rqJz9fE9prZvQd8WsQv6q"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_7jzOZuWgZ5gaMet9V5Ix1d": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2737da22ba88dfc26a18122ee2d",
+    "canonical_album_name": "GAME PLAN",
+    "spotify_album_id": "7xMXoWstClAzBIo5lOAASu",
+    "spotify_artist_ids": [
+      "7zYj9S9SdIunYCfSm7vzAR"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2pRy6Ll8ZPDoDKZeNt5BO6": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739288676513aeb8244df573e5",
+    "canonical_album_name": "Hearts of Iron IV (Original Game Soundtrack)",
+    "spotify_album_id": "2EhDqRjaxd6HCdTu3PikCt",
+    "spotify_artist_ids": [
+      "7eyudpSl4KF7iXun4H2PSh"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
   "spotify_tracklookup_3VA4sjTMSTTF02hFGmlpJh": {
     "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
     "canonical_album_name": "Riot!",
@@ -667,22 +232,42 @@
     "album_type": "album",
     "source": "spotify (uri_lookup)"
   },
-  "spotify_tracklookup_0KAe8Hh67OXolVlcsZDCIy": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273b26a4067962c3238ad504a6f",
-    "canonical_album_name": "Dreaming : WEBTOON 'The Great X ANYUJIN (IVE)",
-    "spotify_album_id": "58QAs8YSamH7yhU1VrHn3L",
+  "spotify_tracklookup_003vvx7Niy0yvhvHt4a68B": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ccdddd46119a4ff53eaf1f5d",
+    "canonical_album_name": "Hot Fuss",
+    "spotify_album_id": "4piJq7R3gjUOxnYs6lDCTg",
     "spotify_artist_ids": [
-      "3schR1HLbYu3RqqPDiDFrE"
+      "0C0XlULifJtAgn6ZNCW2eu"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_3F2QRtNpPBWPnFrn0TWJ3P": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735f8edd201c2dbeb1a10af3b1",
+    "canonical_album_name": "Ref:rain / \u7729\u3044\u3070\u304b\u308a",
+    "spotify_album_id": "15rOdvntK571e7m4okaSok",
+    "spotify_artist_ids": [
+      "0bAsR2unSRpn6BQPEnNlZm"
     ],
     "album_type": "single",
     "source": "spotify (uri_lookup)"
   },
-  "spotify_tracklookup_6SpLc7EXZIPpy0sVko0aoU": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
-    "canonical_album_name": "Riot!",
-    "spotify_album_id": "71rziY9eLo1tA2dBMxrwhc",
+  "spotify_tracklookup_1j8z4TTjJ1YOdoFEDwJTQa": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273532033d0d90736f661c13d35",
+    "canonical_album_name": "Paramore",
+    "spotify_album_id": "4sgYpkIASM1jVlNC8Wp9oF",
     "spotify_artist_ids": [
       "74XFHRwlV6OrjEM0A2NCMF"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0fBrOyJj7gEAyXevVq69xv": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732bfa74be7288986e88513fa9",
+    "canonical_album_name": "The Other Side",
+    "spotify_album_id": "0jWzcec3ugHZoQpogj6PrD",
+    "spotify_artist_ids": [
+      "5pjCYG6hPLBO3y4swxu3dh"
     ],
     "album_type": "album",
     "source": "spotify (uri_lookup)"
@@ -697,44 +282,228 @@
     "album_type": "single",
     "source": "spotify (uri_lookup)"
   },
-  "spotify_tracklookup_2n1PhZHxdiaCMs5xLtsH4j": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2732244e9976343a6a34c5ab1b9",
-    "canonical_album_name": "N\u00e4r det b\u00f6rjar",
-    "spotify_album_id": "0IevxAdYzARtExqLuSGFYD",
+  "spotify_tracklookup_36VoVeLLFDFp6id0v8T2Fy": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273f91db309f9cfe624a0033a95",
+    "canonical_album_name": "Clumsy",
+    "spotify_album_id": "7j7ZXUzBluCKBXemgRHo6g",
     "spotify_artist_ids": [
-      "6Uo3nC1ZbCL0bSeIlqgTN0"
+      "4n2W84plMrq8WttT18Npwi",
+      "565RlgvCEeBHqybr221qBs"
     ],
     "album_type": "album",
     "source": "spotify (uri_lookup)"
   },
-  "spotify_tracklookup_1WvOzvyS18s649de8JPSai": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273e68476836f5efa73ac01ac25",
-    "canonical_album_name": "Fake Spotlight",
-    "spotify_album_id": "2svrxNYt8qCNZmow1H3dnq",
+  "spotify_tracklookup_0M3adYbGtyRHACP86dey1H": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273413697269620e16f4466f543",
+    "canonical_album_name": "That's The Spirit",
+    "spotify_album_id": "7FqHuAvmREiIwVXVpZ9ooP",
     "spotify_artist_ids": [
-      "6I4zig1oXcokmAxdryfzoI"
+      "1Ffb6ejR6Fe5IamqA5oRUF"
     ],
     "album_type": "album",
     "source": "spotify (uri_lookup)"
   },
-  "spotify_tracklookup_13yhhn6Cg9WrjusOTJfH3C": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b2734658d3ce54b0040227be05dc",
-    "canonical_album_name": "Highway",
-    "spotify_album_id": "5hT8DB8ID8oUu8CqCtSiPW",
+  "spotify_tracklookup_4R2kfaDFhslZEMJqAFNpdd": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27395f754318336a07e85ec59bc",
+    "canonical_album_name": "folklore",
+    "spotify_album_id": "2fenSS68JI1h4Fo296JfGr",
     "spotify_artist_ids": [
-      "1sgoKEz17EnuD6eb3nRk05"
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_4TbweJbbB80M74w8jdiqLp": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d066a4eafb4e6edfbe918ba2",
+    "canonical_album_name": "realize",
+    "spotify_album_id": "475dwmD4lTQ89RHnVA8yE1",
+    "spotify_artist_ids": [
+      "4Lmo7h2Ik12QI3Ik0BvGbB"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1JdKrFyoU05abww0Zv0ayQ": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
+    "canonical_album_name": "Riot!",
+    "spotify_album_id": "71rziY9eLo1tA2dBMxrwhc",
+    "spotify_artist_ids": [
+      "74XFHRwlV6OrjEM0A2NCMF"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2VnVfGZuVCQKm9xBTuWM7N": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273281dfd7af2ee99a124404623",
+    "canonical_album_name": "Pocahontas",
+    "spotify_album_id": "7L6kEZVkWh7OEI71b1JHZd",
+    "spotify_artist_ids": [
+      "5DH8cLYXVTknLlSRzzkRc4",
+      "0N0dbr5s2y20PAo2cDAeVP",
+      "3OIPwMAZipDCLQwHmxS5EG"
+    ],
+    "album_type": "compilation",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2hloaUoRonYssMuqLCBLTX": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27356ac7b86e090f307e218e9c8",
+    "canonical_album_name": "thank u, next",
+    "spotify_album_id": "2fYhqwDWXjbpjaIJPEfKFw",
+    "spotify_artist_ids": [
+      "66CXWjxzNUsdJxJ2JdwvnR"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_4ZxOuNHhpyOj4gv52MtQpT": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ac93d8b1bd84fa6b5291ba21",
+    "canonical_album_name": "As If It's Your Last",
+    "spotify_album_id": "7ikmjsvRzDRzxHN0KXSQdv",
+    "spotify_artist_ids": [
+      "41MozSoPIsD1dJM0CLPjZF"
     ],
     "album_type": "single",
     "source": "spotify (uri_lookup)"
   },
-  "spotify_tracklookup_2owgvchbF6IJrxu4rLPBIl": {
-    "art_url": "https://i.scdn.co/image/ab67616d0000b273b9791a0a6efa800f285a7bab",
-    "canonical_album_name": "Walking the Wire (Piano Acoustic Instrumental)",
-    "spotify_album_id": "7vQuyVhO5ua2dJ1K91JDQc",
+  "spotify_tracklookup_4lIxdJw6W3Fg4vUIYCB0S5": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739abdf14e6058bd3903686148",
+    "canonical_album_name": "1989",
+    "spotify_album_id": "2QJmrSgbdM35R67eoGQo4j",
     "spotify_artist_ids": [
-      "6NbfU62rDuIP4dSlfJFijF"
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0KAe8Hh67OXolVlcsZDCIy": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b26a4067962c3238ad504a6f",
+    "canonical_album_name": "Dreaming : WEBTOON 'The Great X ANYUJIN (IVE)",
+    "spotify_album_id": "58QAs8YSamH7yhU1VrHn3L",
+    "spotify_artist_ids": [
+      "3schR1HLbYu3RqqPDiDFrE"
     ],
     "album_type": "single",
     "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0InqZvX2yR28fcnNN8F1A6": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739bba46fb362df4d33a0a8b3f",
+    "canonical_album_name": "\u904b\u547d\u306e\u4eba",
+    "spotify_album_id": "0eNmYuy5xTFFwfdwfyGQLL",
+    "spotify_artist_ids": [
+      "2EqaSEa0WkE59Aca9iXSYj"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_4y5bvROuBDPr5fuwXbIBZR": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647",
+    "canonical_album_name": "Lover",
+    "spotify_album_id": "1NAmidJlEaVgA3MpcPFYGq",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_56v8WEnGzLByGsDAXDiv4d": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2730744690248ef3ba7b776ea7b",
+    "canonical_album_name": "NewJeans 2nd EP 'Get Up'",
+    "spotify_album_id": "4N1fROq2oeyLGAlQ1C1j18",
+    "spotify_artist_ids": [
+      "6HvZYsbFfjnjFrWF950C9d"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_4Zhuv5znO4SFdhPBVKoOs1": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2731d19f0f1ff26230ef6ceca7a",
+    "canonical_album_name": "AliVe",
+    "spotify_album_id": "2XMOWnYPyNxhIhj4bQeomY",
+    "spotify_artist_ids": [
+      "4Lmo7h2Ik12QI3Ik0BvGbB"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1Iq8oo9XkmmvCQiGOfORiz": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac",
+    "canonical_album_name": "1989 (Taylor's Version)",
+    "spotify_album_id": "64LU4c1nfjz1t4VnGhagcg",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1a9YW7fATU351ok4zWjU7a": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e01d7d558032457b0e4883f6",
+    "canonical_album_name": "Brand New Eyes",
+    "spotify_album_id": "27UqZoE1kV6sIV6uQcI28A",
+    "spotify_artist_ids": [
+      "74XFHRwlV6OrjEM0A2NCMF"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0pYacDCZuRhcrwGUA5nTBe": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c63be04ae902b1da7a54d247",
+    "canonical_album_name": "eight",
+    "spotify_album_id": "5vJNAlQeTf9lsulO1YlmSt",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU",
+      "0ebNdVaOfp6N0oZ1guIxM8"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5eY7692tmgHB9dbmq6wa2M": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e763f5fcb87919a7ae96f8b",
+    "canonical_album_name": "\u6674\u308b",
+    "spotify_album_id": "4O53dhmIctih3p2suAAgga",
+    "spotify_artist_ids": [
+      "4UK2Lzi6fBfUi9rpDt6cik"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_7uwNVnaOswnVGJ5v8e2bQk": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734119e198ca7e3bbc2a7b5685",
+    "canonical_album_name": "Pit-a-Pat",
+    "spotify_album_id": "4ivrWy4dTl3eOAEOfFXnM0",
+    "spotify_artist_ids": [
+      "7mgY992t7YTx6UELsoIMRa"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0NwGC0v03ysCYINtg6ns58": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2730b04da4f224b51ff86e0a481",
+    "canonical_album_name": "Speak Now (Taylor's Version)",
+    "spotify_album_id": "5AEDGbliTTfjOB8TSm1sxt",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_12M5uqx0ZuwkpLp5rJim1a": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e787cffec20aa2a396a61647",
+    "canonical_album_name": "Lover",
+    "spotify_album_id": "1NAmidJlEaVgA3MpcPFYGq",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_search_bad habit_ed sheeran_subtract": null,
+  "spotify_search_ed sheeran_bad habit_subtract": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ef24c3fdbf856340d55cfeb2",
+    "canonical_album_name": "=",
+    "spotify_album_id": "32iAEBstCjauDhyKpGjTuq",
+    "spotify_artist_ids": [
+      "6eUKZXaKkcviH0Ku9w2n3V"
+    ],
+    "source": "spotify (Precise Search (Artist: Ed Sheeran))"
   }
 }

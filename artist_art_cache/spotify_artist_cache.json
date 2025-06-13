@@ -1467,5 +1467,11 @@
     "popularity": 68,
     "followers": 182730,
     "source": "spotify (track_uri_lookup)"
-  }
+  },
+  "spotify_artist_search_taylor swift": null,
+  "spotify_artist_search_ive": null,
+  "spotify_artist_search_anyujin": null,
+  "spotify_artist_search_blackpink": null,
+  "spotify_artist_search_ed sheeran": null,
+  "spotify_artist_search_dua lipa": null
 }

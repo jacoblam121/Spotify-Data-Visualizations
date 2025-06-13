@@ -86,6 +86,32 @@ class AppConfig:
             'cache_expiry_days': self.get_int('MusicBrainzAPI', 'CACHE_EXPIRY_DAYS', 30)
         }
     
+    def get_network_visualization_config(self):
+        """Get network visualization configuration."""
+        sizing_strategy = self.get('NetworkVisualization', 'NODE_SIZING_STRATEGY', 'hybrid_multiply').lower().strip()
+        fallback_behavior = self.get('NetworkVisualization', 'FALLBACK_BEHAVIOR', 'fallback').lower().strip()
+        
+        # Validate node sizing strategy
+        valid_strategies = ['lastfm', 'spotify_popularity', 'hybrid_multiply', 'hybrid_weighted']
+        if sizing_strategy not in valid_strategies:
+            print(f"Warning: Invalid NODE_SIZING_STRATEGY '{sizing_strategy}'. Valid options: {valid_strategies}")
+            print("Defaulting to 'hybrid_multiply'.")
+            sizing_strategy = 'hybrid_multiply'
+        
+        # Validate fallback behavior
+        valid_fallbacks = ['fallback', 'skip', 'default']
+        if fallback_behavior not in valid_fallbacks:
+            print(f"Warning: Invalid FALLBACK_BEHAVIOR '{fallback_behavior}'. Valid options: {valid_fallbacks}")
+            print("Defaulting to 'fallback'.")
+            fallback_behavior = 'fallback'
+        
+        return {
+            'node_sizing_strategy': sizing_strategy,
+            'fetch_both_sources': self.get_bool('NetworkVisualization', 'FETCH_BOTH_SOURCES', True),
+            'fallback_behavior': fallback_behavior,
+            'spotify_popularity_boost': self.get_float('NetworkVisualization', 'SPOTIFY_POPULARITY_BOOST', 1.5)
+        }
+
     def validate_visualization_mode(self):
         """Validate the visualization mode setting and return the normalized mode."""
         mode = self.get('VisualizationMode', 'MODE', 'tracks').lower().strip()

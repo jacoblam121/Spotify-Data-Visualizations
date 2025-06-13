@@ -14,6 +14,7 @@ import networkx as nx
 from dotenv import load_dotenv
 from config_loader import AppConfig
 from lastfm_utils import LastfmAPI
+from artist_data_fetcher import EnhancedArtistDataFetcher
 
 # Load environment variables
 load_dotenv()
@@ -64,6 +65,7 @@ class ArtistNetworkAnalyzer:
         """Initialize the analyzer with configuration."""
         self.config = config
         self.lastfm_config = config.get_lastfm_config()
+        self.network_config = config.get_network_visualization_config()
         
         # Initialize Last.fm API if available
         self.lastfm_api = None
@@ -73,6 +75,9 @@ class ArtistNetworkAnalyzer:
                 self.lastfm_config['api_secret'],
                 self.lastfm_config['cache_dir']
             )
+        
+        # Initialize enhanced artist data fetcher
+        self.artist_fetcher = EnhancedArtistDataFetcher(config)
     
     def calculate_co_listening_scores(self, df: pd.DataFrame, 
                                     time_window_hours: int = 24,
@@ -216,7 +221,7 @@ class ArtistNetworkAnalyzer:
                           min_plays_threshold: int = 5,
                           min_similarity_threshold: float = 0.1) -> Dict:
         """
-        Create network data structure using only Last.fm similarity data.
+        Create network data structure with enhanced artist data (Last.fm + Spotify).
         
         Args:
             df: DataFrame with listening history
@@ -227,7 +232,8 @@ class ArtistNetworkAnalyzer:
         Returns:
             Network data dict with nodes and edges
         """
-        print(f"Creating network data for top {top_n_artists} artists...")
+        print(f"Creating enhanced network data for top {top_n_artists} artists...")
+        print(f"Using {self.network_config['listener_count_source']} as primary listener count source")
         
         if df.empty or 'artist' not in df.columns:
             print("❌ No artist data available")
@@ -242,53 +248,129 @@ class ArtistNetworkAnalyzer:
         
         print(f"Selected {len(top_artists)} artists (min {min_plays_threshold} plays)")
         
-        # Create nodes
-        nodes = []
-        for rank, (artist, play_count) in enumerate(top_artists.items(), 1):
-            nodes.append({
-                'id': artist,
-                'name': artist,
-                'play_count': int(play_count),
-                'rank': rank,
-                'size': play_count,  # For visualization sizing
-                'in_library': True
-            })
-        
-        # Create edges
-        edges = []
+        # Fetch enhanced artist data
+        print(f"🔍 Fetching enhanced artist data from APIs...")
         artist_list = list(top_artists.index)
         
-        # Get Last.fm similarities (ONLY data source for network)
-        lastfm_similarities = {}
-        if self.lastfm_api:
-            lastfm_similarities = self.get_lastfm_similarity_matrix(artist_list)
-        else:
-            print("❌ Last.fm API not available - cannot create network without similarity data")
-            return {'nodes': nodes, 'edges': [], 'metadata': {}}
+        def progress_callback(current, total, artist_name):
+            if current % 5 == 0 or current == total:
+                print(f"  {current}/{total}: {artist_name}")
         
-        # Create edges from Last.fm similarities only
-        for pair, lastfm_score in lastfm_similarities.items():
-            artist1, artist2 = pair
+        enhanced_data = self.artist_fetcher.batch_fetch_artist_data(
+            artist_list, 
+            include_similar=True,
+            progress_callback=progress_callback
+        )
+        
+        # Create nodes with enhanced data
+        nodes = []
+        artist_data_map = {}  # For edge creation
+        
+        successful_artists = 0
+        for i, (artist, play_count) in enumerate(top_artists.items()):
+            rank = i + 1
+            enhanced = enhanced_data[i]
+            artist_data_map[artist] = enhanced
             
-            # Skip if either artist not in top list
-            if artist1 not in artist_list or artist2 not in artist_list:
-                continue
-            
-            # Only include relationships above threshold
-            if lastfm_score >= min_similarity_threshold:
-                edges.append({
-                    'source': artist1,
-                    'target': artist2,
-                    'weight': lastfm_score,
-                    'lastfm_similarity': lastfm_score,
-                    'relationship_type': 'lastfm_similarity'
-                })
+            if enhanced['success']:
+                successful_artists += 1
+                
+                # Use configured listener count source
+                listener_count = enhanced['primary_listener_count']
+                listener_source = enhanced['primary_source']
+                
+                node = {
+                    'id': artist,
+                    'name': enhanced['canonical_name'],
+                    'play_count': int(play_count),
+                    'rank': rank,
+                    'size': listener_count,  # Primary listener count for sizing
+                    'listener_count': listener_count,
+                    'listener_source': listener_source,
+                    'in_library': True
+                }
+                
+                # Add additional data sources if available
+                if enhanced['lastfm_data']:
+                    node['lastfm_listeners'] = enhanced['lastfm_data']['listeners']
+                    node['lastfm_playcount'] = enhanced['lastfm_data']['playcount']
+                    node['lastfm_url'] = enhanced['lastfm_data']['url']
+                    node['genres_lastfm'] = [tag['name'] for tag in enhanced['lastfm_data']['tags'][:3]]
+                
+                if enhanced['spotify_data']:
+                    node['spotify_followers'] = enhanced['spotify_data']['followers']
+                    node['spotify_popularity'] = enhanced['spotify_data']['popularity']
+                    node['spotify_id'] = enhanced['spotify_data']['spotify_artist_id']
+                    node['photo_url'] = enhanced['spotify_data']['photo_url']
+                    node['genres_spotify'] = enhanced['spotify_data']['genres'][:3]
+                
+                nodes.append(node)
+            else:
+                # Handle failed artists based on fallback behavior
+                fallback_behavior = self.network_config['fallback_behavior']
+                if fallback_behavior != 'skip':
+                    node = {
+                        'id': artist,
+                        'name': artist,
+                        'play_count': int(play_count),
+                        'rank': rank,
+                        'size': int(play_count),  # Use play count as fallback
+                        'listener_count': 0,
+                        'listener_source': 'play_count_fallback',
+                        'in_library': True
+                    }
+                    nodes.append(node)
+        
+        print(f"✅ Successfully fetched data for {successful_artists}/{len(artist_list)} artists")
+        
+        # Create edges from similarity data
+        edges = []
+        edges_created = 0
+        
+        print(f"🕸️  Creating similarity edges...")
+        for enhanced in enhanced_data:
+            if enhanced['similar_artists']:
+                source_artist = enhanced['artist_name']
+                similar_artists = enhanced['similar_artists']
+                
+                for similar in similar_artists:
+                    target_artist = similar['name']
+                    similarity_score = similar['match']
+                    
+                    # Only include if target artist is in our network and meets threshold
+                    if (target_artist in artist_list and 
+                        similarity_score >= min_similarity_threshold and
+                        source_artist != target_artist):
+                        
+                        # Create sorted pair to avoid duplicates
+                        pair = tuple(sorted([source_artist, target_artist]))
+                        
+                        # Check if edge already exists
+                        existing_edge = None
+                        for edge in edges:
+                            edge_pair = tuple(sorted([edge['source'], edge['target']]))
+                            if edge_pair == pair:
+                                existing_edge = edge
+                                break
+                        
+                        if not existing_edge:
+                            edges.append({
+                                'source': source_artist,
+                                'target': target_artist,
+                                'weight': similarity_score,
+                                'lastfm_similarity': similarity_score,
+                                'relationship_type': 'lastfm_similarity'
+                            })
+                            edges_created += 1
+        
+        print(f"✅ Created {edges_created} similarity edges")
         
         # Create metadata
         metadata = {
             'generated': datetime.now().isoformat(),
             'total_artists_in_data': len(artist_plays),
             'artists_included': len(nodes),
+            'artists_with_api_data': successful_artists,
             'total_plays': len(df),
             'date_range': {
                 'start': df.index.min().isoformat() if hasattr(df.index, 'min') else None,
@@ -297,11 +379,16 @@ class ArtistNetworkAnalyzer:
             'edge_types': {
                 'lastfm_similarity': len(edges)
             },
+            'configuration': {
+                'listener_count_source': self.network_config['listener_count_source'],
+                'fetch_both_sources': self.network_config['fetch_both_sources'],
+                'fallback_behavior': self.network_config['fallback_behavior']
+            },
             'parameters': {
                 'top_n_artists': top_n_artists,
                 'min_plays_threshold': min_plays_threshold,
                 'min_similarity_threshold': min_similarity_threshold,
-                'data_source': 'lastfm_similarity_only'
+                'data_source': 'enhanced_multi_api'
             }
         }
         
@@ -311,7 +398,7 @@ class ArtistNetworkAnalyzer:
             'metadata': metadata
         }
         
-        print(f"✅ Network created: {len(nodes)} nodes, {len(edges)} edges")
+        print(f"✅ Enhanced network created: {len(nodes)} nodes, {len(edges)} edges")
         
         return network_data
     
