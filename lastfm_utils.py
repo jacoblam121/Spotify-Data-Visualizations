@@ -661,7 +661,23 @@ class LastfmAPI:
         errors_count = 0
         max_consecutive_errors = 5
         
-        for i, variant in enumerate(name_variants):
+        # Prioritize variants that are already cached to avoid unnecessary API calls
+        cached_variants = []
+        uncached_variants = []
+        
+        for variant in name_variants:
+            params = {'limit': str(limit), 'artist': variant}
+            cache_key = self._get_cache_key('artist.getsimilar', params)
+            if cache_key in self.cache:
+                cached_variants.append(variant)
+            else:
+                uncached_variants.append(variant)
+        
+        # Process cached variants first, then uncached ones
+        prioritized_variants = cached_variants + uncached_variants
+        logger.debug(f"Processing {len(cached_variants)} cached variants first, then {len(uncached_variants)} uncached variants")
+        
+        for i, variant in enumerate(prioritized_variants):
             params = {'limit': str(limit), 'artist': variant}
             response = self._make_request('artist.getsimilar', params)
             attempted_variants.append(variant)
@@ -1018,7 +1034,23 @@ class LastfmAPI:
         # Collect all valid artist pages
         artist_pages = []
         
+        # Prioritize cached variants to avoid unnecessary API calls
+        cached_variants = []
+        uncached_variants = []
+        
         for variant in name_variants:
+            params = {'artist': variant}
+            cache_key = self._get_cache_key('artist.getinfo', params)
+            if cache_key in self.cache:
+                cached_variants.append(variant)
+            else:
+                uncached_variants.append(variant)
+        
+        # Process cached variants first
+        prioritized_variants = cached_variants + uncached_variants
+        logger.debug(f"Processing {len(cached_variants)} cached variants first, then {len(uncached_variants)} uncached variants")
+        
+        for variant in prioritized_variants:
             params = {'artist': variant}
             response = self._make_request('artist.getinfo', params)
             artist_info = self._parse_artist_info_response(response)

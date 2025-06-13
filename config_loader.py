@@ -109,7 +109,10 @@ class AppConfig:
             'node_sizing_strategy': sizing_strategy,
             'fetch_both_sources': self.get_bool('NetworkVisualization', 'FETCH_BOTH_SOURCES', True),
             'fallback_behavior': fallback_behavior,
-            'spotify_popularity_boost': self.get_float('NetworkVisualization', 'SPOTIFY_POPULARITY_BOOST', 1.5)
+            'spotify_popularity_boost': self.get_float('NetworkVisualization', 'SPOTIFY_POPULARITY_BOOST', 1.5),
+            'top_n_artists': self.get_int('NetworkVisualization', 'TOP_N_ARTISTS', 100),
+            'min_similarity_threshold': self.get_float('NetworkVisualization', 'MIN_SIMILARITY_THRESHOLD', 0.2),
+            'min_plays_threshold': self.get_int('NetworkVisualization', 'MIN_PLAYS_THRESHOLD', 5)
         }
 
     def validate_visualization_mode(self):

@@ -103,6 +103,9 @@ class EnhancedArtistDataFetcher:
                 result['canonical_name'] = result['lastfm_data']['name']
                 result['primary_listener_count'] = result['lastfm_data']['listeners']
                 result['success'] = True
+                # Promote similar_artists to top-level if available
+                if include_similar and result['lastfm_data'].get('similar_artists'):
+                    result['similar_artists'] = result['lastfm_data']['similar_artists']
         
         if primary_source in ['spotify', 'both'] and self.spotify_available:
             result['spotify_data'] = self._fetch_spotify_data(artist_name)
@@ -128,8 +131,9 @@ class EnhancedArtistDataFetcher:
             elif primary_source == 'spotify' and self.lastfm_api and not result['lastfm_data']:
                 result['lastfm_data'] = self._fetch_lastfm_data(artist_name, include_similar)
                 if result['lastfm_data']:
-                    if not result['similar_artists'] and include_similar:
-                        result['similar_artists'] = result['lastfm_data'].get('similar_artists')
+                    # Always promote similar_artists if we have them and they're requested
+                    if include_similar and result['lastfm_data'].get('similar_artists'):
+                        result['similar_artists'] = result['lastfm_data']['similar_artists']
                     # Use as fallback if primary failed
                     if not result['success'] and fallback_behavior == 'fallback':
                         result['canonical_name'] = result['lastfm_data']['name']

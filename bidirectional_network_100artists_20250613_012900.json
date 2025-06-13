@@ -1,0 +1,4199 @@
+{
+  "nodes": [
+    {
+      "id": "taylor swift",
+      "name": "Taylor Swift",
+      "play_count": 12824,
+      "rank": 1,
+      "size": 5160232,
+      "listener_count": 5160232,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 5160232,
+      "lastfm_playcount": 3009283152,
+      "lastfm_url": "https://www.last.fm/music/Taylor+Swift",
+      "genres_lastfm": [
+        "country",
+        "pop",
+        "female vocalists"
+      ],
+      "spotify_followers": 138794730,
+      "spotify_popularity": 98,
+      "spotify_id": "06HL4z0CvFAxyc27GXpf02",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676",
+      "genres_spotify": []
+    },
+    {
+      "id": "paramore",
+      "name": "Paramore",
+      "play_count": 6821,
+      "rank": 2,
+      "size": 4779115,
+      "listener_count": 4779115,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 4779115,
+      "lastfm_playcount": 431381316,
+      "lastfm_url": "https://www.last.fm/music/Paramore",
+      "genres_lastfm": [
+        "rock",
+        "pop punk",
+        "alternative"
+      ],
+      "spotify_followers": 9466054,
+      "spotify_popularity": 82,
+      "spotify_id": "74XFHRwlV6OrjEM0A2NCMF",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb10c34546a4ca2d7faeb8865",
+      "genres_spotify": [
+        "pop punk",
+        "emo"
+      ]
+    },
+    {
+      "id": "ive",
+      "name": "Ive",
+      "play_count": 6143,
+      "rank": 3,
+      "size": 837966,
+      "listener_count": 837966,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 837966,
+      "lastfm_playcount": 122865833,
+      "lastfm_url": "https://www.last.fm/music/Ive",
+      "genres_lastfm": [
+        "k-pop",
+        "pop",
+        "Kpop"
+      ],
+      "spotify_followers": 132233,
+      "spotify_popularity": 43,
+      "spotify_id": "3kYFawNQVZ00FQbgs4rVBe",
+      "photo_url": "https://i.scdn.co/image/0078316432cdfb6733c3bde0dc61754d45442d0f",
+      "genres_spotify": [
+        "pop punk"
+      ]
+    },
+    {
+      "id": "ヨルシカ",
+      "name": "Yorushika",
+      "play_count": 5130,
+      "rank": 4,
+      "size": 224593,
+      "listener_count": 224593,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 224593,
+      "lastfm_playcount": 13038264,
+      "lastfm_url": "https://www.last.fm/music/Yorushika",
+      "genres_lastfm": [
+        "japanese",
+        "J-rock",
+        "j-pop"
+      ],
+      "spotify_followers": 3122427,
+      "spotify_popularity": 74,
+      "spotify_id": "4UK2Lzi6fBfUi9rpDt6cik",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab",
+      "genres_spotify": [
+        "j-pop",
+        "j-rock",
+        "japanese indie"
+      ]
+    },
+    {
+      "id": "iu",
+      "name": "IU",
+      "play_count": 5047,
+      "rank": 5,
+      "size": 913058,
+      "listener_count": 913058,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 913058,
+      "lastfm_playcount": 79744903,
+      "lastfm_url": "https://www.last.fm/music/IU",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "female vocalists"
+      ],
+      "spotify_followers": 9243806,
+      "spotify_popularity": 72,
+      "spotify_id": "3HqSLMAZ3g3d5poNaI7GOU",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb789f38042e5ef8911fc3826b",
+      "genres_spotify": [
+        "k-pop",
+        "k-ballad"
+      ]
+    },
+    {
+      "id": "aimer",
+      "name": "Aimer",
+      "play_count": 4802,
+      "rank": 6,
+      "size": 389315,
+      "listener_count": 389315,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 389315,
+      "lastfm_playcount": 20440322,
+      "lastfm_url": "https://www.last.fm/music/Aimer",
+      "genres_lastfm": [
+        "j-pop",
+        "japanese",
+        "female vocalists"
+      ],
+      "spotify_followers": 2653739,
+      "spotify_popularity": 66,
+      "spotify_id": "0bAsR2unSRpn6BQPEnNlZm",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8",
+      "genres_spotify": [
+        "anime",
+        "j-pop",
+        "j-rock"
+      ]
+    },
+    {
+      "id": "*luna",
+      "name": "*LUNA",
+      "play_count": 4534,
+      "rank": 7,
+      "size": 17148,
+      "listener_count": 17148,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 17148,
+      "lastfm_playcount": 424063,
+      "lastfm_url": "https://www.last.fm/music/%2ALUNA",
+      "genres_lastfm": [
+        "vocaloid",
+        "j-pop"
+      ],
+      "spotify_followers": 9840466,
+      "spotify_popularity": 72,
+      "spotify_id": "47MpMsUfWtgyIIBEFOr4FE",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb45d443b065a66c92d166f598",
+      "genres_spotify": [
+        "reggaeton"
+      ]
+    },
+    {
+      "id": "rosé",
+      "name": "Rosé",
+      "play_count": 3046,
+      "rank": 8,
+      "size": 1350281,
+      "listener_count": 1350281,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1350281,
+      "lastfm_playcount": 82660045,
+      "lastfm_url": "https://www.last.fm/music/Ros%C3%A9",
+      "genres_lastfm": [
+        "pop",
+        "Rosé",
+        "Korean"
+      ],
+      "spotify_followers": 11750348,
+      "spotify_popularity": 84,
+      "spotify_id": "3eVa5w3URK5duf6eyVDbu9",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebcfb4350222919670128ff2dc",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "younha",
+      "name": "Younha",
+      "play_count": 2547,
+      "rank": 9,
+      "size": 341199,
+      "listener_count": 341199,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 341199,
+      "lastfm_playcount": 11919088,
+      "lastfm_url": "https://www.last.fm/music/Younha",
+      "genres_lastfm": [
+        "j-pop",
+        "Korean",
+        "k-pop"
+      ],
+      "spotify_followers": 564911,
+      "spotify_popularity": 54,
+      "spotify_id": "6GwM5CHqhWXzG3l5kzRSAS",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf5e315e40a6d4ffd36c10d94",
+      "genres_spotify": [
+        "k-ballad"
+      ]
+    },
+    {
+      "id": "yoasobi",
+      "name": "yoasobi",
+      "play_count": 2441,
+      "rank": 10,
+      "size": 712847,
+      "listener_count": 712847,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 712847,
+      "lastfm_playcount": 43046735,
+      "lastfm_url": "https://www.last.fm/music/yoasobi",
+      "genres_lastfm": [
+        "j-pop",
+        "japanese",
+        "japan"
+      ],
+      "spotify_followers": 9192593,
+      "spotify_popularity": 76,
+      "spotify_id": "64tJ2EAv1R6UaZqc4iOCyj",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb507349709ae19263301a62f7",
+      "genres_spotify": [
+        "j-pop",
+        "anime"
+      ]
+    },
+    {
+      "id": "twice",
+      "name": "TWICE",
+      "play_count": 1776,
+      "rank": 11,
+      "size": 1388675,
+      "listener_count": 1388675,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1388675,
+      "lastfm_playcount": 384013510,
+      "lastfm_url": "https://www.last.fm/music/TWICE",
+      "genres_lastfm": [
+        "k-pop",
+        "Kpop",
+        "Korean"
+      ],
+      "spotify_followers": 21957816,
+      "spotify_popularity": 80,
+      "spotify_id": "7n2Ycct7Beij7Dj7meI4X0",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebca6c145421fa9ceb58d6f9d4",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "jeon somi",
+      "name": "Jeon Somi",
+      "play_count": 1589,
+      "rank": 12,
+      "size": 438835,
+      "listener_count": 438835,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 438835,
+      "lastfm_playcount": 13927483,
+      "lastfm_url": "https://www.last.fm/music/Jeon+Somi",
+      "genres_lastfm": [
+        "k-pop",
+        "pop",
+        "Kpop"
+      ],
+      "spotify_followers": 3215373,
+      "spotify_popularity": 59,
+      "spotify_id": "7zYj9S9SdIunYCfSm7vzAR",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8acf72a6c3da24a6483255fa",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "onerepublic",
+      "name": "OneRepublic",
+      "play_count": 1571,
+      "rank": 13,
+      "size": 3981382,
+      "listener_count": 3981382,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3981382,
+      "lastfm_playcount": 118248251,
+      "lastfm_url": "https://www.last.fm/music/OneRepublic",
+      "genres_lastfm": [
+        "rock",
+        "pop rock",
+        "alternative"
+      ],
+      "spotify_followers": 18337561,
+      "spotify_popularity": 85,
+      "spotify_id": "5Pwc4xIPtQLFEnJriah9YJ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb57138b98e7ddd5a86ee97a9b",
+      "genres_spotify": [
+        "soft pop"
+      ]
+    },
+    {
+      "id": "imagine dragons",
+      "name": "Imagine Dragons",
+      "play_count": 1476,
+      "rank": 14,
+      "size": 3630198,
+      "listener_count": 3630198,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3630198,
+      "lastfm_playcount": 216541311,
+      "lastfm_url": "https://www.last.fm/music/Imagine+Dragons",
+      "genres_lastfm": [
+        "indie",
+        "indie rock",
+        "alternative"
+      ],
+      "spotify_followers": 57456144,
+      "spotify_popularity": 88,
+      "spotify_id": "53XhwfbYqKCa1cC15pYq2q",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebab47d8dae2b24f5afe7f9d38",
+      "genres_spotify": []
+    },
+    {
+      "id": "yama",
+      "name": "Yama",
+      "play_count": 1382,
+      "rank": 15,
+      "size": 222925,
+      "listener_count": 222925,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 222925,
+      "lastfm_playcount": 5324961,
+      "lastfm_url": "https://www.last.fm/music/Yama",
+      "genres_lastfm": [
+        "Stoner Rock",
+        "Psychedelic Rock",
+        "japanese"
+      ],
+      "spotify_followers": 1364140,
+      "spotify_popularity": 61,
+      "spotify_id": "7kOrrFIBIBc8uCu2zbxbLv",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebabbad8c1528c9a2e42d04402",
+      "genres_spotify": [
+        "j-pop",
+        "anime"
+      ]
+    },
+    {
+      "id": "nf",
+      "name": "NF",
+      "play_count": 1342,
+      "rank": 16,
+      "size": 1107027,
+      "listener_count": 1107027,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1107027,
+      "lastfm_playcount": 78686823,
+      "lastfm_url": "https://www.last.fm/music/NF",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "hip hop"
+      ],
+      "spotify_followers": 10907942,
+      "spotify_popularity": 79,
+      "spotify_id": "6fOMl44jA4Sp5b9PpYCkzz",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb1cf142a710a2f3d9b7a62da1",
+      "genres_spotify": [
+        "christian hip hop"
+      ]
+    },
+    {
+      "id": "ed sheeran",
+      "name": "Ed Sheeran",
+      "play_count": 1137,
+      "rank": 17,
+      "size": 3709854,
+      "listener_count": 3709854,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3709854,
+      "lastfm_playcount": 215691093,
+      "lastfm_url": "https://www.last.fm/music/Ed+Sheeran",
+      "genres_lastfm": [
+        "acoustic",
+        "british",
+        "singer-songwriter"
+      ],
+      "spotify_followers": 120776075,
+      "spotify_popularity": 91,
+      "spotify_id": "6eUKZXaKkcviH0Ku9w2n3V",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb399444ed4eace08b549d1161",
+      "genres_spotify": [
+        "soft pop"
+      ]
+    },
+    {
+      "id": "the chainsmokers",
+      "name": "The Chainsmokers",
+      "play_count": 1033,
+      "rank": 18,
+      "size": 2375086,
+      "listener_count": 2375086,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2375086,
+      "lastfm_playcount": 72555574,
+      "lastfm_url": "https://www.last.fm/music/The+Chainsmokers",
+      "genres_lastfm": [
+        "electronic",
+        "pop",
+        "House"
+      ],
+      "spotify_followers": 21096440,
+      "spotify_popularity": 83,
+      "spotify_id": "69GGBxA162lTqCwzJG5jLp",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb44434ab91c37f5407f8e83b6",
+      "genres_spotify": []
+    },
+    {
+      "id": "(g)i-dle",
+      "name": "(G)I-DLE",
+      "play_count": 1011,
+      "rank": 19,
+      "size": 912771,
+      "listener_count": 912771,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 912771,
+      "lastfm_playcount": 100893883,
+      "lastfm_url": "https://www.last.fm/music/(G)I-DLE",
+      "genres_lastfm": [
+        "k-pop",
+        "pop",
+        "Korean"
+      ],
+      "spotify_followers": 4,
+      "spotify_popularity": 0,
+      "spotify_id": "0AKLWgKyN0h9YxoGMOyPwW",
+      "photo_url": null,
+      "genres_spotify": []
+    },
+    {
+      "id": "berlinist",
+      "name": "Berlinist",
+      "play_count": 992,
+      "rank": 20,
+      "size": 151740,
+      "listener_count": 151740,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 151740,
+      "lastfm_playcount": 2587389,
+      "lastfm_url": "https://www.last.fm/music/Berlinist",
+      "genres_lastfm": [
+        "ambient",
+        "Soundtrack",
+        "spanish"
+      ],
+      "spotify_followers": 31414,
+      "spotify_popularity": 46,
+      "spotify_id": "6EUPmAvpY341eXZwJVy6dn",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebbb58bf9492983cb91adc7150",
+      "genres_spotify": []
+    },
+    {
+      "id": "alia",
+      "name": "Alia",
+      "play_count": 967,
+      "rank": 21,
+      "size": 34043,
+      "listener_count": 34043,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 34043,
+      "lastfm_playcount": 709733,
+      "lastfm_url": "https://www.last.fm/music/Alia",
+      "genres_lastfm": [
+        "emo",
+        "german",
+        "post-rock"
+      ],
+      "spotify_followers": 95900,
+      "spotify_popularity": 48,
+      "spotify_id": "4Lmo7h2Ik12QI3Ik0BvGbB",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb531364c94ec00ac6077dfac5",
+      "genres_spotify": [
+        "j-pop",
+        "j-rock",
+        "anime"
+      ]
+    },
+    {
+      "id": "le sserafim",
+      "name": "LE SSERAFIM",
+      "play_count": 876,
+      "rank": 22,
+      "size": 1210534,
+      "listener_count": 1210534,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1210534,
+      "lastfm_playcount": 191086980,
+      "lastfm_url": "https://www.last.fm/music/LE+SSERAFIM",
+      "genres_lastfm": [
+        "k-pop",
+        "Kpop",
+        "Korean"
+      ],
+      "spotify_followers": 7220203,
+      "spotify_popularity": 81,
+      "spotify_id": "4SpbR6yFEvexJuaBpgAU5p",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb593f35db6f6837e1047a5e33",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "tonight alive",
+      "name": "Tonight Alive",
+      "play_count": 855,
+      "rank": 23,
+      "size": 319335,
+      "listener_count": 319335,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 319335,
+      "lastfm_playcount": 11145722,
+      "lastfm_url": "https://www.last.fm/music/Tonight+Alive",
+      "genres_lastfm": [
+        "pop punk",
+        "female vocalists",
+        "pop rock"
+      ],
+      "spotify_followers": 338253,
+      "spotify_popularity": 48,
+      "spotify_id": "5pjCYG6hPLBO3y4swxu3dh",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf605f6c661815b71d4bcc2ea",
+      "genres_spotify": [
+        "pop punk"
+      ]
+    },
+    {
+      "id": "alan walker",
+      "name": "Alan Walker",
+      "play_count": 848,
+      "rank": 24,
+      "size": 1504284,
+      "listener_count": 1504284,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1504284,
+      "lastfm_playcount": 38907899,
+      "lastfm_url": "https://www.last.fm/music/Alan+Walker",
+      "genres_lastfm": [
+        "electronic",
+        "House",
+        "EDM"
+      ],
+      "spotify_followers": 40785011,
+      "spotify_popularity": 82,
+      "spotify_id": "7vk5e3vY1uw9plTHJAMwjN",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebbf753c009fd9c2d53351dd3c",
+      "genres_spotify": []
+    },
+    {
+      "id": "walk off the earth",
+      "name": "Walk Off the Earth",
+      "play_count": 812,
+      "rank": 25,
+      "size": 501389,
+      "listener_count": 501389,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 501389,
+      "lastfm_playcount": 6896013,
+      "lastfm_url": "https://www.last.fm/music/Walk+Off+the+Earth",
+      "genres_lastfm": [
+        "indie",
+        "indie rock",
+        "rock"
+      ],
+      "spotify_followers": 813826,
+      "spotify_popularity": 60,
+      "spotify_id": "6jEiUoyyJNPHzSR0Nib6HX",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb9cc45f0fafaa6587fa6f600f",
+      "genres_spotify": []
+    },
+    {
+      "id": "blackpink",
+      "name": "BLACKPINK",
+      "play_count": 796,
+      "rank": 26,
+      "size": 1558082,
+      "listener_count": 1558082,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1558082,
+      "lastfm_playcount": 269626831,
+      "lastfm_url": "https://www.last.fm/music/BLACKPINK",
+      "genres_lastfm": [
+        "k-pop",
+        "Kpop",
+        "pop"
+      ],
+      "spotify_followers": 54087598,
+      "spotify_popularity": 80,
+      "spotify_id": "41MozSoPIsD1dJM0CLPjZF",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb667b1c37aac06716daa5fe92",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "st. lundi",
+      "name": "St. Lundi",
+      "play_count": 762,
+      "rank": 27,
+      "size": 61645,
+      "listener_count": 61645,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 61645,
+      "lastfm_playcount": 453308,
+      "lastfm_url": "https://www.last.fm/music/St.+Lundi",
+      "genres_lastfm": [
+        "USA"
+      ],
+      "spotify_followers": 44386,
+      "spotify_popularity": 55,
+      "spotify_id": "3i94wxAKQqlJyiPLDmjNdH",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8029aff4b6fb2aab742867f9",
+      "genres_spotify": []
+    },
+    {
+      "id": "ava max",
+      "name": "Ava Max",
+      "play_count": 760,
+      "rank": 28,
+      "size": 1347730,
+      "listener_count": 1347730,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1347730,
+      "lastfm_playcount": 55985208,
+      "lastfm_url": "https://www.last.fm/music/Ava+Max",
+      "genres_lastfm": [
+        "pop",
+        "electropop",
+        "female vocalists"
+      ],
+      "spotify_followers": 7545445,
+      "spotify_popularity": 80,
+      "spotify_id": "4npEfmQ6YuiwW1GpUmaq3F",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb44968b056b6979c120b0dcf1",
+      "genres_spotify": []
+    },
+    {
+      "id": "tsukuyomi",
+      "name": "Tsukuyomi",
+      "play_count": 728,
+      "rank": 29,
+      "size": 31577,
+      "listener_count": 31577,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 31577,
+      "lastfm_playcount": 985293,
+      "lastfm_url": "https://www.last.fm/music/Tsukuyomi",
+      "genres_lastfm": [
+        "jazz",
+        "rock",
+        "japanese"
+      ],
+      "spotify_followers": 94187,
+      "spotify_popularity": 49,
+      "spotify_id": "2mcj8ajoE1eFlNkAihw5Cg",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb15cb41026a788a83cd0da201",
+      "genres_spotify": [
+        "j-pop",
+        "anime",
+        "vocaloid"
+      ]
+    },
+    {
+      "id": "jo yuri",
+      "name": "JO YURI",
+      "play_count": 673,
+      "rank": 30,
+      "size": 305082,
+      "listener_count": 305082,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 305082,
+      "lastfm_playcount": 11331424,
+      "lastfm_url": "https://www.last.fm/music/JO+YURI",
+      "genres_lastfm": [
+        "k-pop",
+        "pop",
+        "Korean"
+      ],
+      "spotify_followers": 506278,
+      "spotify_popularity": 52,
+      "spotify_id": "3LFFf4EpKn2krneZ9vozyz",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb1605bb0e3881cfc8f63c2c6a",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "ariana grande",
+      "name": "Ariana Grande",
+      "play_count": 655,
+      "rank": 31,
+      "size": 3867554,
+      "listener_count": 3867554,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3867554,
+      "lastfm_playcount": 884727493,
+      "lastfm_url": "https://www.last.fm/music/Ariana+Grande",
+      "genres_lastfm": [
+        "pop",
+        "rnb",
+        "female vocalists"
+      ],
+      "spotify_followers": 105685236,
+      "spotify_popularity": 93,
+      "spotify_id": "66CXWjxzNUsdJxJ2JdwvnR",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb6725802588d7dc1aba076ca5",
+      "genres_spotify": [
+        "pop"
+      ]
+    },
+    {
+      "id": "the killers",
+      "name": "The Killers",
+      "play_count": 644,
+      "rank": 32,
+      "size": 6183625,
+      "listener_count": 6183625,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 6183625,
+      "lastfm_playcount": 304582856,
+      "lastfm_url": "https://www.last.fm/music/The+Killers",
+      "genres_lastfm": [
+        "indie",
+        "rock",
+        "indie rock"
+      ],
+      "spotify_followers": 7842304,
+      "spotify_popularity": 79,
+      "spotify_id": "0C0XlULifJtAgn6ZNCW2eu",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb207b21f3ed0ee96adce3166a",
+      "genres_spotify": [
+        "alternative rock"
+      ]
+    },
+    {
+      "id": "henry young",
+      "name": "Henry Young",
+      "play_count": 633,
+      "rank": 33,
+      "size": 59816,
+      "listener_count": 59816,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 59816,
+      "lastfm_playcount": 732735,
+      "lastfm_url": "https://www.last.fm/music/Henry+Young",
+      "genres_lastfm": [
+        "electronic",
+        "pop"
+      ],
+      "spotify_followers": 31500,
+      "spotify_popularity": 46,
+      "spotify_id": "7BFfb40nQrs3xKRMGK1GrC",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb6a52e24df19cf8ac43383084",
+      "genres_spotify": []
+    },
+    {
+      "id": "kyo hanabasami",
+      "name": "Kyo Hanabasami",
+      "play_count": 630,
+      "rank": 34,
+      "size": 7722,
+      "listener_count": 7722,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 7722,
+      "lastfm_playcount": 222030,
+      "lastfm_url": "https://www.last.fm/music/Kyo+Hanabasami",
+      "genres_lastfm": [],
+      "spotify_followers": 15320,
+      "spotify_popularity": 30,
+      "spotify_id": "2VeV8p67KNOG5JahnqcK7x",
+      "photo_url": "https://i.scdn.co/image/ab67616d0000b273a5a8dbb7a5ef133a6ed71db9",
+      "genres_spotify": [
+        "j-pop"
+      ]
+    },
+    {
+      "id": "taeyeon",
+      "name": "taeyeon",
+      "play_count": 627,
+      "rank": 35,
+      "size": 522931,
+      "listener_count": 522931,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 522931,
+      "lastfm_playcount": 43603242,
+      "lastfm_url": "https://www.last.fm/music/+noredirect/taeyeon",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "Kpop"
+      ],
+      "spotify_followers": 3093342,
+      "spotify_popularity": 66,
+      "spotify_id": "3qNVuliS40BLgXGxhdBdqu",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb5d9ebbbbe3fff5a330b40c8",
+      "genres_spotify": [
+        "k-pop",
+        "k-ballad"
+      ]
+    },
+    {
+      "id": "openside",
+      "name": "Openside",
+      "play_count": 622,
+      "rank": 36,
+      "size": 15377,
+      "listener_count": 15377,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 15377,
+      "lastfm_playcount": 97107,
+      "lastfm_url": "https://www.last.fm/music/Openside",
+      "genres_lastfm": [
+        "New Zealand",
+        "alternative",
+        "indie pop"
+      ],
+      "spotify_followers": 8103,
+      "spotify_popularity": 28,
+      "spotify_id": "20cozXBkQdesuJYvtvZ2vH",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf145fb81564bfc1dd65fa22d",
+      "genres_spotify": []
+    },
+    {
+      "id": "seori",
+      "name": "Seori",
+      "play_count": 616,
+      "rank": 37,
+      "size": 219842,
+      "listener_count": 219842,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 219842,
+      "lastfm_playcount": 5981522,
+      "lastfm_url": "https://www.last.fm/music/Seori",
+      "genres_lastfm": [
+        "Korean",
+        "k-pop",
+        "k-rnb"
+      ],
+      "spotify_followers": 333943,
+      "spotify_popularity": 58,
+      "spotify_id": "2bWTIIQP9zaVc55RaMGu7e",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb639dc73ec795e329d064dbb2",
+      "genres_spotify": []
+    },
+    {
+      "id": "saya",
+      "name": "Saya",
+      "play_count": 603,
+      "rank": 38,
+      "size": 62235,
+      "listener_count": 62235,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 62235,
+      "lastfm_playcount": 431745,
+      "lastfm_url": "https://www.last.fm/music/Saya",
+      "genres_lastfm": [
+        "pop",
+        "japanese",
+        "female vocalists"
+      ],
+      "spotify_followers": 81456,
+      "spotify_popularity": 52,
+      "spotify_id": "4EnymklUyqZwvmHQGlRssl",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb6f0edfb968ea1eb5c77d0270",
+      "genres_spotify": []
+    },
+    {
+      "id": "foreground eclipse",
+      "name": "Foreground Eclipse",
+      "play_count": 579,
+      "rank": 39,
+      "size": 31776,
+      "listener_count": 31776,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 31776,
+      "lastfm_playcount": 2118226,
+      "lastfm_url": "https://www.last.fm/music/Foreground+Eclipse",
+      "genres_lastfm": [
+        "post-hardcore",
+        "japanese",
+        "touhou"
+      ],
+      "spotify_followers": 12574,
+      "spotify_popularity": 37,
+      "spotify_id": "133ZFcHur9ckcKLnJ0XNJS",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb667a82fc51bbceb49329dcea",
+      "genres_spotify": [
+        "j-rock"
+      ]
+    },
+    {
+      "id": "harry styles",
+      "name": "Harry Styles",
+      "play_count": 572,
+      "rank": 40,
+      "size": 2776001,
+      "listener_count": 2776001,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2776001,
+      "lastfm_playcount": 344310549,
+      "lastfm_url": "https://www.last.fm/music/Harry+Styles",
+      "genres_lastfm": [
+        "pop",
+        "rock",
+        "seen live"
+      ],
+      "spotify_followers": 33768649,
+      "spotify_popularity": 85,
+      "spotify_id": "6KImCVD70vtIoJWnq6nGn3",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf7db7c8ede90a019c54590bb",
+      "genres_spotify": []
+    },
+    {
+      "id": "maroon 5",
+      "name": "Maroon 5",
+      "play_count": 497,
+      "rank": 41,
+      "size": 5822671,
+      "listener_count": 5822671,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 5822671,
+      "lastfm_playcount": 222079240,
+      "lastfm_url": "https://www.last.fm/music/Maroon+5",
+      "genres_lastfm": [
+        "rock",
+        "pop",
+        "pop rock"
+      ],
+      "spotify_followers": 45047634,
+      "spotify_popularity": 88,
+      "spotify_id": "04gDigrS5kc9YWfZHwBETP",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf8349dfb619a7f842242de77",
+      "genres_spotify": [
+        "pop"
+      ]
+    },
+    {
+      "id": "harold faltermeyer",
+      "name": "Harold Faltermeyer",
+      "play_count": 485,
+      "rank": 42,
+      "size": 410223,
+      "listener_count": 410223,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 410223,
+      "lastfm_playcount": 2939902,
+      "lastfm_url": "https://www.last.fm/music/Harold+Faltermeyer",
+      "genres_lastfm": [
+        "Soundtrack",
+        "electronic",
+        "80s"
+      ],
+      "spotify_followers": 58210,
+      "spotify_popularity": 57,
+      "spotify_id": "7Cf73Z3RZQTH4V69GSDxnv",
+      "photo_url": "https://i.scdn.co/image/595485b5a0d83252a95f5fcb21a7101f73b08386",
+      "genres_spotify": [
+        "synthpop"
+      ]
+    },
+    {
+      "id": "dreamcatcher",
+      "name": "Dreamcatcher",
+      "play_count": 481,
+      "rank": 43,
+      "size": 494541,
+      "listener_count": 494541,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 494541,
+      "lastfm_playcount": 71505082,
+      "lastfm_url": "https://www.last.fm/music/Dreamcatcher",
+      "genres_lastfm": [
+        "k-pop",
+        "rock",
+        "Korean"
+      ],
+      "spotify_followers": 1393069,
+      "spotify_popularity": 58,
+      "spotify_id": "5V1qsQHdXNm4ZEZHWvFnqQ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb2e75abbdf622da095f8b21cd",
+      "genres_spotify": [
+        "k-pop",
+        "k-rock"
+      ]
+    },
+    {
+      "id": "avicii",
+      "name": "Avicii",
+      "play_count": 458,
+      "rank": 44,
+      "size": 2992153,
+      "listener_count": 2992153,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2992153,
+      "lastfm_playcount": 96886638,
+      "lastfm_url": "https://www.last.fm/music/Avicii",
+      "genres_lastfm": [
+        "House",
+        "electronic",
+        "dance"
+      ],
+      "spotify_followers": 23521996,
+      "spotify_popularity": 84,
+      "spotify_id": "1vCWHaC5f2uS3yhpwWbIA6",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebae07171f989fb39736674113",
+      "genres_spotify": [
+        "edm"
+      ]
+    },
+    {
+      "id": "bring me the horizon",
+      "name": "Bring Me the Horizon",
+      "play_count": 454,
+      "rank": 45,
+      "size": 2441949,
+      "listener_count": 2441949,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2441949,
+      "lastfm_playcount": 259140048,
+      "lastfm_url": "https://www.last.fm/music/Bring+Me+the+Horizon",
+      "genres_lastfm": [
+        "deathcore",
+        "metalcore",
+        "hardcore"
+      ],
+      "spotify_followers": 6445440,
+      "spotify_popularity": 79,
+      "spotify_id": "1Ffb6ejR6Fe5IamqA5oRUF",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe7c9399d0b5d813c20cbec65",
+      "genres_spotify": [
+        "metalcore",
+        "emo",
+        "screamo"
+      ]
+    },
+    {
+      "id": "kimsejeong",
+      "name": "KIMSEJEONG",
+      "play_count": 437,
+      "rank": 46,
+      "size": 121232,
+      "listener_count": 121232,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 121232,
+      "lastfm_playcount": 3628042,
+      "lastfm_url": "https://www.last.fm/music/KIMSEJEONG",
+      "genres_lastfm": [
+        "Korean",
+        "k-pop",
+        "gugudan"
+      ],
+      "spotify_followers": 615715,
+      "spotify_popularity": 52,
+      "spotify_id": "1lFLniFTaPjYCtQZvDXpqu",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb55083bec4696aa1fb3a146e8",
+      "genres_spotify": [
+        "k-ballad"
+      ]
+    },
+    {
+      "id": "anyujin",
+      "name": "ANYUJIN",
+      "play_count": 427,
+      "rank": 47,
+      "size": 6822,
+      "listener_count": 6822,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 6822,
+      "lastfm_playcount": 231971,
+      "lastfm_url": "https://www.last.fm/music/ANYUJIN",
+      "genres_lastfm": [
+        "Korean",
+        "k-pop",
+        "pop"
+      ],
+      "spotify_followers": 37744,
+      "spotify_popularity": 42,
+      "spotify_id": "3schR1HLbYu3RqqPDiDFrE",
+      "photo_url": "https://i.scdn.co/image/ab67616d0000b27394f40c707b710aa7f07e9b4c",
+      "genres_spotify": []
+    },
+    {
+      "id": "bts",
+      "name": "BTS",
+      "play_count": 417,
+      "rank": 48,
+      "size": 1968819,
+      "listener_count": 1968819,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1968819,
+      "lastfm_playcount": 2330181198,
+      "lastfm_url": "https://www.last.fm/music/BTS",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "bts"
+      ],
+      "spotify_followers": 132233,
+      "spotify_popularity": 43,
+      "spotify_id": "3kYFawNQVZ00FQbgs4rVBe",
+      "photo_url": "https://i.scdn.co/image/0078316432cdfb6733c3bde0dc61754d45442d0f",
+      "genres_spotify": [
+        "pop punk"
+      ]
+    },
+    {
+      "id": "bbno$",
+      "name": "bbno$",
+      "play_count": 407,
+      "rank": 49,
+      "size": 1121818,
+      "listener_count": 1121818,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1121818,
+      "lastfm_playcount": 44298364,
+      "lastfm_url": "https://www.last.fm/music/bbno$",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "hip hop"
+      ],
+      "spotify_followers": 2325254,
+      "spotify_popularity": 79,
+      "spotify_id": "41X1TR6hrK8Q2ZCpp2EqCz",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebae7196326fa12fe1ea99b7e9",
+      "genres_spotify": []
+    },
+    {
+      "id": "the script",
+      "name": "The Script",
+      "play_count": 394,
+      "rank": 50,
+      "size": 2636347,
+      "listener_count": 2636347,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2636347,
+      "lastfm_playcount": 59779232,
+      "lastfm_url": "https://www.last.fm/music/The+Script",
+      "genres_lastfm": [
+        "pop rock",
+        "irish",
+        "rock"
+      ],
+      "spotify_followers": 8650091,
+      "spotify_popularity": 79,
+      "spotify_id": "3AQRLZ9PuTAozP28Skbq8V",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4a0b21cd87d8a8752fd32e94",
+      "genres_spotify": []
+    },
+    {
+      "id": "ryokuoushoku shakai",
+      "name": "Ryokuoushoku Shakai",
+      "play_count": 389,
+      "rank": 51,
+      "size": 145807,
+      "listener_count": 145807,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 145807,
+      "lastfm_playcount": 2999413,
+      "lastfm_url": "https://www.last.fm/music/Ryokuoushoku+Shakai",
+      "genres_lastfm": [
+        "J-rock",
+        "j-pop",
+        "rock"
+      ],
+      "spotify_followers": 1338920,
+      "spotify_popularity": 65,
+      "spotify_id": "4SJ7qRgJYNXB9Yttzs4aSa",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebd9a48d00ce7cf4d66abc76b6",
+      "genres_spotify": [
+        "j-pop",
+        "anime",
+        "j-rock"
+      ]
+    },
+    {
+      "id": "sra",
+      "name": "SRA",
+      "play_count": 373,
+      "rank": 52,
+      "size": 10946,
+      "listener_count": 10946,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 10946,
+      "lastfm_playcount": 63015,
+      "lastfm_url": "https://www.last.fm/music/SRA",
+      "genres_lastfm": [
+        "pop",
+        "minimal",
+        "rnb"
+      ],
+      "spotify_followers": 5163,
+      "spotify_popularity": 36,
+      "spotify_id": "6ajLYP0hhsrxlmJQWqDruk",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4633645973f0e613d28386d7",
+      "genres_spotify": []
+    },
+    {
+      "id": "tate mcrae",
+      "name": "Tate McRae",
+      "play_count": 358,
+      "rank": 53,
+      "size": 1769357,
+      "listener_count": 1769357,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1769357,
+      "lastfm_playcount": 158431747,
+      "lastfm_url": "https://www.last.fm/music/Tate+McRae",
+      "genres_lastfm": [
+        "pop",
+        "seen live",
+        "Canadian"
+      ],
+      "spotify_followers": 7985474,
+      "spotify_popularity": 91,
+      "spotify_id": "45dkTj5sMRSjrmBSBeiHym",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb590259e859082dc3b661b8ac",
+      "genres_spotify": []
+    },
+    {
+      "id": "bol4",
+      "name": "BOL4",
+      "play_count": 356,
+      "rank": 54,
+      "size": 347934,
+      "listener_count": 347934,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 347934,
+      "lastfm_playcount": 9459278,
+      "lastfm_url": "https://www.last.fm/music/BOL4",
+      "genres_lastfm": [
+        "Korean",
+        "indie",
+        "k-indie"
+      ],
+      "spotify_followers": 2092586,
+      "spotify_popularity": 62,
+      "spotify_id": "4k5fFEYgkWYrYvtOK3zVBl",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4a970fe13b80298b5621d657",
+      "genres_spotify": [
+        "k-pop",
+        "k-ballad"
+      ]
+    },
+    {
+      "id": "前島麻由",
+      "name": "前島麻由",
+      "play_count": 347,
+      "rank": 55,
+      "size": 30535,
+      "listener_count": 30535,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 30535,
+      "lastfm_playcount": 532664,
+      "lastfm_url": "https://www.last.fm/music/%E5%89%8D%E5%B3%B6%E9%BA%BB%E7%94%B1",
+      "genres_lastfm": [
+        "j-pop",
+        "female vocalists",
+        "rock"
+      ],
+      "spotify_followers": 29750,
+      "spotify_popularity": 44,
+      "spotify_id": "0M0v61x8lN3rDLbmTnlYBg",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe314851d0f55c16fb1a95a09",
+      "genres_spotify": [
+        "anime"
+      ]
+    },
+    {
+      "id": "kygo",
+      "name": "Kygo",
+      "play_count": 343,
+      "rank": 56,
+      "size": 1772716,
+      "listener_count": 1772716,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1772716,
+      "lastfm_playcount": 51908368,
+      "lastfm_url": "https://www.last.fm/music/Kygo",
+      "genres_lastfm": [
+        "electronic",
+        "House",
+        "chillout"
+      ],
+      "spotify_followers": 8635536,
+      "spotify_popularity": 82,
+      "spotify_id": "23fqKkggKUBHNkbKtXEls4",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe5ea1aa1404629c12ad86658",
+      "genres_spotify": [
+        "tropical house"
+      ]
+    },
+    {
+      "id": "mary",
+      "name": "Mary",
+      "play_count": 340,
+      "rank": 57,
+      "size": 68728,
+      "listener_count": 68728,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 68728,
+      "lastfm_playcount": 743071,
+      "lastfm_url": "https://www.last.fm/music/Mary",
+      "genres_lastfm": [
+        "seen live",
+        "post-punk",
+        "finnish"
+      ],
+      "spotify_followers": 4237275,
+      "spotify_popularity": 74,
+      "spotify_id": "1XkoF8ryArs86LZvFOkbyr",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb3d7888ba4d2bf67fe6b64a55",
+      "genres_spotify": [
+        "r&b"
+      ]
+    },
+    {
+      "id": "mina okabe",
+      "name": "Mina Okabe",
+      "play_count": 339,
+      "rank": 58,
+      "size": 84100,
+      "listener_count": 84100,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 84100,
+      "lastfm_playcount": 959899,
+      "lastfm_url": "https://www.last.fm/music/Mina+Okabe",
+      "genres_lastfm": [
+        "indie pop",
+        "dream pop",
+        "danish"
+      ],
+      "spotify_followers": 131988,
+      "spotify_popularity": 53,
+      "spotify_id": "5BS8KSKJPeLeXfABQx0bXl",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7f76f44aeae81dca31a337d7",
+      "genres_spotify": []
+    },
+    {
+      "id": "yeji",
+      "name": "Yeji",
+      "play_count": 334,
+      "rank": 59,
+      "size": 88404,
+      "listener_count": 88404,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 88404,
+      "lastfm_playcount": 2116138,
+      "lastfm_url": "https://www.last.fm/music/Yeji",
+      "genres_lastfm": [
+        "k-pop",
+        "itzy",
+        "pop"
+      ],
+      "spotify_followers": 178510,
+      "spotify_popularity": 57,
+      "spotify_id": "3skli1w2n0nOZ4qkDbvV2m",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb485cfbf516f7bf8b7b479a91",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "the oral cigarettes",
+      "name": "THE ORAL CIGARETTES",
+      "play_count": 333,
+      "rank": 60,
+      "size": 342009,
+      "listener_count": 342009,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 342009,
+      "lastfm_playcount": 9840221,
+      "lastfm_url": "https://www.last.fm/music/THE+ORAL+CIGARETTES",
+      "genres_lastfm": [
+        "J-rock",
+        "alternative",
+        "rock"
+      ],
+      "spotify_followers": 638464,
+      "spotify_popularity": 59,
+      "spotify_id": "4rqJz9fE9prZvQd8WsQv6q",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb41d06008db6aff64378b802",
+      "genres_spotify": [
+        "j-rock",
+        "anime",
+        "j-pop"
+      ]
+    },
+    {
+      "id": "gyubin",
+      "name": "GYUBIN",
+      "play_count": 323,
+      "rank": 61,
+      "size": 40323,
+      "listener_count": 40323,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 40323,
+      "lastfm_playcount": 690784,
+      "lastfm_url": "https://www.last.fm/music/GYUBIN",
+      "genres_lastfm": [
+        "pop",
+        "Korean",
+        "k-pop"
+      ],
+      "spotify_followers": 70150,
+      "spotify_popularity": 48,
+      "spotify_id": "7nScMbyBG94XsSpe7yrImS",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb385c830d0c36d70376aa2d26",
+      "genres_spotify": []
+    },
+    {
+      "id": "sam ryder",
+      "name": "Sam Ryder",
+      "play_count": 309,
+      "rank": 62,
+      "size": 141712,
+      "listener_count": 141712,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 141712,
+      "lastfm_playcount": 1771783,
+      "lastfm_url": "https://www.last.fm/music/Sam+Ryder",
+      "genres_lastfm": [
+        "pop",
+        "british",
+        "Eurovision"
+      ],
+      "spotify_followers": 396556,
+      "spotify_popularity": 54,
+      "spotify_id": "1rvnJJghrxl1xakJZct08m",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8d6dcbcc410cebf4b045e663",
+      "genres_spotify": []
+    },
+    {
+      "id": "rothy",
+      "name": "Rothy",
+      "play_count": 302,
+      "rank": 63,
+      "size": 61955,
+      "listener_count": 61955,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 61955,
+      "lastfm_playcount": 933598,
+      "lastfm_url": "https://www.last.fm/music/Rothy",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "Ballad"
+      ],
+      "spotify_followers": 203853,
+      "spotify_popularity": 40,
+      "spotify_id": "0jUn8CXobOt0IixyR72una",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebdf3a5d53cb05ff031efe7abb",
+      "genres_spotify": [
+        "k-ballad"
+      ]
+    },
+    {
+      "id": "kobasolo",
+      "name": "KOBASOLO",
+      "play_count": 297,
+      "rank": 64,
+      "size": 50375,
+      "listener_count": 50375,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 50375,
+      "lastfm_playcount": 861168,
+      "lastfm_url": "https://www.last.fm/music/KOBASOLO",
+      "genres_lastfm": [
+        "japanese",
+        "japan",
+        "finished"
+      ],
+      "spotify_followers": 219169,
+      "spotify_popularity": 46,
+      "spotify_id": "4n2W84plMrq8WttT18Npwi",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebd34fe8b6854a93a79dcf9236",
+      "genres_spotify": [
+        "j-pop"
+      ]
+    },
+    {
+      "id": "uru",
+      "name": "Uru",
+      "play_count": 289,
+      "rank": 65,
+      "size": 64054,
+      "listener_count": 64054,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 64054,
+      "lastfm_playcount": 1257082,
+      "lastfm_url": "https://www.last.fm/music/Uru",
+      "genres_lastfm": [
+        "japanese",
+        "j-pop",
+        "female vocalists"
+      ],
+      "spotify_followers": 1091030,
+      "spotify_popularity": 63,
+      "spotify_id": "6le80R1opKnTlP4o3KvA2k",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb065048a1c3aa3af5bb117ed4",
+      "genres_spotify": [
+        "j-pop",
+        "anime"
+      ]
+    },
+    {
+      "id": "b.i",
+      "name": "B.I",
+      "play_count": 278,
+      "rank": 66,
+      "size": 292880,
+      "listener_count": 292880,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 292880,
+      "lastfm_playcount": 9890951,
+      "lastfm_url": "https://www.last.fm/music/B.I",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "rap"
+      ],
+      "spotify_followers": 157,
+      "spotify_popularity": 20,
+      "spotify_id": "4XIn6DuTy0ZSfABDGVzh25",
+      "photo_url": null,
+      "genres_spotify": []
+    },
+    {
+      "id": "muse",
+      "name": "Muse",
+      "play_count": 269,
+      "rank": 67,
+      "size": 5601707,
+      "listener_count": 5601707,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 5601707,
+      "lastfm_playcount": 458345502,
+      "lastfm_url": "https://www.last.fm/music/Muse",
+      "genres_lastfm": [
+        "alternative rock",
+        "rock",
+        "alternative"
+      ],
+      "spotify_followers": 8298078,
+      "spotify_popularity": 78,
+      "spotify_id": "12Chz98pHFMPJEknJQMWvI",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb0accbbe13e1aa147dd27671c",
+      "genres_spotify": [
+        "alternative rock",
+        "rock"
+      ]
+    },
+    {
+      "id": "sunmi",
+      "name": "SunMi",
+      "play_count": 266,
+      "rank": 68,
+      "size": 599077,
+      "listener_count": 599077,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 599077,
+      "lastfm_playcount": 30436849,
+      "lastfm_url": "https://www.last.fm/music/SunMi",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "pop"
+      ],
+      "spotify_followers": 2640851,
+      "spotify_popularity": 56,
+      "spotify_id": "6MoXcK2GyGg7FIyxPU5yW6",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebced85d5f223e7301022a8599",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "wooah",
+      "name": "WOOAH",
+      "play_count": 257,
+      "rank": 69,
+      "size": 98586,
+      "listener_count": 98586,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 98586,
+      "lastfm_playcount": 1909643,
+      "lastfm_url": "https://www.last.fm/music/WOOAH",
+      "genres_lastfm": [
+        "Korean",
+        "k-pop",
+        "Girl Groups"
+      ],
+      "spotify_followers": 315580,
+      "spotify_popularity": 42,
+      "spotify_id": "7mgY992t7YTx6UELsoIMRa",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf45456a6207be90a847e952d",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "aisha",
+      "name": "Aisha",
+      "play_count": 252,
+      "rank": 70,
+      "size": 116200,
+      "listener_count": 116200,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 116200,
+      "lastfm_playcount": 3113573,
+      "lastfm_url": "https://www.last.fm/music/Aisha",
+      "genres_lastfm": [
+        "latvian",
+        "female vocalists",
+        "reggae"
+      ],
+      "spotify_followers": 2631,
+      "spotify_popularity": 40,
+      "spotify_id": "2CrQohuZKX4Kijnw1FX4tf",
+      "photo_url": null,
+      "genres_spotify": []
+    },
+    {
+      "id": "the rose",
+      "name": "The Rose",
+      "play_count": 243,
+      "rank": 71,
+      "size": 393939,
+      "listener_count": 393939,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 393939,
+      "lastfm_playcount": 19905947,
+      "lastfm_url": "https://www.last.fm/music/The+Rose",
+      "genres_lastfm": [
+        "rock",
+        "trance",
+        "House"
+      ],
+      "spotify_followers": 2784391,
+      "spotify_popularity": 65,
+      "spotify_id": "5na1LmEmK2VzNLje9snJYW",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebd434a8b25f5a50277b05a402",
+      "genres_spotify": [
+        "k-rock",
+        "k-pop"
+      ]
+    },
+    {
+      "id": "fellowship",
+      "name": "Fellowship",
+      "play_count": 237,
+      "rank": 72,
+      "size": 20755,
+      "listener_count": 20755,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 20755,
+      "lastfm_playcount": 690001,
+      "lastfm_url": "https://www.last.fm/music/Fellowship",
+      "genres_lastfm": [
+        "Power metal",
+        "Drum and bass",
+        "symphonic power metal"
+      ],
+      "spotify_followers": 13673,
+      "spotify_popularity": 34,
+      "spotify_id": "3WDqn7WBcRoRE1IpEWNf3E",
+      "photo_url": "https://i.scdn.co/image/ab67616d0000b2731e2d779853f23d2b3bc218f3",
+      "genres_spotify": [
+        "power metal",
+        "symphonic metal"
+      ]
+    },
+    {
+      "id": "yerin baek",
+      "name": "Yerin Baek",
+      "play_count": 232,
+      "rank": 73,
+      "size": 238043,
+      "listener_count": 238043,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 238043,
+      "lastfm_playcount": 13184903,
+      "lastfm_url": "https://www.last.fm/music/Yerin+Baek",
+      "genres_lastfm": [
+        "k-pop",
+        "indie",
+        "rnb"
+      ],
+      "spotify_followers": 734791,
+      "spotify_popularity": 59,
+      "spotify_id": "6dhfy4ByARPJdPtMyrUYJK",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf02894a4871ab241313e59e1",
+      "genres_spotify": [
+        "k-ballad"
+      ]
+    },
+    {
+      "id": "shawn mendes",
+      "name": "Shawn Mendes",
+      "play_count": 230,
+      "rank": 74,
+      "size": 2341003,
+      "listener_count": 2341003,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2341003,
+      "lastfm_playcount": 121341678,
+      "lastfm_url": "https://www.last.fm/music/Shawn+Mendes",
+      "genres_lastfm": [
+        "pop",
+        "Canadian",
+        "seen live"
+      ],
+      "spotify_followers": 45085414,
+      "spotify_popularity": 84,
+      "spotify_id": "7n2wHs1TKAczGzO7Dd2rGr",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb58b4b9419486550f6fda0535",
+      "genres_spotify": []
+    },
+    {
+      "id": "kiss of life",
+      "name": "Kiss Of Life",
+      "play_count": 228,
+      "rank": 75,
+      "size": 579679,
+      "listener_count": 579679,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 579679,
+      "lastfm_playcount": 49912079,
+      "lastfm_url": "https://www.last.fm/music/Kiss+Of+Life",
+      "genres_lastfm": [
+        "k-pop",
+        "pop",
+        "Kpop"
+      ],
+      "spotify_followers": 2220548,
+      "spotify_popularity": 70,
+      "spotify_id": "4TEK9tIkcoxib4GxT3O4ky",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb5227c0582a86838a0942d9f3",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "miyeon",
+      "name": "Miyeon",
+      "play_count": 227,
+      "rank": 76,
+      "size": 113308,
+      "listener_count": 113308,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 113308,
+      "lastfm_playcount": 2909325,
+      "lastfm_url": "https://www.last.fm/music/Miyeon",
+      "genres_lastfm": [
+        "Korean",
+        "k-pop",
+        "ost"
+      ],
+      "spotify_followers": 748199,
+      "spotify_popularity": 46,
+      "spotify_id": "779v40cWIJUUoIDtC1IGaF",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb193a30737a6d250d0cc0749d",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "lewis capaldi",
+      "name": "Lewis Capaldi",
+      "play_count": 227,
+      "rank": 77,
+      "size": 1317559,
+      "listener_count": 1317559,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1317559,
+      "lastfm_playcount": 42952487,
+      "lastfm_url": "https://www.last.fm/music/Lewis+Capaldi",
+      "genres_lastfm": [
+        "pop",
+        "seen live",
+        "pop rock"
+      ],
+      "spotify_followers": 13519306,
+      "spotify_popularity": 80,
+      "spotify_id": "4GNC7GD6oZMSxPGyXy4MNB",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebea7538654040e553a7b0fc28",
+      "genres_spotify": [
+        "soft pop"
+      ]
+    },
+    {
+      "id": "mikolai stroinski",
+      "name": "Mikolai Stroinski",
+      "play_count": 221,
+      "rank": 78,
+      "size": 181516,
+      "listener_count": 181516,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 181516,
+      "lastfm_playcount": 6147154,
+      "lastfm_url": "https://www.last.fm/music/Mikolai+Stroinski",
+      "genres_lastfm": [
+        "Soundtrack",
+        "video game music",
+        "instrumental"
+      ],
+      "spotify_followers": 22979,
+      "spotify_popularity": 55,
+      "spotify_id": "6lGCmXtqSxze8o2KEfYD6D",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebd4088efd0150facb7b67a610",
+      "genres_spotify": [
+        "medieval",
+        "soundtrack"
+      ]
+    },
+    {
+      "id": "simple plan",
+      "name": "Simple Plan",
+      "play_count": 217,
+      "rank": 79,
+      "size": 2441387,
+      "listener_count": 2441387,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2441387,
+      "lastfm_playcount": 62097930,
+      "lastfm_url": "https://www.last.fm/music/Simple+Plan",
+      "genres_lastfm": [
+        "pop punk",
+        "rock",
+        "punk rock"
+      ],
+      "spotify_followers": 3830993,
+      "spotify_popularity": 72,
+      "spotify_id": "2p4FqHnazRucYQHyDCdBrJ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebc5fa723bdd0e043d13877196",
+      "genres_spotify": [
+        "pop punk",
+        "punk",
+        "emo"
+      ]
+    },
+    {
+      "id": "twenty one pilots",
+      "name": "Twenty One Pilots",
+      "play_count": 216,
+      "rank": 80,
+      "size": 2808714,
+      "listener_count": 2808714,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2808714,
+      "lastfm_playcount": 300945125,
+      "lastfm_url": "https://www.last.fm/music/Twenty+One+Pilots",
+      "genres_lastfm": [
+        "electronic",
+        "alternative",
+        "indie pop"
+      ],
+      "spotify_followers": 25456728,
+      "spotify_popularity": 85,
+      "spotify_id": "3YQKmKGau1PzlVlkL1iodx",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb61a7ea26d33ded218cd1e59d",
+      "genres_spotify": []
+    },
+    {
+      "id": "miley cyrus",
+      "name": "Miley Cyrus",
+      "play_count": 216,
+      "rank": 81,
+      "size": 4286253,
+      "listener_count": 4286253,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 4286253,
+      "lastfm_playcount": 249160818,
+      "lastfm_url": "https://www.last.fm/music/Miley+Cyrus",
+      "genres_lastfm": [
+        "pop",
+        "female vocalists",
+        "Disney"
+      ],
+      "spotify_followers": 26079616,
+      "spotify_popularity": 86,
+      "spotify_id": "5YGY8feqx7naU7z4HrwZM6",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf4cccd14ec026038d713e353",
+      "genres_spotify": []
+    },
+    {
+      "id": "jennie",
+      "name": "Jennie",
+      "play_count": 208,
+      "rank": 82,
+      "size": 1121490,
+      "listener_count": 1121490,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1121490,
+      "lastfm_playcount": 68271344,
+      "lastfm_url": "https://www.last.fm/music/Jennie",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "Kpop"
+      ],
+      "spotify_followers": 10626902,
+      "spotify_popularity": 87,
+      "spotify_id": "250b0Wlc5Vk0CoUsaCY84M",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eba8e3627e392a1d8f539cb575",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "aimyon",
+      "name": "aimyon",
+      "play_count": 197,
+      "rank": 83,
+      "size": 97104,
+      "listener_count": 97104,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 97104,
+      "lastfm_playcount": 2355488,
+      "lastfm_url": "https://www.last.fm/music/aimyon",
+      "genres_lastfm": [
+        "j-pop",
+        "japanese",
+        "singer-songwriter"
+      ],
+      "spotify_followers": 5835422,
+      "spotify_popularity": 72,
+      "spotify_id": "5kVZa4lFUmAQlBogl1fkd6",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8ead6e5e5233992332b2abed",
+      "genres_spotify": [
+        "j-pop"
+      ]
+    },
+    {
+      "id": "88rising",
+      "name": "88Rising",
+      "play_count": 196,
+      "rank": 84,
+      "size": 885005,
+      "listener_count": 885005,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 885005,
+      "lastfm_playcount": 26620752,
+      "lastfm_url": "https://www.last.fm/music/88Rising",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rnb",
+        "soul"
+      ],
+      "spotify_followers": 1032213,
+      "spotify_popularity": 69,
+      "spotify_id": "1AhjOkOLkbHUfcHDSErXQs",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb9925b25e0ad0d1c661e1e474",
+      "genres_spotify": []
+    },
+    {
+      "id": "david longoria",
+      "name": "David Longoria",
+      "play_count": 188,
+      "rank": 85,
+      "size": 2057,
+      "listener_count": 2057,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2057,
+      "lastfm_playcount": 15256,
+      "lastfm_url": "https://www.last.fm/music/David+Longoria",
+      "genres_lastfm": [
+        "seen live"
+      ],
+      "spotify_followers": 64610,
+      "spotify_popularity": 37,
+      "spotify_id": "7fc6URuip6672lCJwLO31s",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8e3d03475337df7e9f352c7a",
+      "genres_spotify": []
+    },
+    {
+      "id": "evanescence",
+      "name": "Evanescence",
+      "play_count": 188,
+      "rank": 86,
+      "size": 3769173,
+      "listener_count": 3769173,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3769173,
+      "lastfm_playcount": 156986446,
+      "lastfm_url": "https://www.last.fm/music/Evanescence",
+      "genres_lastfm": [
+        "rock",
+        "Gothic Rock",
+        "female vocalists"
+      ],
+      "spotify_followers": 5636186,
+      "spotify_popularity": 78,
+      "spotify_id": "5nGIFgo0shDenQYSE0Sn7c",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7ecf213c7dd78e0049379c5b",
+      "genres_spotify": [
+        "alternative metal"
+      ]
+    },
+    {
+      "id": "marcin przybyłowicz",
+      "name": "Marcin Przybyłowicz",
+      "play_count": 187,
+      "rank": 87,
+      "size": 320005,
+      "listener_count": 320005,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 320005,
+      "lastfm_playcount": 10295930,
+      "lastfm_url": "https://www.last.fm/music/+noredirect/Marcin+Przyby%C5%82owicz",
+      "genres_lastfm": [
+        "Soundtrack",
+        "instrumental",
+        "electronic"
+      ],
+      "spotify_followers": 86087,
+      "spotify_popularity": 59,
+      "spotify_id": "07vycW8ICLf5hKb22PFWXw",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf1e54d1ce1d7cc63560ecc11",
+      "genres_spotify": [
+        "medieval",
+        "soundtrack"
+      ]
+    },
+    {
+      "id": "olivia rodrigo",
+      "name": "Olivia Rodrigo",
+      "play_count": 186,
+      "rank": 88,
+      "size": 2601037,
+      "listener_count": 2601037,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2601037,
+      "lastfm_playcount": 446470808,
+      "lastfm_url": "https://www.last.fm/music/Olivia+Rodrigo",
+      "genres_lastfm": [
+        "pop",
+        "pop rock",
+        "seen live"
+      ],
+      "spotify_followers": 46360903,
+      "spotify_popularity": 88,
+      "spotify_id": "1McMsnEElThX1knmY4oliG",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe03a98785f3658f0b6461ec4",
+      "genres_spotify": []
+    },
+    {
+      "id": "jisoo",
+      "name": "JiSoo",
+      "play_count": 184,
+      "rank": 89,
+      "size": 431177,
+      "listener_count": 431177,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 431177,
+      "lastfm_playcount": 33572096,
+      "lastfm_url": "https://www.last.fm/music/JiSoo",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "pop"
+      ],
+      "spotify_followers": 6141418,
+      "spotify_popularity": 70,
+      "spotify_id": "6UZ0ba50XreR4TM8u322gs",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb9e33dd3ae51452774a133e1f",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "justine skye",
+      "name": "Justine Skye",
+      "play_count": 184,
+      "rank": 90,
+      "size": 575138,
+      "listener_count": 575138,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 575138,
+      "lastfm_playcount": 6400431,
+      "lastfm_url": "https://www.last.fm/music/Justine+Skye",
+      "genres_lastfm": [
+        "rnb",
+        "pop",
+        "soul"
+      ],
+      "spotify_followers": 922063,
+      "spotify_popularity": 65,
+      "spotify_id": "0jUQSUOcM7lxVn5eVGTkzQ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb690b6f30c0c6cac2a94e3bb",
+      "genres_spotify": []
+    },
+    {
+      "id": "knox",
+      "name": "Knox",
+      "play_count": 182,
+      "rank": 91,
+      "size": 146806,
+      "listener_count": 146806,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 146806,
+      "lastfm_playcount": 3062531,
+      "lastfm_url": "https://www.last.fm/music/Knox",
+      "genres_lastfm": [
+        "punk",
+        "speedcore",
+        "trip-hop"
+      ],
+      "spotify_followers": 150699,
+      "spotify_popularity": 60,
+      "spotify_id": "61S5H9Lxn1PDUvu1TV0kCX",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb943c2329b4a19091898abd95",
+      "genres_spotify": []
+    },
+    {
+      "id": "konomi suzuki",
+      "name": "Konomi Suzuki",
+      "play_count": 180,
+      "rank": 92,
+      "size": 89763,
+      "listener_count": 89763,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 89763,
+      "lastfm_playcount": 1864056,
+      "lastfm_url": "https://www.last.fm/music/+noredirect/Konomi+Suzuki",
+      "genres_lastfm": [
+        "J-rock",
+        "j-pop",
+        "Soundtrack"
+      ],
+      "spotify_followers": 221890,
+      "spotify_popularity": 53,
+      "spotify_id": "3O0kLS5sLZ41XZRxjBKmLF",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebce9e8797e4189b7c277ead8f",
+      "genres_spotify": [
+        "anime",
+        "j-pop",
+        "j-rock"
+      ]
+    },
+    {
+      "id": "sheppard",
+      "name": "Sheppard",
+      "play_count": 178,
+      "rank": 93,
+      "size": 555141,
+      "listener_count": 555141,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 555141,
+      "lastfm_playcount": 5479712,
+      "lastfm_url": "https://www.last.fm/music/Sheppard",
+      "genres_lastfm": [
+        "indie",
+        "australian",
+        "folk"
+      ],
+      "spotify_followers": 335305,
+      "spotify_popularity": 62,
+      "spotify_id": "6VxCmtR7S3yz4vnzsJqhSV",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb2267c8de897d96c45ed86acb",
+      "genres_spotify": []
+    },
+    {
+      "id": "percy grainger",
+      "name": "Percy Grainger",
+      "play_count": 176,
+      "rank": 94,
+      "size": 55686,
+      "listener_count": 55686,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 55686,
+      "lastfm_playcount": 426485,
+      "lastfm_url": "https://www.last.fm/music/Percy+Grainger",
+      "genres_lastfm": [
+        "Classical",
+        "piano",
+        "australian"
+      ],
+      "spotify_followers": 11369,
+      "spotify_popularity": 36,
+      "spotify_id": "6evVLxWyiwmi8gDtHn1Vzx",
+      "photo_url": "https://i.scdn.co/image/b43c570dd3475eb92f417edb7bc9026db11c2179",
+      "genres_spotify": []
+    },
+    {
+      "id": "the backseat lovers",
+      "name": "The Backseat Lovers",
+      "play_count": 173,
+      "rank": 95,
+      "size": 860285,
+      "listener_count": 860285,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 860285,
+      "lastfm_playcount": 31671667,
+      "lastfm_url": "https://www.last.fm/music/The+Backseat+Lovers",
+      "genres_lastfm": [
+        "indie rock",
+        "seen live",
+        "rock"
+      ],
+      "spotify_followers": 809996,
+      "spotify_popularity": 70,
+      "spotify_id": "6p2HnfM955TI1bX34dkLnI",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb42ba5ff4f62126b3c96803f6",
+      "genres_spotify": []
+    },
+    {
+      "id": "kwon eunbi",
+      "name": "Kwon Eunbi",
+      "play_count": 171,
+      "rank": 96,
+      "size": 142501,
+      "listener_count": 142501,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 142501,
+      "lastfm_playcount": 3647310,
+      "lastfm_url": "https://www.last.fm/music/Kwon+Eunbi",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "Eunbi"
+      ],
+      "spotify_followers": 302743,
+      "spotify_popularity": 49,
+      "spotify_id": "0qr7Rhj0yU7BPySYecNUlm",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb3ce47ab42eab72fd304b8d6",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "hoobastank",
+      "name": "Hoobastank",
+      "play_count": 169,
+      "rank": 97,
+      "size": 2530593,
+      "listener_count": 2530593,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2530593,
+      "lastfm_playcount": 39404808,
+      "lastfm_url": "https://www.last.fm/music/Hoobastank",
+      "genres_lastfm": [
+        "rock",
+        "alternative rock",
+        "alternative"
+      ],
+      "spotify_followers": 2676439,
+      "spotify_popularity": 69,
+      "spotify_id": "2MqhkhX4npxDZ62ObR5ELO",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebfd24e4299227b496c8bc9765",
+      "genres_spotify": [
+        "nu metal"
+      ]
+    },
+    {
+      "id": "『ユイカ』",
+      "name": "『ユイカ』",
+      "play_count": 166,
+      "rank": 98,
+      "size": 58810,
+      "listener_count": 58810,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 58810,
+      "lastfm_playcount": 1213175,
+      "lastfm_url": "https://www.last.fm/music/%E3%80%8E%E3%83%A6%E3%82%A4%E3%82%AB%E3%80%8F",
+      "genres_lastfm": [
+        "japanese",
+        "pop",
+        "pop rock"
+      ],
+      "spotify_followers": 353412,
+      "spotify_popularity": 61,
+      "spotify_id": "2EqaSEa0WkE59Aca9iXSYj",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb775869f50e1369fbea0c559a",
+      "genres_spotify": [
+        "j-pop"
+      ]
+    },
+    {
+      "id": "paul blanco",
+      "name": "Paul Blanco",
+      "play_count": 164,
+      "rank": 99,
+      "size": 63533,
+      "listener_count": 63533,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 63533,
+      "lastfm_playcount": 986643,
+      "lastfm_url": "https://www.last.fm/music/Paul+Blanco",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "Korean"
+      ],
+      "spotify_followers": 106360,
+      "spotify_popularity": 54,
+      "spotify_id": "2fiGm496AG7ePURQiSSJIw",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7877ecabb7562a6084ecfe5e",
+      "genres_spotify": [
+        "k-rap"
+      ]
+    },
+    {
+      "id": "newjeans",
+      "name": "NewJeans",
+      "play_count": 160,
+      "rank": 100,
+      "size": 1430599,
+      "listener_count": 1430599,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1430599,
+      "lastfm_playcount": 258537616,
+      "lastfm_url": "https://www.last.fm/music/NewJeans",
+      "genres_lastfm": [
+        "k-pop",
+        "Kpop",
+        "pop"
+      ],
+      "spotify_followers": 10827267,
+      "spotify_popularity": 79,
+      "spotify_id": "6HvZYsbFfjnjFrWF950C9d",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb80668ba2b15094d083780ea9",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "taylor swift",
+      "target": "ariana grande",
+      "weight": 0.366299,
+      "lastfm_similarity": 0.366299,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.366299,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "taylor swift",
+      "target": "harry styles",
+      "weight": 0.45906,
+      "lastfm_similarity": 0.45906,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.45906,
+        "b_to_a": 0.261174,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "taylor swift",
+      "target": "tate mcrae",
+      "weight": 0.408214,
+      "lastfm_similarity": 0.408214,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.408214,
+        "b_to_a": 0.386936,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "taylor swift",
+      "target": "miley cyrus",
+      "weight": 0.300623,
+      "lastfm_similarity": 0.300623,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.300623,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "taylor swift",
+      "target": "olivia rodrigo",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 1.0,
+        "b_to_a": 0.927375,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "twice",
+      "weight": 0.482294,
+      "lastfm_similarity": 0.482294,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.482294,
+        "b_to_a": 0.179055,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "(g)i-dle",
+      "weight": 0.348032,
+      "lastfm_similarity": 0.348032,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.348032,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "alia",
+      "weight": 0.681857,
+      "lastfm_similarity": 0.681857,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.681857,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "le sserafim",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 1.0,
+        "b_to_a": 0.662612,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "tonight alive",
+      "weight": 0.361981,
+      "lastfm_similarity": 0.361981,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.361981,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "blackpink",
+      "weight": 0.362861,
+      "lastfm_similarity": 0.362861,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.362861,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "jo yuri",
+      "weight": 0.485996,
+      "lastfm_similarity": 0.485996,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.485996,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "seori",
+      "weight": 0.699662,
+      "lastfm_similarity": 0.699662,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.699662,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "bts",
+      "weight": 0.432992,
+      "lastfm_similarity": 0.432992,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.432992,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "the script",
+      "weight": 0.399569,
+      "lastfm_similarity": 0.399569,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.399569,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "yeji",
+      "weight": 0.436103,
+      "lastfm_similarity": 0.436103,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.436103,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "simple plan",
+      "weight": 0.373072,
+      "lastfm_similarity": 0.373072,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.373072,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "jennie",
+      "weight": 0.330908,
+      "lastfm_similarity": 0.330908,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.330908,
+        "b_to_a": 0.200584,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "88rising",
+      "weight": 0.349514,
+      "lastfm_similarity": 0.349514,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.349514,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "sheppard",
+      "weight": 0.302714,
+      "lastfm_similarity": 0.302714,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.302714,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "the backseat lovers",
+      "weight": 0.521555,
+      "lastfm_similarity": 0.521555,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.521555,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ive",
+      "target": "newjeans",
+      "weight": 0.429847,
+      "lastfm_similarity": 0.429847,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.429847,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "aimer",
+      "weight": 0.46033,
+      "lastfm_similarity": 0.46033,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.46033,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "yoasobi",
+      "weight": 0.732585,
+      "lastfm_similarity": 0.732585,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.512078,
+        "b_to_a": 0.732585,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "alia",
+      "weight": 0.492466,
+      "lastfm_similarity": 0.492466,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.492466,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "tsukuyomi",
+      "weight": 0.605134,
+      "lastfm_similarity": 0.605134,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.605134,
+        "b_to_a": 0.436007,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.785994,
+      "lastfm_similarity": 0.785994,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.785994,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "uru",
+      "weight": 0.463307,
+      "lastfm_similarity": 0.463307,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.463307,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "aimyon",
+      "weight": 0.52978,
+      "lastfm_similarity": 0.52978,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.52978,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "『ユイカ』",
+      "weight": 0.439633,
+      "lastfm_similarity": 0.439633,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.439633,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "younha",
+      "weight": 0.715533,
+      "lastfm_similarity": 0.715533,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.715533,
+        "b_to_a": 0.695728,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "the chainsmokers",
+      "weight": 0.765953,
+      "lastfm_similarity": 0.765953,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.765953,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "taeyeon",
+      "weight": 0.408943,
+      "lastfm_similarity": 0.408943,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.408943,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "kimsejeong",
+      "weight": 0.934066,
+      "lastfm_similarity": 0.934066,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.782577,
+        "b_to_a": 0.934066,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "sra",
+      "weight": 0.261277,
+      "lastfm_similarity": 0.261277,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.261277,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "bol4",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 1.0,
+        "b_to_a": 1.0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "mina okabe",
+      "weight": 0.409698,
+      "lastfm_similarity": 0.409698,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.409698,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "rothy",
+      "weight": 0.624491,
+      "lastfm_similarity": 0.624491,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.624491,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "sunmi",
+      "weight": 0.445201,
+      "lastfm_similarity": 0.445201,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.445201,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "yerin baek",
+      "weight": 0.714366,
+      "lastfm_similarity": 0.714366,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.714366,
+        "b_to_a": 0.284807,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "miyeon",
+      "weight": 0.64274,
+      "lastfm_similarity": 0.64274,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.64274,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "iu",
+      "target": "percy grainger",
+      "weight": 0.382834,
+      "lastfm_similarity": 0.382834,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.382834,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "aimer",
+      "target": "yoasobi",
+      "weight": 0.538817,
+      "lastfm_similarity": 0.538817,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.462574,
+        "b_to_a": 0.538817,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "aimer",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.470763,
+      "lastfm_similarity": 0.470763,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.470763,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "aimer",
+      "target": "kobasolo",
+      "weight": 0.665056,
+      "lastfm_similarity": 0.665056,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.665056,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "aimer",
+      "target": "uru",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.846598,
+        "b_to_a": 1.0,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "(g)i-dle",
+      "weight": 0.209902,
+      "lastfm_similarity": 0.209902,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.209902,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "le sserafim",
+      "weight": 0.214933,
+      "lastfm_similarity": 0.214933,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.214933,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "blackpink",
+      "weight": 0.533499,
+      "lastfm_similarity": 0.533499,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.188157,
+        "b_to_a": 0.533499,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "yeji",
+      "weight": 0.230054,
+      "lastfm_similarity": 0.230054,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.230054,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "kiss of life",
+      "weight": 0.206291,
+      "lastfm_similarity": 0.206291,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.206291,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "jennie",
+      "weight": 0.813048,
+      "lastfm_similarity": 0.813048,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.813048,
+        "b_to_a": 0.272239,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "olivia rodrigo",
+      "weight": 0.343546,
+      "lastfm_similarity": 0.343546,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.343546,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "jisoo",
+      "weight": 0.956625,
+      "lastfm_similarity": 0.956625,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.956625,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "younha",
+      "target": "seori",
+      "weight": 0.742573,
+      "lastfm_similarity": 0.742573,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.742573,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "younha",
+      "target": "harold faltermeyer",
+      "weight": 0.685181,
+      "lastfm_similarity": 0.685181,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.685181,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "younha",
+      "target": "kimsejeong",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.814627,
+        "b_to_a": 1.0,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "younha",
+      "target": "bol4",
+      "weight": 0.67545,
+      "lastfm_similarity": 0.67545,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.656754,
+        "b_to_a": 0.67545,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "younha",
+      "target": "gyubin",
+      "weight": 0.848743,
+      "lastfm_similarity": 0.848743,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.808824,
+        "b_to_a": 0.848743,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "younha",
+      "target": "rothy",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.852086,
+        "b_to_a": 1.0,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "yoasobi",
+      "target": "yama",
+      "weight": 0.204825,
+      "lastfm_similarity": 0.204825,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.204825,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "yoasobi",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.724588,
+      "lastfm_similarity": 0.724588,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.724588,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "yoasobi",
+      "target": "uru",
+      "weight": 0.214311,
+      "lastfm_similarity": 0.214311,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.214311,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "twice",
+      "target": "blackpink",
+      "weight": 0.27826,
+      "lastfm_similarity": 0.27826,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.27826,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "jeon somi",
+      "target": "(g)i-dle",
+      "weight": 0.308215,
+      "lastfm_similarity": 0.308215,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.308215,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "jeon somi",
+      "target": "blackpink",
+      "weight": 0.639437,
+      "lastfm_similarity": 0.639437,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.639437,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "onerepublic",
+      "target": "imagine dragons",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.986732,
+        "b_to_a": 1.0,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "onerepublic",
+      "target": "maroon 5",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.83471,
+        "b_to_a": 1.0,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "onerepublic",
+      "target": "the script",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 1.0,
+        "b_to_a": 1.0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "imagine dragons",
+      "target": "the killers",
+      "weight": 0.415196,
+      "lastfm_similarity": 0.415196,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.415196,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "imagine dragons",
+      "target": "maroon 5",
+      "weight": 0.472593,
+      "lastfm_similarity": 0.472593,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.399782,
+        "b_to_a": 0.472593,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "imagine dragons",
+      "target": "muse",
+      "weight": 0.411027,
+      "lastfm_similarity": 0.411027,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.411027,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "imagine dragons",
+      "target": "twenty one pilots",
+      "weight": 0.561002,
+      "lastfm_similarity": 0.561002,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.561002,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "imagine dragons",
+      "target": "david longoria",
+      "weight": 0.605672,
+      "lastfm_similarity": 0.605672,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.605672,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "yama",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.246994,
+      "lastfm_similarity": 0.246994,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.246994,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "nf",
+      "target": "tonight alive",
+      "weight": 0.356892,
+      "lastfm_similarity": 0.356892,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.356892,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "nf",
+      "target": "foreground eclipse",
+      "weight": 0.470293,
+      "lastfm_similarity": 0.470293,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.470293,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "nf",
+      "target": "fellowship",
+      "weight": 0.292565,
+      "lastfm_similarity": 0.292565,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.292565,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ed sheeran",
+      "target": "shawn mendes",
+      "weight": 0.809995,
+      "lastfm_similarity": 0.809995,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.809995,
+        "b_to_a": 0.4506,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ed sheeran",
+      "target": "lewis capaldi",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 1.0,
+        "b_to_a": 0.4139,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "the chainsmokers",
+      "target": "alan walker",
+      "weight": 0.511625,
+      "lastfm_similarity": 0.511625,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.511625,
+        "b_to_a": 0.255897,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "the chainsmokers",
+      "target": "maroon 5",
+      "weight": 0.56687,
+      "lastfm_similarity": 0.56687,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.56687,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "the chainsmokers",
+      "target": "avicii",
+      "weight": 0.78724,
+      "lastfm_similarity": 0.78724,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.78724,
+        "b_to_a": 0.69518,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "the chainsmokers",
+      "target": "kygo",
+      "weight": 0.841432,
+      "lastfm_similarity": 0.841432,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.841432,
+        "b_to_a": 0.625297,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "le sserafim",
+      "weight": 0.376879,
+      "lastfm_similarity": 0.376879,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.376879,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "blackpink",
+      "weight": 0.441561,
+      "lastfm_similarity": 0.441561,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.441561,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "dreamcatcher",
+      "weight": 0.341407,
+      "lastfm_similarity": 0.341407,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.341407,
+        "b_to_a": 0.315059,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "yeji",
+      "weight": 0.453302,
+      "lastfm_similarity": 0.453302,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.453302,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "kiss of life",
+      "weight": 0.322599,
+      "lastfm_similarity": 0.322599,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.322599,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "miyeon",
+      "weight": 0.903397,
+      "lastfm_similarity": 0.903397,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.903397,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "(g)i-dle",
+      "target": "jennie",
+      "weight": 0.337877,
+      "lastfm_similarity": 0.337877,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.337877,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "alia",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.491652,
+      "lastfm_similarity": 0.491652,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.491652,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "le sserafim",
+      "target": "blackpink",
+      "weight": 0.337645,
+      "lastfm_similarity": 0.337645,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.337645,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "le sserafim",
+      "target": "yeji",
+      "weight": 0.486852,
+      "lastfm_similarity": 0.486852,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.431772,
+        "b_to_a": 0.486852,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "le sserafim",
+      "target": "kiss of life",
+      "weight": 0.534861,
+      "lastfm_similarity": 0.534861,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.534861,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "le sserafim",
+      "target": "jennie",
+      "weight": 0.227281,
+      "lastfm_similarity": 0.227281,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.227281,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "le sserafim",
+      "target": "newjeans",
+      "weight": 0.529992,
+      "lastfm_similarity": 0.529992,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.448043,
+        "b_to_a": 0.529992,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "alan walker",
+      "target": "avicii",
+      "weight": 0.249998,
+      "lastfm_similarity": 0.249998,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.249998,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "alan walker",
+      "target": "kygo",
+      "weight": 0.273748,
+      "lastfm_similarity": 0.273748,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.273748,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "blackpink",
+      "target": "jennie",
+      "weight": 0.73804,
+      "lastfm_similarity": 0.73804,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.73804,
+        "b_to_a": 0.425215,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "blackpink",
+      "target": "jisoo",
+      "weight": 0.964988,
+      "lastfm_similarity": 0.964988,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.964988,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "st. lundi",
+      "target": "paul blanco",
+      "weight": 0.630058,
+      "lastfm_similarity": 0.630058,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.630058,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ava max",
+      "target": "tate mcrae",
+      "weight": 0.406441,
+      "lastfm_similarity": 0.406441,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.400251,
+        "b_to_a": 0.406441,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "tsukuyomi",
+      "target": "ryokuoushoku shakai",
+      "weight": 0.833241,
+      "lastfm_similarity": 0.833241,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.833241,
+        "b_to_a": 0.713885,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "tsukuyomi",
+      "target": "mary",
+      "weight": 0.266459,
+      "lastfm_similarity": 0.266459,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.266459,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "tsukuyomi",
+      "target": "kobasolo",
+      "weight": 0.358201,
+      "lastfm_similarity": 0.358201,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.358201,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "jo yuri",
+      "target": "kimsejeong",
+      "weight": 0.849443,
+      "lastfm_similarity": 0.849443,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.849443,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "jo yuri",
+      "target": "kwon eunbi",
+      "weight": 0.922755,
+      "lastfm_similarity": 0.922755,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.922755,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ariana grande",
+      "target": "tate mcrae",
+      "weight": 0.660284,
+      "lastfm_similarity": 0.660284,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.640668,
+        "b_to_a": 0.660284,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ariana grande",
+      "target": "olivia rodrigo",
+      "weight": 0.466184,
+      "lastfm_similarity": 0.466184,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.462333,
+        "b_to_a": 0.466184,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "the killers",
+      "target": "muse",
+      "weight": 0.543765,
+      "lastfm_similarity": 0.543765,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.543765,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "taeyeon",
+      "target": "sunmi",
+      "weight": 0.335682,
+      "lastfm_similarity": 0.335682,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.335682,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "seori",
+      "target": "kimsejeong",
+      "weight": 0.722063,
+      "lastfm_similarity": 0.722063,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.722063,
+        "b_to_a": 0.719745,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "harry styles",
+      "target": "shawn mendes",
+      "weight": 0.468603,
+      "lastfm_similarity": 0.468603,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.264797,
+        "b_to_a": 0.468603,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "harry styles",
+      "target": "olivia rodrigo",
+      "weight": 0.555539,
+      "lastfm_similarity": 0.555539,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.340816,
+        "b_to_a": 0.555539,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "maroon 5",
+      "target": "the script",
+      "weight": 0.802018,
+      "lastfm_similarity": 0.802018,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.802018,
+        "b_to_a": 0.669452,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "harold faltermeyer",
+      "target": "bts",
+      "weight": 0.766772,
+      "lastfm_similarity": 0.766772,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.766772,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "avicii",
+      "target": "kygo",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 1.0,
+        "b_to_a": 0.841544,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "kimsejeong",
+      "target": "bol4",
+      "weight": 0.734385,
+      "lastfm_similarity": 0.734385,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.734385,
+        "b_to_a": 0.61528,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "anyujin",
+      "target": "bts",
+      "weight": 0.856382,
+      "lastfm_similarity": 0.856382,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.856382,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ryokuoushoku shakai",
+      "target": "kobasolo",
+      "weight": 0.476298,
+      "lastfm_similarity": 0.476298,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.476298,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "ryokuoushoku shakai",
+      "target": "uru",
+      "weight": 0.570444,
+      "lastfm_similarity": 0.570444,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.570444,
+        "b_to_a": 0.56104,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "ryokuoushoku shakai",
+      "target": "aimyon",
+      "weight": 0.75538,
+      "lastfm_similarity": 0.75538,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.75538,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "bol4",
+      "target": "gyubin",
+      "weight": 0.522105,
+      "lastfm_similarity": 0.522105,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.522105,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "bol4",
+      "target": "rothy",
+      "weight": 0.620045,
+      "lastfm_similarity": 0.620045,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.618786,
+        "b_to_a": 0.620045,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "bol4",
+      "target": "sunmi",
+      "weight": 0.515534,
+      "lastfm_similarity": 0.515534,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.515534,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "bol4",
+      "target": "the rose",
+      "weight": 0.251603,
+      "lastfm_similarity": 0.251603,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.251603,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "前島麻由",
+      "target": "konomi suzuki",
+      "weight": 0.898209,
+      "lastfm_similarity": 0.898209,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.898209,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "yeji",
+      "target": "jennie",
+      "weight": 0.576295,
+      "lastfm_similarity": 0.576295,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.576295,
+        "b_to_a": 0.381234,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "yeji",
+      "target": "jisoo",
+      "weight": 0.694148,
+      "lastfm_similarity": 0.694148,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.694148,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "the oral cigarettes",
+      "target": "simple plan",
+      "weight": 0.351837,
+      "lastfm_similarity": 0.351837,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.351837,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "gyubin",
+      "target": "wooah",
+      "weight": 0.712344,
+      "lastfm_similarity": 0.712344,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.712344,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "rothy",
+      "target": "aimyon",
+      "weight": 0.605003,
+      "lastfm_similarity": 0.605003,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.605003,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "kobasolo",
+      "target": "uru",
+      "weight": 0.649011,
+      "lastfm_similarity": 0.649011,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.649011,
+        "b_to_a": 0.458227,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "kobasolo",
+      "target": "『ユイカ』",
+      "weight": 0.614253,
+      "lastfm_similarity": 0.614253,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.614253,
+        "b_to_a": 0.343585,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "uru",
+      "target": "aimyon",
+      "weight": 0.468521,
+      "lastfm_similarity": 0.468521,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.468521,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "wooah",
+      "target": "kwon eunbi",
+      "weight": 0.703555,
+      "lastfm_similarity": 0.703555,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 0.703555,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "shawn mendes",
+      "target": "olivia rodrigo",
+      "weight": 0.29821,
+      "lastfm_similarity": 0.29821,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.29821,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "kiss of life",
+      "target": "newjeans",
+      "weight": 0.442979,
+      "lastfm_similarity": 0.442979,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.442979,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "mikolai stroinski",
+      "target": "marcin przybyłowicz",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0.530778,
+        "b_to_a": 1.0,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "simple plan",
+      "target": "knox",
+      "weight": 0.279216,
+      "lastfm_similarity": 0.279216,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.279216,
+        "max_direction": "B→A"
+      }
+    },
+    {
+      "source": "jennie",
+      "target": "jisoo",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "bidirectional_lastfm (A→B)",
+      "bidirectional_data": {
+        "a_to_b": 1.0,
+        "b_to_a": 0,
+        "max_direction": "A→B"
+      }
+    },
+    {
+      "source": "jennie",
+      "target": "newjeans",
+      "weight": 0.272452,
+      "lastfm_similarity": 0.272452,
+      "relationship_type": "bidirectional_lastfm (B→A)",
+      "bidirectional_data": {
+        "a_to_b": 0,
+        "b_to_a": 0.272452,
+        "max_direction": "B→A"
+      }
+    }
+  ],
+  "metadata": {
+    "generated": "2025-06-13T01:29:00.856059",
+    "total_artists_in_data": 1558,
+    "artists_included": 100,
+    "artists_with_api_data": 100,
+    "total_plays": 109605,
+    "date_range": {
+      "start": "2017-03-03T06:14:24+00:00",
+      "end": "2025-05-28T21:24:00+00:00"
+    },
+    "edge_types": {
+      "lastfm_similarity": 143
+    },
+    "configuration": {
+      "listener_count_source": "hybrid",
+      "fetch_both_sources": true,
+      "fallback_behavior": "fallback",
+      "node_sizing_strategy": "hybrid_multiply"
+    },
+    "parameters": {
+      "top_n_artists": 100,
+      "min_plays_threshold": 5,
+      "min_similarity_threshold": 0.2,
+      "data_source": "enhanced_multi_api"
+    }
+  }
+}

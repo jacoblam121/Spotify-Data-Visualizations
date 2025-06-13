@@ -505,5 +505,25 @@
       "6eUKZXaKkcviH0Ku9w2n3V"
     ],
     "source": "spotify (Precise Search (Artist: Ed Sheeran))"
+  },
+  "spotify_tracklookup_2owgvchbF6IJrxu4rLPBIl": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b9791a0a6efa800f285a7bab",
+    "canonical_album_name": "Walking the Wire (Piano Acoustic Instrumental)",
+    "spotify_album_id": "7vQuyVhO5ua2dJ1K91JDQc",
+    "spotify_artist_ids": [
+      "6NbfU62rDuIP4dSlfJFijF"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_2n1PhZHxdiaCMs5xLtsH4j": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732244e9976343a6a34c5ab1b9",
+    "canonical_album_name": "N\u00e4r det b\u00f6rjar",
+    "spotify_album_id": "0IevxAdYzARtExqLuSGFYD",
+    "spotify_artist_ids": [
+      "6Uo3nC1ZbCL0bSeIlqgTN0"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
   }
 }

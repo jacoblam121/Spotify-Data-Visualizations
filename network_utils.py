@@ -167,6 +167,69 @@ class ArtistNetworkAnalyzer:
         print(f"✅ Calculated scores for {len(co_listening_scores)} valid pairs")
         return co_listening_scores
     
+    def _find_matching_artist(self, target_artist: str, artist_list: List[str]) -> Optional[str]:
+        """
+        Find a matching artist from the list using fuzzy matching.
+        
+        Args:
+            target_artist: Artist name from Last.fm similar artists
+            artist_list: List of artist names from our data
+            
+        Returns:
+            Matched artist name from the list, or None if no match
+        """
+        target_lower = target_artist.lower().strip()
+        
+        # Exact match first
+        for artist in artist_list:
+            if artist.lower().strip() == target_lower:
+                return artist
+        
+        # Fuzzy matching for common variations
+        for artist in artist_list:
+            artist_lower = artist.lower().strip()
+            
+            # Check if either contains the other (handles case differences)
+            if target_lower in artist_lower or artist_lower in target_lower:
+                return artist
+            
+            # Check for common K-pop name patterns
+            if self._is_kpop_name_match(target_artist, artist):
+                return artist
+        
+        return None
+    
+    def _is_kpop_name_match(self, name1: str, name2: str) -> bool:
+        """Check if two names refer to the same K-pop artist."""
+        name1_clean = name1.lower().strip()
+        name2_clean = name2.lower().strip()
+        
+        # Handle BOL4/Bolbbalgan4 variations
+        bol4_variants = {'bol4', 'bolbbalgan4', 'bolbbalgan4 (볼빨간사춘기)', '볼빨간사춘기'}
+        if any(variant in name1_clean for variant in bol4_variants) and \
+           any(variant in name2_clean for variant in bol4_variants):
+            return True
+        
+        # Handle IU variations  
+        iu_variants = {'iu', '아이유', 'iu (아이유)', 'iu(아이유)'}
+        if any(variant in name1_clean for variant in iu_variants) and \
+           any(variant in name2_clean for variant in iu_variants):
+            return True
+        
+        # Handle other common K-pop variations
+        kpop_patterns = [
+            (['twice', '트와이스', 'twice (트와이스)'], ['twice', '트와이스', 'twice (트와이스)']),
+            (['blackpink', '블랙핑크', 'blackpink (블랙핑크)'], ['blackpink', '블랙핑크', 'blackpink (블랙핑크)']),
+            (['ive', 'ive (아이브)', '아이브'], ['ive', 'ive (아이브)', '아이브']),
+        ]
+        
+        for pattern1, pattern2 in kpop_patterns:
+            if any(variant in name1_clean for variant in pattern1) and \
+               any(variant in name2_clean for variant in pattern2):
+                return True
+        
+        return False
+    
     def get_lastfm_similarity_matrix(self, artists: List[str], 
                                    limit_per_artist: int = 100) -> Dict[Tuple[str, str], float]:
         """
@@ -217,23 +280,32 @@ class ArtistNetworkAnalyzer:
         return similarity_scores
     
     def create_network_data(self, df: pd.DataFrame, 
-                          top_n_artists: int = 50,
-                          min_plays_threshold: int = 5,
-                          min_similarity_threshold: float = 0.1) -> Dict:
+                          top_n_artists: int = None,
+                          min_plays_threshold: int = None,
+                          min_similarity_threshold: float = None) -> Dict:
         """
         Create network data structure with enhanced artist data (Last.fm + Spotify).
         
         Args:
             df: DataFrame with listening history
-            top_n_artists: Number of top artists to include
-            min_plays_threshold: Minimum plays to include artist
-            min_similarity_threshold: Minimum Last.fm similarity to include edge
+            top_n_artists: Number of top artists to include (defaults to config)
+            min_plays_threshold: Minimum plays to include artist (defaults to config)
+            min_similarity_threshold: Minimum Last.fm similarity to include edge (defaults to config)
             
         Returns:
             Network data dict with nodes and edges
         """
+        # Use config defaults if parameters not provided
+        if top_n_artists is None:
+            top_n_artists = self.network_config['top_n_artists']
+        if min_plays_threshold is None:
+            min_plays_threshold = self.network_config['min_plays_threshold']
+        if min_similarity_threshold is None:
+            min_similarity_threshold = self.network_config['min_similarity_threshold']
+            
         print(f"Creating enhanced network data for top {top_n_artists} artists...")
         print(f"Using {self.network_config['node_sizing_strategy']} as node sizing strategy")
+        print(f"Similarity threshold: {min_similarity_threshold}, Min plays: {min_plays_threshold}")
         
         if df.empty or 'artist' not in df.columns:
             print("❌ No artist data available")
@@ -323,45 +395,68 @@ class ArtistNetworkAnalyzer:
         
         print(f"✅ Successfully fetched data for {successful_artists}/{len(artist_list)} artists")
         
-        # Create edges from similarity data
+        # Create edges using bidirectional similarity matrix
         edges = []
         edges_created = 0
         
-        print(f"🕸️  Creating similarity edges...")
+        print(f"🕸️  Building bidirectional similarity matrix...")
+        # Build complete similarity matrix
+        similarity_matrix = {}
+        
         for enhanced in enhanced_data:
+            source_artist = enhanced['artist_name']
+            similarity_matrix[source_artist] = {}
+            
             if enhanced['similar_artists']:
-                source_artist = enhanced['artist_name']
-                similar_artists = enhanced['similar_artists']
-                
-                for similar in similar_artists:
+                for similar in enhanced['similar_artists']:
                     target_artist = similar['name']
                     similarity_score = similar['match']
                     
-                    # Only include if target artist is in our network and meets threshold
-                    if (target_artist in artist_list and 
-                        similarity_score >= min_similarity_threshold and
-                        source_artist != target_artist):
-                        
-                        # Create sorted pair to avoid duplicates
-                        pair = tuple(sorted([source_artist, target_artist]))
-                        
-                        # Check if edge already exists
-                        existing_edge = None
-                        for edge in edges:
-                            edge_pair = tuple(sorted([edge['source'], edge['target']]))
-                            if edge_pair == pair:
-                                existing_edge = edge
-                                break
-                        
-                        if not existing_edge:
-                            edges.append({
-                                'source': source_artist,
-                                'target': target_artist,
-                                'weight': similarity_score,
-                                'lastfm_similarity': similarity_score,
-                                'relationship_type': 'lastfm_similarity'
-                            })
-                            edges_created += 1
+                    # Store similarity if target is in our artist list (with fuzzy matching)
+                    matched_artist = self._find_matching_artist(target_artist, artist_list)
+                    if matched_artist:
+                        similarity_matrix[source_artist][matched_artist] = similarity_score
+        
+        print(f"📊 Processing {len(artist_list)} × {len(artist_list)} artist pairs...")
+        # Create edges by checking bidirectional similarities
+        processed_pairs = set()
+        
+        for i, artist_a in enumerate(artist_list):
+            for j, artist_b in enumerate(artist_list):
+                if i >= j:  # Skip same artist and avoid duplicates
+                    continue
+                
+                # Create sorted pair key to avoid duplicates
+                pair = tuple(sorted([artist_a, artist_b]))
+                if pair in processed_pairs:
+                    continue
+                processed_pairs.add(pair)
+                
+                # Check similarity in both directions
+                similarity_ab = similarity_matrix.get(artist_a, {}).get(artist_b, 0)
+                similarity_ba = similarity_matrix.get(artist_b, {}).get(artist_a, 0)
+                
+                # Use the highest similarity found in either direction
+                max_similarity = max(similarity_ab, similarity_ba)
+                
+                if max_similarity >= min_similarity_threshold:
+                    # Determine which direction provided the similarity
+                    direction = "A→B" if similarity_ab >= similarity_ba else "B→A"
+                    relationship_type = f"bidirectional_lastfm ({direction})"
+                    
+                    edges.append({
+                        'source': artist_a,
+                        'target': artist_b,
+                        'weight': max_similarity,
+                        'lastfm_similarity': max_similarity,
+                        'relationship_type': relationship_type,
+                        'bidirectional_data': {
+                            'a_to_b': similarity_ab,
+                            'b_to_a': similarity_ba,
+                            'max_direction': direction
+                        }
+                    })
+                    edges_created += 1
         
         print(f"✅ Created {edges_created} similarity edges")
         

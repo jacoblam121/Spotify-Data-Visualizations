@@ -1758,5 +1758,14 @@
     "popularity": 32,
     "followers": 11399,
     "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_7luZH5bMPxagI44Y2yc5sr": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8440f8573cac55ae8143668e",
+    "canonical_artist_name": "DreamDoll",
+    "spotify_artist_id": "1nsdnHv49z0H5oPj3sJ3to",
+    "genres": [],
+    "popularity": 40,
+    "followers": 473215,
+    "source": "spotify (track_uri_lookup)"
   }
 }

@@ -85,12 +85,21 @@ python switch_mode.py               # Interactive mode selection
 ```bash
 # Generate artist similarity networks from listening data
 python network_utils.py              # Direct network analysis
-python tests/test_network_analysis.py # Test network functionality
-python tests/test_full_network_robust.py # Comprehensive network tests
+python test_full_bidirectional.py    # Test bidirectional similarity detection
+python debug_network_iu_bol4.py      # Debug specific artist relationships
+
+# Generate networks with different parameters
+python generate_network.py --artists 50 --threshold 0.2   # 50 artists, 0.2 similarity threshold
+python generate_network.py --artists 100 --threshold 0.1  # Full network
+
+# Debug network generation issues
+python debug_iu_bol4_names.py       # Test artist name variants
+python debug_cache_test.py           # Test Last.fm caching
+python debug_network_edges.py        # Analyze edge creation
 
 # Test specific network features
-python tests/test_similarity_visualization.py  # Test similarity visualization
-python tests/manual_test_network.py          # Manual network testing
+python tests/test_network_analysis.py # Test network functionality
+python tests/test_full_network_robust.py # Comprehensive network tests
 ```
 
 ## Architecture
@@ -139,16 +148,26 @@ python tests/manual_test_network.py          # Manual network testing
 
 **network_utils.py**: Artist similarity network analysis:
 - Creates artist relationship networks based on listening patterns and Last.fm similarity data
+- Implements bidirectional similarity checking (checks both A→B and B→A relationships)
+- Uses fuzzy name matching to handle artist name variations (e.g., "BOL4" vs "Bolbbalgan4")
 - Calculates co-listening scores using temporal proximity of plays
-- Integrates Last.fm API for artist similarity relationships
 - Generates JSON network data for visualization (nodes and edges)
-- Supports filtering by play count thresholds and top N artists
+- Supports configurable filtering (TOP_N_ARTISTS, MIN_SIMILARITY_THRESHOLD, MIN_PLAYS_THRESHOLD)
 
-**lastfm_utils.py**: Last.fm API integration:
-- Fetches artist similarity data from Last.fm API
-- Provides caching mechanism for API responses
-- Rate limiting to respect API quotas
-- Supports artist metadata and similar artist lookups
+**lastfm_utils.py**: Last.fm API integration with enhanced matching:
+- Fetches artist similarity data from Last.fm API with intelligent name variant resolution
+- Implements multi-stage artist verification (MBID, song-based, listener count)
+- Provides comprehensive caching mechanism for API responses
+- Handles international artist names with specialized K-pop/J-pop variant generation
+- Rate limiting (200ms between requests) to respect API quotas
+- Prioritizes cached variants to minimize API calls
+
+**artist_data_fetcher.py**: Enhanced artist data aggregation:
+- Fetches and consolidates data from multiple sources (Last.fm + Spotify)
+- Manages data source priorities based on configuration
+- Handles fallback strategies when APIs fail
+- Promotes similar_artists data to top-level for network generation
+- Supports batch fetching with progress callbacks
 
 ### Data Flow
 
@@ -172,6 +191,10 @@ All behavior is controlled through `configurations.txt`:
 - **NightingaleChart**: Enable/disable and configure the polar chart visualization
 - **RollingStatsDisplay**: Layout and styling for rolling statistics panels
 - **LastfmAPI**: API credentials and configuration for artist similarity data (optional)
+- **NetworkVisualization**: Network generation parameters:
+  - `TOP_N_ARTISTS` = Number of top artists to include (default: 100)
+  - `MIN_SIMILARITY_THRESHOLD` = Minimum similarity score for edges (default: 0.2)
+  - `MIN_PLAYS_THRESHOLD` = Minimum play count to include artist (default: 5)
 
 ### Performance Features
 
@@ -206,19 +229,33 @@ All visualization elements are fully configurable through `configurations.txt` a
 
 The application includes sophisticated network analysis capabilities for understanding artist relationships:
 
-- **Co-listening Analysis**: Identifies artists frequently played together by analyzing temporal proximity of plays (configurable time windows)
-- **Last.fm Integration**: Fetches official artist similarity scores from Last.fm API to complement listening patterns
-- **Network Generation**: Creates weighted graphs combining both co-listening patterns and external similarity data
+- **Bidirectional Similarity Detection**: Checks both A→B and B→A relationships to find all connections
+- **Fuzzy Name Matching**: Handles artist name variations across platforms (e.g., "IU" ↔ "아이유", "BOL4" ↔ "Bolbbalgan4")
+- **Enhanced API Integration**: Uses intelligent name variant generation and resolution for international artists
+- **Multi-Source Data**: Combines Last.fm similarity scores with Spotify metadata and listening patterns
 - **Export Formats**: Generates JSON network data files suitable for visualization tools (D3.js, Gephi, etc.)
 - **Configurable Filtering**: Supports minimum play count thresholds, top N artist limits, and relationship strength filters
 
 #### Network Data Structure
 
 Generated network files contain:
-- **Nodes**: Artists with play counts, rankings, and metadata
-- **Edges**: Relationships with weights combining Last.fm similarity (70%) and co-listening scores (30%)
+- **Nodes**: Artists with enriched metadata:
+  - Play counts and rankings from user data
+  - Listener counts from Last.fm/Spotify
+  - Artist photos from Spotify
+  - Genres and popularity scores
+- **Edges**: Bidirectional relationships with:
+  - Similarity weights from Last.fm API
+  - Direction indicators (A→B vs B→A)
+  - Relationship type metadata
 - **Metadata**: Generation timestamps, parameters used, and network statistics
-- **Relationship Types**: Classified as 'lastfm_only', 'colistening_only', or 'both'
+
+#### Caching Architecture
+
+Multi-layer caching system for performance:
+- **L1 Cache**: Raw API responses (`lastfm_cache/`)
+- **L2 Cache**: Processed artist data (planned)
+- **L3 Cache**: Complete network results (planned)
 
 ## Data Sources
 
@@ -260,7 +297,20 @@ For network analysis, Last.fm API credentials can be configured:
 - Artist photos cache stored in `artist_art_cache/` directory for artists mode
 
 ### Network Analysis Issues
-- **Last.fm API Limits**: API has rate limits (200 requests per hour), network generation for large artist lists may take time
-- **Cache Management**: Network cache files can become large; periodically clean `lastfm_cache/` directory
-- **Data Quality**: Co-listening scores depend on temporal proximity; adjust `time_window_hours` parameter for different listening patterns
-- **Missing Relationships**: Not all artists have Last.fm similarity data; network will be sparser for less popular artists
+
+#### Artist Name Matching
+- **Problem**: Artists may have different names on Spotify vs Last.fm (e.g., "BOL4" vs "Bolbbalgan4")
+- **Solution**: The system uses fuzzy matching and name variant generation. Check `debug_iu_bol4_names.py` for specific artists
+- **K-pop/J-pop**: Special handling for international artists with multiple name formats
+
+#### Performance & Caching
+- **Initial Generation**: First run with 100 artists takes 15-20 minutes due to API calls
+- **Subsequent Runs**: Should be faster due to caching, but enhanced matching may still make many API calls
+- **Cache Optimization**: Prioritize cached variants by running smaller test sets first
+- **Debug Caching**: Use `debug_cache_test.py` to verify cache behavior
+
+#### Missing Relationships
+- **Bidirectional Check**: System now checks both A→B and B→A relationships
+- **Similarity Threshold**: Default is 0.2; lower it to find more connections
+- **API Coverage**: Not all artists have Last.fm similarity data; mainstream artists have better coverage
+- **Debug Specific Pairs**: Use `debug_network_iu_bol4.py` to trace why specific relationships aren't appearing

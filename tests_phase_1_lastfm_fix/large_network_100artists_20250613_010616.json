@@ -1,0 +1,2641 @@
+{
+  "nodes": [
+    {
+      "id": "juice wrld",
+      "name": "Juice WRLD",
+      "play_count": 3585,
+      "rank": 1,
+      "size": 2116421,
+      "listener_count": 2116421,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2116421,
+      "lastfm_playcount": 428910998,
+      "lastfm_url": "https://www.last.fm/music/Juice+WRLD",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "emo rap"
+      ],
+      "spotify_followers": 40746033,
+      "spotify_popularity": 89,
+      "spotify_id": "4MCBfE4596Uoi2O4DtmEMz",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb23a60030944f7853c21565ef",
+      "genres_spotify": [
+        "melodic rap",
+        "emo rap"
+      ]
+    },
+    {
+      "id": "iann dior",
+      "name": "iann dior",
+      "play_count": 1563,
+      "rank": 2,
+      "size": 657635,
+      "listener_count": 657635,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 657635,
+      "lastfm_playcount": 35071173,
+      "lastfm_url": "https://www.last.fm/music/iann+dior",
+      "genres_lastfm": [
+        "emo rap",
+        "Hip-Hop",
+        "rnb"
+      ],
+      "spotify_followers": 1881238,
+      "spotify_popularity": 71,
+      "spotify_id": "6ASri4ePR7RlsvIQgWPJpS",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb1df5b51522294de652625947",
+      "genres_spotify": [
+        "melodic rap"
+      ]
+    },
+    {
+      "id": "trippie redd",
+      "name": "Trippie Redd",
+      "play_count": 1301,
+      "rank": 3,
+      "size": 1565944,
+      "listener_count": 1565944,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1565944,
+      "lastfm_playcount": 153221095,
+      "lastfm_url": "https://www.last.fm/music/Trippie+Redd",
+      "genres_lastfm": [
+        "trap",
+        "Hip-Hop",
+        "rap"
+      ],
+      "spotify_followers": 10637737,
+      "spotify_popularity": 81,
+      "spotify_id": "6Xgp2XMz1fhVYe7i6yNAax",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf2db81b3312a1f167fc54096",
+      "genres_spotify": [
+        "melodic rap"
+      ]
+    },
+    {
+      "id": "xxxtentacion",
+      "name": "xxxtentacion",
+      "play_count": 1232,
+      "rank": 4,
+      "size": 2410546,
+      "listener_count": 2410546,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2410546,
+      "lastfm_playcount": 281913554,
+      "lastfm_url": "https://www.last.fm/music/xxxtentacion",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "trap"
+      ],
+      "spotify_followers": 50451725,
+      "spotify_popularity": 87,
+      "spotify_id": "15UsOTVnJzReFVN1VCnxy4",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf0c20db5ef6c6fbe5135d2e4",
+      "genres_spotify": [
+        "emo rap"
+      ]
+    },
+    {
+      "id": "polo g",
+      "name": "Polo G",
+      "play_count": 794,
+      "rank": 5,
+      "size": 1057256,
+      "listener_count": 1057256,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1057256,
+      "lastfm_playcount": 90950053,
+      "lastfm_url": "https://www.last.fm/music/Polo+G",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "trap"
+      ],
+      "spotify_followers": 12692328,
+      "spotify_popularity": 80,
+      "spotify_id": "6AgTAQt8XS6jRWi4sX7w49",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebbedf3bdf589da06d1567196c",
+      "genres_spotify": []
+    },
+    {
+      "id": "poorstacy",
+      "name": "POORSTACY",
+      "play_count": 716,
+      "rank": 6,
+      "size": 295686,
+      "listener_count": 295686,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 295686,
+      "lastfm_playcount": 8060395,
+      "lastfm_url": "https://www.last.fm/music/POORSTACY",
+      "genres_lastfm": [
+        "emo rap",
+        "alternative rock",
+        "rap"
+      ],
+      "spotify_followers": 222220,
+      "spotify_popularity": 50,
+      "spotify_id": "7vSY9HEreOqb1Llar3UC38",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebfa9a31f16097f85b0b96b02f",
+      "genres_spotify": [
+        "emo rap",
+        "melodic rap"
+      ]
+    },
+    {
+      "id": "nf",
+      "name": "NF",
+      "play_count": 500,
+      "rank": 7,
+      "size": 1107027,
+      "listener_count": 1107027,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1107027,
+      "lastfm_playcount": 78686823,
+      "lastfm_url": "https://www.last.fm/music/NF",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "hip hop"
+      ],
+      "spotify_followers": 10907942,
+      "spotify_popularity": 79,
+      "spotify_id": "6fOMl44jA4Sp5b9PpYCkzz",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb1cf142a710a2f3d9b7a62da1",
+      "genres_spotify": [
+        "christian hip hop"
+      ]
+    },
+    {
+      "id": "lil nas x",
+      "name": "Lil Nas X",
+      "play_count": 476,
+      "rank": 8,
+      "size": 2342028,
+      "listener_count": 2342028,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2342028,
+      "lastfm_playcount": 106927878,
+      "lastfm_url": "https://www.last.fm/music/Lil+Nas+X",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "trap"
+      ],
+      "spotify_followers": 12345784,
+      "spotify_popularity": 75,
+      "spotify_id": "7jVv8c5Fj3E9VhNjxT4snq",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb3758a33e782b46bd7f174e1d",
+      "genres_spotify": []
+    },
+    {
+      "id": "mgk",
+      "name": "Machine Gun Kelly",
+      "play_count": 472,
+      "rank": 9,
+      "size": 1286513,
+      "listener_count": 1286513,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1286513,
+      "lastfm_playcount": 75198824,
+      "lastfm_url": "https://www.last.fm/music/Machine+Gun+Kelly",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "pop punk"
+      ],
+      "spotify_followers": 5552663,
+      "spotify_popularity": 81,
+      "spotify_id": "6TIYQ3jFPwQSRmorSezPxX",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb60306b56791163f32700ddaa",
+      "genres_spotify": []
+    },
+    {
+      "id": "post malone",
+      "name": "Post Malone",
+      "play_count": 409,
+      "rank": 10,
+      "size": 3064289,
+      "listener_count": 3064289,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3064289,
+      "lastfm_playcount": 278104801,
+      "lastfm_url": "https://www.last.fm/music/Post+Malone",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "trap"
+      ],
+      "spotify_followers": 47122372,
+      "spotify_popularity": 90,
+      "spotify_id": "246dkjvS1zLTtiykXe5h60",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe17c0aa1714a03d62b5ce4e0",
+      "genres_spotify": []
+    },
+    {
+      "id": "the kid laroi",
+      "name": "The Kid Laroi",
+      "play_count": 389,
+      "rank": 11,
+      "size": 2063387,
+      "listener_count": 2063387,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2063387,
+      "lastfm_playcount": 127137491,
+      "lastfm_url": "https://www.last.fm/music/The+Kid+Laroi",
+      "genres_lastfm": [
+        "rap",
+        "emo rap",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 6309300,
+      "spotify_popularity": 82,
+      "spotify_id": "2tIP7SsRs7vjIcLrU85W8J",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb6d3f88864b613a595a6ab457",
+      "genres_spotify": []
+    },
+    {
+      "id": "le sserafim",
+      "name": "LE SSERAFIM",
+      "play_count": 378,
+      "rank": 12,
+      "size": 1210534,
+      "listener_count": 1210534,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1210534,
+      "lastfm_playcount": 191086980,
+      "lastfm_url": "https://www.last.fm/music/LE+SSERAFIM",
+      "genres_lastfm": [
+        "k-pop",
+        "Kpop",
+        "Korean"
+      ],
+      "spotify_followers": 7220203,
+      "spotify_popularity": 81,
+      "spotify_id": "4SpbR6yFEvexJuaBpgAU5p",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb593f35db6f6837e1047a5e33",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "the weeknd",
+      "name": "The Weeknd",
+      "play_count": 362,
+      "rank": 13,
+      "size": 4631683,
+      "listener_count": 4631683,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 4631683,
+      "lastfm_playcount": 889755513,
+      "lastfm_url": "https://www.last.fm/music/The+Weeknd",
+      "genres_lastfm": [
+        "rnb",
+        "electronic",
+        "Canadian"
+      ],
+      "spotify_followers": 106428818,
+      "spotify_popularity": 97,
+      "spotify_id": "1Xyo4u8uXC1ZmMpatF05PJ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb9e528993a2820267b97f6aae",
+      "genres_spotify": []
+    },
+    {
+      "id": "travis scott",
+      "name": "Travis Scott",
+      "play_count": 353,
+      "rank": 14,
+      "size": 2614618,
+      "listener_count": 2614618,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2614618,
+      "lastfm_playcount": 492042838,
+      "lastfm_url": "https://www.last.fm/music/+noredirect/Travis+Scott",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "trap"
+      ],
+      "spotify_followers": 39150490,
+      "spotify_popularity": 93,
+      "spotify_id": "0Y5tJX1MQlPlqiwlOH1tJY",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb19c2790744c792d05570bb71",
+      "genres_spotify": [
+        "rap"
+      ]
+    },
+    {
+      "id": "ed sheeran",
+      "name": "Ed Sheeran",
+      "play_count": 341,
+      "rank": 15,
+      "size": 3709854,
+      "listener_count": 3709854,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3709854,
+      "lastfm_playcount": 215691093,
+      "lastfm_url": "https://www.last.fm/music/Ed+Sheeran",
+      "genres_lastfm": [
+        "acoustic",
+        "british",
+        "singer-songwriter"
+      ],
+      "spotify_followers": 120776075,
+      "spotify_popularity": 91,
+      "spotify_id": "6eUKZXaKkcviH0Ku9w2n3V",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb399444ed4eace08b549d1161",
+      "genres_spotify": [
+        "soft pop"
+      ]
+    },
+    {
+      "id": "maroon 5",
+      "name": "Maroon 5",
+      "play_count": 337,
+      "rank": 16,
+      "size": 5822671,
+      "listener_count": 5822671,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 5822671,
+      "lastfm_playcount": 222079240,
+      "lastfm_url": "https://www.last.fm/music/Maroon+5",
+      "genres_lastfm": [
+        "rock",
+        "pop",
+        "pop rock"
+      ],
+      "spotify_followers": 45047634,
+      "spotify_popularity": 88,
+      "spotify_id": "04gDigrS5kc9YWfZHwBETP",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf8349dfb619a7f842242de77",
+      "genres_spotify": [
+        "pop"
+      ]
+    },
+    {
+      "id": "lil peep",
+      "name": "LIL PEEP",
+      "play_count": 330,
+      "rank": 17,
+      "size": 1800972,
+      "listener_count": 1800972,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1800972,
+      "lastfm_playcount": 282466555,
+      "lastfm_url": "https://www.last.fm/music/LIL+PEEP",
+      "genres_lastfm": [
+        "cloud rap",
+        "emo rap",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 14913650,
+      "spotify_popularity": 84,
+      "spotify_id": "2kCcBybjl3SAtIcwdWpUe3",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb3d9d59e200e82fa53d8781a1",
+      "genres_spotify": [
+        "emo rap",
+        "cloud rap"
+      ]
+    },
+    {
+      "id": "ren ran",
+      "name": "Ren Ran",
+      "play_count": 328,
+      "rank": 18,
+      "size": 35226,
+      "listener_count": 35226,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 35226,
+      "lastfm_playcount": 925741,
+      "lastfm_url": "https://www.last.fm/music/Ren+Ran",
+      "genres_lastfm": [
+        "chinese",
+        "C-pop",
+        "mandopop"
+      ],
+      "spotify_followers": 465329,
+      "spotify_popularity": 58,
+      "spotify_id": "6f4srX54JFrLNK4aTJe2Sc",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf275b5cd5f576cf23bad5f94",
+      "genres_spotify": [
+        "mandopop",
+        "c-pop",
+        "gufeng"
+      ]
+    },
+    {
+      "id": "aimer",
+      "name": "Aimer",
+      "play_count": 298,
+      "rank": 19,
+      "size": 389315,
+      "listener_count": 389315,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 389315,
+      "lastfm_playcount": 20440322,
+      "lastfm_url": "https://www.last.fm/music/Aimer",
+      "genres_lastfm": [
+        "j-pop",
+        "japanese",
+        "female vocalists"
+      ],
+      "spotify_followers": 2653739,
+      "spotify_popularity": 66,
+      "spotify_id": "0bAsR2unSRpn6BQPEnNlZm",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8",
+      "genres_spotify": [
+        "anime",
+        "j-pop",
+        "j-rock"
+      ]
+    },
+    {
+      "id": "joji",
+      "name": "Joji",
+      "play_count": 283,
+      "rank": 20,
+      "size": 2470175,
+      "listener_count": 2470175,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2470175,
+      "lastfm_playcount": 282432460,
+      "lastfm_url": "https://www.last.fm/music/Joji",
+      "genres_lastfm": [
+        "Lo-Fi",
+        "rnb",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 10260030,
+      "spotify_popularity": 79,
+      "spotify_id": "3MZsBdqDrRTJihTHQrO6Dq",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4111c95b5f430c3265c7304b",
+      "genres_spotify": []
+    },
+    {
+      "id": "billie eilish",
+      "name": "Billie Eilish",
+      "play_count": 278,
+      "rank": 21,
+      "size": 3627017,
+      "listener_count": 3627017,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3627017,
+      "lastfm_playcount": 661999374,
+      "lastfm_url": "https://www.last.fm/music/Billie+Eilish",
+      "genres_lastfm": [
+        "pop",
+        "indie pop",
+        "seen live"
+      ],
+      "spotify_followers": 113090139,
+      "spotify_popularity": 95,
+      "spotify_id": "6qqNVTkY8uBg9cP3Jd7DAH",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4a21b4760d2ecb7b0dcdc8da",
+      "genres_spotify": []
+    },
+    {
+      "id": "powfu",
+      "name": "Powfu",
+      "play_count": 273,
+      "rank": 22,
+      "size": 934784,
+      "listener_count": 934784,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 934784,
+      "lastfm_playcount": 23625102,
+      "lastfm_url": "https://www.last.fm/music/Powfu",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "emo rap",
+        "rap"
+      ],
+      "spotify_followers": 1432176,
+      "spotify_popularity": 70,
+      "spotify_id": "6bmlMHgSheBauioMgKv2tn",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb9704481f539d36ee73d228f3",
+      "genres_spotify": []
+    },
+    {
+      "id": "bruno mars",
+      "name": "Bruno Mars",
+      "play_count": 272,
+      "rank": 23,
+      "size": 4482282,
+      "listener_count": 4482282,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 4482282,
+      "lastfm_playcount": 225598755,
+      "lastfm_url": "https://www.last.fm/music/Bruno+Mars",
+      "genres_lastfm": [
+        "pop",
+        "rnb",
+        "male vocalists"
+      ],
+      "spotify_followers": 72538074,
+      "spotify_popularity": 93,
+      "spotify_id": "0du5cEVh5yTK9QJze8zA0C",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebc36dd9eb55fb0db4911f25dd",
+      "genres_spotify": []
+    },
+    {
+      "id": "drake",
+      "name": "Drake",
+      "play_count": 254,
+      "rank": 24,
+      "size": 6075575,
+      "listener_count": 6075575,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 6075575,
+      "lastfm_playcount": 893384540,
+      "lastfm_url": "https://www.last.fm/music/Drake",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "rnb"
+      ],
+      "spotify_followers": 99258716,
+      "spotify_popularity": 98,
+      "spotify_id": "3TVXtAsR1Inumwj472S9r4",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4293385d324db8558179afd9",
+      "genres_spotify": [
+        "rap"
+      ]
+    },
+    {
+      "id": "marshmello",
+      "name": "Marshmello",
+      "play_count": 252,
+      "rank": 25,
+      "size": 2208756,
+      "listener_count": 2208756,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2208756,
+      "lastfm_playcount": 57589615,
+      "lastfm_url": "https://www.last.fm/music/Marshmello",
+      "genres_lastfm": [
+        "electronic",
+        "dance",
+        "trap"
+      ],
+      "spotify_followers": 34261407,
+      "spotify_popularity": 84,
+      "spotify_id": "64KEffDW9EtZ1y2vBYgq8T",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb3b2498dc8a8c6eceed0a2db3",
+      "genres_spotify": [
+        "edm"
+      ]
+    },
+    {
+      "id": "sam smith",
+      "name": "Sam Smith",
+      "play_count": 248,
+      "rank": 26,
+      "size": 2738617,
+      "listener_count": 2738617,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2738617,
+      "lastfm_playcount": 99201390,
+      "lastfm_url": "https://www.last.fm/music/Sam+Smith",
+      "genres_lastfm": [
+        "soul",
+        "pop",
+        "british"
+      ],
+      "spotify_followers": 25869404,
+      "spotify_popularity": 84,
+      "spotify_id": "2wY79sveU1sp5g7SokKOiI",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebc4c97d96c08e4bb7c5f574aa",
+      "genres_spotify": [
+        "soft pop"
+      ]
+    },
+    {
+      "id": "metro boomin",
+      "name": "Metro Boomin",
+      "play_count": 233,
+      "rank": 27,
+      "size": 2086545,
+      "listener_count": 2086545,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2086545,
+      "lastfm_playcount": 197816085,
+      "lastfm_url": "https://www.last.fm/music/Metro+Boomin",
+      "genres_lastfm": [
+        "trap",
+        "Hip-Hop",
+        "rap"
+      ],
+      "spotify_followers": 11097442,
+      "spotify_popularity": 87,
+      "spotify_id": "0iEtIxbK0KxaSlF7G42ZOp",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebdf9a1555f53a20087b8c5a5c",
+      "genres_spotify": []
+    },
+    {
+      "id": "lauv",
+      "name": "Lauv",
+      "play_count": 230,
+      "rank": 28,
+      "size": 1531736,
+      "listener_count": 1531736,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1531736,
+      "lastfm_playcount": 67467712,
+      "lastfm_url": "https://www.last.fm/music/Lauv",
+      "genres_lastfm": [
+        "pop",
+        "indie pop",
+        "indie"
+      ],
+      "spotify_followers": 6679262,
+      "spotify_popularity": 78,
+      "spotify_id": "5JZ7CnR6gTvEMKX4g70Amv",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb173d69f77530d77a991984f",
+      "genres_spotify": []
+    },
+    {
+      "id": "zara larsson",
+      "name": "Zara Larsson",
+      "play_count": 227,
+      "rank": 29,
+      "size": 1561908,
+      "listener_count": 1561908,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1561908,
+      "lastfm_playcount": 44887188,
+      "lastfm_url": "https://www.last.fm/music/Zara+Larsson",
+      "genres_lastfm": [
+        "pop",
+        "swedish",
+        "seen live"
+      ],
+      "spotify_followers": 10741521,
+      "spotify_popularity": 77,
+      "spotify_id": "1Xylc3o4UrD53lo9CvFvVg",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb11be9310ef4b23734c13b5c8",
+      "genres_spotify": []
+    },
+    {
+      "id": "21 savage",
+      "name": "21 Savage",
+      "play_count": 221,
+      "rank": 30,
+      "size": 1996963,
+      "listener_count": 1996963,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1996963,
+      "lastfm_playcount": 188633371,
+      "lastfm_url": "https://www.last.fm/music/21+Savage",
+      "genres_lastfm": [
+        "trap",
+        "Hip-Hop",
+        "rap"
+      ],
+      "spotify_followers": 22814187,
+      "spotify_popularity": 88,
+      "spotify_id": "1URnnhqYAYcrqrcwql10ft",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4f8f76117470957c0e81e5b2",
+      "genres_spotify": []
+    },
+    {
+      "id": "queen",
+      "name": "Queen",
+      "play_count": 220,
+      "rank": 31,
+      "size": 6385663,
+      "listener_count": 6385663,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 6385663,
+      "lastfm_playcount": 351088831,
+      "lastfm_url": "https://www.last.fm/music/Queen",
+      "genres_lastfm": [
+        "classic rock",
+        "rock",
+        "80s"
+      ],
+      "spotify_followers": 54116102,
+      "spotify_popularity": 86,
+      "spotify_id": "1dfeR4HaWDbWqFHLkxsg1d",
+      "photo_url": "https://i.scdn.co/image/b040846ceba13c3e9c125d68389491094e7f2982",
+      "genres_spotify": [
+        "classic rock",
+        "rock",
+        "glam rock"
+      ]
+    },
+    {
+      "id": "internet money",
+      "name": "Internet Money",
+      "play_count": 211,
+      "rank": 32,
+      "size": 973898,
+      "listener_count": 973898,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 973898,
+      "lastfm_playcount": 23536663,
+      "lastfm_url": "https://www.last.fm/music/Internet+Money",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "trap"
+      ],
+      "spotify_followers": 979888,
+      "spotify_popularity": 69,
+      "spotify_id": "6MPCFvOQv5cIGfw3jODMF0",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb30cc15d302e22803fcb5ad34",
+      "genres_spotify": []
+    },
+    {
+      "id": "halsey",
+      "name": "Halsey",
+      "play_count": 203,
+      "rank": 33,
+      "size": 2394274,
+      "listener_count": 2394274,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2394274,
+      "lastfm_playcount": 184748833,
+      "lastfm_url": "https://www.last.fm/music/Halsey",
+      "genres_lastfm": [
+        "pop",
+        "indie pop",
+        "indie"
+      ],
+      "spotify_followers": 22177687,
+      "spotify_popularity": 84,
+      "spotify_id": "26VFTg2z8YR0cCuwLzESi2",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7f17140567e7df5799d5c3a9",
+      "genres_spotify": []
+    },
+    {
+      "id": "taylor swift",
+      "name": "Taylor Swift",
+      "play_count": 189,
+      "rank": 34,
+      "size": 5160232,
+      "listener_count": 5160232,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 5160232,
+      "lastfm_playcount": 3009283152,
+      "lastfm_url": "https://www.last.fm/music/Taylor+Swift",
+      "genres_lastfm": [
+        "country",
+        "pop",
+        "female vocalists"
+      ],
+      "spotify_followers": 138794730,
+      "spotify_popularity": 98,
+      "spotify_id": "06HL4z0CvFAxyc27GXpf02",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676",
+      "genres_spotify": []
+    },
+    {
+      "id": "ellie goulding",
+      "name": "Ellie Goulding",
+      "play_count": 184,
+      "rank": 35,
+      "size": 3439442,
+      "listener_count": 3439442,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3439442,
+      "lastfm_playcount": 128368659,
+      "lastfm_url": "https://www.last.fm/music/Ellie+Goulding",
+      "genres_lastfm": [
+        "female vocalists",
+        "electronic",
+        "british"
+      ],
+      "spotify_followers": 13074316,
+      "spotify_popularity": 82,
+      "spotify_id": "0X2BH1fck6amBIoJhDVmmJ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebc3cd7dc428871e8985d62b9a",
+      "genres_spotify": []
+    },
+    {
+      "id": "twenty one pilots",
+      "name": "Twenty One Pilots",
+      "play_count": 183,
+      "rank": 36,
+      "size": 2808714,
+      "listener_count": 2808714,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2808714,
+      "lastfm_playcount": 300945125,
+      "lastfm_url": "https://www.last.fm/music/Twenty+One+Pilots",
+      "genres_lastfm": [
+        "electronic",
+        "alternative",
+        "indie pop"
+      ],
+      "spotify_followers": 25456728,
+      "spotify_popularity": 85,
+      "spotify_id": "3YQKmKGau1PzlVlkL1iodx",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb61a7ea26d33ded218cd1e59d",
+      "genres_spotify": []
+    },
+    {
+      "id": "lil wayne",
+      "name": "Lil Wayne",
+      "play_count": 179,
+      "rank": 37,
+      "size": 1868373,
+      "listener_count": 1868373,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1868373,
+      "lastfm_playcount": 72658500,
+      "lastfm_url": "https://www.last.fm/music/+noredirect/Lil+Wayne",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "hip hop"
+      ],
+      "spotify_followers": 17227093,
+      "spotify_popularity": 90,
+      "spotify_id": "55Aa2cqylxrFIXC767Z865",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb998010cd1075921b5faf16b2",
+      "genres_spotify": [
+        "rap",
+        "hip hop"
+      ]
+    },
+    {
+      "id": "88rising",
+      "name": "88Rising",
+      "play_count": 162,
+      "rank": 38,
+      "size": 885005,
+      "listener_count": 885005,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 885005,
+      "lastfm_playcount": 26620752,
+      "lastfm_url": "https://www.last.fm/music/88Rising",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rnb",
+        "soul"
+      ],
+      "spotify_followers": 1032213,
+      "spotify_popularity": 69,
+      "spotify_id": "1AhjOkOLkbHUfcHDSErXQs",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb9925b25e0ad0d1c661e1e474",
+      "genres_spotify": []
+    },
+    {
+      "id": "aespa",
+      "name": "aespa",
+      "play_count": 154,
+      "rank": 39,
+      "size": 1046454,
+      "listener_count": 1046454,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1046454,
+      "lastfm_playcount": 203610224,
+      "lastfm_url": "https://www.last.fm/music/aespa",
+      "genres_lastfm": [
+        "k-pop",
+        "Kpop",
+        "Korean"
+      ],
+      "spotify_followers": 8821904,
+      "spotify_popularity": 79,
+      "spotify_id": "6YVMFz59CuY7ngCxTxjpxE",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf7a1090ad3a35a34fc0ecb57",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "charlie puth",
+      "name": "Charlie Puth",
+      "play_count": 151,
+      "rank": 40,
+      "size": 2009701,
+      "listener_count": 2009701,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2009701,
+      "lastfm_playcount": 113779318,
+      "lastfm_url": "https://www.last.fm/music/Charlie+Puth",
+      "genres_lastfm": [
+        "pop",
+        "rnb",
+        "soul"
+      ],
+      "spotify_followers": 24702575,
+      "spotify_popularity": 82,
+      "spotify_id": "6VuMaDnrHyPL1p4EHjYLi7",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebd5594e3ae145bbb2c096366d",
+      "genres_spotify": [
+        "soft pop",
+        "pop"
+      ]
+    },
+    {
+      "id": "all time low",
+      "name": "All Time Low",
+      "play_count": 149,
+      "rank": 41,
+      "size": 2217556,
+      "listener_count": 2217556,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2217556,
+      "lastfm_playcount": 108777907,
+      "lastfm_url": "https://www.last.fm/music/All+Time+Low",
+      "genres_lastfm": [
+        "pop punk",
+        "rock",
+        "powerpop"
+      ],
+      "spotify_followers": 3143470,
+      "spotify_popularity": 71,
+      "spotify_id": "46gyXjRIvN1NL1eCB8GBxo",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8625dac822c90c5f8c605170",
+      "genres_spotify": [
+        "pop punk",
+        "emo",
+        "punk"
+      ]
+    },
+    {
+      "id": "seezyn",
+      "name": "Seezyn",
+      "play_count": 146,
+      "rank": 42,
+      "size": 8502,
+      "listener_count": 8502,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 8502,
+      "lastfm_playcount": 131479,
+      "lastfm_url": "https://www.last.fm/music/Seezyn",
+      "genres_lastfm": [
+        "Seezyn"
+      ],
+      "spotify_followers": 20140,
+      "spotify_popularity": 57,
+      "spotify_id": "1jIVEaq8GmqMYb8nFNAZgb",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb356b28502be25a017e38f395",
+      "genres_spotify": []
+    },
+    {
+      "id": "ynw melly",
+      "name": "YNW Melly",
+      "play_count": 141,
+      "rank": 43,
+      "size": 922387,
+      "listener_count": 922387,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 922387,
+      "lastfm_playcount": 30591976,
+      "lastfm_url": "https://www.last.fm/music/YNW+Melly",
+      "genres_lastfm": [
+        "trap",
+        "rap",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 12182842,
+      "spotify_popularity": 75,
+      "spotify_id": "1cNDP5yjU5vjeR8qMf4grg",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4da4a196cc973f65b68fe67b",
+      "genres_spotify": [
+        "melodic rap"
+      ]
+    },
+    {
+      "id": "shannon",
+      "name": "Shannon",
+      "play_count": 134,
+      "rank": 44,
+      "size": 235717,
+      "listener_count": 235717,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 235717,
+      "lastfm_playcount": 1741751,
+      "lastfm_url": "https://www.last.fm/music/Shannon",
+      "genres_lastfm": [
+        "celtic",
+        "folk",
+        "80s"
+      ],
+      "spotify_followers": 96353,
+      "spotify_popularity": 45,
+      "spotify_id": "2O8QAJmRrwkFXq2aWZnHYB",
+      "photo_url": "https://i.scdn.co/image/00d1d61823edda045cbb20395c0065a6238b1810",
+      "genres_spotify": [
+        "freestyle",
+        "hi-nrg",
+        "post-disco"
+      ]
+    },
+    {
+      "id": "khalid",
+      "name": "Khalid",
+      "play_count": 133,
+      "rank": 45,
+      "size": 1990036,
+      "listener_count": 1990036,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1990036,
+      "lastfm_playcount": 79487649,
+      "lastfm_url": "https://www.last.fm/music/Khalid",
+      "genres_lastfm": [
+        "rnb",
+        "pop",
+        "soul"
+      ],
+      "spotify_followers": 16744924,
+      "spotify_popularity": 84,
+      "spotify_id": "6LuN9FCkKOj5PcnpouEgny",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb24ff450c42d4e36fb34a7631",
+      "genres_spotify": []
+    },
+    {
+      "id": "lil tecca",
+      "name": "Lil Tecca",
+      "play_count": 133,
+      "rank": 46,
+      "size": 1458900,
+      "listener_count": 1458900,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1458900,
+      "lastfm_playcount": 112069104,
+      "lastfm_url": "https://www.last.fm/music/Lil+Tecca",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "trap"
+      ],
+      "spotify_followers": 9571785,
+      "spotify_popularity": 85,
+      "spotify_id": "4Ga1P7PMIsmqEZqhYZQgDo",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb5433d9d8519ad0635d8bd869",
+      "genres_spotify": [
+        "melodic rap",
+        "rap"
+      ]
+    },
+    {
+      "id": "jay chou",
+      "name": "Jay Chou",
+      "play_count": 125,
+      "rank": 47,
+      "size": 90600,
+      "listener_count": 90600,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 90600,
+      "lastfm_playcount": 6301030,
+      "lastfm_url": "https://www.last.fm/music/+noredirect/Jay+Chou",
+      "genres_lastfm": [
+        "C-pop",
+        "chinese",
+        "pop"
+      ],
+      "spotify_followers": 7028193,
+      "spotify_popularity": 75,
+      "spotify_id": "2elBjNSdBE2Y3f0j1mjrql",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb02b3aa55ba238b2ceafb09da",
+      "genres_spotify": [
+        "mandopop",
+        "c-pop",
+        "taiwanese pop"
+      ]
+    },
+    {
+      "id": "lil uzi vert",
+      "name": "LIL UZI VERT",
+      "play_count": 117,
+      "rank": 48,
+      "size": 2300449,
+      "listener_count": 2300449,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2300449,
+      "lastfm_playcount": 339453661,
+      "lastfm_url": "https://www.last.fm/music/LIL+UZI+VERT",
+      "genres_lastfm": [
+        "trap",
+        "rap",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 18881574,
+      "spotify_popularity": 85,
+      "spotify_id": "4O15NlyKLIASxsJ0PrXPfz",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eba8ce348f34f18241d3249fa9",
+      "genres_spotify": [
+        "melodic rap"
+      ]
+    },
+    {
+      "id": "jj lin",
+      "name": "JJ Lin",
+      "play_count": 115,
+      "rank": 49,
+      "size": 103414,
+      "listener_count": 103414,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 103414,
+      "lastfm_playcount": 2901439,
+      "lastfm_url": "https://www.last.fm/music/+noredirect/JJ+Lin",
+      "genres_lastfm": [
+        "C-pop",
+        "pop",
+        "singapore"
+      ],
+      "spotify_followers": 3643257,
+      "spotify_popularity": 69,
+      "spotify_id": "7Dx7RhX0mFuXhCOUgB01uM",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb181b3f24c2a457e7fa3edb59",
+      "genres_spotify": [
+        "mandopop",
+        "c-pop",
+        "taiwanese pop"
+      ]
+    },
+    {
+      "id": "rae sremmurd",
+      "name": "Rae Sremmurd",
+      "play_count": 108,
+      "rank": 50,
+      "size": 1594060,
+      "listener_count": 1594060,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1594060,
+      "lastfm_playcount": 37243603,
+      "lastfm_url": "https://www.last.fm/music/Rae+Sremmurd",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "hip hop"
+      ],
+      "spotify_followers": 7708762,
+      "spotify_popularity": 72,
+      "spotify_id": "7iZtZyCzp3LItcw1wtPI3D",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebca1568791bf7ac0cf34dbc66",
+      "genres_spotify": []
+    },
+    {
+      "id": "king von",
+      "name": "King Von",
+      "play_count": 106,
+      "rank": 51,
+      "size": 765621,
+      "listener_count": 765621,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 765621,
+      "lastfm_playcount": 47643384,
+      "lastfm_url": "https://www.last.fm/music/King+Von",
+      "genres_lastfm": [
+        "drill",
+        "rap",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 7080744,
+      "spotify_popularity": 80,
+      "spotify_id": "6QtgPSJPSzcnn7dPZ4VINp",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb5c0b2129a88c7d6ed0704556",
+      "genres_spotify": [
+        "chicago drill",
+        "drill"
+      ]
+    },
+    {
+      "id": "benny blanco",
+      "name": "Benny Blanco",
+      "play_count": 97,
+      "rank": 52,
+      "size": 1259959,
+      "listener_count": 1259959,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1259959,
+      "lastfm_playcount": 36195492,
+      "lastfm_url": "https://www.last.fm/music/Benny+Blanco",
+      "genres_lastfm": [
+        "pop",
+        "electronic",
+        "hip hop"
+      ],
+      "spotify_followers": 1481978,
+      "spotify_popularity": 81,
+      "spotify_id": "5CiGnKThu5ctn9pBxv7DGa",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb9e339e423b680759b0006a63",
+      "genres_spotify": []
+    },
+    {
+      "id": "5 seconds of summer",
+      "name": "5 Seconds of Summer",
+      "play_count": 97,
+      "rank": 53,
+      "size": 1920767,
+      "listener_count": 1920767,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1920767,
+      "lastfm_playcount": 162072411,
+      "lastfm_url": "https://www.last.fm/music/5+Seconds+of+Summer",
+      "genres_lastfm": [
+        "pop rock",
+        "pop punk",
+        "rock"
+      ],
+      "spotify_followers": 10326246,
+      "spotify_popularity": 78,
+      "spotify_id": "5Rl15oVamLq7FbSb0NNBNy",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb5048d9616b459ef90f04b6d8",
+      "genres_spotify": []
+    },
+    {
+      "id": "meek mill",
+      "name": "Meek Mill",
+      "play_count": 91,
+      "rank": 54,
+      "size": 1595958,
+      "listener_count": 1595958,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1595958,
+      "lastfm_playcount": 40702774,
+      "lastfm_url": "https://www.last.fm/music/Meek+Mill",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "hip hop"
+      ],
+      "spotify_followers": 8198224,
+      "spotify_popularity": 76,
+      "spotify_id": "20sxb77xiYeusSH8cVdatc",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebc14756c27212bdea80f6cfac",
+      "genres_spotify": [
+        "rap"
+      ]
+    },
+    {
+      "id": "fall out boy",
+      "name": "Fall Out Boy",
+      "play_count": 91,
+      "rank": 55,
+      "size": 4405754,
+      "listener_count": 4405754,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 4405754,
+      "lastfm_playcount": 320154089,
+      "lastfm_url": "https://www.last.fm/music/Fall+Out+Boy",
+      "genres_lastfm": [
+        "pop punk",
+        "rock",
+        "emo"
+      ],
+      "spotify_followers": 11302218,
+      "spotify_popularity": 81,
+      "spotify_id": "4UXqAaa6dQYAk18Lv7PEgX",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb362011ebe6064c38e97e9aac",
+      "genres_spotify": [
+        "emo",
+        "pop punk"
+      ]
+    },
+    {
+      "id": "the fray",
+      "name": "The Fray",
+      "play_count": 90,
+      "rank": 56,
+      "size": 3146735,
+      "listener_count": 3146735,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3146735,
+      "lastfm_playcount": 73635857,
+      "lastfm_url": "https://www.last.fm/music/The+Fray",
+      "genres_lastfm": [
+        "alternative",
+        "rock",
+        "piano rock"
+      ],
+      "spotify_followers": 4232618,
+      "spotify_popularity": 75,
+      "spotify_id": "0zOcE3mg9nS6l3yxt1Y0bK",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebfc346418571318500c277d0c",
+      "genres_spotify": []
+    },
+    {
+      "id": "kodak black",
+      "name": "Kodak Black",
+      "play_count": 89,
+      "rank": 57,
+      "size": 1514727,
+      "listener_count": 1514727,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1514727,
+      "lastfm_playcount": 83590731,
+      "lastfm_url": "https://www.last.fm/music/Kodak+Black",
+      "genres_lastfm": [
+        "trap",
+        "Hip-Hop",
+        "rap"
+      ],
+      "spotify_followers": 12027760,
+      "spotify_popularity": 83,
+      "spotify_id": "46SHBwWsqBkxI7EeeBEQG7",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb70c05cf4dc9a7d3ffd02ba19",
+      "genres_spotify": []
+    },
+    {
+      "id": "justin bieber",
+      "name": "Justin Bieber",
+      "play_count": 89,
+      "rank": 58,
+      "size": 4051266,
+      "listener_count": 4051266,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 4051266,
+      "lastfm_playcount": 228252287,
+      "lastfm_url": "https://www.last.fm/music/Justin+Bieber",
+      "genres_lastfm": [
+        "pop",
+        "black metal",
+        "justin bieber"
+      ],
+      "spotify_followers": 82828306,
+      "spotify_popularity": 91,
+      "spotify_id": "1uNFoZAHBGtllmzznpCI3s",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8ae7f2aaa9817a704a87ea36",
+      "genres_spotify": []
+    },
+    {
+      "id": "wiz khalifa",
+      "name": "Wiz Khalifa",
+      "play_count": 88,
+      "rank": 59,
+      "size": 3505567,
+      "listener_count": 3505567,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3505567,
+      "lastfm_playcount": 72592745,
+      "lastfm_url": "https://www.last.fm/music/Wiz+Khalifa",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "underground hip-hop"
+      ],
+      "spotify_followers": 12012409,
+      "spotify_popularity": 84,
+      "spotify_id": "137W8MRPWKqSmrBGDBFSop",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebc66b0a8c3268f0b6556f64a8",
+      "genres_spotify": [
+        "rap"
+      ]
+    },
+    {
+      "id": "dean lewis",
+      "name": "Dean Lewis",
+      "play_count": 87,
+      "rank": 60,
+      "size": 833026,
+      "listener_count": 833026,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 833026,
+      "lastfm_playcount": 20961057,
+      "lastfm_url": "https://www.last.fm/music/Dean+Lewis",
+      "genres_lastfm": [
+        "indie",
+        "pop",
+        "australian"
+      ],
+      "spotify_followers": 3874838,
+      "spotify_popularity": 78,
+      "spotify_id": "3QSQFmccmX81fWCUSPTS7y",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebcd4f69d1758be97745a7e961",
+      "genres_spotify": []
+    },
+    {
+      "id": "tyler, the creator",
+      "name": "Tyler, the Creator",
+      "play_count": 87,
+      "rank": 61,
+      "size": 3671783,
+      "listener_count": 3671783,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3671783,
+      "lastfm_playcount": 802988437,
+      "lastfm_url": "https://www.last.fm/music/Tyler,+the+Creator",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "ofwgkta"
+      ],
+      "spotify_followers": 22443389,
+      "spotify_popularity": 90,
+      "spotify_id": "4V8LLVI7PbaPR0K2TGSxFF",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebdfa2b0c7544a772042a12e52",
+      "genres_spotify": []
+    },
+    {
+      "id": "lukas graham",
+      "name": "Lukas Graham",
+      "play_count": 86,
+      "rank": 62,
+      "size": 1033851,
+      "listener_count": 1033851,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1033851,
+      "lastfm_playcount": 14010489,
+      "lastfm_url": "https://www.last.fm/music/Lukas+Graham",
+      "genres_lastfm": [
+        "pop",
+        "soul",
+        "danish"
+      ],
+      "spotify_followers": 2726605,
+      "spotify_popularity": 73,
+      "spotify_id": "25u4wHJWxCA9vO0CzxAbK7",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb955b1ec67667a5d67ebba167",
+      "genres_spotify": []
+    },
+    {
+      "id": "ariana grande",
+      "name": "Ariana Grande",
+      "play_count": 84,
+      "rank": 63,
+      "size": 3867554,
+      "listener_count": 3867554,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3867554,
+      "lastfm_playcount": 884727493,
+      "lastfm_url": "https://www.last.fm/music/Ariana+Grande",
+      "genres_lastfm": [
+        "pop",
+        "rnb",
+        "female vocalists"
+      ],
+      "spotify_followers": 105685236,
+      "spotify_popularity": 93,
+      "spotify_id": "66CXWjxzNUsdJxJ2JdwvnR",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb6725802588d7dc1aba076ca5",
+      "genres_spotify": [
+        "pop"
+      ]
+    },
+    {
+      "id": "jaden",
+      "name": "Jaden",
+      "play_count": 84,
+      "rank": 64,
+      "size": 1051422,
+      "listener_count": 1051422,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1051422,
+      "lastfm_playcount": 42270649,
+      "lastfm_url": "https://www.last.fm/music/Jaden",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "seen live"
+      ],
+      "spotify_followers": 1948333,
+      "spotify_popularity": 67,
+      "spotify_id": "0xOeVMOz2fVg5BJY3N6akT",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7fcdd9f3bc9e12baf89b1016",
+      "genres_spotify": []
+    },
+    {
+      "id": "flume",
+      "name": "Flume",
+      "play_count": 81,
+      "rank": 65,
+      "size": 1717060,
+      "listener_count": 1717060,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1717060,
+      "lastfm_playcount": 61885037,
+      "lastfm_url": "https://www.last.fm/music/Flume",
+      "genres_lastfm": [
+        "electronic",
+        "chillout",
+        "seen live"
+      ],
+      "spotify_followers": 2499429,
+      "spotify_popularity": 73,
+      "spotify_id": "6nxWCVXbOlEVRexSbLsTer",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebdcbf7ddf047dd267e4de8978",
+      "genres_spotify": [
+        "future bass"
+      ]
+    },
+    {
+      "id": "shawn mendes",
+      "name": "Shawn Mendes",
+      "play_count": 80,
+      "rank": 66,
+      "size": 2341003,
+      "listener_count": 2341003,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2341003,
+      "lastfm_playcount": 121341678,
+      "lastfm_url": "https://www.last.fm/music/Shawn+Mendes",
+      "genres_lastfm": [
+        "pop",
+        "Canadian",
+        "seen live"
+      ],
+      "spotify_followers": 45085414,
+      "spotify_popularity": 84,
+      "spotify_id": "7n2wHs1TKAczGzO7Dd2rGr",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb58b4b9419486550f6fda0535",
+      "genres_spotify": []
+    },
+    {
+      "id": "king gnu",
+      "name": "King Gnu",
+      "play_count": 78,
+      "rank": 67,
+      "size": 391755,
+      "listener_count": 391755,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 391755,
+      "lastfm_playcount": 13679810,
+      "lastfm_url": "https://www.last.fm/music/King+Gnu",
+      "genres_lastfm": [
+        "J-rock",
+        "indie",
+        "japanese"
+      ],
+      "spotify_followers": 3923703,
+      "spotify_popularity": 72,
+      "spotify_id": "6wxfx1yhyqjCPYwwxJktR2",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb420186de6166368e93187b5f",
+      "genres_spotify": [
+        "j-pop",
+        "anime",
+        "j-rock"
+      ]
+    },
+    {
+      "id": "blackway",
+      "name": "Blackway",
+      "play_count": 73,
+      "rank": 68,
+      "size": 323028,
+      "listener_count": 323028,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 323028,
+      "lastfm_playcount": 3306711,
+      "lastfm_url": "https://www.last.fm/music/Blackway",
+      "genres_lastfm": [
+        "Italo Disco",
+        "80s",
+        "rap"
+      ],
+      "spotify_followers": 73903,
+      "spotify_popularity": 56,
+      "spotify_id": "1QvK8bFc2WREH4LDlJcJbi",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb0397950f833da568b125b329",
+      "genres_spotify": []
+    },
+    {
+      "id": "jackboys",
+      "name": "JackBoys",
+      "play_count": 72,
+      "rank": 69,
+      "size": 859457,
+      "listener_count": 859457,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 859457,
+      "lastfm_playcount": 21999294,
+      "lastfm_url": "https://www.last.fm/music/JackBoys",
+      "genres_lastfm": [
+        "rap",
+        "trap",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 1083508,
+      "spotify_popularity": 66,
+      "spotify_id": "7A8S43ryYdbWpJKeHRZRcq",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb440b705481183f0ddaa521d7",
+      "genres_spotify": []
+    },
+    {
+      "id": "rex orange county",
+      "name": "Rex Orange County",
+      "play_count": 72,
+      "rank": 70,
+      "size": 1774911,
+      "listener_count": 1774911,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1774911,
+      "lastfm_playcount": 105972977,
+      "lastfm_url": "https://www.last.fm/music/Rex+Orange+County",
+      "genres_lastfm": [
+        "indie pop",
+        "seen live",
+        "rnb"
+      ],
+      "spotify_followers": 6533042,
+      "spotify_popularity": 77,
+      "spotify_id": "7pbDxGE6nQSZVfiFdq9lOL",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebee3852e6b5500f0af5315609",
+      "genres_spotify": [
+        "bedroom pop"
+      ]
+    },
+    {
+      "id": "kygo",
+      "name": "Kygo",
+      "play_count": 71,
+      "rank": 71,
+      "size": 1772716,
+      "listener_count": 1772716,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1772716,
+      "lastfm_playcount": 51908368,
+      "lastfm_url": "https://www.last.fm/music/Kygo",
+      "genres_lastfm": [
+        "electronic",
+        "House",
+        "chillout"
+      ],
+      "spotify_followers": 8635536,
+      "spotify_popularity": 82,
+      "spotify_id": "23fqKkggKUBHNkbKtXEls4",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe5ea1aa1404629c12ad86658",
+      "genres_spotify": [
+        "tropical house"
+      ]
+    },
+    {
+      "id": "ksi",
+      "name": "ksi",
+      "play_count": 70,
+      "rank": 72,
+      "size": 639023,
+      "listener_count": 639023,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 639023,
+      "lastfm_playcount": 16144244,
+      "lastfm_url": "https://www.last.fm/music/ksi",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "Grime"
+      ],
+      "spotify_followers": 132233,
+      "spotify_popularity": 43,
+      "spotify_id": "3kYFawNQVZ00FQbgs4rVBe",
+      "photo_url": "https://i.scdn.co/image/0078316432cdfb6733c3bde0dc61754d45442d0f",
+      "genres_spotify": [
+        "pop punk"
+      ]
+    },
+    {
+      "id": "magic!",
+      "name": "Magic!",
+      "play_count": 70,
+      "rank": 73,
+      "size": 1282108,
+      "listener_count": 1282108,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1282108,
+      "lastfm_playcount": 11249336,
+      "lastfm_url": "https://www.last.fm/music/Magic%21",
+      "genres_lastfm": [
+        "reggae",
+        "pop",
+        "Canadian"
+      ],
+      "spotify_followers": 1540119,
+      "spotify_popularity": 70,
+      "spotify_id": "0DxeaLnv6SyYk2DOqkLO8c",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8b68d29a8713b8260aa18e19",
+      "genres_spotify": []
+    },
+    {
+      "id": "nle choppa",
+      "name": "NLE Choppa",
+      "play_count": 70,
+      "rank": 74,
+      "size": 1245392,
+      "listener_count": 1245392,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1245392,
+      "lastfm_playcount": 47372294,
+      "lastfm_url": "https://www.last.fm/music/NLE+Choppa",
+      "genres_lastfm": [
+        "trap",
+        "rap",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 9729246,
+      "spotify_popularity": 79,
+      "spotify_id": "0ErzCpIMyLcjPiwT4elrtZ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe2c985e8509fc8788a5a5208",
+      "genres_spotify": []
+    },
+    {
+      "id": "lovelytheband",
+      "name": "lovelytheband",
+      "play_count": 68,
+      "rank": 75,
+      "size": 482295,
+      "listener_count": 482295,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 482295,
+      "lastfm_playcount": 7140284,
+      "lastfm_url": "https://www.last.fm/music/lovelytheband",
+      "genres_lastfm": [
+        "indie pop",
+        "alternative",
+        "indie"
+      ],
+      "spotify_followers": 430348,
+      "spotify_popularity": 57,
+      "spotify_id": "4KJ6jujcNPzOyhdNoiNftp",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebec81e7178a32c7b697c2780c",
+      "genres_spotify": []
+    },
+    {
+      "id": "bryant barnes",
+      "name": "Bryant Barnes",
+      "play_count": 68,
+      "rank": 76,
+      "size": 197842,
+      "listener_count": 197842,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 197842,
+      "lastfm_playcount": 5535435,
+      "lastfm_url": "https://www.last.fm/music/Bryant+Barnes",
+      "genres_lastfm": [
+        "rnb",
+        "alternative rnb",
+        "electronic"
+      ],
+      "spotify_followers": 503136,
+      "spotify_popularity": 65,
+      "spotify_id": "1URGXPcURc0aQzLeph65nK",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebbec4cb1dad8d16b100a1d168",
+      "genres_spotify": []
+    },
+    {
+      "id": "ヨルシカ",
+      "name": "Yorushika",
+      "play_count": 67,
+      "rank": 77,
+      "size": 224593,
+      "listener_count": 224593,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 224593,
+      "lastfm_playcount": 13038264,
+      "lastfm_url": "https://www.last.fm/music/Yorushika",
+      "genres_lastfm": [
+        "japanese",
+        "J-rock",
+        "j-pop"
+      ],
+      "spotify_followers": 3122427,
+      "spotify_popularity": 74,
+      "spotify_id": "4UK2Lzi6fBfUi9rpDt6cik",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab",
+      "genres_spotify": [
+        "j-pop",
+        "j-rock",
+        "japanese indie"
+      ]
+    },
+    {
+      "id": "rosé",
+      "name": "Rosé",
+      "play_count": 66,
+      "rank": 78,
+      "size": 1350281,
+      "listener_count": 1350281,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1350281,
+      "lastfm_playcount": 82660045,
+      "lastfm_url": "https://www.last.fm/music/Ros%C3%A9",
+      "genres_lastfm": [
+        "pop",
+        "Rosé",
+        "Korean"
+      ],
+      "spotify_followers": 11750348,
+      "spotify_popularity": 84,
+      "spotify_id": "3eVa5w3URK5duf6eyVDbu9",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebcfb4350222919670128ff2dc",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "axwell /\\ ingrosso",
+      "name": "Axwell /\\ Ingrosso",
+      "play_count": 64,
+      "rank": 79,
+      "size": 649212,
+      "listener_count": 649212,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 649212,
+      "lastfm_playcount": 8572553,
+      "lastfm_url": "https://www.last.fm/music/Axwell+%2F%5C+Ingrosso",
+      "genres_lastfm": [
+        "swedish",
+        "dance",
+        "electronic"
+      ],
+      "spotify_followers": 2518003,
+      "spotify_popularity": 67,
+      "spotify_id": "2XnBwblw31dfGnspMIwgWz",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb9f6e5d736809c4cb40d59a7e",
+      "genres_spotify": []
+    },
+    {
+      "id": "lil tjay",
+      "name": "lil tjay",
+      "play_count": 64,
+      "rank": 80,
+      "size": 843921,
+      "listener_count": 843921,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 843921,
+      "lastfm_playcount": 54046862,
+      "lastfm_url": "https://www.last.fm/music/lil+tjay",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "trap"
+      ],
+      "spotify_followers": 9850297,
+      "spotify_popularity": 78,
+      "spotify_id": "6jGMq4yGs7aQzuGsMgVgZR",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb61a229ac35bdd68d42bffe32",
+      "genres_spotify": [
+        "brooklyn drill",
+        "melodic rap"
+      ]
+    },
+    {
+      "id": "nmixx",
+      "name": "NMixx",
+      "play_count": 63,
+      "rank": 81,
+      "size": 573136,
+      "listener_count": 573136,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 573136,
+      "lastfm_playcount": 57287482,
+      "lastfm_url": "https://www.last.fm/music/NMixx",
+      "genres_lastfm": [
+        "k-pop",
+        "Kpop",
+        "Korean"
+      ],
+      "spotify_followers": 3694665,
+      "spotify_popularity": 68,
+      "spotify_id": "28ot3wh4oNmoFOdVajibBl",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb75519f6b752fce04b2e4ed7",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "gotye",
+      "name": "Gotye",
+      "play_count": 63,
+      "rank": 82,
+      "size": 2747266,
+      "listener_count": 2747266,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2747266,
+      "lastfm_playcount": 46747337,
+      "lastfm_url": "https://www.last.fm/music/Gotye",
+      "genres_lastfm": [
+        "indie",
+        "electronic",
+        "alternative"
+      ],
+      "spotify_followers": 2262486,
+      "spotify_popularity": 72,
+      "spotify_id": "2AsusXITU8P25dlRNhcAbG",
+      "photo_url": "https://i.scdn.co/image/713664fded8bdd28ed84f4b2054815af92999b9c",
+      "genres_spotify": []
+    },
+    {
+      "id": "yuki hayashi",
+      "name": "Yuki Hayashi",
+      "play_count": 63,
+      "rank": 83,
+      "size": 170482,
+      "listener_count": 170482,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 170482,
+      "lastfm_playcount": 6943137,
+      "lastfm_url": "https://www.last.fm/music/+noredirect/Yuki+Hayashi",
+      "genres_lastfm": [],
+      "spotify_followers": 156342,
+      "spotify_popularity": 61,
+      "spotify_id": "3oGVQWQy7lgTMuTnKUZZNZ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb2446b3fc23566403acc9c576",
+      "genres_spotify": [
+        "anime",
+        "soundtrack"
+      ]
+    },
+    {
+      "id": "jon bellion",
+      "name": "Jon Bellion",
+      "play_count": 61,
+      "rank": 84,
+      "size": 685865,
+      "listener_count": 685865,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 685865,
+      "lastfm_playcount": 21581916,
+      "lastfm_url": "https://www.last.fm/music/Jon+Bellion",
+      "genres_lastfm": [
+        "electronic",
+        "Hip-Hop",
+        "experimental"
+      ],
+      "spotify_followers": 1494854,
+      "spotify_popularity": 72,
+      "spotify_id": "50JJSqHUf2RQ9xsHs0KMHg",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebbdc0709eec4b28557926fab6",
+      "genres_spotify": []
+    },
+    {
+      "id": "kiss of life",
+      "name": "Kiss Of Life",
+      "play_count": 61,
+      "rank": 85,
+      "size": 579679,
+      "listener_count": 579679,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 579679,
+      "lastfm_playcount": 49912079,
+      "lastfm_url": "https://www.last.fm/music/Kiss+Of+Life",
+      "genres_lastfm": [
+        "k-pop",
+        "pop",
+        "Kpop"
+      ],
+      "spotify_followers": 2220548,
+      "spotify_popularity": 70,
+      "spotify_id": "4TEK9tIkcoxib4GxT3O4ky",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb5227c0582a86838a0942d9f3",
+      "genres_spotify": [
+        "k-pop"
+      ]
+    },
+    {
+      "id": "panic! at the disco",
+      "name": "Panic! at the Disco",
+      "play_count": 60,
+      "rank": 86,
+      "size": 4022451,
+      "listener_count": 4022451,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 4022451,
+      "lastfm_playcount": 252855814,
+      "lastfm_url": "https://www.last.fm/music/Panic%21+at+the+Disco",
+      "genres_lastfm": [
+        "rock",
+        "alternative",
+        "emo"
+      ],
+      "spotify_followers": 12631784,
+      "spotify_popularity": 78,
+      "spotify_id": "20JZFwl6HVl6yg8a4H3ZqK",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb256ae9a4b82bfff97776ae2",
+      "genres_spotify": [
+        "emo"
+      ]
+    },
+    {
+      "id": "jack harlow",
+      "name": "Jack Harlow",
+      "play_count": 59,
+      "rank": 87,
+      "size": 1630119,
+      "listener_count": 1630119,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1630119,
+      "lastfm_playcount": 69175248,
+      "lastfm_url": "https://www.last.fm/music/Jack+Harlow",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "trap"
+      ],
+      "spotify_followers": 4224805,
+      "spotify_popularity": 80,
+      "spotify_id": "2LIk90788K0zvyj2JJVwkJ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb645c02cfa05103299775097",
+      "genres_spotify": []
+    },
+    {
+      "id": "g herbo",
+      "name": "G Herbo",
+      "play_count": 58,
+      "rank": 88,
+      "size": 469228,
+      "listener_count": 469228,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 469228,
+      "lastfm_playcount": 15843665,
+      "lastfm_url": "https://www.last.fm/music/G+Herbo",
+      "genres_lastfm": [
+        "drill",
+        "rap",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 2351865,
+      "spotify_popularity": 72,
+      "spotify_id": "5QdEbQJ3ylBnc3gsIASAT5",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb1a620eb0a042b4430d340757",
+      "genres_spotify": [
+        "chicago drill",
+        "drill"
+      ]
+    },
+    {
+      "id": "alan silvestri",
+      "name": "Alan Silvestri",
+      "play_count": 56,
+      "rank": 89,
+      "size": 757921,
+      "listener_count": 757921,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 757921,
+      "lastfm_playcount": 11914614,
+      "lastfm_url": "https://www.last.fm/music/Alan+Silvestri",
+      "genres_lastfm": [
+        "Soundtrack",
+        "instrumental",
+        "composer"
+      ],
+      "spotify_followers": 318642,
+      "spotify_popularity": 61,
+      "spotify_id": "0Xk15jHKly4c3AhPr5vjoA",
+      "photo_url": "https://i.scdn.co/image/99a6958df8dfe17c85eff3ac7d2aed2a87413f72",
+      "genres_spotify": [
+        "soundtrack"
+      ]
+    },
+    {
+      "id": "yoasobi",
+      "name": "yoasobi",
+      "play_count": 55,
+      "rank": 90,
+      "size": 712847,
+      "listener_count": 712847,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 712847,
+      "lastfm_playcount": 43046735,
+      "lastfm_url": "https://www.last.fm/music/yoasobi",
+      "genres_lastfm": [
+        "j-pop",
+        "japanese",
+        "japan"
+      ],
+      "spotify_followers": 9192593,
+      "spotify_popularity": 76,
+      "spotify_id": "64tJ2EAv1R6UaZqc4iOCyj",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb507349709ae19263301a62f7",
+      "genres_spotify": [
+        "j-pop",
+        "anime"
+      ]
+    },
+    {
+      "id": "yasai",
+      "name": "Yasai",
+      "play_count": 54,
+      "rank": 91,
+      "size": 1144,
+      "listener_count": 1144,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1144,
+      "lastfm_playcount": 8392,
+      "lastfm_url": "https://www.last.fm/music/Yasai",
+      "genres_lastfm": [
+        "Low",
+        "Velvet Underground",
+        "Galaxie 500"
+      ],
+      "spotify_followers": 859,
+      "spotify_popularity": 4,
+      "spotify_id": "3Ls9HA7QItd84JBQ5io1u5",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb14864a62c8927a31e083040a",
+      "genres_spotify": []
+    },
+    {
+      "id": "don toliver",
+      "name": "Don Toliver",
+      "play_count": 54,
+      "rank": 92,
+      "size": 1945710,
+      "listener_count": 1945710,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1945710,
+      "lastfm_playcount": 173586482,
+      "lastfm_url": "https://www.last.fm/music/Don+Toliver",
+      "genres_lastfm": [
+        "rap",
+        "trap",
+        "Hip-Hop"
+      ],
+      "spotify_followers": 6820887,
+      "spotify_popularity": 87,
+      "spotify_id": "4Gso3d4CscCijv0lmajZWs",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb62d52993e245cb161f89b01c",
+      "genres_spotify": []
+    },
+    {
+      "id": "lewis capaldi",
+      "name": "Lewis Capaldi",
+      "play_count": 53,
+      "rank": 93,
+      "size": 1317559,
+      "listener_count": 1317559,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1317559,
+      "lastfm_playcount": 42952487,
+      "lastfm_url": "https://www.last.fm/music/Lewis+Capaldi",
+      "genres_lastfm": [
+        "pop",
+        "seen live",
+        "pop rock"
+      ],
+      "spotify_followers": 13519306,
+      "spotify_popularity": 80,
+      "spotify_id": "4GNC7GD6oZMSxPGyXy4MNB",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebea7538654040e553a7b0fc28",
+      "genres_spotify": [
+        "soft pop"
+      ]
+    },
+    {
+      "id": "eminem",
+      "name": "Eminem",
+      "play_count": 53,
+      "rank": 94,
+      "size": 7044703,
+      "listener_count": 7044703,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 7044703,
+      "lastfm_playcount": 470117202,
+      "lastfm_url": "https://www.last.fm/music/Eminem",
+      "genres_lastfm": [
+        "rap",
+        "Hip-Hop",
+        "Eminem"
+      ],
+      "spotify_followers": 101424481,
+      "spotify_popularity": 92,
+      "spotify_id": "7dGJo4pcD2V6oG8kP0tJRR",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eba00b11c129b27a88fc72f36b",
+      "genres_spotify": [
+        "rap",
+        "hip hop"
+      ]
+    },
+    {
+      "id": "a flock of seagulls",
+      "name": "A Flock of Seagulls",
+      "play_count": 52,
+      "rank": 95,
+      "size": 1103000,
+      "listener_count": 1103000,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1103000,
+      "lastfm_playcount": 10973192,
+      "lastfm_url": "https://www.last.fm/music/A+Flock+of+Seagulls",
+      "genres_lastfm": [
+        "new wave",
+        "80s",
+        "synthpop"
+      ],
+      "spotify_followers": 687534,
+      "spotify_popularity": 60,
+      "spotify_id": "0uAjBatvB4ubpd4kCfjmNt",
+      "photo_url": "https://i.scdn.co/image/0e0b74658f7e16190f23d795648c888c4dd40f2a",
+      "genres_spotify": [
+        "new wave",
+        "synthpop"
+      ]
+    },
+    {
+      "id": "the chainsmokers",
+      "name": "The Chainsmokers",
+      "play_count": 52,
+      "rank": 96,
+      "size": 2375086,
+      "listener_count": 2375086,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 2375086,
+      "lastfm_playcount": 72555574,
+      "lastfm_url": "https://www.last.fm/music/The+Chainsmokers",
+      "genres_lastfm": [
+        "electronic",
+        "pop",
+        "House"
+      ],
+      "spotify_followers": 21096440,
+      "spotify_popularity": 83,
+      "spotify_id": "69GGBxA162lTqCwzJG5jLp",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb44434ab91c37f5407f8e83b6",
+      "genres_spotify": []
+    },
+    {
+      "id": "imagine dragons",
+      "name": "Imagine Dragons",
+      "play_count": 51,
+      "rank": 97,
+      "size": 3630198,
+      "listener_count": 3630198,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3630198,
+      "lastfm_playcount": 216541311,
+      "lastfm_url": "https://www.last.fm/music/Imagine+Dragons",
+      "genres_lastfm": [
+        "indie",
+        "indie rock",
+        "alternative"
+      ],
+      "spotify_followers": 57456144,
+      "spotify_popularity": 88,
+      "spotify_id": "53XhwfbYqKCa1cC15pYq2q",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebab47d8dae2b24f5afe7f9d38",
+      "genres_spotify": []
+    },
+    {
+      "id": "24kgoldn",
+      "name": "24kgoldn",
+      "play_count": 51,
+      "rank": 98,
+      "size": 1051883,
+      "listener_count": 1051883,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1051883,
+      "lastfm_playcount": 21103734,
+      "lastfm_url": "https://www.last.fm/music/24kgoldn",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "pop",
+        "rap"
+      ],
+      "spotify_followers": 2272118,
+      "spotify_popularity": 69,
+      "spotify_id": "6fWVd57NKTalqvmjRd2t8Z",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebdbe6d377ce63a248c0108605",
+      "genres_spotify": []
+    },
+    {
+      "id": "logic",
+      "name": "Logic",
+      "play_count": 50,
+      "rank": 99,
+      "size": 1539142,
+      "listener_count": 1539142,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1539142,
+      "lastfm_playcount": 91295797,
+      "lastfm_url": "https://www.last.fm/music/Logic",
+      "genres_lastfm": [
+        "Hip-Hop",
+        "rap",
+        "hip hop"
+      ],
+      "spotify_followers": 6138820,
+      "spotify_popularity": 75,
+      "spotify_id": "4xRYI6VqpkE3UwrDrAZL8L",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb646477c13fe9ffb656d3607d",
+      "genres_spotify": []
+    },
+    {
+      "id": "theishter",
+      "name": "TheIshter",
+      "play_count": 49,
+      "rank": 100,
+      "size": 54364,
+      "listener_count": 54364,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 54364,
+      "lastfm_playcount": 629998,
+      "lastfm_url": "https://www.last.fm/music/TheIshter",
+      "genres_lastfm": [
+        "ambient",
+        "canada"
+      ],
+      "spotify_followers": 46958,
+      "spotify_popularity": 38,
+      "spotify_id": "2Hqn367geFndjn7SaFNn49",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebeb78771440435bcd2aa285e5",
+      "genres_spotify": [
+        "anime"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "source": "juice wrld",
+      "target": "iann dior",
+      "weight": 0.793924,
+      "lastfm_similarity": 0.793924,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "juice wrld",
+      "target": "xxxtentacion",
+      "weight": 0.780755,
+      "lastfm_similarity": 0.780755,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "juice wrld",
+      "target": "lil tjay",
+      "weight": 0.439225,
+      "lastfm_similarity": 0.439225,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "iann dior",
+      "target": "24kgoldn",
+      "weight": 0.83028,
+      "lastfm_similarity": 0.83028,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "trippie redd",
+      "target": "xxxtentacion",
+      "weight": 0.729169,
+      "lastfm_similarity": 0.729169,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "trippie redd",
+      "target": "iann dior",
+      "weight": 0.626247,
+      "lastfm_similarity": 0.626247,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "polo g",
+      "target": "lil tjay",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "poorstacy",
+      "target": "iann dior",
+      "weight": 1.0,
+      "lastfm_similarity": 1.0,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "lil nas x",
+      "target": "24kgoldn",
+      "weight": 0.846209,
+      "lastfm_similarity": 0.846209,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "lil nas x",
+      "target": "ksi",
+      "weight": 0.38294,
+      "lastfm_similarity": 0.38294,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "post malone",
+      "target": "24kgoldn",
+      "weight": 0.571514,
+      "lastfm_similarity": 0.571514,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "post malone",
+      "target": "iann dior",
+      "weight": 0.480737,
+      "lastfm_similarity": 0.480737,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "post malone",
+      "target": "xxxtentacion",
+      "weight": 0.418673,
+      "lastfm_similarity": 0.418673,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "le sserafim",
+      "target": "aespa",
+      "weight": 0.537282,
+      "lastfm_similarity": 0.537282,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "aimer",
+      "target": "yoasobi",
+      "weight": 0.462574,
+      "lastfm_similarity": 0.462574,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "aimer",
+      "target": "ヨルシカ",
+      "weight": 0.46033,
+      "lastfm_similarity": 0.46033,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "internet money",
+      "target": "24kgoldn",
+      "weight": 0.843256,
+      "lastfm_similarity": 0.843256,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "internet money",
+      "target": "lil tjay",
+      "weight": 0.687273,
+      "lastfm_similarity": 0.687273,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "internet money",
+      "target": "iann dior",
+      "weight": 0.672187,
+      "lastfm_similarity": 0.672187,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "ynw melly",
+      "target": "lil tjay",
+      "weight": 0.945528,
+      "lastfm_similarity": 0.945528,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "lil tecca",
+      "target": "lil tjay",
+      "weight": 0.871021,
+      "lastfm_similarity": 0.871021,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "king von",
+      "target": "lil tjay",
+      "weight": 0.526918,
+      "lastfm_similarity": 0.526918,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "nle choppa",
+      "target": "lil tjay",
+      "weight": 0.765646,
+      "lastfm_similarity": 0.765646,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "yoasobi",
+      "weight": 0.512078,
+      "lastfm_similarity": 0.512078,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "rosé",
+      "target": "aespa",
+      "weight": 0.215249,
+      "lastfm_similarity": 0.215249,
+      "relationship_type": "lastfm_similarity"
+    },
+    {
+      "source": "jack harlow",
+      "target": "24kgoldn",
+      "weight": 0.80008,
+      "lastfm_similarity": 0.80008,
+      "relationship_type": "lastfm_similarity"
+    }
+  ],
+  "metadata": {
+    "generated": "2025-06-13T01:06:16.335818",
+    "total_artists_in_data": 1207,
+    "artists_included": 100,
+    "artists_with_api_data": 100,
+    "total_plays": 28625,
+    "date_range": {
+      "start": "2018-06-12T21:59:46+00:00",
+      "end": "2025-05-27T04:29:24+00:00"
+    },
+    "edge_types": {
+      "lastfm_similarity": 26
+    },
+    "configuration": {
+      "listener_count_source": "hybrid",
+      "fetch_both_sources": true,
+      "fallback_behavior": "fallback",
+      "node_sizing_strategy": "hybrid_multiply"
+    },
+    "parameters": {
+      "top_n_artists": 100,
+      "min_plays_threshold": 5,
+      "min_similarity_threshold": 0.2,
+      "data_source": "enhanced_multi_api"
+    }
+  }
+}

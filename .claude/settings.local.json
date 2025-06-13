@@ -21,7 +21,8 @@
       "Bash(rm:*)",
       "Bash(true)",
       "mcp__gemini__analyze",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "mcp__gemini__debug"
     ],
     "deny": []
   }
