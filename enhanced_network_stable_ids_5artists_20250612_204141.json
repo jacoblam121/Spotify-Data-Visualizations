@@ -1,0 +1,261 @@
+{
+  "nodes": [
+    {
+      "id": "spotify:4UK2Lzi6fBfUi9rpDt6cik",
+      "name": "Yorushika",
+      "play_count": 1980,
+      "rank": 1,
+      "size": 224593,
+      "listener_count": 224593,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 224593,
+      "lastfm_playcount": 13038264,
+      "lastfm_url": "https://www.last.fm/music/Yorushika",
+      "genres_lastfm": [
+        "japanese",
+        "J-rock",
+        "j-pop"
+      ],
+      "spotify_followers": 3122427,
+      "spotify_popularity": 74,
+      "spotify_id": "4UK2Lzi6fBfUi9rpDt6cik",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab",
+      "genres_spotify": [
+        "j-pop",
+        "j-rock",
+        "japanese indie"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Yorushika",
+      "viz": {
+        "radius": 43.4,
+        "size_score": 0.956,
+        "glow_intensity": 0.0,
+        "color": "#F06292",
+        "primary_genre": "j-pop",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab",
+        "sizing_metric": "hybrid_personal_emphasis",
+        "sizing_value": "Personal: 1980, Global: 74",
+        "sizing_mode": "adaptive",
+        "personal_weight": 0.85,
+        "global_weight": 0.15
+      }
+    },
+    {
+      "id": "spotify:6GwM5CHqhWXzG3l5kzRSAS",
+      "name": "Younha",
+      "play_count": 1706,
+      "rank": 2,
+      "size": 341199,
+      "listener_count": 341199,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 341199,
+      "lastfm_playcount": 11919088,
+      "lastfm_url": "https://www.last.fm/music/Younha",
+      "genres_lastfm": [
+        "j-pop",
+        "Korean",
+        "k-pop"
+      ],
+      "spotify_followers": 564911,
+      "spotify_popularity": 54,
+      "spotify_id": "6GwM5CHqhWXzG3l5kzRSAS",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf5e315e40a6d4ffd36c10d94",
+      "genres_spotify": [
+        "k-ballad"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Younha",
+      "viz": {
+        "radius": 41.2,
+        "size_score": 0.897,
+        "glow_intensity": 0.0,
+        "color": "#BDC3C7",
+        "primary_genre": "k-ballad",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5ebf5e315e40a6d4ffd36c10d94",
+        "sizing_metric": "hybrid_personal_emphasis",
+        "sizing_value": "Personal: 1706, Global: 54",
+        "sizing_mode": "adaptive",
+        "personal_weight": 0.85,
+        "global_weight": 0.15
+      }
+    },
+    {
+      "id": "spotify:64tJ2EAv1R6UaZqc4iOCyj",
+      "name": "yoasobi",
+      "play_count": 1683,
+      "rank": 3,
+      "size": 712847,
+      "listener_count": 712847,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 712847,
+      "lastfm_playcount": 43046735,
+      "lastfm_url": "https://www.last.fm/music/yoasobi",
+      "genres_lastfm": [
+        "j-pop",
+        "japanese",
+        "japan"
+      ],
+      "spotify_followers": 9192593,
+      "spotify_popularity": 76,
+      "spotify_id": "64tJ2EAv1R6UaZqc4iOCyj",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb507349709ae19263301a62f7",
+      "genres_spotify": [
+        "j-pop",
+        "anime"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "yoasobi",
+      "viz": {
+        "radius": 42.9,
+        "size_score": 0.942,
+        "glow_intensity": 0.0,
+        "color": "#F06292",
+        "primary_genre": "j-pop",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5eb507349709ae19263301a62f7",
+        "sizing_metric": "hybrid_personal_emphasis",
+        "sizing_value": "Personal: 1683, Global: 76",
+        "sizing_mode": "adaptive",
+        "personal_weight": 0.85,
+        "global_weight": 0.15
+      }
+    },
+    {
+      "id": "spotify:5Pwc4xIPtQLFEnJriah9YJ",
+      "name": "OneRepublic",
+      "play_count": 1123,
+      "rank": 4,
+      "size": 3981382,
+      "listener_count": 3981382,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 3981382,
+      "lastfm_playcount": 118248251,
+      "lastfm_url": "https://www.last.fm/music/OneRepublic",
+      "genres_lastfm": [
+        "rock",
+        "pop rock",
+        "alternative"
+      ],
+      "spotify_followers": 18337561,
+      "spotify_popularity": 85,
+      "spotify_id": "5Pwc4xIPtQLFEnJriah9YJ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb57138b98e7ddd5a86ee97a9b",
+      "genres_spotify": [
+        "soft pop"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "OneRepublic",
+      "viz": {
+        "radius": 41.8,
+        "size_score": 0.914,
+        "glow_intensity": 0.0,
+        "color": "#BDC3C7",
+        "primary_genre": "soft pop",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5eb57138b98e7ddd5a86ee97a9b",
+        "sizing_metric": "hybrid_personal_emphasis",
+        "sizing_value": "Personal: 1123, Global: 85",
+        "sizing_mode": "adaptive",
+        "personal_weight": 0.85,
+        "global_weight": 0.15
+      }
+    },
+    {
+      "id": "spotify:0bAsR2unSRpn6BQPEnNlZm",
+      "name": "Aimer",
+      "play_count": 1059,
+      "rank": 5,
+      "size": 389315,
+      "listener_count": 389315,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 389315,
+      "lastfm_playcount": 20440322,
+      "lastfm_url": "https://www.last.fm/music/Aimer",
+      "genres_lastfm": [
+        "j-pop",
+        "japanese",
+        "female vocalists"
+      ],
+      "spotify_followers": 2653739,
+      "spotify_popularity": 66,
+      "spotify_id": "0bAsR2unSRpn6BQPEnNlZm",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8",
+      "genres_spotify": [
+        "anime",
+        "j-pop",
+        "j-rock"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Aimer",
+      "viz": {
+        "radius": 40.3,
+        "size_score": 0.873,
+        "glow_intensity": 0.0,
+        "color": "#BDC3C7",
+        "primary_genre": "anime",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8",
+        "sizing_metric": "hybrid_personal_emphasis",
+        "sizing_value": "Personal: 1059, Global: 66",
+        "sizing_mode": "adaptive",
+        "personal_weight": 0.85,
+        "global_weight": 0.15
+      }
+    }
+  ],
+  "edges": [],
+  "metadata": {
+    "generated": "2025-06-12T20:41:41.812409",
+    "total_artists_in_data": 297,
+    "artists_included": 5,
+    "artists_with_api_data": 5,
+    "total_plays": 22838,
+    "date_range": {
+      "start": "2022-01-01T01:55:24+00:00",
+      "end": "2022-12-31T23:57:03+00:00"
+    },
+    "edge_types": {
+      "lastfm_similarity": 0
+    },
+    "configuration": {
+      "listener_count_source": "hybrid",
+      "fetch_both_sources": true,
+      "fallback_behavior": "fallback",
+      "node_sizing_strategy": "hybrid_multiply"
+    },
+    "parameters": {
+      "top_n_artists": 5,
+      "min_plays_threshold": 5,
+      "min_similarity_threshold": 0.1,
+      "data_source": "enhanced_multi_api"
+    },
+    "id_migration": {
+      "migration_date": "null",
+      "total_artists": 5,
+      "id_types": {
+        "spotify": 5,
+        "musicbrainz": 0,
+        "local_hash": 0
+      },
+      "mapping_changes": 5
+    },
+    "visualization": {
+      "enhanced_date": "2025-06-12T20:41:41.812971",
+      "size_range": {
+        "min_radius": 8,
+        "max_radius": 45
+      },
+      "color_scheme": "genre_based",
+      "sizing_algorithm": "spotify_emphasis_sqrt",
+      "total_genres": 4
+    }
+  }
+}

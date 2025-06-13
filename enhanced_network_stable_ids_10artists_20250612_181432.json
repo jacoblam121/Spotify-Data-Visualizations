@@ -1,0 +1,426 @@
+{
+  "nodes": [
+    {
+      "id": "spotify:06HL4z0CvFAxyc27GXpf02",
+      "name": "Taylor Swift",
+      "play_count": 5216,
+      "rank": 1,
+      "size": 5160232,
+      "listener_count": 5160232,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 5160232,
+      "lastfm_playcount": 3009283152,
+      "lastfm_url": "https://www.last.fm/music/Taylor+Swift",
+      "genres_lastfm": [
+        "country",
+        "pop",
+        "female vocalists"
+      ],
+      "spotify_followers": 138794730,
+      "spotify_popularity": 98,
+      "spotify_id": "06HL4z0CvFAxyc27GXpf02",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676",
+      "genres_spotify": [],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Taylor Swift",
+      "viz": {
+        "radius": 45.0,
+        "size_score": 1.0,
+        "color": "#DDA0DD",
+        "primary_genre": "country",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 138794730
+      }
+    },
+    {
+      "id": "spotify:74XFHRwlV6OrjEM0A2NCMF",
+      "name": "Paramore",
+      "play_count": 3460,
+      "rank": 2,
+      "size": 4779115,
+      "listener_count": 4779115,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 4779115,
+      "lastfm_playcount": 431381316,
+      "lastfm_url": "https://www.last.fm/music/Paramore",
+      "genres_lastfm": [
+        "rock",
+        "pop punk",
+        "alternative"
+      ],
+      "spotify_followers": 9466054,
+      "spotify_popularity": 82,
+      "spotify_id": "74XFHRwlV6OrjEM0A2NCMF",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb10c34546a4ca2d7faeb8865",
+      "genres_spotify": [
+        "pop punk",
+        "emo"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Paramore",
+      "viz": {
+        "radius": 17.6,
+        "size_score": 0.259,
+        "color": "#BDC3C7",
+        "primary_genre": "pop punk",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5ebb10c34546a4ca2d7faeb8865",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 9466054
+      }
+    },
+    {
+      "id": "spotify:3HqSLMAZ3g3d5poNaI7GOU",
+      "name": "IU",
+      "play_count": 2265,
+      "rank": 3,
+      "size": 913058,
+      "listener_count": 913058,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 913058,
+      "lastfm_playcount": 79744903,
+      "lastfm_url": "https://www.last.fm/music/IU",
+      "genres_lastfm": [
+        "k-pop",
+        "Korean",
+        "female vocalists"
+      ],
+      "spotify_followers": 9243806,
+      "spotify_popularity": 72,
+      "spotify_id": "3HqSLMAZ3g3d5poNaI7GOU",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb789f38042e5ef8911fc3826b",
+      "genres_spotify": [
+        "k-pop",
+        "k-ballad"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "IU",
+      "viz": {
+        "radius": 17.5,
+        "size_score": 0.256,
+        "color": "#BDC3C7",
+        "primary_genre": "k-pop",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5eb789f38042e5ef8911fc3826b",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 9243806
+      }
+    },
+    {
+      "id": "spotify:4UK2Lzi6fBfUi9rpDt6cik",
+      "name": "Yorushika",
+      "play_count": 1282,
+      "rank": 4,
+      "size": 224593,
+      "listener_count": 224593,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 224593,
+      "lastfm_playcount": 13038264,
+      "lastfm_url": "https://www.last.fm/music/Yorushika",
+      "genres_lastfm": [
+        "japanese",
+        "J-rock",
+        "j-pop"
+      ],
+      "spotify_followers": 3122427,
+      "spotify_popularity": 74,
+      "spotify_id": "4UK2Lzi6fBfUi9rpDt6cik",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab",
+      "genres_spotify": [
+        "j-pop",
+        "j-rock",
+        "japanese indie"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Yorushika",
+      "viz": {
+        "radius": 13.4,
+        "size_score": 0.147,
+        "color": "#BDC3C7",
+        "primary_genre": "j-pop",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 3122427
+      }
+    },
+    {
+      "id": "spotify:7n2Ycct7Beij7Dj7meI4X0",
+      "name": "TWICE",
+      "play_count": 1057,
+      "rank": 5,
+      "size": 1388675,
+      "listener_count": 1388675,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1388675,
+      "lastfm_playcount": 384013510,
+      "lastfm_url": "https://www.last.fm/music/TWICE",
+      "genres_lastfm": [
+        "k-pop",
+        "Kpop",
+        "Korean"
+      ],
+      "spotify_followers": 21957816,
+      "spotify_popularity": 80,
+      "spotify_id": "7n2Ycct7Beij7Dj7meI4X0",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebca6c145421fa9ceb58d6f9d4",
+      "genres_spotify": [
+        "k-pop"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "TWICE",
+      "viz": {
+        "radius": 22.7,
+        "size_score": 0.397,
+        "color": "#BDC3C7",
+        "primary_genre": "k-pop",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5ebca6c145421fa9ceb58d6f9d4",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 21957816
+      }
+    },
+    {
+      "id": "spotify:0bAsR2unSRpn6BQPEnNlZm",
+      "name": "Aimer",
+      "play_count": 885,
+      "rank": 6,
+      "size": 389315,
+      "listener_count": 389315,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 389315,
+      "lastfm_playcount": 20440322,
+      "lastfm_url": "https://www.last.fm/music/Aimer",
+      "genres_lastfm": [
+        "j-pop",
+        "japanese",
+        "female vocalists"
+      ],
+      "spotify_followers": 2653739,
+      "spotify_popularity": 66,
+      "spotify_id": "0bAsR2unSRpn6BQPEnNlZm",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8",
+      "genres_spotify": [
+        "anime",
+        "j-pop",
+        "j-rock"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Aimer",
+      "viz": {
+        "radius": 13.0,
+        "size_score": 0.135,
+        "color": "#BDC3C7",
+        "primary_genre": "anime",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 2653739
+      }
+    },
+    {
+      "id": "spotify:5pjCYG6hPLBO3y4swxu3dh",
+      "name": "Tonight Alive",
+      "play_count": 852,
+      "rank": 7,
+      "size": 319335,
+      "listener_count": 319335,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 319335,
+      "lastfm_playcount": 11145722,
+      "lastfm_url": "https://www.last.fm/music/Tonight+Alive",
+      "genres_lastfm": [
+        "pop punk",
+        "female vocalists",
+        "pop rock"
+      ],
+      "spotify_followers": 338253,
+      "spotify_popularity": 48,
+      "spotify_id": "5pjCYG6hPLBO3y4swxu3dh",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf605f6c661815b71d4bcc2ea",
+      "genres_spotify": [
+        "pop punk"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Tonight Alive",
+      "viz": {
+        "radius": 9.4,
+        "size_score": 0.039,
+        "color": "#BDC3C7",
+        "primary_genre": "pop punk",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5ebf605f6c661815b71d4bcc2ea",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 338253
+      }
+    },
+    {
+      "id": "spotify:3kYFawNQVZ00FQbgs4rVBe",
+      "name": "Ive",
+      "play_count": 662,
+      "rank": 8,
+      "size": 837966,
+      "listener_count": 837966,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 837966,
+      "lastfm_playcount": 122865833,
+      "lastfm_url": "https://www.last.fm/music/Ive",
+      "genres_lastfm": [
+        "k-pop",
+        "pop",
+        "Kpop"
+      ],
+      "spotify_followers": 132233,
+      "spotify_popularity": 43,
+      "spotify_id": "3kYFawNQVZ00FQbgs4rVBe",
+      "photo_url": "https://i.scdn.co/image/0078316432cdfb6733c3bde0dc61754d45442d0f",
+      "genres_spotify": [
+        "pop punk"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Ive",
+      "viz": {
+        "radius": 8.0,
+        "size_score": 0.0,
+        "color": "#BDC3C7",
+        "primary_genre": "pop punk",
+        "image_url": "https://i.scdn.co/image/0078316432cdfb6733c3bde0dc61754d45442d0f",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 132233
+      }
+    },
+    {
+      "id": "spotify:41MozSoPIsD1dJM0CLPjZF",
+      "name": "BLACKPINK",
+      "play_count": 481,
+      "rank": 9,
+      "size": 1558082,
+      "listener_count": 1558082,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 1558082,
+      "lastfm_playcount": 269626831,
+      "lastfm_url": "https://www.last.fm/music/BLACKPINK",
+      "genres_lastfm": [
+        "k-pop",
+        "Kpop",
+        "pop"
+      ],
+      "spotify_followers": 54087598,
+      "spotify_popularity": 80,
+      "spotify_id": "41MozSoPIsD1dJM0CLPjZF",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb667b1c37aac06716daa5fe92",
+      "genres_spotify": [
+        "k-pop"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "BLACKPINK",
+      "viz": {
+        "radius": 31.1,
+        "size_score": 0.624,
+        "color": "#BDC3C7",
+        "primary_genre": "k-pop",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5eb667b1c37aac06716daa5fe92",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 54087598
+      }
+    },
+    {
+      "id": "spotify:5V1qsQHdXNm4ZEZHWvFnqQ",
+      "name": "Dreamcatcher",
+      "play_count": 462,
+      "rank": 10,
+      "size": 494541,
+      "listener_count": 494541,
+      "listener_source": "hybrid_multiply",
+      "in_library": true,
+      "lastfm_listeners": 494541,
+      "lastfm_playcount": 71505082,
+      "lastfm_url": "https://www.last.fm/music/Dreamcatcher",
+      "genres_lastfm": [
+        "k-pop",
+        "rock",
+        "Korean"
+      ],
+      "spotify_followers": 1393069,
+      "spotify_popularity": 58,
+      "spotify_id": "5V1qsQHdXNm4ZEZHWvFnqQ",
+      "photo_url": "https://i.scdn.co/image/ab6761610000e5eb2e75abbdf622da095f8b21cd",
+      "genres_spotify": [
+        "k-pop",
+        "k-rock"
+      ],
+      "id_type": "spotify",
+      "id_confidence": 0.9,
+      "canonical_name": "Dreamcatcher",
+      "viz": {
+        "radius": 11.5,
+        "size_score": 0.095,
+        "color": "#BDC3C7",
+        "primary_genre": "k-pop",
+        "image_url": "https://i.scdn.co/image/ab6761610000e5eb2e75abbdf622da095f8b21cd",
+        "sizing_metric": "spotify_followers",
+        "sizing_value": 1393069
+      }
+    }
+  ],
+  "edges": [],
+  "metadata": {
+    "generated": "2025-06-12T18:14:32.787424",
+    "total_artists_in_data": 335,
+    "artists_included": 10,
+    "artists_with_api_data": 10,
+    "total_plays": 23490,
+    "date_range": {
+      "start": "2024-01-02T00:18:02+00:00",
+      "end": "2024-12-28T00:16:59+00:00"
+    },
+    "edge_types": {
+      "lastfm_similarity": 0
+    },
+    "configuration": {
+      "listener_count_source": "hybrid",
+      "fetch_both_sources": true,
+      "fallback_behavior": "fallback",
+      "node_sizing_strategy": "hybrid_multiply"
+    },
+    "parameters": {
+      "top_n_artists": 10,
+      "min_plays_threshold": 5,
+      "min_similarity_threshold": 0.1,
+      "data_source": "enhanced_multi_api"
+    },
+    "id_migration": {
+      "migration_date": "null",
+      "total_artists": 10,
+      "id_types": {
+        "spotify": 10,
+        "musicbrainz": 0,
+        "local_hash": 0
+      },
+      "mapping_changes": 10
+    },
+    "visualization": {
+      "enhanced_date": "2025-06-12T18:14:32.787900",
+      "size_range": {
+        "min_radius": 8,
+        "max_radius": 45
+      },
+      "color_scheme": "genre_based",
+      "sizing_algorithm": "spotify_emphasis_sqrt",
+      "total_genres": 5
+    }
+  }
+}

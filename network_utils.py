@@ -233,7 +233,7 @@ class ArtistNetworkAnalyzer:
             Network data dict with nodes and edges
         """
         print(f"Creating enhanced network data for top {top_n_artists} artists...")
-        print(f"Using {self.network_config['listener_count_source']} as primary listener count source")
+        print(f"Using {self.network_config['node_sizing_strategy']} as node sizing strategy")
         
         if df.empty or 'artist' not in df.columns:
             print("❌ No artist data available")
@@ -380,9 +380,10 @@ class ArtistNetworkAnalyzer:
                 'lastfm_similarity': len(edges)
             },
             'configuration': {
-                'listener_count_source': self.network_config['listener_count_source'],
-                'fetch_both_sources': self.network_config['fetch_both_sources'],
-                'fallback_behavior': self.network_config['fallback_behavior']
+                'listener_count_source': self.network_config.get('listener_count_source', 'hybrid'),
+                'fetch_both_sources': self.network_config.get('fetch_both_sources', True),
+                'fallback_behavior': self.network_config.get('fallback_behavior', 'fallback'),
+                'node_sizing_strategy': self.network_config.get('node_sizing_strategy', 'hybrid_multiply')
             },
             'parameters': {
                 'top_n_artists': top_n_artists,

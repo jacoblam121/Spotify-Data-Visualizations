@@ -1473,5 +1473,290 @@
   "spotify_artist_search_anyujin": null,
   "spotify_artist_search_blackpink": null,
   "spotify_artist_search_ed sheeran": null,
-  "spotify_artist_search_dua lipa": null
+  "spotify_artist_search_dua lipa": null,
+  "spotify_artist_from_track_6ilTR3RpLCAHDt3Z6YuQGx": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebc156959ac858573a3cbf0ed9",
+    "canonical_artist_name": "Cidergirl",
+    "spotify_artist_id": "3hprFQEXS7glX1Jxxwv9Dn",
+    "genres": [
+      "anime",
+      "j-pop",
+      "j-rock",
+      "japanese indie"
+    ],
+    "popularity": 47,
+    "followers": 205072,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_4PoMMt1P8TAIRbeAcY8PN3": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb1605bb0e3881cfc8f63c2c6a",
+    "canonical_artist_name": "JO YURI",
+    "spotify_artist_id": "3LFFf4EpKn2krneZ9vozyz",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 52,
+    "followers": 506278,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_4mnjwMLCk3JZkhkok3u5g1": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb6f7500437ff98a04fd97b8c5",
+    "canonical_artist_name": "Dream",
+    "spotify_artist_id": "6LArUyIoMiHmDvvOAsE2cd",
+    "genres": [],
+    "popularity": 49,
+    "followers": 1048354,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_6IHWPY5iBUI1AOUclbtE6F": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb96f321dde2bc589d16beb17c",
+    "canonical_artist_name": "Ayase",
+    "spotify_artist_id": "1S8OQ9SqlLdD9l4paaZMuZ",
+    "genres": [
+      "vocaloid",
+      "j-pop"
+    ],
+    "popularity": 54,
+    "followers": 370962,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_583Fc6qU9thMdXu64j1Wus": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb8029aff4b6fb2aab742867f9",
+    "canonical_artist_name": "St. Lundi",
+    "spotify_artist_id": "3i94wxAKQqlJyiPLDmjNdH",
+    "genres": [],
+    "popularity": 55,
+    "followers": 44386,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_5jQRsJZzu8jicHgC3wgiY5": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb2a930fed2193a8ff8f537eb7",
+    "canonical_artist_name": "ONEW",
+    "spotify_artist_id": "7sZ5ipSoboWdqXkdj6AXHo",
+    "genres": [
+      "k-ballad",
+      "k-pop"
+    ],
+    "popularity": 48,
+    "followers": 452143,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_3P3UA61WRQqwCXaoFOTENd": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb789f38042e5ef8911fc3826b",
+    "canonical_artist_name": "IU",
+    "spotify_artist_id": "3HqSLMAZ3g3d5poNaI7GOU",
+    "genres": [
+      "k-pop",
+      "k-ballad"
+    ],
+    "popularity": 72,
+    "followers": 9243806,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_6CdUgvL597jWmW4w8P5kHs": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb5d9ebbbbe3fff5a330b40c8",
+    "canonical_artist_name": "TAEYEON",
+    "spotify_artist_id": "3qNVuliS40BLgXGxhdBdqu",
+    "genres": [
+      "k-pop",
+      "k-ballad"
+    ],
+    "popularity": 66,
+    "followers": 3093342,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_3RfTeIrWS8LNrfHYwechtt": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4923728dfd8edfd266cfd1d3",
+    "canonical_artist_name": "Nicky Youre",
+    "spotify_artist_id": "7qmpXeNz2ojlMl2EEfkeLs",
+    "genres": [],
+    "popularity": 67,
+    "followers": 311187,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_1SEPMXUucO3iiYgDDWUk2u": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb793ada9706c01495f738c9da",
+    "canonical_artist_name": "Minori Suzuki",
+    "spotify_artist_id": "3Ath9xfI4WBdrZPFQ4VX9A",
+    "genres": [
+      "anime"
+    ],
+    "popularity": 30,
+    "followers": 29213,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_19kX6hSlYH31js2SL4jgrj": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb61a7ea26d33ded218cd1e59d",
+    "canonical_artist_name": "Twenty One Pilots",
+    "spotify_artist_id": "3YQKmKGau1PzlVlkL1iodx",
+    "genres": [],
+    "popularity": 85,
+    "followers": 25456728,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_69QlYqNJeZG14R4an2aoJv": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb080109ba641204f8c80d2b5e",
+    "canonical_artist_name": "Beast",
+    "spotify_artist_id": "1Pr9gT0veB2tgcisQeIGoC",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 53,
+    "followers": 473030,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_7huWBxXBSizb0tftJRbJed": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebc1bba6ccbabb3ea93c27ed4d",
+    "canonical_artist_name": "KARD",
+    "spotify_artist_id": "2JhAlkmukNvarUpGhTFXUQ",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 54,
+    "followers": 2067861,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_2ZVQY4mXF3eHTu1RBnBZl0": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb3bbb8087ad3a5ae7f5d38ca0",
+    "canonical_artist_name": "OH MY GIRL",
+    "spotify_artist_id": "2019zR22qK2RBvCqtudBaI",
+    "genres": [
+      "k-pop"
+    ],
+    "popularity": 54,
+    "followers": 1865796,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_28QpCzFbTf09Jsj2zuz58t": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe6aeffd18b2bfe76c6a2a39c",
+    "canonical_artist_name": "SawanoHiroyuki[nZk]",
+    "spotify_artist_id": "2EWXgN0xWOnbqJOxa9pWNO",
+    "genres": [
+      "anime",
+      "j-pop",
+      "j-rock"
+    ],
+    "popularity": 65,
+    "followers": 358954,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_4DjyuqJvrr10efe2aGoSYJ": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8",
+    "canonical_artist_name": "Aimer",
+    "spotify_artist_id": "0bAsR2unSRpn6BQPEnNlZm",
+    "genres": [
+      "anime",
+      "j-pop",
+      "j-rock"
+    ],
+    "popularity": 66,
+    "followers": 2653739,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_5aZYyAIBmLSXTlez59ZvZ7": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb509ff4872e533f7426719408",
+    "canonical_artist_name": "Kalafina",
+    "spotify_artist_id": "2otsTXVV2ZWZ8T5LPzsBhy",
+    "genres": [
+      "anime",
+      "j-pop",
+      "j-rock"
+    ],
+    "popularity": 48,
+    "followers": 302739,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_6ADDIJxxqzM9LMpm78yzQG": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676",
+    "canonical_artist_name": "Taylor Swift",
+    "spotify_artist_id": "06HL4z0CvFAxyc27GXpf02",
+    "genres": [],
+    "popularity": 98,
+    "followers": 138794730,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_6dLEKeBiTaEOzXz4pzSdde": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb531364c94ec00ac6077dfac5",
+    "canonical_artist_name": "AliA",
+    "spotify_artist_id": "4Lmo7h2Ik12QI3Ik0BvGbB",
+    "genres": [
+      "j-pop",
+      "j-rock",
+      "anime"
+    ],
+    "popularity": 48,
+    "followers": 95900,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_1AfFUID69eG8hOkkc3asNM": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebcf1059806aef122d3b7cf0f0",
+    "canonical_artist_name": "Eve",
+    "spotify_artist_id": "58oPVy7oihAEXE0Ott6JOf",
+    "genres": [
+      "anime",
+      "j-pop",
+      "j-rock",
+      "vocaloid",
+      "japanese indie"
+    ],
+    "popularity": 68,
+    "followers": 2551149,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_5cRKj1kynNFqiliT2ndZ3y": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb4f6660f71fcf1621ac6e6c77",
+    "canonical_artist_name": "Ai Higuchi",
+    "spotify_artist_id": "4GxWcui9BlMJH9VOOK5wav",
+    "genres": [
+      "anime",
+      "j-pop"
+    ],
+    "popularity": 55,
+    "followers": 142554,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_6wuj7kT7v4pq9A7GhCnqhZ": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb15cb41026a788a83cd0da201",
+    "canonical_artist_name": "Tsukuyomi",
+    "spotify_artist_id": "2mcj8ajoE1eFlNkAihw5Cg",
+    "genres": [
+      "j-pop",
+      "anime",
+      "vocaloid"
+    ],
+    "popularity": 49,
+    "followers": 94187,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_1y3bE5i57eUm3hfLAc7h08": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5ebab47d8dae2b24f5afe7f9d38",
+    "canonical_artist_name": "Imagine Dragons",
+    "spotify_artist_id": "53XhwfbYqKCa1cC15pYq2q",
+    "genres": [],
+    "popularity": 88,
+    "followers": 57456144,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_6KCEL11alMnIccqpRBrrN1": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb67c40d3b2e968407aff40b54",
+    "canonical_artist_name": "\u3082\u3055\u3092\u3002",
+    "spotify_artist_id": "71KI7v1YqVU8cIFzBl47dh",
+    "genres": [
+      "j-pop"
+    ],
+    "popularity": 52,
+    "followers": 440271,
+    "source": "spotify (track_uri_lookup)"
+  },
+  "spotify_artist_from_track_1ognDP1UWqfcPaOvlzTCXx": {
+    "photo_url": "https://i.scdn.co/image/ab6761610000e5eb1495a62480eb7933cb81b620",
+    "canonical_artist_name": "\u3042\u304b\u305b\u3042\u304b\u308a",
+    "spotify_artist_id": "50k6hfXdVJ3uD8fUt7PQvL",
+    "genres": [
+      "anime"
+    ],
+    "popularity": 32,
+    "followers": 11399,
+    "source": "spotify (track_uri_lookup)"
+  }
 }

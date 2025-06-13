@@ -19,7 +19,7 @@ def test_enhanced_network():
     network_config = config.get_network_visualization_config()
     
     print(f"📊 Configuration:")
-    print(f"  Primary source: {network_config['listener_count_source']}")
+    print(f"  Node sizing strategy: {network_config['node_sizing_strategy']}")
     print(f"  Fetch both sources: {network_config['fetch_both_sources']}")
     print(f"  Fallback behavior: {network_config['fallback_behavior']}")
     
