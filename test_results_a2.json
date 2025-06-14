@@ -1,0 +1,191 @@
+{
+  "config": {
+    "data_path": "lastfm_data.csv",
+    "force_data_source": null,
+    "performance_iterations": 5,
+    "max_verification_time": 0.5,
+    "max_batch_time_per_artist": 1.0,
+    "mbid_min_confidence": 0.95,
+    "track_strong_min_confidence": 0.85,
+    "heuristic_improvement_threshold": 0.75,
+    "max_candidates_per_test": 5,
+    "performance_test_artists": 10,
+    "edge_case_long_name_length": 500,
+    "edge_case_timeout": 5.0,
+    "api_timeout": 10.0,
+    "max_api_retries": 3,
+    "use_api_for_real_tests": true,
+    "skip_slow_tests": false,
+    "skip_api_tests": false,
+    "skip_performance_tests": false,
+    "verbose_output": true,
+    "detailed_track_analysis": true,
+    "min_pass_rate": 75.0,
+    "max_failed_tests": 5,
+    "expected_mbid_coverage": 10.0,
+    "problematic_artists": [
+      "*LUNA",
+      "YOASOBI",
+      "IVE",
+      "BTS",
+      "Taylor Swift"
+    ],
+    "unicode_test_artists": [
+      "*LUNA",
+      "YOASOBI",
+      "\ubc29\ud0c4\uc18c\ub144\ub2e8"
+    ],
+    "performance_test_sample_size": 10,
+    "save_results": true,
+    "results_file": "test_results_a2.json",
+    "show_progress": true,
+    "colorized_output": true
+  },
+  "results": {
+    "passed": 30,
+    "failed": 0,
+    "skipped": 0,
+    "details": [
+      {
+        "test": "Perfect MBID Match",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "No MBID Fallback",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Wrong MBID Rejection",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Perfect Track Matches",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "No Track Matches",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Unicode: \u30a2\u30c8\u30e9\u30af\u30c8\u30e9\u30a4\u30c8 vs \u30a2\u30c8\u30e9\u30af\u30c8\u30e9\u30a4\u30c8",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Unicode: \u30a2\u30c8\u30e9\u30af\u30c8\u30e9\u30a4\u30c8 (Live) vs \u30a2\u30c8\u30e9\u30af\u30c8\u30e9\u30a4\u30c8",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Unicode: \uff21\uff34\uff34\uff32\uff21\uff23\uff34 vs attract",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Unicode: different song vs \u30a2\u30c8\u30e9\u30af\u30c8\u30e9\u30a4\u30c8",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Long Name Performance",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Verification Speed",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Batch Performance",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Last.fm Source Detection",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Spotify Source Detection",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "MBID Data Loaded",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "MBID Confidence Level",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "High Track Evidence",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Evidence Ranking",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Case variant: *LUNA",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Case variant: *luna",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Case variant: *luna",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Case variant: *luna",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Album case-insensitive lookup",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "*LUNA Improvement",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "YOASOBI Improvement",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "IVE Improvement",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "BTS Improvement",
+        "passed": true,
+        "error": null
+      },
+      {
+        "test": "Taylor Swift Improvement",
+        "passed": true,
+        "error": null
+      }
+    ]
+  }
+}

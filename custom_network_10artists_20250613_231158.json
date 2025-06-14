@@ -1,0 +1,439 @@
+{
+  "nodes": [
+    {
+      "id": "taylor_swift",
+      "name": "taylor swift",
+      "play_count": 12824,
+      "rank": 1,
+      "listeners": 5161355,
+      "playcount": 3011212964,
+      "lastfm_url": "https://www.last.fm/music/Taylor+Swift",
+      "canonical_name": "Taylor Swift",
+      "display_metadata_source": "taylor swift",
+      "mbid": "20244d07-534f-4eff-b4d4-930878889970"
+    },
+    {
+      "id": "paramore",
+      "name": "paramore",
+      "play_count": 6821,
+      "rank": 2,
+      "listeners": 4780920,
+      "playcount": 431691707,
+      "lastfm_url": "https://www.last.fm/music/Paramore",
+      "canonical_name": "Paramore",
+      "display_metadata_source": "paramore",
+      "mbid": "728ea90d-279b-4201-a8c4-597830883150"
+    },
+    {
+      "id": "ive",
+      "name": "ive",
+      "play_count": 6143,
+      "rank": 3,
+      "listeners": 838290,
+      "playcount": 122943901,
+      "lastfm_url": "https://www.last.fm/music/Ive",
+      "canonical_name": "Ive",
+      "display_metadata_source": "Ive",
+      "mbid": ""
+    },
+    {
+      "id": "ヨルシカ",
+      "name": "ヨルシカ",
+      "play_count": 5130,
+      "rank": 4,
+      "listeners": 187291,
+      "playcount": 7533714,
+      "lastfm_url": "https://www.last.fm/music/%E3%83%A8%E3%83%AB%E3%82%B7%E3%82%AB",
+      "canonical_name": "ヨルシカ",
+      "display_metadata_source": "ヨルシカ",
+      "mbid": ""
+    },
+    {
+      "id": "iu",
+      "name": "iu",
+      "play_count": 5047,
+      "rank": 5,
+      "listeners": 913426,
+      "playcount": 79787876,
+      "lastfm_url": "https://www.last.fm/music/IU",
+      "canonical_name": "IU",
+      "display_metadata_source": "iu",
+      "mbid": "b9545342-1e6d-4dae-84ac-013374ad8d7c"
+    },
+    {
+      "id": "aimer",
+      "name": "aimer",
+      "play_count": 4802,
+      "rank": 6,
+      "listeners": 389509,
+      "playcount": 20450720,
+      "lastfm_url": "https://www.last.fm/music/Aimer",
+      "canonical_name": "Aimer",
+      "display_metadata_source": "aimer",
+      "mbid": "9388cee2-7d57-4598-905f-106019b267d3"
+    },
+    {
+      "id": "*luna",
+      "name": "*luna",
+      "play_count": 4534,
+      "rank": 7,
+      "listeners": 17154,
+      "playcount": 424561,
+      "lastfm_url": "https://www.last.fm/music/%2ALUNA",
+      "canonical_name": "*LUNA",
+      "display_metadata_source": "*luna",
+      "mbid": ""
+    },
+    {
+      "id": "rosé",
+      "name": "rosé",
+      "play_count": 3046,
+      "rank": 8,
+      "listeners": 1351149,
+      "playcount": 82759350,
+      "lastfm_url": "https://www.last.fm/music/Ros%C3%A9",
+      "canonical_name": "Rosé",
+      "display_metadata_source": "rosé",
+      "mbid": ""
+    },
+    {
+      "id": "younha",
+      "name": "younha",
+      "play_count": 2547,
+      "rank": 9,
+      "listeners": 341288,
+      "playcount": 11922233,
+      "lastfm_url": "https://www.last.fm/music/Younha",
+      "canonical_name": "Younha",
+      "display_metadata_source": "younha",
+      "mbid": "5e3bc4c7-adbe-40e0-b56e-57d755908d52"
+    },
+    {
+      "id": "yoasobi",
+      "name": "yoasobi",
+      "play_count": 2441,
+      "rank": 10,
+      "listeners": 713328,
+      "playcount": 43087830,
+      "lastfm_url": "https://www.last.fm/music/yoasobi",
+      "canonical_name": "yoasobi",
+      "display_metadata_source": "yoasobi",
+      "mbid": ""
+    }
+  ],
+  "edges": [
+    {
+      "source": "taylor_swift",
+      "target": "rosé",
+      "weight": 0.247419,
+      "distance": 4.041726787352628,
+      "confidence": 1.0,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted",
+      "sources": [
+        "lastfm"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.247419,
+          "normalized_similarity": 0.247419,
+          "confidence": 1.0
+        }
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "yoasobi",
+      "weight": 0.7784877777777779,
+      "distance": 1.001001001001001,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.512078,
+          "normalized_similarity": 0.512078,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.999,
+          "normalized_similarity": 0.999,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "aimer",
+      "weight": 0.421874,
+      "distance": 2.370375989039381,
+      "confidence": 1.0,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted",
+      "sources": [
+        "lastfm"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.421874,
+          "normalized_similarity": 0.421874,
+          "confidence": 1.0
+        }
+      }
+    },
+    {
+      "source": "ヨルシカ",
+      "target": "yoasobi",
+      "weight": 0.7784877777777779,
+      "distance": 1.001001001001001,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.512078,
+          "normalized_similarity": 0.512078,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.999,
+          "normalized_similarity": 0.999,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "iu",
+      "target": "younha",
+      "weight": 0.715533,
+      "distance": 1.3975595814588566,
+      "confidence": 1.0,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted",
+      "sources": [
+        "lastfm"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.715533,
+          "normalized_similarity": 0.715533,
+          "confidence": 1.0
+        }
+      }
+    },
+    {
+      "source": "iu",
+      "target": "ive",
+      "weight": 0.548231,
+      "distance": 1.8240486218400638,
+      "confidence": 1.0,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted",
+      "sources": [
+        "lastfm"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.548231,
+          "normalized_similarity": 0.548231,
+          "confidence": 1.0
+        }
+      }
+    },
+    {
+      "source": "iu",
+      "target": "ive",
+      "weight": 0.548231,
+      "distance": 1.8240486218400638,
+      "confidence": 1.0,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted",
+      "sources": [
+        "lastfm"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.548231,
+          "normalized_similarity": 0.548231,
+          "confidence": 1.0
+        }
+      }
+    },
+    {
+      "source": "aimer",
+      "target": "ヨルシカ",
+      "weight": 0.46033,
+      "distance": 2.17235461516738,
+      "confidence": 1.0,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted",
+      "sources": [
+        "lastfm"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.46033,
+          "normalized_similarity": 0.46033,
+          "confidence": 1.0
+        }
+      }
+    },
+    {
+      "source": "aimer",
+      "target": "yoasobi",
+      "weight": 0.462574,
+      "distance": 2.161816271558713,
+      "confidence": 1.0,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted",
+      "sources": [
+        "lastfm"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.462574,
+          "normalized_similarity": 0.462574,
+          "confidence": 1.0
+        }
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "ive",
+      "weight": 0.48474333333333336,
+      "distance": 1.3333333333333333,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.182538,
+          "normalized_similarity": 0.182538,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.75,
+          "normalized_similarity": 0.75,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "ive",
+      "weight": 0.48474333333333336,
+      "distance": 1.3333333333333333,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.182538,
+          "normalized_similarity": 0.182538,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.75,
+          "normalized_similarity": 0.75,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "rosé",
+      "target": "ive",
+      "weight": 0.48474333333333336,
+      "distance": 1.3333333333333333,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.182538,
+          "normalized_similarity": 0.182538,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.75,
+          "normalized_similarity": 0.75,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "younha",
+      "target": "iu",
+      "weight": 0.695728,
+      "distance": 1.4373433295770761,
+      "confidence": 1.0,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted",
+      "sources": [
+        "lastfm"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.695728,
+          "normalized_similarity": 0.695728,
+          "confidence": 1.0
+        }
+      }
+    },
+    {
+      "source": "yoasobi",
+      "target": "aimer",
+      "weight": 0.305,
+      "distance": 3.278688524590164,
+      "confidence": 0.8,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted",
+      "sources": [
+        "deezer"
+      ],
+      "source_details": {
+        "deezer": {
+          "raw_value": 0.305,
+          "normalized_similarity": 0.305,
+          "confidence": 0.8
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "created": "2025-06-13T23:12:53.722737",
+    "total_artists": 10,
+    "total_edges": 14,
+    "parameters": {
+      "top_n_artists": 100,
+      "min_similarity_threshold": 0.2,
+      "min_plays_threshold": 5
+    },
+    "apis_used": {
+      "lastfm": true,
+      "deezer": true,
+      "musicbrainz": true,
+      "manual_connections": true
+    },
+    "edge_weighting": "comprehensive_multi_source"
+  }
+}

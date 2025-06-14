@@ -1,0 +1,38 @@
+{
+  "description": "Test case for *luna artist - should not be confused with 'luna' (different artist)",
+  "query_artist": "*luna",
+  "expected_choice": "*LUNA",
+  "expected_listeners": 17154,
+  "mock_candidates": [
+    {
+      "name": "*LUNA",
+      "listeners": 17154,
+      "url": "https://www.last.fm/music/*LUNA",
+      "mbid": "",
+      "description": "Correct artist - Last.fm canonical name (*LUNA)",
+      "source": "self_lookup"
+    },
+    {
+      "name": "luna", 
+      "listeners": 539768,
+      "url": "https://www.last.fm/music/luna",
+      "mbid": "089e0fd9-20e8-4dc3-b635-8e2cfb8e765a",
+      "description": "Different artist - indie rock band",
+      "source": "similar_artist"
+    },
+    {
+      "name": "Luna",
+      "listeners": 245678,
+      "url": "https://www.last.fm/music/Luna",
+      "mbid": "",
+      "description": "Another different artist variant",
+      "source": "similar_artist"
+    }
+  ],
+  "user_tracks_sample": [
+    "track1",
+    "track2", 
+    "track3"
+  ],
+  "notes": "The asterisk (*) in the name is significant - different artist entirely"
+}

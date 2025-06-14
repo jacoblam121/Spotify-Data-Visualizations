@@ -1,0 +1,41 @@
+{
+  "description": "Test case for IVE - dual profile scenario. Should use high-listener for display, functional for similarity",
+  "query_artist": "IVE",
+  "expected_choice": "Ive",
+  "expected_listeners": 838290,
+  "mock_candidates": [
+    {
+      "name": "Ive",
+      "listeners": 838290,
+      "url": "https://www.last.fm/music/Ive",
+      "mbid": "cd916fa8-c3b1-4c8b-b9e8-4b8e9c4d2b8a",
+      "description": "High-listener profile - good for display",
+      "has_similarity_data": false,
+      "profile_type": "display"
+    },
+    {
+      "name": "IVE (아이브)",
+      "listeners": 3094,
+      "url": "https://www.last.fm/music/IVE+%28%EC%95%84%EC%9D%B4%EB%B8%8C%29",
+      "mbid": "",
+      "description": "Lower-listener profile but has similarity data",
+      "has_similarity_data": true,
+      "profile_type": "functional"
+    },
+    {
+      "name": "아이브",
+      "listeners": 897,
+      "url": "https://www.last.fm/music/%EC%95%84%EC%9D%B4%EB%B8%8C",
+      "mbid": "",
+      "description": "Korean name variant with lowest listeners"
+    }
+  ],
+  "user_tracks_sample": [
+    "After LIKE",
+    "LOVE DIVE", 
+    "Eleven",
+    "Kitsch",
+    "I AM"
+  ],
+  "notes": "IVE is a K-pop group. User has their popular tracks. Need dual-profile system: high-listener for display, functional for similarity"
+}

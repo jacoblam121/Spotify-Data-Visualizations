@@ -1,0 +1,36 @@
+{
+  "description": "Test case for YOASOBI - should use high-listener profile, not low-listener variant",
+  "query_artist": "YOASOBI",
+  "expected_choice": "YOASOBI",
+  "expected_listeners": 713328,
+  "mock_candidates": [
+    {
+      "name": "YOASOBI",
+      "listeners": 713328,
+      "url": "https://www.last.fm/music/YOASOBI",
+      "mbid": "c572f72a-d939-4fe5-a1c3-f9ab7e6c0a7f",
+      "description": "Main profile - Japanese duo, correct high-listener count"
+    },
+    {
+      "name": "YOASOBI (ヨアソビ)",
+      "listeners": 143,
+      "url": "https://www.last.fm/music/YOASOBI+(ヨアソビ)",
+      "mbid": "",
+      "description": "Low-listener variant - possibly duplicate or incorrect"
+    },
+    {
+      "name": "ヨアソビ",
+      "listeners": 110,
+      "url": "https://www.last.fm/music/ヨアソビ",
+      "mbid": "",
+      "description": "Japanese name variant with very low listeners"
+    }
+  ],
+  "user_tracks_sample": [
+    "Yoru ni Kakeru",
+    "Racing into the Night",
+    "Gurenge",
+    "Monster"
+  ],
+  "notes": "User likely listens to main YOASOBI hits, should match high-listener profile"
+}

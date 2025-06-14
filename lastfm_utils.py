@@ -1022,6 +1022,118 @@ class LastfmAPI:
         
         return []
     
+    def search_artists(self, query: str, limit: int = 10) -> List[Dict]:
+        """
+        Search for artists by name.
+        
+        Args:
+            query: Search query
+            limit: Maximum number of results
+            
+        Returns:
+            List of artist search results
+        """
+        params = {
+            'artist': query,
+            'limit': str(limit)
+        }
+        
+        response = self._make_request('artist.search', params)
+        
+        if response and 'results' in response and 'artistmatches' in response['results']:
+            artists = response['results']['artistmatches'].get('artist', [])
+            if isinstance(artists, dict):
+                artists = [artists]
+            
+            return [{
+                'name': artist.get('name', ''),
+                'mbid': artist.get('mbid', ''),
+                'url': artist.get('url', ''),
+                'listeners': int(artist.get('listeners', 0)),
+                'images': artist.get('image', [])
+            } for artist in artists]
+        
+        return []
+    
+    def get_top_tracks(self, artist_name: str = None, mbid: str = None, limit: int = 20) -> List[Dict]:
+        """
+        Get top tracks for an artist.
+        
+        Args:
+            artist_name: Artist name (required if mbid not provided)
+            mbid: MusicBrainz ID (required if artist_name not provided)
+            limit: Maximum number of tracks
+            
+        Returns:
+            List of top tracks
+        """
+        if not artist_name and not mbid:
+            logger.error("Either artist_name or mbid must be provided")
+            return []
+        
+        params = {'limit': str(limit)}
+        if mbid:
+            params['mbid'] = mbid
+        else:
+            params['artist'] = artist_name
+            
+        response = self._make_request('artist.gettoptracks', params)
+        
+        if response and 'toptracks' in response:
+            tracks = response['toptracks'].get('track', [])
+            if isinstance(tracks, dict):
+                tracks = [tracks]
+                
+            return [{
+                'name': track.get('name', ''),
+                'playcount': int(track.get('playcount', 0)),
+                'listeners': int(track.get('listeners', 0)),
+                'mbid': track.get('mbid', ''),
+                'url': track.get('url', ''),
+                'artist': track.get('artist', {})
+            } for track in tracks]
+        
+        return []
+    
+    def get_top_albums(self, artist_name: str = None, mbid: str = None, limit: int = 10) -> List[Dict]:
+        """
+        Get top albums for an artist.
+        
+        Args:
+            artist_name: Artist name (required if mbid not provided)
+            mbid: MusicBrainz ID (required if artist_name not provided)
+            limit: Maximum number of albums
+            
+        Returns:
+            List of top albums
+        """
+        if not artist_name and not mbid:
+            logger.error("Either artist_name or mbid must be provided")
+            return []
+        
+        params = {'limit': str(limit)}
+        if mbid:
+            params['mbid'] = mbid
+        else:
+            params['artist'] = artist_name
+            
+        response = self._make_request('artist.gettopalbums', params)
+        
+        if response and 'topalbums' in response:
+            albums = response['topalbums'].get('album', [])
+            if isinstance(albums, dict):
+                albums = [albums]
+                
+            return [{
+                'name': album.get('name', ''),
+                'playcount': int(album.get('playcount', 0)),
+                'mbid': album.get('mbid', ''),
+                'url': album.get('url', ''),
+                'artist': album.get('artist', {})
+            } for album in albums]
+        
+        return []
+    
     def _get_canonical_artist_info_with_verification(self, artist_name: str) -> Optional[Dict]:
         """
         Get artist info using multi-stage verification:

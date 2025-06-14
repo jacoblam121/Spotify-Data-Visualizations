@@ -185,14 +185,23 @@ def load_lastfm_data(csv_filepath):
 
     # Essential columns for Last.fm processing
     columns_to_keep_lastfm = ['timestamp', 'artist', 'album', 'track']
+    
     # Check if 'album_mbid' exists and add it if so
     if 'album_mbid' in df.columns:
         columns_to_keep_lastfm.append('album_mbid')
     else:
         print("Note: 'album_mbid' column not found in Last.fm CSV. Will proceed without it.")
         df['album_mbid'] = None # Ensure the column exists for consistent structure, filled with None
+    
+    # Check if 'artist_mbid' exists and add it if so
+    if 'artist_mbid' in df.columns:
+        columns_to_keep_lastfm.append('artist_mbid')
+        print("✅ Found 'artist_mbid' column in Last.fm CSV - will enable MBID-based verification")
+    else:
+        print("Note: 'artist_mbid' column not found in Last.fm CSV. Will proceed without it.")
+        df['artist_mbid'] = None # Ensure the column exists for consistent structure, filled with None
 
-    missing_columns = [col for col in columns_to_keep_lastfm if col not in df.columns and col != 'timestamp' and col != 'album_mbid']
+    missing_columns = [col for col in columns_to_keep_lastfm if col not in df.columns and col != 'timestamp' and col != 'album_mbid' and col != 'artist_mbid']
     if missing_columns:
         print(f"Error: Essential Last.fm columns {missing_columns} are missing from the CSV after initial load.")
         return None
@@ -210,7 +219,7 @@ def load_lastfm_data(csv_filepath):
         print(f"Dropped {rows_dropped} rows from Last.fm data due to missing values in 'artist', 'album', or 'track'.")
     
     # Ensure all expected columns are present before returning, even if some were added as None
-    final_cols = ['timestamp', 'artist', 'album', 'track', 'album_mbid', 'original_artist', 'original_track']
+    final_cols = ['timestamp', 'artist', 'album', 'track', 'album_mbid', 'artist_mbid', 'original_artist', 'original_track']
     for col in final_cols:
         if col not in df_selected.columns:
             df_selected[col] = None
@@ -263,7 +272,7 @@ def clean_and_filter_data(config):
         if data_source == 'spotify':
             base_cols.append('spotify_track_uri')
         elif data_source == 'lastfm':
-            base_cols.append('album_mbid')
+            base_cols.extend(['album_mbid', 'artist_mbid'])
         return pd.DataFrame(columns=base_cols)
 
     print(f"Successfully loaded and initially processed {len(df_loaded)} rows from '{data_source}'.")
