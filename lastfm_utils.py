@@ -790,6 +790,47 @@ class LastfmAPI:
             
         return similar_artists
     
+    def get_artist_similarity(self, artist_a: str, artist_b: str) -> Optional[Dict]:
+        """
+        Get similarity score between two specific artists.
+        
+        Args:
+            artist_a: First artist name
+            artist_b: Second artist name
+            
+        Returns:
+            Dictionary with similarity data or None if not found:
+            {
+                'similarity': float,  # Similarity score 0-1
+                'source': 'lastfm',
+                'artist_a': str,
+                'artist_b': str
+            }
+        """
+        try:
+            # Get similar artists for artist_a
+            similar_artists = self.get_similar_artists(artist_a, limit=50)
+            
+            if not similar_artists:
+                return None
+            
+            # Look for artist_b in the similar artists list
+            for similar in similar_artists:
+                if self._similar_strings(similar['name'], artist_b):
+                    return {
+                        'similarity': similar['match'],
+                        'source': 'lastfm', 
+                        'artist_a': artist_a,
+                        'artist_b': artist_b
+                    }
+            
+            # Not found - return None
+            return None
+            
+        except Exception as e:
+            logger.warning(f"Error getting similarity between {artist_a} and {artist_b}: {e}")
+            return None
+    
     def get_artist_info(self, artist_name: str = None, mbid: str = None, 
                        use_enhanced_matching: bool = True) -> Optional[Dict]:
         """

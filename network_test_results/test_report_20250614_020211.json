@@ -1,0 +1,59 @@
+{
+  "test_summary": {
+    "duration_seconds": 5.779244,
+    "tests_run": 22,
+    "tests_passed": 22,
+    "tests_failed": 0,
+    "success_rate": 1.0,
+    "warnings": 0,
+    "errors": 0,
+    "metrics": {
+      "Total User Tracks": 109605,
+      "Unique Artists": 1558,
+      "YOASOBI_confidence": 0.91,
+      "YOASOBI_method": "STRONG_TRACK_MATCH",
+      "IVE_confidence": 0.95,
+      "IVE_method": "STRONG_TRACK_MATCH",
+      "BTS_confidence": 0.99,
+      "BTS_method": "MBID_MATCH",
+      "Network Nodes": 3,
+      "Network Edges": 0,
+      "YOASOBI_connections": 0,
+      "IVE_connections": 0,
+      "BTS_connections": 0
+    },
+    "artifacts": {
+      "Network JSON": "network_test_results/comprehensive_network_20250614_020211.json",
+      "Network GraphML": "network_test_results/comprehensive_network_20250614_020211.graphml"
+    }
+  },
+  "configuration": {
+    "top_n_artists": 8,
+    "similarity_threshold": 0.3,
+    "seed_artists": [
+      "YOASOBI",
+      "IVE",
+      "BTS"
+    ],
+    "data_source": "lastfm_data.csv"
+  },
+  "verified_artists": {
+    "YOASOBI": {
+      "confidence": 0.91,
+      "method": "STRONG_TRACK_MATCH",
+      "user_tracks": 3
+    },
+    "IVE": {
+      "confidence": 0.95,
+      "method": "STRONG_TRACK_MATCH",
+      "user_tracks": 23
+    },
+    "BTS": {
+      "confidence": 0.99,
+      "method": "MBID_MATCH",
+      "user_tracks": 3
+    }
+  },
+  "warnings": [],
+  "errors": []
+}

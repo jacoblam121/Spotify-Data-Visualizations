@@ -1,0 +1,48 @@
+{
+  "nodes": [
+    {
+      "id": "YOASOBI",
+      "display_name": "yoasobi",
+      "lastfm_listeners": 713328,
+      "lastfm_url": "https://www.last.fm/music/yoasobi",
+      "user_plays": 3,
+      "verification_confidence": 0.91,
+      "verification_method": "STRONG_TRACK_MATCH",
+      "node_size": 17.933239999999998,
+      "glow_value": 0.9352000000000001,
+      "color": "#96CEB4",
+      "spotify_popularity": 14
+    },
+    {
+      "id": "IVE",
+      "display_name": "Ive",
+      "lastfm_listeners": 838290,
+      "lastfm_url": "https://www.last.fm/music/Ive",
+      "user_plays": 23,
+      "verification_confidence": 0.95,
+      "verification_method": "STRONG_TRACK_MATCH",
+      "node_size": 23.120075,
+      "glow_value": 0.964,
+      "color": "#45B7D1",
+      "spotify_popularity": 16
+    }
+  ],
+  "edges": [],
+  "metadata": {
+    "generated_at": "2025-06-14T01:54:57.516217",
+    "config": {
+      "top_n_artists": 10,
+      "similarity_threshold": 0.3,
+      "seed_artists": [
+        "YOASOBI",
+        "IVE"
+      ]
+    },
+    "metrics": {
+      "node_count": 2,
+      "edge_count": 0,
+      "density": 0,
+      "average_clustering": 0.0
+    }
+  }
+}

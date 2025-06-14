@@ -1,0 +1,62 @@
+{
+  "nodes": [
+    {
+      "id": "YOASOBI",
+      "display_name": "yoasobi",
+      "lastfm_listeners": 713328,
+      "lastfm_url": "https://www.last.fm/music/yoasobi",
+      "user_plays": 30,
+      "verification_confidence": 0.95,
+      "verification_method": "STRONG_TRACK_MATCH",
+      "node_size": 21.98324,
+      "glow_value": 0.964,
+      "color": "#45B7D1",
+      "spotify_popularity": 14
+    },
+    {
+      "id": "IVE",
+      "display_name": "Ive",
+      "lastfm_listeners": 838290,
+      "lastfm_url": "https://www.last.fm/music/Ive",
+      "user_plays": 40,
+      "verification_confidence": 0.95,
+      "verification_method": "STRONG_TRACK_MATCH",
+      "node_size": 25.670074999999997,
+      "glow_value": 0.964,
+      "color": "#45B7D1",
+      "spotify_popularity": 16
+    },
+    {
+      "id": "BTS",
+      "display_name": "BTS",
+      "lastfm_listeners": 1969790,
+      "lastfm_url": "https://www.last.fm/music/BTS",
+      "user_plays": 8,
+      "verification_confidence": 0.9400000000000001,
+      "verification_method": "STRONG_TRACK_MATCH",
+      "node_size": 23.7,
+      "glow_value": 0.9568000000000002,
+      "color": "#96CEB4",
+      "spotify_popularity": 39
+    }
+  ],
+  "edges": [],
+  "metadata": {
+    "generated_at": "2025-06-14T01:59:39.049511",
+    "config": {
+      "top_n_artists": 100,
+      "similarity_threshold": 0.2,
+      "seed_artists": [
+        "YOASOBI",
+        "IVE",
+        "BTS"
+      ]
+    },
+    "metrics": {
+      "node_count": 3,
+      "edge_count": 0,
+      "density": 0,
+      "average_clustering": 0.0
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "test_summary": {
+    "duration_seconds": 4.599022,
+    "tests_run": 17,
+    "tests_passed": 17,
+    "tests_failed": 0,
+    "success_rate": 1.0,
+    "warnings": 0,
+    "errors": 0,
+    "metrics": {
+      "Total User Tracks": 109605,
+      "Unique Artists": 1558,
+      "YOASOBI_confidence": 0.91,
+      "YOASOBI_method": "STRONG_TRACK_MATCH",
+      "IVE_confidence": 0.95,
+      "IVE_method": "STRONG_TRACK_MATCH",
+      "Network Nodes": 2,
+      "Network Edges": 0,
+      "YOASOBI_connections": 0,
+      "IVE_connections": 0
+    },
+    "artifacts": {
+      "Network JSON": "network_test_results/comprehensive_network_20250614_015634.json",
+      "Network GraphML": "network_test_results/comprehensive_network_20250614_015634.graphml"
+    }
+  },
+  "configuration": {
+    "top_n_artists": 10,
+    "similarity_threshold": 0.3,
+    "seed_artists": [
+      "YOASOBI",
+      "IVE"
+    ],
+    "data_source": "lastfm_data.csv"
+  },
+  "verified_artists": {
+    "YOASOBI": {
+      "confidence": 0.91,
+      "method": "STRONG_TRACK_MATCH",
+      "user_tracks": 3
+    },
+    "IVE": {
+      "confidence": 0.95,
+      "method": "STRONG_TRACK_MATCH",
+      "user_tracks": 23
+    }
+  },
+  "warnings": [],
+  "errors": []
+}

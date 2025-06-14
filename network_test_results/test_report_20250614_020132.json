@@ -1,0 +1,59 @@
+{
+  "test_summary": {
+    "duration_seconds": 16.424183,
+    "tests_run": 22,
+    "tests_passed": 22,
+    "tests_failed": 0,
+    "success_rate": 1.0,
+    "warnings": 0,
+    "errors": 0,
+    "metrics": {
+      "Total User Tracks": 109605,
+      "Unique Artists": 1558,
+      "Taylor Swift_confidence": 0.95,
+      "Taylor Swift_method": "STRONG_TRACK_MATCH",
+      "Olivia Rodrigo_confidence": 0.95,
+      "Olivia Rodrigo_method": "STRONG_TRACK_MATCH",
+      "Billie Eilish_confidence": 0.95,
+      "Billie Eilish_method": "STRONG_TRACK_MATCH",
+      "Network Nodes": 3,
+      "Network Edges": 3,
+      "Taylor Swift_connections": 2,
+      "Olivia Rodrigo_connections": 2,
+      "Billie Eilish_connections": 2
+    },
+    "artifacts": {
+      "Network JSON": "network_test_results/comprehensive_network_20250614_020132.json",
+      "Network GraphML": "network_test_results/comprehensive_network_20250614_020132.graphml"
+    }
+  },
+  "configuration": {
+    "top_n_artists": 100,
+    "similarity_threshold": 0.2,
+    "seed_artists": [
+      "Taylor Swift",
+      "Olivia Rodrigo",
+      "Billie Eilish"
+    ],
+    "data_source": "spotify_data.json"
+  },
+  "verified_artists": {
+    "Taylor Swift": {
+      "confidence": 0.95,
+      "method": "STRONG_TRACK_MATCH",
+      "user_tracks": 119
+    },
+    "Olivia Rodrigo": {
+      "confidence": 0.95,
+      "method": "STRONG_TRACK_MATCH",
+      "user_tracks": 7
+    },
+    "Billie Eilish": {
+      "confidence": 0.95,
+      "method": "STRONG_TRACK_MATCH",
+      "user_tracks": 8
+    }
+  },
+  "warnings": [],
+  "errors": []
+}

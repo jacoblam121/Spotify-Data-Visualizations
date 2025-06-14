@@ -1,0 +1,81 @@
+{
+  "nodes": [
+    {
+      "id": "Taylor Swift",
+      "display_name": "Taylor Swift",
+      "lastfm_listeners": 5161355,
+      "lastfm_url": "https://www.last.fm/music/Taylor+Swift",
+      "user_plays": 119,
+      "verification_confidence": 0.95,
+      "verification_method": "STRONG_TRACK_MATCH",
+      "node_size": 30.0,
+      "glow_value": 0.964,
+      "color": "#45B7D1",
+      "spotify_popularity": 100
+    },
+    {
+      "id": "Olivia Rodrigo",
+      "display_name": "Olivia Rodrigo",
+      "lastfm_listeners": 2602113,
+      "lastfm_url": "https://www.last.fm/music/Olivia+Rodrigo",
+      "user_plays": 7,
+      "verification_confidence": 0.95,
+      "verification_method": "STRONG_TRACK_MATCH",
+      "node_size": 23.55,
+      "glow_value": 0.964,
+      "color": "#96CEB4",
+      "spotify_popularity": 52
+    },
+    {
+      "id": "Billie Eilish",
+      "display_name": "Billie Eilish",
+      "lastfm_listeners": 3628428,
+      "lastfm_url": "https://www.last.fm/music/Billie+Eilish",
+      "user_plays": 8,
+      "verification_confidence": 0.95,
+      "verification_method": "STRONG_TRACK_MATCH",
+      "node_size": 23.7,
+      "glow_value": 0.964,
+      "color": "#96CEB4",
+      "spotify_popularity": 72
+    }
+  ],
+  "edges": [
+    {
+      "source": "lastfm",
+      "target": "Olivia Rodrigo",
+      "similarity": 1.0,
+      "weight": 1.0
+    },
+    {
+      "source": "lastfm",
+      "target": "Billie Eilish",
+      "similarity": 0.26833,
+      "weight": 0.26833
+    },
+    {
+      "source": "lastfm",
+      "target": "Billie Eilish",
+      "similarity": 0.598363,
+      "weight": 0.598363
+    }
+  ],
+  "metadata": {
+    "generated_at": "2025-06-14T02:01:32.763666",
+    "config": {
+      "top_n_artists": 100,
+      "similarity_threshold": 0.2,
+      "seed_artists": [
+        "Taylor Swift",
+        "Olivia Rodrigo",
+        "Billie Eilish"
+      ]
+    },
+    "metrics": {
+      "node_count": 3,
+      "edge_count": 3,
+      "density": 1.0,
+      "average_clustering": 1.0
+    }
+  }
+}

@@ -1,0 +1,106 @@
+# Comprehensive Network Test Suite Configuration
+# ==============================================
+
+default_params:
+  # Core network parameters
+  top_n_artists: 20
+  similarity_threshold: 0.3
+  min_plays_threshold: 5
+  
+  # Data source configuration
+  data_path: "lastfm_data.csv"
+  force_data_source: "lastfm"  # or "spotify" or null for auto-detect
+  
+  # Visual property ranges
+  min_node_size: 8.0
+  max_node_size: 25.0
+  min_glow_value: 0.2
+  max_glow_value: 1.0
+  
+  # Performance and rate limiting
+  max_api_calls_per_artist: 10
+  rate_limit_delay: 0.2
+
+test_config:
+  # What to test
+  test_verification: true
+  test_similarity_symmetry: true
+  test_visual_properties: true
+  test_persistence: true
+  test_individual_connections: true
+  
+  # Output configuration
+  output_dir: "network_test_results"
+  save_networks: true
+  generate_reports: true
+
+# Test Scenarios
+scenarios:
+  quick_test:
+    top_n_artists: 10
+    seed_artists: ["YOASOBI", "IVE"]
+    similarity_threshold: 0.3
+    
+  kpop_focus:
+    top_n_artists: 25
+    seed_artists: ["IVE", "BTS", "YOASOBI", "NewJeans"]
+    similarity_threshold: 0.25
+    
+  comprehensive:
+    top_n_artists: 50
+    seed_artists: ["Taylor Swift", "BTS", "YOASOBI", "IVE", "Arctic Monkeys"]
+    similarity_threshold: 0.2
+    
+  deep_analysis:
+    top_n_artists: 100
+    seed_artists: ["Radiohead", "The Beatles", "Pink Floyd", "Led Zeppelin"]
+    similarity_threshold: 0.15
+    max_api_calls_per_artist: 20
+
+# Visual Property Testing
+visual_tests:
+  node_size_mapping:
+    # Test that node sizes correctly reflect popularity
+    high_popularity_min_size: 15.0  # Artists with >1M listeners
+    low_popularity_max_size: 12.0   # Artists with <100K listeners
+    
+  glow_intensity:
+    # Test glow based on verification confidence
+    high_confidence_min_glow: 0.7   # Confidence >0.9
+    low_confidence_max_glow: 0.4    # Confidence <0.7
+    
+  color_scheme:
+    # Expected colors for different engagement levels
+    high_engagement: "#FF6B6B"      # Red for high personal engagement
+    medium_engagement: "#4ECDC4"    # Teal for medium engagement
+    low_engagement: "#45B7D1"       # Blue for low engagement
+    popular_only: "#96CEB4"         # Green for popular but low personal
+
+# Quality Thresholds
+quality_thresholds:
+  min_success_rate: 0.8            # 80% of tests should pass
+  max_asymmetric_edges: 0.1        # <10% of edges can be asymmetric
+  min_network_density: 0.1         # Network should have some connectivity
+  max_verification_failures: 2     # Allow up to 2 verification failures
+
+# Expected Artist Mappings (for validation)
+expected_mappings:
+  "YOASOBI":
+    expected_listeners_min: 500000
+    expected_confidence_min: 0.85
+    expected_method: ["STRONG_TRACK_MATCH", "TRACK_BASED"]
+    
+  "BTS":
+    expected_listeners_min: 1500000
+    expected_confidence_min: 0.9
+    expected_method: ["MBID_MATCH", "STRONG_TRACK_MATCH"]
+    
+  "IVE":
+    expected_listeners_min: 500000
+    expected_confidence_min: 0.85
+    expected_method: ["STRONG_TRACK_MATCH"]
+    
+  "Taylor Swift":
+    expected_listeners_min: 4000000
+    expected_confidence_min: 0.9
+    expected_method: ["MBID_MATCH", "STRONG_TRACK_MATCH"]
