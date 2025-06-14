@@ -1,0 +1,132 @@
+{
+  "network_d3.html": {
+    "filename": "network_d3.html",
+    "exists": true,
+    "file_size": 4747,
+    "d3_version": "v7",
+    "node_count": 8,
+    "edge_count": 6,
+    "has_sidebar": false,
+    "has_controls": false,
+    "has_zoom": false,
+    "has_tooltips": true,
+    "data_structure": {
+      "node_properties": [
+        "id",
+        "name",
+        "listeners",
+        "genre",
+        "size"
+      ],
+      "edge_properties": [
+        "source",
+        "target",
+        "weight"
+      ],
+      "data_complexity": "simple"
+    },
+    "css_features": [
+      "transitions",
+      "rounded_corners"
+    ],
+    "js_features": [
+      "force_simulation",
+      "drag_nodes",
+      "hover_events",
+      "event_handlers",
+      "animations",
+      "color_scales"
+    ]
+  },
+  "real_network_d3.html": {
+    "filename": "real_network_d3.html",
+    "exists": true,
+    "file_size": 10882,
+    "d3_version": "v7",
+    "node_count": 15,
+    "edge_count": 2,
+    "has_sidebar": true,
+    "has_controls": true,
+    "has_zoom": true,
+    "has_tooltips": true,
+    "data_structure": {
+      "node_properties": [
+        "id",
+        "name",
+        "listeners",
+        "genre",
+        "size"
+      ],
+      "edge_properties": [
+        "source",
+        "target",
+        "weight"
+      ],
+      "data_complexity": "medium"
+    },
+    "css_features": [
+      "gradients",
+      "backdrop_blur",
+      "transitions",
+      "flexbox",
+      "shadows",
+      "rounded_corners"
+    ],
+    "js_features": [
+      "force_simulation",
+      "drag_nodes",
+      "zoom_pan",
+      "hover_events",
+      "click_events",
+      "event_handlers",
+      "animations"
+    ]
+  },
+  "corrected_network_d3.html": {
+    "filename": "corrected_network_d3.html",
+    "exists": true,
+    "file_size": 15051,
+    "d3_version": "v7",
+    "node_count": 15,
+    "edge_count": 10,
+    "has_sidebar": true,
+    "has_controls": true,
+    "has_zoom": true,
+    "has_tooltips": true,
+    "data_structure": {
+      "node_properties": [
+        "id",
+        "name",
+        "canonical",
+        "listeners",
+        "play_count",
+        "size",
+        "url"
+      ],
+      "edge_properties": [
+        "source",
+        "target",
+        "weight"
+      ],
+      "data_complexity": "medium"
+    },
+    "css_features": [
+      "gradients",
+      "backdrop_blur",
+      "transitions",
+      "flexbox",
+      "shadows",
+      "rounded_corners"
+    ],
+    "js_features": [
+      "force_simulation",
+      "drag_nodes",
+      "zoom_pan",
+      "hover_events",
+      "click_events",
+      "event_handlers",
+      "animations",
+      "color_scales"
+    ]
+  }
+}

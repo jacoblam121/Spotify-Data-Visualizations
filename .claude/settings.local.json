@@ -22,7 +22,10 @@
       "Bash(true)",
       "mcp__gemini__analyze",
       "Bash(mkdir:*)",
-      "mcp__gemini__debug"
+      "mcp__gemini__debug",
+      "Bash(cp:*)",
+      "Bash(kill:*)",
+      "Bash(jq:*)"
     ],
     "deny": []
   }

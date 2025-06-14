@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Artist Network - Three Mode Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
+        }
+        .container { 
+            display: flex; 
+            height: 100vh; 
+        }
+        .sidebar { 
+            width: 320px; 
+            background: rgba(0,0,0,0.3); 
+            padding: 20px; 
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+        }
+        .main { 
+            flex: 1; 
+            position: relative; 
+        }
+        h1 { 
+            margin: 0 0 20px 0; 
+            font-size: 24px; 
+            font-weight: 300; 
+        }
+        
+        /* Mode Switcher */
+        .mode-selector {
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .mode-selector legend {
+            padding: 0 10px;
+            font-weight: bold;
+        }
+        .mode-option {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        .mode-option input[type="radio"] {
+            margin-right: 8px;
+        }
+        .mode-description {
+            background: rgba(255,255,255,0.1);
+            padding: 12px;
+            border-radius: 6px;
+            margin: 15px 0;
+            font-size: 13px;
+            line-height: 1.4;
+            border-left: 3px solid #64b5f6;
+        }
+        
+        /* Controls */
+        .controls { 
+            margin: 20px 0; 
+        }
+        .control-group { 
+            margin: 15px 0; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-size: 14px; 
+        }
+        input[type="range"] { 
+            width: 100%; 
+            margin: 5px 0; 
+        }
+        
+        /* Network visualization styles */
+        .node { 
+            cursor: pointer; 
+            transition: all 0.3s ease;
+            stroke: white;
+            stroke-width: 2px;
+        }
+        .node:hover { 
+            stroke-width: 4px; 
+        }
+        
+        /* Glow effect using CSS (much more performant than SVG filters) */
+        .node.glow {
+            filter: drop-shadow(0 0 8px #ffeb3b) drop-shadow(0 0 16px #ffeb3b);
+            stroke: #ffeb3b;
+            stroke-width: 3px;
+        }
+        
+        .link { 
+            stroke: rgba(255,255,255,0.5); 
+            stroke-opacity: 0.7; 
+            transition: all 0.3s ease;
+        }
+        .link:hover { 
+            stroke-opacity: 1; 
+            stroke-width: 4px;
+            stroke: #ffeb3b;
+        }
+        .link.highlighted {
+            stroke: #64b5f6;
+            stroke-width: 3px;
+            stroke-opacity: 1;
+        }
+        
+        .tooltip { 
+            position: absolute; 
+            padding: 15px; 
+            background: rgba(0,0,0,0.95); 
+            color: white; 
+            border-radius: 10px; 
+            pointer-events: none; 
+            font-size: 14px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 300px;
+            z-index: 1000;
+        }
+        
+        .stats { 
+            margin-top: 20px; 
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .stat-item { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 8px 0; 
+            font-size: 13px;
+        }
+        
+        svg { 
+            width: 100%; 
+            height: 100%; 
+        }
+        .link-label {
+            font-size: 10px;
+            fill: rgba(255,255,255,0.8);
+            text-anchor: middle;
+            pointer-events: none;
+        }
+        
+        /* Loading state */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>🎵 Artist Network</h1>
+            <p style="font-size: 12px; opacity: 0.8;">Multi-Mode Visualization</p>
+            
+            <!-- Mode Switcher -->
+            <fieldset class="mode-selector">
+                <legend>Visualization Mode</legend>
+                <label class="mode-option">
+                    <input type="radio" name="mode" value="global" checked>
+                    <strong>Global</strong> - Popularity View
+                </label>
+                <label class="mode-option">
+                    <input type="radio" name="mode" value="personal">
+                    <strong>Personal</strong> - Your Listening
+                </label>
+                <label class="mode-option">
+                    <input type="radio" name="mode" value="hybrid">
+                    <strong>Hybrid</strong> - Combined View
+                </label>
+            </fieldset>
+            
+            <!-- Dynamic Description -->
+            <div class="mode-description" id="modeDescription">
+                Node size shows global popularity. Your top artists glow.
+            </div>
+            
+            <!-- Controls -->
+            <div class="controls">
+                <div class="control-group">
+                    <label>Force Strength</label>
+                    <input type="range" id="forceStrength" min="50" max="800" value="400">
+                </div>
+                <div class="control-group">
+                    <label>Link Distance</label>
+                    <input type="range" id="linkDistance" min="80" max="300" value="150">
+                </div>
+                <div class="control-group">
+                    <label>Show Edge Labels</label>
+                    <input type="checkbox" id="showLabels" checked>
+                </div>
+            </div>
+            
+            <!-- Network Stats -->
+            <div class="stats">
+                <h3 style="margin-top: 0;">Network Stats</h3>
+                <div class="stat-item">
+                    <span>Nodes:</span>
+                    <span id="nodeCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Edges:</span>
+                    <span id="edgeCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Current Mode:</span>
+                    <span id="currentMode">Global</span>
+                </div>
+                <div class="stat-item">
+                    <span>Glowing Nodes:</span>
+                    <span id="glowingCount">0</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main">
+            <svg></svg>
+            <div class="tooltip" style="opacity: 0;"></div>
+            <div class="loading" id="loadingIndicator">Loading network data...</div>
+        </div>
+    </div>
+    
+    <script src="js/network-visualization.js"></script>
+</body>
+</html>

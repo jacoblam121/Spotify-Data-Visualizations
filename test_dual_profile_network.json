@@ -1,0 +1,208 @@
+{
+  "nodes": [
+    {
+      "id": "ive",
+      "name": "ive",
+      "play_count": 6143,
+      "rank": 1,
+      "listeners": 838290,
+      "playcount": 122943901,
+      "lastfm_url": "https://www.last.fm/music/Ive",
+      "canonical_name": "Ive",
+      "display_metadata_source": "Ive",
+      "mbid": ""
+    },
+    {
+      "id": "tonight_alive",
+      "name": "tonight alive",
+      "play_count": 855,
+      "rank": 2,
+      "listeners": 319388,
+      "playcount": 11147783,
+      "lastfm_url": "https://www.last.fm/music/Tonight+Alive",
+      "canonical_name": "Tonight Alive",
+      "display_metadata_source": "tonight alive",
+      "mbid": "712dbd18-d8fd-4bd0-a5b5-edb9577c493f"
+    },
+    {
+      "id": "anyujin",
+      "name": "anyujin",
+      "play_count": 427,
+      "rank": 3,
+      "listeners": 6833,
+      "playcount": 232390,
+      "lastfm_url": "https://www.last.fm/music/ANYUJIN",
+      "canonical_name": "ANYUJIN",
+      "display_metadata_source": "anyujin",
+      "mbid": ""
+    },
+    {
+      "id": "newjeans",
+      "name": "newjeans",
+      "play_count": 160,
+      "rank": 4,
+      "listeners": 1431273,
+      "playcount": 258722418,
+      "lastfm_url": "https://www.last.fm/music/NewJeans",
+      "canonical_name": "NewJeans",
+      "display_metadata_source": "newjeans",
+      "mbid": ""
+    }
+  ],
+  "edges": [
+    {
+      "source": "ive",
+      "target": "anyujin",
+      "weight": 0.35,
+      "distance": 2.0,
+      "confidence": 0.9,
+      "is_factual": true,
+      "fusion_method": "hybrid_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer",
+        "musicbrainz"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 0.8
+        },
+        "musicbrainz": {
+          "raw_value": 0.5,
+          "normalized_similarity": 0.5,
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "source": "anyujin",
+      "target": "ive",
+      "weight": 0.35,
+      "distance": 2.0,
+      "confidence": 0.9,
+      "is_factual": true,
+      "fusion_method": "hybrid_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer",
+        "musicbrainz"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 0.8
+        },
+        "musicbrainz": {
+          "raw_value": 0.5,
+          "normalized_similarity": 0.5,
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "source": "newjeans",
+      "target": "ive",
+      "weight": 0.711026111111111,
+      "distance": 1.0526315789473684,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.429847,
+          "normalized_similarity": 0.429847,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.95,
+          "normalized_similarity": 0.95,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "newjeans",
+      "target": "ive",
+      "weight": 0.711026111111111,
+      "distance": 1.0526315789473684,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.429847,
+          "normalized_similarity": 0.429847,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.95,
+          "normalized_similarity": 0.95,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "newjeans",
+      "target": "ive",
+      "weight": 0.711026111111111,
+      "distance": 1.0526315789473684,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.429847,
+          "normalized_similarity": 0.429847,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.95,
+          "normalized_similarity": 0.95,
+          "confidence": 0.8
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "created": "2025-06-13T22:48:26.677556",
+    "total_artists": 4,
+    "total_edges": 5,
+    "parameters": {
+      "top_n_artists": 100,
+      "min_similarity_threshold": 0.2,
+      "min_plays_threshold": 5
+    },
+    "apis_used": {
+      "lastfm": true,
+      "deezer": true,
+      "musicbrainz": true,
+      "manual_connections": true
+    },
+    "edge_weighting": "comprehensive_multi_source"
+  }
+}

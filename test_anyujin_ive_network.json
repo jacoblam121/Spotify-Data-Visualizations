@@ -1,0 +1,240 @@
+{
+  "nodes": [
+    {
+      "id": "taylor_swift",
+      "name": "taylor swift",
+      "play_count": 12824,
+      "rank": 1
+    },
+    {
+      "id": "paramore",
+      "name": "paramore",
+      "play_count": 6821,
+      "rank": 2
+    },
+    {
+      "id": "ive",
+      "name": "ive",
+      "play_count": 6143,
+      "rank": 3
+    },
+    {
+      "id": "twice",
+      "name": "twice",
+      "play_count": 1776,
+      "rank": 4
+    },
+    {
+      "id": "anyujin",
+      "name": "anyujin",
+      "play_count": 427,
+      "rank": 5
+    }
+  ],
+  "edges": [
+    {
+      "source": "ive",
+      "target": "twice",
+      "weight": 0.49444444444444446,
+      "distance": 1.0,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 1.0,
+          "normalized_similarity": 1.0,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "ive",
+      "target": "twice",
+      "weight": 0.49444444444444446,
+      "distance": 1.0,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 1.0,
+          "normalized_similarity": 1.0,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "ive",
+      "target": "anyujin",
+      "weight": 0.35,
+      "distance": 2.0,
+      "confidence": 0.9,
+      "is_factual": true,
+      "fusion_method": "hybrid_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer",
+        "musicbrainz"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 0.8
+        },
+        "musicbrainz": {
+          "raw_value": 0.5,
+          "normalized_similarity": 0.5,
+          "confidence": 0.9
+        }
+      }
+    },
+    {
+      "source": "twice",
+      "target": "ive",
+      "weight": 0.5939194444444444,
+      "distance": 1.0,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.179055,
+          "normalized_similarity": 0.179055,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 1.0,
+          "normalized_similarity": 1.0,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "twice",
+      "target": "ive",
+      "weight": 0.5939194444444444,
+      "distance": 1.0,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.179055,
+          "normalized_similarity": 0.179055,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 1.0,
+          "normalized_similarity": 1.0,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "twice",
+      "target": "ive",
+      "weight": 0.5939194444444444,
+      "distance": 1.0,
+      "confidence": 0.9,
+      "is_factual": false,
+      "fusion_method": "algorithmic_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.179055,
+          "normalized_similarity": 0.179055,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 1.0,
+          "normalized_similarity": 1.0,
+          "confidence": 0.8
+        }
+      }
+    },
+    {
+      "source": "anyujin",
+      "target": "ive",
+      "weight": 0.35,
+      "distance": 2.0,
+      "confidence": 0.9,
+      "is_factual": true,
+      "fusion_method": "hybrid_weighted_multi_source",
+      "sources": [
+        "lastfm",
+        "deezer",
+        "musicbrainz"
+      ],
+      "source_details": {
+        "lastfm": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 1.0
+        },
+        "deezer": {
+          "raw_value": 0.0,
+          "normalized_similarity": 0.0,
+          "confidence": 0.8
+        },
+        "musicbrainz": {
+          "raw_value": 0.5,
+          "normalized_similarity": 0.5,
+          "confidence": 0.9
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "created": "2025-06-13T17:13:42.728357",
+    "total_artists": 5,
+    "total_edges": 7,
+    "parameters": {
+      "top_n_artists": 100,
+      "min_similarity_threshold": 0.2,
+      "min_plays_threshold": 5
+    },
+    "apis_used": {
+      "lastfm": true,
+      "deezer": true,
+      "musicbrainz": true,
+      "manual_connections": true
+    },
+    "edge_weighting": "comprehensive_multi_source"
+  }
+}

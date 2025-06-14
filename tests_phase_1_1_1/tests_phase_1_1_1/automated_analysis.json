@@ -1,0 +1,47 @@
+{
+  "network_d3.html": {
+    "filename": "network_d3.html",
+    "exists": false,
+    "file_size": 0,
+    "d3_version": null,
+    "node_count": 0,
+    "edge_count": 0,
+    "has_sidebar": false,
+    "has_controls": false,
+    "has_zoom": false,
+    "has_tooltips": false,
+    "data_structure": {},
+    "css_features": [],
+    "js_features": []
+  },
+  "real_network_d3.html": {
+    "filename": "real_network_d3.html",
+    "exists": false,
+    "file_size": 0,
+    "d3_version": null,
+    "node_count": 0,
+    "edge_count": 0,
+    "has_sidebar": false,
+    "has_controls": false,
+    "has_zoom": false,
+    "has_tooltips": false,
+    "data_structure": {},
+    "css_features": [],
+    "js_features": []
+  },
+  "corrected_network_d3.html": {
+    "filename": "corrected_network_d3.html",
+    "exists": false,
+    "file_size": 0,
+    "d3_version": null,
+    "node_count": 0,
+    "edge_count": 0,
+    "has_sidebar": false,
+    "has_controls": false,
+    "has_zoom": false,
+    "has_tooltips": false,
+    "data_structure": {},
+    "css_features": [],
+    "js_features": []
+  }
+}

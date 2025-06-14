@@ -1,0 +1,101 @@
+{
+  "test_suite_config": {
+    "name": "Phase 1.1.1 Visualization Analysis",
+    "version": "1.0.0",
+    "description": "Comprehensive test suite for analyzing existing D3.js network visualizations"
+  },
+  "files_to_test": [
+    {
+      "name": "Basic Network",
+      "filename": "network_d3.html",
+      "description": "Simple proof-of-concept visualization",
+      "expected_score_range": [3, 6],
+      "critical_features": ["force_simulation", "hover_tooltips", "drag_nodes"]
+    },
+    {
+      "name": "Enhanced Network",
+      "filename": "real_network_d3.html", 
+      "description": "Enhanced version with controls and modern UI",
+      "expected_score_range": [6, 8],
+      "critical_features": ["force_simulation", "sidebar_controls", "zoom_pan", "modern_styling"]
+    },
+    {
+      "name": "Corrected Network",
+      "filename": "corrected_network_d3.html",
+      "description": "Production-ready with corrected data and full features",
+      "expected_score_range": [8, 10],
+      "critical_features": ["force_simulation", "sidebar_controls", "zoom_pan", "edge_labels", "statistics_panel", "connection_highlighting"]
+    }
+  ],
+  "test_categories": {
+    "ui_ux": {
+      "weight": 0.25,
+      "description": "User interface and user experience quality",
+      "criteria": [
+        "Visual appeal and modern design",
+        "Layout and spacing",
+        "Color scheme and typography",
+        "Responsiveness",
+        "Accessibility"
+      ]
+    },
+    "functionality": {
+      "weight": 0.30,
+      "description": "Core functionality and features",
+      "criteria": [
+        "Force simulation works correctly",
+        "All interactive elements function",
+        "Data visualization is accurate",
+        "No JavaScript errors",
+        "Cross-browser compatibility"
+      ]
+    },
+    "performance": {
+      "weight": 0.20,
+      "description": "Performance and responsiveness",
+      "criteria": [
+        "Fast initial load",
+        "Smooth animations",
+        "Responsive interactions",
+        "Memory usage",
+        "Frame rate"
+      ]
+    },
+    "data_visualization": {
+      "weight": 0.25,
+      "description": "Quality of data representation",
+      "criteria": [
+        "Clear node representation",
+        "Meaningful edge weights",
+        "Effective use of color",
+        "Readable labels",
+        "Information density"
+      ]
+    }
+  },
+  "scoring": {
+    "scale": {
+      "1-2": "Poor - Major issues, not functional",
+      "3-4": "Below Average - Works but has significant problems",
+      "5-6": "Average - Functional with minor issues",
+      "7-8": "Good - Works well with few issues", 
+      "9-10": "Excellent - High quality, production-ready"
+    },
+    "pass_threshold": 7,
+    "excellence_threshold": 9
+  },
+  "test_execution": {
+    "auto_open_browser": true,
+    "test_duration_seconds": 30,
+    "detailed_analysis": true,
+    "save_screenshots": false,
+    "include_performance_metrics": false
+  },
+  "output": {
+    "generate_json_report": true,
+    "generate_text_report": true,
+    "generate_html_report": false,
+    "include_recommendations": true,
+    "include_detailed_analysis": true
+  }
+}

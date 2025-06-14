@@ -219,8 +219,8 @@ class LastfmAPI:
             'ARTMS': ['ARTMS (아르테미스)', '아르테미스'],
             'ILLIT': ['ILLIT (아일릿)', '아일릿'],
             
-            # K-pop soloists
-            'ANYUJIN': ['An Yujin', 'ANYUJIN (IVE)', 'Ahn Yujin', 'Ahn Yu-jin'],
+            # K-pop soloists  
+            'ANYUJIN': ['AnYujin', 'Ahn Yujin', 'An Yujin', '안유진', 'ANYUJIN (IVE)'],
             'JEON SOMI': ['SOMI', 'Somi'],
             'KISS OF LIFE': ['KOL', 'Kiss Of Life'],
             'SUNMI': ['Lee Sun-mi', 'SUNMI (선미)', '선미'],
@@ -583,10 +583,11 @@ class LastfmAPI:
                 if similar_mbid:
                     similar = similar_mbid
             
-            # Score based on: has_similar_artists (MASSIVE boost) + listener_count
-            # We HEAVILY prioritize having similar artists data over raw popularity
-            # Use a boost so large that even tiny collaborations beat huge solo artists
-            score = (1000000000 if similar else 0) + listeners
+            # Score based on: listener_count (PRIMARY) + bonus for similar artists
+            # Accept that Last.fm has multiple profiles and use the one that works for similarity
+            # The 'IVE (아이브)' profile (3K listeners) is functional even if not the "main" profile
+            similarity_bonus = len(similar) * 1000 if similar else 0
+            score = listeners + similarity_bonus
             
             if score > best_score:
                 best_score = score

@@ -1,0 +1,30 @@
+{
+  "total_test_cases": 10,
+  "passed": 10,
+  "failed": 0,
+  "api_performance": {
+    "lastfm": {
+      "total_connections": 290,
+      "artists_with_data": 10
+    },
+    "deezer": {
+      "total_connections": 300,
+      "artists_with_data": 10
+    },
+    "musicbrainz": {
+      "total_connections": 213,
+      "artists_with_data": 10
+    }
+  },
+  "edge_weighting_stats": {
+    "total_edges": 88,
+    "factual_edges": 29,
+    "avg_similarity": 0.9630681818181821,
+    "avg_confidence": 0.9247159090909091,
+    "fusion_methods": {
+      "algorithmic_weighted": 59,
+      "factual_primary": 29
+    }
+  },
+  "issues_found": []
+}
