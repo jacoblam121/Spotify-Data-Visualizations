@@ -27,6 +27,7 @@ import shutil # Added for directory operations
 import matplotlib.patheffects as path_effects # For text outlining
 import matplotlib.patches as patches # For the text background rectangle
 import matplotlib.font_manager as fm  # Needed for precise text width measurement
+import argparse # Added for command line argument parsing
 from text_utils import truncate_to_fit  # Helper for dynamic truncation
 
 # Import the config loader
@@ -34,6 +35,7 @@ from config_loader import AppConfig
 
 # --- Configuration (will be loaded from file) ---
 config = None # Global config object
+args = None # Global CLI arguments object
 VISUALIZATION_MODE = "tracks" # Default mode - will be loaded from config
 
 # --- Default values that might be overridden by config ---
@@ -232,6 +234,7 @@ def load_configuration():
     global MAX_PARALLEL_WORKERS, CLEANUP_INTERMEDIATE_FRAMES, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
     global LOG_PARALLEL_PROCESS_START_CONFIG, ANIMATION_TRANSITION_DURATION_SECONDS
     global ENABLE_OVERTAKE_ANIMATIONS_CONFIG, SONG_TEXT_RIGHT_GAP_FRACTION
+    global FORCE_PARALLEL_WORKERS, MEMORY_DEBUG_CONFIG, SERIAL_MODE_CONFIG, MAX_TASKS_PER_CHILD
     # Rolling Stats Display Globals
     global ROLLING_PANEL_AREA_LEFT_FIG, ROLLING_PANEL_AREA_RIGHT_FIG, ROLLING_PANEL_TITLE_Y_FROM_TOP_FIG
     global ROLLING_TITLE_TO_CONTENT_GAP_FIG, ROLLING_TITLE_FONT_SIZE, ROLLING_SONG_ARTIST_FONT_SIZE
@@ -303,6 +306,13 @@ def load_configuration():
         MAX_PARALLEL_WORKERS = workers_from_config
         
     CLEANUP_INTERMEDIATE_FRAMES = config.get_bool('AnimationOutput', 'CLEANUP_INTERMEDIATE_FRAMES', True)
+    
+    # New configuration options for enhanced parallel processing control
+    FORCE_PARALLEL_WORKERS = config.get_int('AnimationOutput', 'FORCE_PARALLEL_WORKERS', 0)
+    MEMORY_DEBUG_CONFIG = config.get_bool('AnimationOutput', 'MEMORY_DEBUG', False)
+    SERIAL_MODE_CONFIG = config.get_bool('AnimationOutput', 'SERIAL_MODE', False)
+    MAX_TASKS_PER_CHILD = config.get_int('AnimationOutput', 'MAX_TASKS_PER_CHILD', 100)
+    
     PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = config.get_int('Debugging', 'PARALLEL_LOG_COMPLETION_INTERVAL', 50)
     LOG_PARALLEL_PROCESS_START_CONFIG = config.get_bool('Debugging', 'LOG_PARALLEL_PROCESS_START', True)
 
@@ -881,7 +891,9 @@ def draw_and_save_single_frame(args):
     # New args for main timestamp position
     main_timestamp_x_fig_config, main_timestamp_y_fig_config,
     # Mode information
-    visualization_mode_local
+    visualization_mode_local,
+    # Debug flags
+    memory_debug_local
     ) = args
 
     # Extract data from render_task
@@ -891,13 +903,32 @@ def draw_and_save_single_frame(args):
     rolling_window_info_for_frame = render_task.get('rolling_window_info', {'top_7_day': None, 'top_30_day': None})
     nightingale_info_for_frame = render_task.get('nightingale_info', {})
 
-    # Each process needs to set its font family if it's not inherited
+    # Each process needs to ensure matplotlib backend and font family are set correctly
     try:
+        # Ensure Agg backend is set in worker process (critical for multiprocessing)
+        import matplotlib
+        current_backend = matplotlib.get_backend()
+        if current_backend != 'Agg':
+            matplotlib.use('Agg')
+            print(f"[Worker PID: {os.getpid()}] Set matplotlib backend to Agg (was {current_backend})")
+        
         plt.rcParams['font.family'] = preferred_fonts_local
-    except Exception as e_font:
-        print(f"[Worker PID: {os.getpid()}] Warning: Could not set preferred fonts: {e_font}")
+    except Exception as e_setup:
+        print(f"[Worker PID: {os.getpid()}] Warning: Worker setup error: {e_setup}")
 
     frame_start_time = time.monotonic()
+    
+    # Memory monitoring for debugging worker process issues
+    try:
+        import psutil
+        process = psutil.Process(os.getpid())
+        mem_before_mb = process.memory_info().rss / 1024**2
+        if memory_debug_local:  # Only log if memory debug is enabled
+            print(f"[Worker PID: {os.getpid()}] Frame {overall_frame_idx} starting. Memory: {mem_before_mb:.1f} MB")
+    except ImportError:
+        mem_before_mb = None  # psutil not available
+    except Exception:
+        mem_before_mb = None  # Other error
     
     figsize_w = fig_width_pixels / dpi
     figsize_h = fig_height_pixels / dpi
@@ -1398,16 +1429,60 @@ def draw_and_save_single_frame(args):
         fig.savefig(output_image_path)
 
     except Exception as e:
-        print(f"Error in draw_and_save_single_frame (PID: {os.getpid()}, Frame Img Idx: {overall_frame_idx}): {e}")
+        import traceback
+        pid = os.getpid()
+        error_log_path = f"error_worker_pid_{pid}_frame_{overall_frame_idx}.log"
+        
+        # Print to console for immediate visibility
+        print(f"ERROR in draw_and_save_single_frame (PID: {pid}, Frame: {overall_frame_idx}): {e}")
+        print(f"Full traceback written to: {error_log_path}")
+        
+        # Write detailed error log to file
+        try:
+            with open(error_log_path, "w", encoding='utf-8') as f:
+                f.write(f"Worker Process Error Report\n")
+                f.write(f"========================\n")
+                f.write(f"PID: {pid}\n")
+                f.write(f"Frame Index: {overall_frame_idx}\n")
+                f.write(f"Output Path: {output_image_path}\n")
+                f.write(f"Error: {e}\n")
+                f.write(f"Error Type: {type(e).__name__}\n")
+                f.write(f"\nFull Traceback:\n")
+                traceback.print_exc(file=f)
+                f.write(f"\nPython Version: {sys.version}\n")
+                f.write(f"Matplotlib Version: {matplotlib.__version__}\n")
+        except Exception as log_error:
+            print(f"Failed to write error log: {log_error}")
+        
+        # Re-raise the exception so it's caught by the ProcessPoolExecutor
+        raise
     finally:
+        # Critical: Close the specific figure and clear all matplotlib state
         plt.close(fig)
+        # Additional safety: Clear any remaining matplotlib figures and state
+        plt.close('all')
+        # Force garbage collection to release memory immediately  
+        import gc
+        gc.collect()
 
     current_frame_render_time = time.monotonic() - frame_start_time
+    
+    # Memory monitoring - log memory usage after cleanup
+    if mem_before_mb is not None and memory_debug_local:
+        try:
+            import psutil
+            process = psutil.Process(os.getpid())
+            mem_after_mb = process.memory_info().rss / 1024**2
+            mem_delta = mem_after_mb - mem_before_mb
+            print(f"[Worker PID: {os.getpid()}] Frame {overall_frame_idx} completed. Memory: {mem_after_mb:.1f} MB (Δ{mem_delta:+.1f} MB)")
+        except Exception:
+            pass  # Ignore memory monitoring errors
+    
     # Return overall_frame_idx for logging in the main process
     return overall_frame_idx, current_frame_render_time, os.getpid()
 
 
-def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_data, nightingale_data=None): # race_df here is already potentially truncated
+def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_data, nightingale_data=None, use_serial_mode=False, max_workers_override=None, memory_debug=False): # race_df here is already potentially truncated
     if race_df is None or race_df.empty:
         print("Cannot create animation: race_df is empty or None.")
         return
@@ -1537,6 +1612,14 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
                 print(f"Error removing temporary frame directory {temp_frame_dir} after no render tasks: {e}")
         return
 
+    # Apply frame limit AFTER transitions are calculated
+    original_task_count = len(all_render_tasks)
+    if MAX_FRAMES_FOR_TEST_RENDER > 0 and MAX_FRAMES_FOR_TEST_RENDER < len(all_render_tasks):
+        print(f"📊 FRAME LIMITING: Taking first {MAX_FRAMES_FOR_TEST_RENDER} frames from {original_task_count} total frames (including transitions)")
+        all_render_tasks = all_render_tasks[:MAX_FRAMES_FOR_TEST_RENDER]
+    elif MAX_FRAMES_FOR_TEST_RENDER > 0:
+        print(f"📊 FRAME LIMITING: MAX_FRAMES_FOR_TEST_RENDER ({MAX_FRAMES_FOR_TEST_RENDER}) >= total frames ({original_task_count}), rendering all frames")
+
     num_total_output_frames = len(all_render_tasks)
     print(f"Total output frames to render (including transitions): {num_total_output_frames}")
 
@@ -1579,40 +1662,122 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
             ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX,
             MAIN_TIMESTAMP_X_FIG, MAIN_TIMESTAMP_Y_FIG,
             # Mode information
-            VISUALIZATION_MODE
+            VISUALIZATION_MODE,
+            # Debug flags
+            memory_debug
         ))
 
+    # Determine the number of workers to use with intelligent scaling for memory-intensive tasks
+    actual_max_workers = MAX_PARALLEL_WORKERS
+    if max_workers_override is not None:
+        actual_max_workers = max_workers_override
+    
+    # Fix ProcessPoolExecutor initialization - never pass 0 directly
+    if actual_max_workers <= 0:
+        actual_max_workers = os.cpu_count() or 1
+    
+    # Intelligent worker count reduction for memory-intensive matplotlib tasks
+    # Each worker will handle multiple high-resolution frames with complex plotting
+    total_frames = len(tasks_args)
+    avg_frames_per_worker = total_frames / actual_max_workers if actual_max_workers > 0 else 1
+    
+    # Apply memory-aware scaling: reduce workers for large workloads
+    # But skip this if user explicitly forced a worker count
+    is_forced_workers = (max_workers_override is not None and max_workers_override > 0) or FORCE_PARALLEL_WORKERS > 0
+    
+    if not is_forced_workers and total_frames > 100 and avg_frames_per_worker > 10:
+        # For large renders (>100 frames), limit workers to prevent memory exhaustion
+        recommended_workers = min(actual_max_workers, max(1, (os.cpu_count() or 4) // 2))
+        if actual_max_workers > recommended_workers:
+            print(f"🧠 MEMORY OPTIMIZATION: Reducing workers from {actual_max_workers} to {recommended_workers}")
+            print(f"   Reason: Large workload ({total_frames} frames, ~{avg_frames_per_worker:.1f} frames/worker)")
+            print(f"   This prevents memory exhaustion and worker process crashes")
+            print(f"   💡 Override with FORCE_PARALLEL_WORKERS={actual_max_workers} in config or --workers {actual_max_workers}")
+            actual_max_workers = recommended_workers
+    elif is_forced_workers and total_frames > 100 and avg_frames_per_worker > 10:
+        print(f"⚠️  FORCED WORKERS: Using {actual_max_workers} workers for large workload ({total_frames} frames)")
+        print(f"   Each worker will handle ~{avg_frames_per_worker:.1f} frames - monitor memory usage!")
+    
     completed_frames = 0
     reported_pids = set()
-    with concurrent.futures.ProcessPoolExecutor(max_workers=MAX_PARALLEL_WORKERS) as executor:
-        futures = [executor.submit(draw_and_save_single_frame, arg_tuple) for arg_tuple in tasks_args]
-        for future in concurrent.futures.as_completed(futures):
+    
+    if use_serial_mode:
+        print("--- SERIAL MODE: Processing frames sequentially for debugging ---")
+        for i, arg_tuple in enumerate(tasks_args):
             try:
-                frame_idx, render_time, pid = future.result()
-
-                # Log a startup message for each worker process exactly once
-                if LOG_PARALLEL_PROCESS_START_CONFIG:
-                    if pid not in reported_pids:
-                        print(f"--- Worker process with PID {pid} has started and is processing frames. ---")
-                        reported_pids.add(pid)
-
+                frame_idx, render_time, pid = draw_and_save_single_frame(arg_tuple)
                 frame_render_times_list.append(render_time)
                 completed_frames += 1
                 
-                # Updated logging condition for frame completion
-                should_log_completion = False
-                if PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG > 0:
-                    if completed_frames == 1 or completed_frames == num_total_output_frames or \
-                       (completed_frames % PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0):
-                        should_log_completion = True
-                elif PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0: # Log only first and last if interval is 0
-                    if completed_frames == 1 or completed_frames == num_total_output_frames:
-                        should_log_completion = True
-
-                if should_log_completion:
-                    print(f"Frame {frame_idx + 1}/{num_total_output_frames} completed by PID {pid} in {render_time:.2f}s. ({completed_frames}/{num_total_output_frames} total done)")
+                # Log progress in serial mode too
+                if completed_frames == 1 or completed_frames == num_total_output_frames or \
+                   (PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG > 0 and completed_frames % PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0):
+                    print(f"Frame {frame_idx + 1}/{num_total_output_frames} completed in {render_time:.2f}s. ({completed_frames}/{num_total_output_frames} total done)")
             except Exception as exc:
-                print(f'Frame generation failed: {exc}') # Handle error from worker
+                print(f'SERIAL MODE - Frame generation failed on frame {i}: {exc}')
+                raise  # Re-raise to stop execution and see the full traceback
+    else:
+        print(f"--- PARALLEL MODE: Using {actual_max_workers} worker processes ---")
+        
+        # Set multiprocessing start method for better compatibility
+        import multiprocessing
+        original_start_method = multiprocessing.get_start_method()
+        
+        # Note: 'spawn' is safer but doesn't inherit globals, 'fork' inherits globals but has matplotlib risks
+        # For now, we'll use 'fork' since the code relies heavily on global variables
+        # We already have matplotlib.use('Agg') which mitigates most fork issues
+        if original_start_method == 'spawn':
+            try:
+                multiprocessing.set_start_method('fork', force=True)
+                print(f"Set multiprocessing start method to 'fork' (was '{original_start_method}') to inherit globals")
+            except (RuntimeError, OSError) as e:
+                print(f"Could not set start method to 'fork': {e}. Using '{original_start_method}'")
+                print("WARNING: 'spawn' method may cause issues with global variables")
+        else:
+            print(f"Using multiprocessing start method: '{original_start_method}'")
+        
+        # Use multiprocessing.Pool with maxtasksperchild for better memory management
+        import multiprocessing as mp
+        
+        # Configure pool parameters
+        pool_kwargs = {'processes': actual_max_workers}
+        if MAX_TASKS_PER_CHILD > 0:
+            pool_kwargs['maxtasksperchild'] = MAX_TASKS_PER_CHILD
+            print(f"🔄 Worker recycling enabled: workers restart after {MAX_TASKS_PER_CHILD} tasks")
+        
+        with mp.Pool(**pool_kwargs) as pool:
+            # Use imap_unordered for better performance (results come back as completed)
+            results = pool.imap_unordered(draw_and_save_single_frame, tasks_args, chunksize=1)
+            
+            for result in results:
+                try:
+                    frame_idx, render_time, pid = result
+
+                    # Log a startup message for each worker process exactly once
+                    if LOG_PARALLEL_PROCESS_START_CONFIG:
+                        if pid not in reported_pids:
+                            print(f"--- Worker process with PID {pid} has started and is processing frames. ---")
+                            reported_pids.add(pid)
+
+                    frame_render_times_list.append(render_time)
+                    completed_frames += 1
+                    
+                    # Updated logging condition for frame completion
+                    should_log_completion = False
+                    if PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG > 0:
+                        if completed_frames == 1 or completed_frames == num_total_output_frames or \
+                           (completed_frames % PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0):
+                            should_log_completion = True
+                    elif PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0: # Log only first and last if interval is 0
+                        if completed_frames == 1 or completed_frames == num_total_output_frames:
+                            should_log_completion = True
+
+                    if should_log_completion:
+                        print(f"Frame {frame_idx + 1}/{num_total_output_frames} completed by PID {pid} in {render_time:.2f}s. ({completed_frames}/{num_total_output_frames} total done)")
+                except Exception as exc:
+                    print(f'PARALLEL MODE - Frame generation failed: {exc}')
+                    print(f'Check error_worker_pid_*.log files for detailed traceback')
+                    # Continue processing other frames
     
     overall_drawing_end_time = time.time()
     total_frame_rendering_cpu_time = sum(frame_render_times_list)
@@ -1856,8 +2021,43 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
     # The original ani.save() and writer logic is now replaced by direct ffmpeg call.
 
 def main():
+    global args
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Generate animated bar chart race from Spotify/Last.fm data')
+    parser.add_argument('--serial', action='store_true', 
+                        help='Use serial processing instead of parallel (for debugging)')
+    parser.add_argument('--workers', type=int, 
+                        help='Override MAX_PARALLEL_WORKERS setting (0 = use all cores)')
+    parser.add_argument('--memory-debug', action='store_true',
+                        help='Enable detailed memory monitoring in worker processes')
+    args = parser.parse_args()
+    
     load_configuration() # Load config first, sets up MAX_FRAMES_FOR_TEST_RENDER
     setup_fonts() # Setup fonts after config is loaded but before any matplotlib operations
+    
+    # Print diagnostic information
+    if args.serial:
+        print(f"🐛 DEBUG MODE: Serial processing enabled (--serial flag)")
+    if args.workers is not None:
+        print(f"⚙️  Worker override: {args.workers} workers (--workers flag)")
+    if args.memory_debug:
+        print(f"🔍 Memory debugging enabled (--memory-debug flag)")
+    
+    print(f"🐍 Python: {sys.version}")
+    print(f"📊 Matplotlib: {matplotlib.__version__}")
+    import multiprocessing
+    print(f"🔧 Multiprocessing start method: {multiprocessing.get_start_method()}")
+    print(f"💻 CPU cores available: {os.cpu_count()}")
+    print(f"⚙️  MAX_PARALLEL_WORKERS (from config): {MAX_PARALLEL_WORKERS}")
+    
+    # Check for psutil for memory monitoring
+    try:
+        import psutil
+        total_mem_gb = psutil.virtual_memory().total / 1024**3
+        print(f"💾 Total system memory: {total_mem_gb:.1f} GB")
+    except ImportError:
+        if args.memory_debug:
+            print("⚠️  psutil not available - memory monitoring disabled")
 
     # Check for PYTHONIOENCODING_WARNING from config
     if config.get_bool('General', 'PYTHONIOENCODING_WARNING', True):
@@ -2045,7 +2245,14 @@ def main():
 
         # Now, call create_bar_chart_race_animation with the potentially truncated and/or aggregated race_df_for_animation
         # The pre_fetch logic is inside create_bar_chart_race_animation, so it will use the df passed to it.
-        create_bar_chart_race_animation(race_df_for_animation, entity_details_map, rolling_stats, nightingale_data) # Pass nightingale_data
+        # Merge CLI args with config settings (CLI takes precedence)
+        use_serial_mode = args.serial or SERIAL_MODE_CONFIG
+        max_workers_override = args.workers if args.workers is not None else (FORCE_PARALLEL_WORKERS if FORCE_PARALLEL_WORKERS > 0 else None)
+        memory_debug = args.memory_debug or MEMORY_DEBUG_CONFIG
+        
+        create_bar_chart_race_animation(race_df_for_animation, entity_details_map, rolling_stats, nightingale_data, 
+                                        use_serial_mode=use_serial_mode, max_workers_override=max_workers_override, 
+                                        memory_debug=memory_debug) # Pass nightingale_data and CLI args
         
         if len(modes_to_run) > 1:
             print(f"\n✓ Completed {current_mode.upper()} mode visualization")

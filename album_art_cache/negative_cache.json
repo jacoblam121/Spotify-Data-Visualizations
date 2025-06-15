@@ -2,5 +2,13 @@
   "spotify_search_bad habit_ed sheeran_subtract": {
     "timestamp": 1749772827.41949,
     "reason": "no_spotify_results_after_1_search_attempts"
+  },
+  "spotify_tracklookup_4YhITuwINLCfXYB2WCXbCZ": {
+    "timestamp": 1749951395.2672045,
+    "reason": "spotify_uri_album_has_no_images"
+  },
+  "spotify_tracklookup_0lMrWcrVXHPEuVBuc0nRzZ": {
+    "timestamp": 1749951401.7483706,
+    "reason": "spotify_uri_album_has_no_images"
   }
 }
