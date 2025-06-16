@@ -29,9 +29,14 @@ import matplotlib.patches as patches # For the text background rectangle
 import matplotlib.font_manager as fm  # Needed for precise text width measurement
 import argparse # Added for command line argument parsing
 from text_utils import truncate_to_fit  # Helper for dynamic truncation
+import dataclasses  # For RenderConfig manipulation
 
 # Import the config loader
 from config_loader import AppConfig
+
+# Import new parallel rendering system
+from render_config import RenderConfig
+from parallel_renderer import ParallelFrameRenderer
 
 # --- Configuration (will be loaded from file) ---
 config = None # Global config object
@@ -868,7 +873,9 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
     print(f"Generated {len(render_tasks)} total render tasks (frames).")
     return render_tasks
 
-def draw_and_save_single_frame(args):
+def draw_and_save_single_frame_OLD(args):
+    # DEPRECATED: This is the old implementation that relies on globals
+    # Kept for reference but no longer used
     # Unpack arguments
     # The first argument is now the 'render_task' dictionary
     global worker_pids_reported
@@ -1612,10 +1619,11 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
                 print(f"Error removing temporary frame directory {temp_frame_dir} after no render tasks: {e}")
         return
 
-    # Apply frame limit AFTER transitions are calculated
+    # Apply frame limit AFTER transitions are calculated (user's intended behavior)  
     original_task_count = len(all_render_tasks)
     if MAX_FRAMES_FOR_TEST_RENDER > 0 and MAX_FRAMES_FOR_TEST_RENDER < len(all_render_tasks):
         print(f"📊 FRAME LIMITING: Taking first {MAX_FRAMES_FOR_TEST_RENDER} frames from {original_task_count} total frames (including transitions)")
+        print(f"   ⚠️  NOTE: This may cut off the animation mid-transition for a test render")
         all_render_tasks = all_render_tasks[:MAX_FRAMES_FOR_TEST_RENDER]
     elif MAX_FRAMES_FOR_TEST_RENDER > 0:
         print(f"📊 FRAME LIMITING: MAX_FRAMES_FOR_TEST_RENDER ({MAX_FRAMES_FOR_TEST_RENDER}) >= total frames ({original_task_count}), rendering all frames")
@@ -1624,160 +1632,36 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
     print(f"Total output frames to render (including transitions): {num_total_output_frames}")
 
 
-    print(f"\n--- Starting Parallel Frame Generation ---")
+    print(f"\n--- Starting Parallel Frame Generation (NEW ARCHITECTURE) ---")
     print(f"Total output frames to render: {num_total_output_frames}")
-    print(f"Using up to {MAX_PARALLEL_WORKERS} worker processes.")
     
-    chart_xaxis_limit = raw_max_play_count_overall * 1.05 
-    # song_id_to_canonical_album_map is already song_id_to_animator_key_map, which is correct.
-
-    # Prepare arguments for each frame to be rendered by draw_and_save_single_frame
-    tasks_args = [] 
-    for task in all_render_tasks:
-        # task contains: "overall_frame_index", "display_timestamp", "bar_render_data_list", "is_keyframe_end_frame"
-        
-        frame_num_digits = len(str(num_total_output_frames -1)) if num_total_output_frames > 0 else 1
-        output_image_path = os.path.join(temp_frame_dir, f"frame_{task['overall_frame_index']:0{frame_num_digits}d}.png")
-
-        tasks_args.append((
-            task, # Pass the whole render task dictionary
-            num_total_output_frames, # Total frames for logging purposes in worker
-            entity_id_to_animator_key_map, # For art/color lookup (maps entity_id to canonical name)
-            entity_details_map, # The main map with display info
-            album_art_image_objects,          # Pre-fetched small art (bar chart)
-            album_art_image_objects_highres,  # Full-res art for rolling panel
-            album_bar_colors,                 # Pre-fetched colors
-            N_BARS,                      # For things like y-axis range, bar height aspect
-            chart_xaxis_limit,           # Overall scale for some relative calculations, not the dynamic x-lim for drawing
-            output_image_path,
-            dpi, fig_width_pixels, fig_height_pixels,
-            LOG_FRAME_TIMES_CONFIG, PREFERRED_FONTS, LOG_PARALLEL_PROCESS_START_CONFIG,
-            # Rolling stats display configs
-            ROLLING_PANEL_AREA_LEFT_FIG, ROLLING_PANEL_AREA_RIGHT_FIG, ROLLING_PANEL_TITLE_Y_FROM_TOP_FIG,
-            ROLLING_TITLE_TO_CONTENT_GAP_FIG, ROLLING_TITLE_FONT_SIZE, ROLLING_SONG_ARTIST_FONT_SIZE,
-            ROLLING_PLAYS_FONT_SIZE, ROLLING_ART_HEIGHT_FIG, ROLLING_ART_ASPECT_RATIO, ROLLING_ART_MAX_WIDTH_FIG,
-            ROLLING_ART_PADDING_RIGHT_FIG, ROLLING_TEXT_PADDING_LEFT_FIG, ROLLING_TEXT_TO_ART_HORIZONTAL_GAP_FIG,
-            ROLLING_TEXT_LINE_VERTICAL_SPACING_FIG, ROLLING_SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG, ROLLING_INTER_PANEL_VERTICAL_SPACING_FIG,
-            # New args for title X, truncation adjust, and main timestamp X, Y
-            ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX,
-            MAIN_TIMESTAMP_X_FIG, MAIN_TIMESTAMP_Y_FIG,
-            # Mode information
-            VISUALIZATION_MODE,
-            # Debug flags
-            memory_debug
-        ))
-
-    # Determine the number of workers to use with intelligent scaling for memory-intensive tasks
-    actual_max_workers = MAX_PARALLEL_WORKERS
+    # Create RenderConfig from current configuration
+    render_config = RenderConfig.from_config_object(config, args)
+    # Update temp_frame_dir in config
+    render_config = dataclasses.replace(render_config, temp_frame_dir=temp_frame_dir)
+    
+    # Override with command line arguments if provided
     if max_workers_override is not None:
-        actual_max_workers = max_workers_override
-    
-    # Fix ProcessPoolExecutor initialization - never pass 0 directly
-    if actual_max_workers <= 0:
-        actual_max_workers = os.cpu_count() or 1
-    
-    # Intelligent worker count reduction for memory-intensive matplotlib tasks
-    # Each worker will handle multiple high-resolution frames with complex plotting
-    total_frames = len(tasks_args)
-    avg_frames_per_worker = total_frames / actual_max_workers if actual_max_workers > 0 else 1
-    
-    # Apply memory-aware scaling: reduce workers for large workloads
-    # But skip this if user explicitly forced a worker count
-    is_forced_workers = (max_workers_override is not None and max_workers_override > 0) or FORCE_PARALLEL_WORKERS > 0
-    
-    if not is_forced_workers and total_frames > 100 and avg_frames_per_worker > 10:
-        # For large renders (>100 frames), limit workers to prevent memory exhaustion
-        recommended_workers = min(actual_max_workers, max(1, (os.cpu_count() or 4) // 2))
-        if actual_max_workers > recommended_workers:
-            print(f"🧠 MEMORY OPTIMIZATION: Reducing workers from {actual_max_workers} to {recommended_workers}")
-            print(f"   Reason: Large workload ({total_frames} frames, ~{avg_frames_per_worker:.1f} frames/worker)")
-            print(f"   This prevents memory exhaustion and worker process crashes")
-            print(f"   💡 Override with FORCE_PARALLEL_WORKERS={actual_max_workers} in config or --workers {actual_max_workers}")
-            actual_max_workers = recommended_workers
-    elif is_forced_workers and total_frames > 100 and avg_frames_per_worker > 10:
-        print(f"⚠️  FORCED WORKERS: Using {actual_max_workers} workers for large workload ({total_frames} frames)")
-        print(f"   Each worker will handle ~{avg_frames_per_worker:.1f} frames - monitor memory usage!")
-    
-    completed_frames = 0
-    reported_pids = set()
-    
+        render_config = dataclasses.replace(render_config, max_parallel_workers=max_workers_override)
     if use_serial_mode:
-        print("--- SERIAL MODE: Processing frames sequentially for debugging ---")
-        for i, arg_tuple in enumerate(tasks_args):
-            try:
-                frame_idx, render_time, pid = draw_and_save_single_frame(arg_tuple)
-                frame_render_times_list.append(render_time)
-                completed_frames += 1
-                
-                # Log progress in serial mode too
-                if completed_frames == 1 or completed_frames == num_total_output_frames or \
-                   (PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG > 0 and completed_frames % PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0):
-                    print(f"Frame {frame_idx + 1}/{num_total_output_frames} completed in {render_time:.2f}s. ({completed_frames}/{num_total_output_frames} total done)")
-            except Exception as exc:
-                print(f'SERIAL MODE - Frame generation failed on frame {i}: {exc}')
-                raise  # Re-raise to stop execution and see the full traceback
-    else:
-        print(f"--- PARALLEL MODE: Using {actual_max_workers} worker processes ---")
-        
-        # Set multiprocessing start method for better compatibility
-        import multiprocessing
-        original_start_method = multiprocessing.get_start_method()
-        
-        # Note: 'spawn' is safer but doesn't inherit globals, 'fork' inherits globals but has matplotlib risks
-        # For now, we'll use 'fork' since the code relies heavily on global variables
-        # We already have matplotlib.use('Agg') which mitigates most fork issues
-        if original_start_method == 'spawn':
-            try:
-                multiprocessing.set_start_method('fork', force=True)
-                print(f"Set multiprocessing start method to 'fork' (was '{original_start_method}') to inherit globals")
-            except (RuntimeError, OSError) as e:
-                print(f"Could not set start method to 'fork': {e}. Using '{original_start_method}'")
-                print("WARNING: 'spawn' method may cause issues with global variables")
-        else:
-            print(f"Using multiprocessing start method: '{original_start_method}'")
-        
-        # Use multiprocessing.Pool with maxtasksperchild for better memory management
-        import multiprocessing as mp
-        
-        # Configure pool parameters
-        pool_kwargs = {'processes': actual_max_workers}
-        if MAX_TASKS_PER_CHILD > 0:
-            pool_kwargs['maxtasksperchild'] = MAX_TASKS_PER_CHILD
-            print(f"🔄 Worker recycling enabled: workers restart after {MAX_TASKS_PER_CHILD} tasks")
-        
-        with mp.Pool(**pool_kwargs) as pool:
-            # Use imap_unordered for better performance (results come back as completed)
-            results = pool.imap_unordered(draw_and_save_single_frame, tasks_args, chunksize=1)
-            
-            for result in results:
-                try:
-                    frame_idx, render_time, pid = result
+        render_config = dataclasses.replace(render_config, serial_mode=True)
+    if memory_debug:
+        render_config = dataclasses.replace(render_config, memory_debug=True)
+    
+    # Create the parallel renderer
+    custom_font_dir = config.get('FontPreferences', 'CUSTOM_FONT_DIR', 'fonts')
+    renderer = ParallelFrameRenderer(render_config, custom_font_dir)
+    
+    # Render all frames
+    frame_render_times_list = renderer.render_frames(
+        render_tasks=all_render_tasks,
+        entity_id_to_canonical_name_map=entity_id_to_animator_key_map,
+        entity_details_map=entity_details_map,
+        album_art_image_objects=album_art_image_objects,
+        album_art_image_objects_highres=album_art_image_objects_highres,
+        album_bar_colors=album_bar_colors
+    )
 
-                    # Log a startup message for each worker process exactly once
-                    if LOG_PARALLEL_PROCESS_START_CONFIG:
-                        if pid not in reported_pids:
-                            print(f"--- Worker process with PID {pid} has started and is processing frames. ---")
-                            reported_pids.add(pid)
-
-                    frame_render_times_list.append(render_time)
-                    completed_frames += 1
-                    
-                    # Updated logging condition for frame completion
-                    should_log_completion = False
-                    if PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG > 0:
-                        if completed_frames == 1 or completed_frames == num_total_output_frames or \
-                           (completed_frames % PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0):
-                            should_log_completion = True
-                    elif PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0: # Log only first and last if interval is 0
-                        if completed_frames == 1 or completed_frames == num_total_output_frames:
-                            should_log_completion = True
-
-                    if should_log_completion:
-                        print(f"Frame {frame_idx + 1}/{num_total_output_frames} completed by PID {pid} in {render_time:.2f}s. ({completed_frames}/{num_total_output_frames} total done)")
-                except Exception as exc:
-                    print(f'PARALLEL MODE - Frame generation failed: {exc}')
-                    print(f'Check error_worker_pid_*.log files for detailed traceback')
-                    # Continue processing other frames
     
     overall_drawing_end_time = time.time()
     total_frame_rendering_cpu_time = sum(frame_render_times_list)
@@ -1793,6 +1677,34 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
     print(f"Output video: {output_filename}")
     print(f"Target FPS: {target_fps_for_video}")
 
+    # --- Pre-flight check: Verify frame files exist ---
+    frame_pattern = f"frame_%0{len(str(num_total_output_frames))}d.png"
+    expected_first_frame = os.path.join(temp_frame_dir, f"frame_{0:0{len(str(num_total_output_frames))}d}.png")
+    expected_last_frame = os.path.join(temp_frame_dir, f"frame_{num_total_output_frames-1:0{len(str(num_total_output_frames))}d}.png")
+    
+    print(f"🔍 PRE-FLIGHT CHECK: Verifying frame files...")
+    print(f"   Expected pattern: {frame_pattern}")
+    print(f"   First frame: {expected_first_frame}")
+    print(f"   Last frame: {expected_last_frame}")
+    
+    if not os.path.exists(expected_first_frame):
+        print(f"❌ CRITICAL ERROR: First frame missing: {expected_first_frame}")
+        print(f"   Temp directory contents:")
+        try:
+            temp_files = sorted(os.listdir(temp_frame_dir))[:10]  # Show first 10 files
+            for f in temp_files:
+                print(f"     {f}")
+            if len(os.listdir(temp_frame_dir)) > 10:
+                print(f"     ... and {len(os.listdir(temp_frame_dir)) - 10} more files")
+        except Exception as e:
+            print(f"     Error listing directory: {e}")
+        return  # Exit early to preserve files for debugging
+    
+    if not os.path.exists(expected_last_frame):
+        print(f"⚠️  WARNING: Last frame missing: {expected_last_frame}")
+    else:
+        print(f"✅ Frame files verified - first and last frames exist")
+
     # --- Define path for ffmpeg progress file ---
     progress_file_path = os.path.join(temp_frame_dir, "ffmpeg_progress.txt")
 
@@ -1804,7 +1716,7 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
     base_ffmpeg_args = [
         ffmpeg_executable,
         '-framerate', str(target_fps_for_video),
-        '-i', os.path.join(temp_frame_dir, f"frame_%0{len(str(num_total_output_frames))}d.png"), # Input pattern
+        '-i', os.path.join(temp_frame_dir, frame_pattern), # Input pattern
     ]
     
     common_ffmpeg_output_args = [
@@ -1885,6 +1797,9 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
         print(f"FFmpeg processing finished. Status: {'Completed' if process.returncode == 0 else f'Error (code {process.returncode})'}")
 
 
+    # Track FFmpeg success for cleanup decisions
+    ffmpeg_successful = False
+    
     if USE_NVENC_IF_AVAILABLE:
         print("Attempting to use NVENC (h264_nvenc) for hardware acceleration...")
         nvenc_args = ['-preset', 'p6', '-tune', 'hq', '-b:v', '0', '-cq', '23', '-rc-lookahead', '20']
@@ -1905,6 +1820,7 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
             if process_nvenc.returncode != 0:
                 raise subprocess.CalledProcessError(process_nvenc.returncode, ffmpeg_cmd_nvenc, output=stdout, stderr=stderr)
             print("Video successfully compiled using NVENC.")
+            ffmpeg_successful = True
             
         except PermissionError as e_perm:
             print(f"\nERROR: Permission denied when trying to execute FFmpeg: {e_perm}")
@@ -1939,6 +1855,7 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
                 if process_cpu_fallback.returncode != 0:
                     raise subprocess.CalledProcessError(process_cpu_fallback.returncode, ffmpeg_cmd_cpu_fallback, output=stdout_cpu, stderr=stderr_cpu)
                 print("Video successfully compiled using libx264 (CPU).")
+                ffmpeg_successful = True
             except subprocess.CalledProcessError as e_cpu_fallback:
                 print(f"\nERROR: ffmpeg (libx264 fallback) also failed. Return code: {e_cpu_fallback.returncode}")
                 if e_cpu_fallback.stdout: print(f"CPU STDOUT: {e_cpu_fallback.stdout.decode(errors='replace')}")
@@ -1968,6 +1885,7 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
             if process_cpu_direct.returncode != 0:
                 raise subprocess.CalledProcessError(process_cpu_direct.returncode, ffmpeg_cmd_cpu_direct, output=stdout, stderr=stderr)
             print("Video successfully compiled using libx264 (CPU).")
+            ffmpeg_successful = True
         except subprocess.CalledProcessError as e_cpu:
             print(f"\nERROR: ffmpeg (libx264) failed. Return code: {e_cpu.returncode}")
             if e_cpu.stdout: print(f"CPU STDOUT: {e_cpu.stdout.decode(errors='replace')}")
@@ -1977,21 +1895,26 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
             print("\nERROR: ffmpeg command not found. Please ensure ffmpeg is installed and in your system's PATH.")
     
     # --- Cleanup intermediate frames and progress file ---
-    if CLEANUP_INTERMEDIATE_FRAMES:
+    if CLEANUP_INTERMEDIATE_FRAMES and ffmpeg_successful:
         try:
             shutil.rmtree(temp_frame_dir)
             print(f"Successfully removed temporary frame directory: {temp_frame_dir}")
         except OSError as e:
             print(f"Error removing temporary frame directory {temp_frame_dir}: {e}")
+    elif not ffmpeg_successful:
+        print(f"🔍 DEBUGGING: FFmpeg failed - preserving frames for inspection at: {temp_frame_dir}")
+        print(f"   You can manually inspect the files and delete the directory when done.")
     else:
         print(f"Intermediate frames retained at: {temp_frame_dir}")
-        # Still try to clean up progress file if frames are kept
-        if os.path.exists(progress_file_path):
-            try:
-                os.remove(progress_file_path)
+        
+    # Clean up progress file regardless (it's not useful for debugging)
+    if os.path.exists(progress_file_path):
+        try:
+            os.remove(progress_file_path)
+            if ffmpeg_successful:
                 print(f"Successfully removed progress file: {progress_file_path}")
-            except OSError as e:
-                print(f"Error removing progress file {progress_file_path}: {e}")
+        except OSError as e:
+            print(f"Error removing progress file {progress_file_path}: {e}")
 
 
     # --- Frame Timing Summary (simplified for parallel generation) ---
@@ -2172,13 +2095,8 @@ def main():
         else:
             print("\n--- Using event-based frames (no aggregation selected or DataFrame was empty) ---")
         
-        # Use MAX_FRAMES_FOR_TEST_RENDER from config
-        # MAX_FRAMES_FOR_TEST_RENDER is already a global variable updated by load_configuration()
-        if MAX_FRAMES_FOR_TEST_RENDER > 0 and MAX_FRAMES_FOR_TEST_RENDER < len(race_df_for_animation): # Use len(race_df_for_animation)
-            print(f"WARNING: Using a SUBSET of data for animation (first {MAX_FRAMES_FOR_TEST_RENDER} frames of potentially aggregated data).")
-            race_df_for_animation = race_df_for_animation.head(MAX_FRAMES_FOR_TEST_RENDER)
-        elif MAX_FRAMES_FOR_TEST_RENDER > 0:
-             print(f"Note: MAX_FRAMES_FOR_TEST_RENDER ({MAX_FRAMES_FOR_TEST_RENDER}) is >= total frames ({len(race_df_for_animation)}). Rendering full video (or full aggregated video).")
+        # Note: MAX_FRAMES_FOR_TEST_RENDER is applied AFTER transition frames are generated
+        # in create_bar_chart_race_animation(), not here on the base data
         
         # --- Step 3: Calculate Rolling Window Stats ---
         if race_df_for_animation.empty:

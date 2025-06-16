@@ -26,7 +26,8 @@
       "Bash(cp:*)",
       "Bash(kill:*)",
       "Bash(jq:*)",
-      "mcp__gemini__codereview"
+      "mcp__gemini__codereview",
+      "Bash(source:*)"
     ],
     "deny": []
   }

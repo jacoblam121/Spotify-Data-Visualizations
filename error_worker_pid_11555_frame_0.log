@@ -1,0 +1,17 @@
+Worker Process Error Report
+========================
+PID: 11555
+Frame Index: 0
+Output Path: /home/jacob/Spotify-Data-Visualizations/temp_frames_spotify_top_songs_race/frame_000.png
+Error: name 'NIGHTINGALE_TITLE_FONT_SIZE' is not defined
+Error Type: NameError
+
+Full Traceback:
+Traceback (most recent call last):
+  File "/home/jacob/Spotify-Data-Visualizations/main_animator.py", line 1355, in draw_and_save_single_frame
+    'title_font_size': NIGHTINGALE_TITLE_FONT_SIZE,
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+NameError: name 'NIGHTINGALE_TITLE_FONT_SIZE' is not defined. Did you mean: 'NIGHTINGALE_LABEL_FONT_SIZE'?
+
+Python Version: 3.12.3 (main, Feb  4 2025, 14:48:35) [GCC 13.3.0]
+Matplotlib Version: 3.10.3

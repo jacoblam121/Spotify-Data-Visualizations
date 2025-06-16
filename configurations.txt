@@ -21,9 +21,9 @@ FILTER_SKIPPED_TRACKS = False
 # START_DATE: YYYY-MM-DD or "all_time"
 # 2024-01-01
 # 2024-12-31
-START_DATE = all_time
+START_DATE = 2024-01-01
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = all_time
+END_DATE = 2024-12-31
 
 # --- Visualization Mode ---
 [VisualizationMode]
@@ -43,7 +43,7 @@ N_BARS = 10
 TARGET_FPS = 30
 USE_NVENC_IF_AVAILABLE = True
 # MAX_FRAMES_FOR_TEST_RENDER: Max frames for a quick test render. Set to 0 or -1 for full render.
-MAX_FRAMES_FOR_TEST_RENDER = 0
+MAX_FRAMES_FOR_TEST_RENDER = 10
 # ANIMATION_TRANSITION_DURATION_SECONDS: Duration of the overtake animation in seconds.
 ANIMATION_TRANSITION_DURATION_SECONDS = 0.2
 # ENABLE_OVERTAKE_ANIMATIONS: Set to True to enable smooth overtake animations, False for static transitions.
@@ -53,7 +53,7 @@ ENABLE_OVERTAKE_ANIMATIONS = True
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), '12H' (12-hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = H
+FRAME_AGGREGATION_PERIOD = 12H
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
@@ -73,11 +73,11 @@ SERIAL_MODE = False
 # MAX_TASKS_PER_CHILD: Recycle worker processes after N tasks to prevent memory accumulation
 # Higher values = better performance, lower values = better memory safety
 # Set to 0 to disable recycling (not recommended for large workloads)
-MAX_TASKS_PER_CHILD = 100
+MAX_TASKS_PER_CHILD = 10
 
 # CLEANUP_INTERMEDIATE_FRAMES: Whether to delete individual frame images after video compilation.
 # Set to False for debugging frame generation.
-CLEANUP_INTERMEDIATE_FRAMES = True
+CLEANUP_INTERMEDIATE_FRAMES = False
 
 # --- Album Art & Artist Photos & Spotify API ---
 [AlbumArtSpotify]
@@ -121,7 +121,7 @@ DEBUG_ALBUM_ART_LOGIC_ANIMATOR = False
 LOG_FRAME_TIMES = True
 # PARALLEL_LOG_COMPLETION_INTERVAL: How often to log frame completion during parallel processing (e.g., 1 = every frame, 50 = every 50th frame).
 # Set to 0 to only log the first and last completed frame. First/last always logged if interval > 0.
-PARALLEL_LOG_COMPLETION_INTERVAL = 100
+PARALLEL_LOG_COMPLETION_INTERVAL = 0
 # LOG_PARALLEL_PROCESS_START: Whether to log a startup message for each parallel worker process (once per worker).
 LOG_PARALLEL_PROCESS_START = False
 

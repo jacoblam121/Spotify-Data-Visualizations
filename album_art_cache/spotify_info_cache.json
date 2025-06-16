@@ -2988,5 +2988,65 @@
     ],
     "album_type": "single",
     "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1TiZWEsxN85yLJBq56K8mG": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e649cde12610c45e05a10d44",
+    "canonical_album_name": "Like I Do",
+    "spotify_album_id": "4AT7V0zZ0B3xWDef7sPCyJ",
+    "spotify_artist_ids": [
+      "0VpMOC5IZU06u29fWjv3qJ"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_0Q5VnK2DYzRyfqQRJuUtvi": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739016f58cc49e6473e1207093",
+    "canonical_album_name": "LOVE DIVE",
+    "spotify_album_id": "1AFVTHHm7kKoQ6Rgb25x3p",
+    "spotify_artist_ids": [
+      "6RHTUrRF63xao58xh9FXYJ"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5Wll1i0Y8GGjyePcP83L3x": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273de5a12fc93022c4f7b8030b3",
+    "canonical_album_name": "IN:VITE U",
+    "spotify_album_id": "5vxZM8rFJiNvjtAThYnwek",
+    "spotify_artist_ids": [
+      "1wKpMkucynaTfG8lyPprYV"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_1yjY7rpaAQvKwpdUliHx0d": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273532033d0d90736f661c13d35",
+    "canonical_album_name": "Paramore",
+    "spotify_album_id": "4sgYpkIASM1jVlNC8Wp9oF",
+    "spotify_artist_ids": [
+      "74XFHRwlV6OrjEM0A2NCMF"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_5Q1tv4GTxP3IJeGMOKdrFO": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732bca95a658fdf653a35a3710",
+    "canonical_album_name": "ROCK-STAR",
+    "spotify_album_id": "0aJnGEZWIc1VCYlZOXv05a",
+    "spotify_artist_ids": [
+      "2dIgFjalVxs4ThymZ67YCE"
+    ],
+    "album_type": "album",
+    "source": "spotify (uri_lookup)"
+  },
+  "spotify_tracklookup_74X2u8JMVooG2QbjRxXwR8": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e352f6eccf8cb96d0b247cc",
+    "canonical_album_name": "Perfect Night",
+    "spotify_album_id": "6Msc3BwzKZ5f5FXmKuUSu6",
+    "spotify_artist_ids": [
+      "4SpbR6yFEvexJuaBpgAU5p"
+    ],
+    "album_type": "single",
+    "source": "spotify (uri_lookup)"
   }
 }
