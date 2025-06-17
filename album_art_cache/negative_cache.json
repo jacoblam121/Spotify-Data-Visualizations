@@ -6,5 +6,9 @@
   "neg_mb_album_nan": {
     "timestamp": 1750159228.8366072,
     "reason": "mb_http_error_400"
+  },
+  "spotify_search_alia_alive_alive": {
+    "timestamp": 1750196284.7673519,
+    "reason": "no_spotify_results_after_1_search_attempts"
   }
 }

@@ -65,6 +65,7 @@ LOG_PARALLEL_PROCESS_START_CONFIG = True # Default, will be loaded from config
 ANIMATION_TRANSITION_DURATION_SECONDS = 0.3 # Default, will be loaded from config
 ENABLE_OVERTAKE_ANIMATIONS_CONFIG = True # Default, will be loaded from config
 SONG_TEXT_RIGHT_GAP_FRACTION = 0.1  # Fraction of x-axis width to leave as a gap after song text
+BAR_TEXT_TRUNCATION_ADJUST_PX = 0  # Manual adjustment for bar chart text truncation
 
 # New debug and progress display options
 SHOW_WORKER_PROGRESS = False # Default, will be loaded from config
@@ -240,7 +241,7 @@ def load_configuration():
     global MAX_FRAMES_FOR_TEST_RENDER, LOG_FRAME_TIMES_CONFIG
     global MAX_PARALLEL_WORKERS, CLEANUP_INTERMEDIATE_FRAMES, USE_FRAME_SPEC_GENERATOR, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
     global LOG_PARALLEL_PROCESS_START_CONFIG, ANIMATION_TRANSITION_DURATION_SECONDS
-    global ENABLE_OVERTAKE_ANIMATIONS_CONFIG, SONG_TEXT_RIGHT_GAP_FRACTION
+    global ENABLE_OVERTAKE_ANIMATIONS_CONFIG, SONG_TEXT_RIGHT_GAP_FRACTION, BAR_TEXT_TRUNCATION_ADJUST_PX
     # Rolling Stats Display Globals
     global ROLLING_PANEL_AREA_LEFT_FIG, ROLLING_PANEL_AREA_RIGHT_FIG, ROLLING_PANEL_TITLE_Y_FROM_TOP_FIG
     global ROLLING_TITLE_TO_CONTENT_GAP_FIG, ROLLING_TITLE_FONT_SIZE, ROLLING_SONG_ARTIST_FONT_SIZE
@@ -298,6 +299,7 @@ def load_configuration():
     ENABLE_OVERTAKE_ANIMATIONS_CONFIG = config.get_bool('AnimationOutput', 'ENABLE_OVERTAKE_ANIMATIONS', ENABLE_OVERTAKE_ANIMATIONS_CONFIG)
     # Load from AlbumArtSpotify section where user has it in configurations.txt
     SONG_TEXT_RIGHT_GAP_FRACTION = config.get_float('AlbumArtSpotify', 'SONG_TEXT_RIGHT_GAP_FRACTION', SONG_TEXT_RIGHT_GAP_FRACTION)
+    BAR_TEXT_TRUNCATION_ADJUST_PX = config.get_int('AlbumArtSpotify', 'BAR_TEXT_TRUNCATION_ADJUST_PX', 0)
     
     # New config options for parallel processing
     # MAX_PARALLEL_WORKERS = config.get_int('AnimationOutput', 'MAX_PARALLEL_WORKERS', os.cpu_count() or 1) # Ensure at least 1
@@ -1177,6 +1179,9 @@ def draw_and_save_single_frame(args):
                 bbox_horizontal_padding_pixels = bbox_horizontal_padding_points * (dpi / 72.0)
                 
                 available_px -= bbox_horizontal_padding_pixels
+                
+                # Apply manual adjustment from configuration
+                available_px += BAR_TEXT_TRUNCATION_ADJUST_PX
 
             font_props = fm.FontProperties(size=song_name_fontsize)
             renderer = fig.canvas.get_renderer()
@@ -1786,6 +1791,7 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
         ROLLING_TEXT_LINE_VERTICAL_SPACING_FIG, ROLLING_SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG,
         ROLLING_INTER_PANEL_VERTICAL_SPACING_FIG, ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX,
         MAIN_TIMESTAMP_X_FIG, MAIN_TIMESTAMP_Y_FIG, VISUALIZATION_MODE,
+        SONG_TEXT_RIGHT_GAP_FRACTION, BAR_TEXT_TRUNCATION_ADJUST_PX,
         MAX_PARALLEL_WORKERS, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
     )
     

@@ -176,6 +176,17 @@ def capture_all_globals_plus_config():
             if isinstance(value, (str, int, float, bool, list, tuple, dict)):
                 relevant_globals[name] = value
     
+    # Debug: Check if our text truncation variables are captured (from introspection)
+    if 'SONG_TEXT_RIGHT_GAP_FRACTION' in relevant_globals:
+        print(f"DEBUG: SONG_TEXT_RIGHT_GAP_FRACTION captured from globals: {relevant_globals['SONG_TEXT_RIGHT_GAP_FRACTION']}")
+    else:
+        print("DEBUG: SONG_TEXT_RIGHT_GAP_FRACTION NOT captured from globals")
+    
+    if 'BAR_TEXT_TRUNCATION_ADJUST_PX' in relevant_globals:
+        print(f"DEBUG: BAR_TEXT_TRUNCATION_ADJUST_PX captured from globals: {relevant_globals['BAR_TEXT_TRUNCATION_ADJUST_PX']}")
+    else:
+        print("DEBUG: BAR_TEXT_TRUNCATION_ADJUST_PX NOT captured from globals")
+
     # CRITICAL: Add missing NIGHTINGALE configuration variables manually
     # These should be loaded from configuration but aren't captured by introspection
     missing_nightingale_vars = {
@@ -251,6 +262,7 @@ def render_frames_in_parallel(
     ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX,
     MAIN_TIMESTAMP_X_FIG, MAIN_TIMESTAMP_Y_FIG,
     VISUALIZATION_MODE,
+    SONG_TEXT_RIGHT_GAP_FRACTION, BAR_TEXT_TRUNCATION_ADJUST_PX,
     MAX_PARALLEL_WORKERS,
     PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
 ):
@@ -304,8 +316,14 @@ def render_frames_in_parallel(
         'ROLLING_TEXT_TRUNCATION_ADJUST_PX': ROLLING_TEXT_TRUNCATION_ADJUST_PX,
         'MAIN_TIMESTAMP_X_FIG': MAIN_TIMESTAMP_X_FIG,
         'MAIN_TIMESTAMP_Y_FIG': MAIN_TIMESTAMP_Y_FIG,
-        'VISUALIZATION_MODE': VISUALIZATION_MODE
+        'VISUALIZATION_MODE': VISUALIZATION_MODE,
+        'SONG_TEXT_RIGHT_GAP_FRACTION': SONG_TEXT_RIGHT_GAP_FRACTION,
+        'BAR_TEXT_TRUNCATION_ADJUST_PX': BAR_TEXT_TRUNCATION_ADJUST_PX
     })
+    
+    # Debug: Show final values that will be sent to workers
+    print(f"DEBUG: Final SONG_TEXT_RIGHT_GAP_FRACTION for workers: {enhanced_context['SONG_TEXT_RIGHT_GAP_FRACTION']}")
+    print(f"DEBUG: Final BAR_TEXT_TRUNCATION_ADJUST_PX for workers: {enhanced_context['BAR_TEXT_TRUNCATION_ADJUST_PX']}")
     
     debug_nightingale = enhanced_context.get('DEBUG_NIGHTINGALE_CONFIG', False)
     if debug_nightingale:

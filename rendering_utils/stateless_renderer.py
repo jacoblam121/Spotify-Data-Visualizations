@@ -44,6 +44,7 @@ class RenderConfig:
     
     # Text settings
     song_text_right_gap_fraction: float = 0.1
+    bar_text_truncation_adjust_px: int = 0
     max_char_len_song_name: int = 50
     
     # Font sizes (scaled by DPI)
@@ -239,6 +240,10 @@ def render_frame_from_spec(frame_spec: Dict[str, Any]) -> Dict[str, Any]:
         from matplotlib.offsetbox import OffsetImage, AnnotationBbox
         from PIL import Image
         import matplotlib.patheffects as path_effects
+        import matplotlib.font_manager as fm
+        
+        # Import text truncation utility
+        from text_utils import truncate_to_fit
         
         # Extract frame data
         frame_index = frame_spec.get('frame_index', 0)
@@ -343,7 +348,7 @@ def render_frame_from_spec(frame_spec: Dict[str, Any]) -> Dict[str, Any]:
             else:
                 end_x_data = interpolated_plays - value_label_padding_data_units - right_gap_units
             
-            # Calculate available text width
+            # Calculate available text width and truncate properly
             available_px = 0
             text_to_display = display_name
             
@@ -358,13 +363,14 @@ def render_frame_from_spec(frame_spec: Dict[str, Any]) -> Dict[str, Any]:
                 bbox_horizontal_padding_pixels = bbox_horizontal_padding_points * (WORKER_RENDER_CONFIG.dpi / 72.0)
                 available_px -= bbox_horizontal_padding_pixels
                 
-                # Simple text truncation (we'll implement proper truncation later)
+                # Apply manual adjustment from configuration
+                available_px += WORKER_RENDER_CONFIG.bar_text_truncation_adjust_px
+                
+                # Use proper text truncation with font metrics
                 if available_px > 0:
-                    # Rough estimate: assume 7 pixels per character at this font size
-                    estimated_char_width = song_name_fontsize * 0.6
-                    max_chars = int(available_px / estimated_char_width)
-                    if len(display_name) > max_chars > 3:
-                        text_to_display = display_name[:max_chars-3] + "..."
+                    font_props = fm.FontProperties(size=song_name_fontsize)
+                    renderer = fig.canvas.get_renderer()
+                    text_to_display = truncate_to_fit(display_name, font_props, renderer, max(0, available_px))
             
             # Draw song text
             song_text_obj = ax.text(
@@ -542,6 +548,10 @@ def create_render_config_from_app_config(app_config) -> RenderConfig:
         
         # Layout settings
         n_bars=app_config.get_int('AnimationOutput', 'N_BARS', 10),
+        
+        # Text settings
+        song_text_right_gap_fraction=app_config.get_float('AlbumArtSpotify', 'SONG_TEXT_RIGHT_GAP_FRACTION', 0.032),
+        bar_text_truncation_adjust_px=app_config.get_int('AlbumArtSpotify', 'BAR_TEXT_TRUNCATION_ADJUST_PX', 0),
         
         # Rolling stats settings (load from config)
         rs_panel_area_left_fig=app_config.get_float('RollingStatsDisplay', 'ROLLING_PANEL_AREA_LEFT_FIG', 0.03),

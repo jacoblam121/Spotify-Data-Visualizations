@@ -8,7 +8,7 @@ PYTHONIOENCODING_WARNING = True
 # --- Data Source ---
 [DataSource]
 # SOURCE: "lastfm" or "spotify"
-SOURCE = lastfm
+SOURCE = spotify
 INPUT_FILENAME_LASTFM = lastfm_data.csv
 # INPUT_FILENAME_SPOTIFY: Path to your Spotify JSON data (e.g., "StreamingHistory0.json")
 # Or use a pattern like "StreamingHistory*.json" if you have multiple files.
@@ -21,9 +21,9 @@ FILTER_SKIPPED_TRACKS = False
 # START_DATE: YYYY-MM-DD or "all_time"
 # 2024-01-01
 # 2024-12-31
-START_DATE = 2024-01-01
+START_DATE = all_time
 # END_DATE: YYYY-MM-DD or "all_time" (inclusive)
-END_DATE = 2024-12-31
+END_DATE = all_time
 
 # --- Visualization Mode ---
 [VisualizationMode]
@@ -31,7 +31,7 @@ END_DATE = 2024-12-31
 # tracks: Show top tracks over time with album covers
 # artists: Show top artists over time with artist profile photos  
 # both: Generate both track and artist visualizations (comprehensive mode for long renders)
-MODE = tracks
+MODE = both
 
 # --- Animation Output ---
 [AnimationOutput]
@@ -53,7 +53,7 @@ ENABLE_OVERTAKE_ANIMATIONS = False
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), '12H' (12-hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = H
+FRAME_AGGREGATION_PERIOD = W
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
@@ -85,6 +85,8 @@ ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR = 0.05
 NEGATIVE_CACHE_HOURS = 24
 # Text formatting
 SONG_TEXT_RIGHT_GAP_FRACTION = 0.032
+# Manual adjustment for bar chart text truncation (positive = more text, negative = less text)
+BAR_TEXT_TRUNCATION_ADJUST_PX = 0
 
 # --- Font Preferences ---
 [FontPreferences]
