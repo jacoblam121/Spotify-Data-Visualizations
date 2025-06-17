@@ -1,0 +1,12 @@
+{
+  "test_id": "artist_mode",
+  "data_load_time": 1.6327178478240967,
+  "race_prep_time": 72.9475450515747,
+  "rolling_time": 0.15842843055725098,
+  "nightingale_time": 0.026343584060668945,
+  "render_task_time": 0.0020782947540283203,
+  "frame_spec_time": 0.10221385955810547,
+  "total_frames": 21,
+  "json_size_bytes": 1719,
+  "frames_per_second": 205.45159033019527
+}

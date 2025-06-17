@@ -1,0 +1,12 @@
+{
+  "test_id": "large_frames",
+  "data_load_time": 1.7468669414520264,
+  "race_prep_time": 35.960105657577515,
+  "rolling_time": 0.3776226043701172,
+  "nightingale_time": 0.0881352424621582,
+  "render_task_time": 0.03084087371826172,
+  "frame_spec_time": 0.22990703582763672,
+  "total_frames": 491,
+  "json_size_bytes": 1669,
+  "frames_per_second": 2135.645819765633
+}

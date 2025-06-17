@@ -1,0 +1,12 @@
+{
+  "test_id": "aggregation",
+  "data_load_time": 1.6934270858764648,
+  "race_prep_time": 35.64776802062988,
+  "rolling_time": 0.28937506675720215,
+  "nightingale_time": 0.0365748405456543,
+  "render_task_time": 0.0068340301513671875,
+  "frame_spec_time": 0.18526887893676758,
+  "total_frames": 91,
+  "json_size_bytes": 1669,
+  "frames_per_second": 491.17801393432285
+}

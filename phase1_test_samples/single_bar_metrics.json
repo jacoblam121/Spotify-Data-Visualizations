@@ -1,0 +1,12 @@
+{
+  "test_id": "single_bar",
+  "data_load_time": 2.0625221729278564,
+  "race_prep_time": 33.64859580993652,
+  "rolling_time": 0.28272271156311035,
+  "nightingale_time": 0.025592565536499023,
+  "render_task_time": 0.0029249191284179688,
+  "frame_spec_time": 0.17751169204711914,
+  "total_frames": 21,
+  "json_size_bytes": 1669,
+  "frames_per_second": 118.30206651641689
+}

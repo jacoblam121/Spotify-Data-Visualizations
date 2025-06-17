@@ -25,7 +25,8 @@
       "mcp__gemini__debug",
       "Bash(cp:*)",
       "Bash(kill:*)",
-      "Bash(jq:*)"
+      "Bash(jq:*)",
+      "Bash(source:*)"
     ],
     "deny": []
   }

@@ -1,0 +1,12 @@
+{
+  "test_id": "no_nightingale",
+  "data_load_time": 1.7257354259490967,
+  "race_prep_time": 36.12835669517517,
+  "rolling_time": 0.2922971248626709,
+  "nightingale_time": 0,
+  "render_task_time": 0.002664327621459961,
+  "frame_spec_time": 0.17956137657165527,
+  "total_frames": 21,
+  "json_size_bytes": 932,
+  "frames_per_second": 116.95165408592085
+}

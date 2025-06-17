@@ -1,0 +1,87 @@
+{
+  "frame_index": 0,
+  "display_timestamp": "2023-10-23T15:58:45+00:00",
+  "bars": [
+    {
+      "entity_id": "ive - after like",
+      "canonical_key": "Unknown - Unknown",
+      "display_name": "Unknown Track - Unknown Artist",
+      "interpolated_y_pos": 0.0,
+      "interpolated_play_count": 1.0,
+      "bar_color": [
+        0.5,
+        0.5,
+        0.5,
+        1.0
+      ],
+      "is_new": false,
+      "current_rank": 0,
+      "entity_details": {
+        "name": "after like",
+        "track_uri": null,
+        "mbid": "2115801c-30ef-48bf-9074-3ccb5e097a0b",
+        "display_artist": "IVE",
+        "display_track": "After LIKE"
+      },
+      "bar_color_rgba": [
+        0.5,
+        0.5,
+        0.5,
+        1.0
+      ]
+    }
+  ],
+  "rolling_stats": {
+    "top_7_day": {
+      "song_id": "paramore - still into you",
+      "plays": 6,
+      "original_artist": "Paramore",
+      "original_track": "Still Into You"
+    },
+    "top_30_day": {
+      "song_id": "paramore - still into you",
+      "plays": 6,
+      "original_artist": "Paramore",
+      "original_track": "Still Into You"
+    }
+  },
+  "nightingale_data": {
+    "aggregation_type": "yearly",
+    "periods": [
+      {
+        "label": "2023",
+        "plays": 1,
+        "start_date": "2023-01-01T00:00:00+00:00",
+        "end_date": "2023-12-31T23:59:59.999999999+00:00",
+        "is_complete": false,
+        "angle_start": 0.0,
+        "angle_end": 6.28318,
+        "color": "#e74c3c"
+      }
+    ],
+    "high_period": {
+      "label": "2023",
+      "plays": 1,
+      "start_date": "2023-01-01T00:00:00+00:00",
+      "end_date": "2023-12-31T23:59:59.999999999+00:00",
+      "is_complete": false,
+      "angle_start": 0.0,
+      "angle_end": 6.28318,
+      "color": "#e74c3c"
+    },
+    "low_period": {
+      "label": "2023",
+      "plays": 1,
+      "start_date": "2023-01-01T00:00:00+00:00",
+      "end_date": "2023-12-31T23:59:59.999999999+00:00",
+      "is_complete": false,
+      "angle_start": 0,
+      "angle_end": 6.28318,
+      "color": "#e74c3c"
+    },
+    "total_periods": 3,
+    "visible_periods": 1
+  },
+  "dynamic_x_axis_limit": 11.0,
+  "visualization_mode": "tracks"
+}

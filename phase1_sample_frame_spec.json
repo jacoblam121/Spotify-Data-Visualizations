@@ -1,0 +1,89 @@
+{
+  "frame_index": 0,
+  "display_timestamp": "2017-03-03T06:14:24+00:00",
+  "bars": [
+    {
+      "entity_id": "imagine dragons",
+      "canonical_key": "Unknown",
+      "display_name": "Unknown Artist",
+      "interpolated_y_pos": 0.0,
+      "interpolated_play_count": 1.0,
+      "bar_color": [
+        0.5,
+        0.5,
+        0.5,
+        1.0
+      ],
+      "is_new": false,
+      "current_rank": 0,
+      "entity_details": {
+        "display_artist": "Imagine Dragons",
+        "normalized_artist": "imagine dragons",
+        "most_played_track": {
+          "track_name": "Walking The Wire",
+          "album_name": "evolve",
+          "track_uri": "spotify:track:1AJQ97yAt6xfeF7nQaE1t8"
+        },
+        "most_played_album": "evolve",
+        "most_played_track_uri": "spotify:track:1AJQ97yAt6xfeF7nQaE1t8"
+      },
+      "bar_color_rgba": [
+        0.5,
+        0.5,
+        0.5,
+        1.0
+      ]
+    }
+  ],
+  "rolling_stats": {
+    "top_7_day": {
+      "artist_id": "imagine dragons",
+      "plays": 12,
+      "original_artist": "Imagine Dragons"
+    },
+    "top_30_day": {
+      "artist_id": "imagine dragons",
+      "plays": 12,
+      "original_artist": "Imagine Dragons"
+    }
+  },
+  "nightingale_data": {
+    "aggregation_type": "yearly",
+    "periods": [
+      {
+        "label": "2017",
+        "plays": 1,
+        "start_date": "2017-01-01T00:00:00+00:00",
+        "end_date": "2017-12-31T23:59:59.999999999+00:00",
+        "is_complete": false,
+        "angle_start": 0.0,
+        "angle_end": 6.28318,
+        "color": "#e74c3c"
+      }
+    ],
+    "high_period": {
+      "label": "2017",
+      "plays": 1,
+      "start_date": "2017-01-01T00:00:00+00:00",
+      "end_date": "2017-12-31T23:59:59.999999999+00:00",
+      "is_complete": false,
+      "angle_start": 0.0,
+      "angle_end": 6.28318,
+      "color": "#e74c3c"
+    },
+    "low_period": {
+      "label": "2017",
+      "plays": 1,
+      "start_date": "2017-01-01T00:00:00+00:00",
+      "end_date": "2017-12-31T23:59:59.999999999+00:00",
+      "is_complete": false,
+      "angle_start": 0,
+      "angle_end": 6.28318,
+      "color": "#e74c3c"
+    },
+    "total_periods": 9,
+    "visible_periods": 1
+  },
+  "dynamic_x_axis_limit": 11.0,
+  "visualization_mode": "artists"
+}

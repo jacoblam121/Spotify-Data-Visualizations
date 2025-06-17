@@ -1,0 +1,51 @@
+{
+  "frame_index": 0,
+  "display_timestamp": "2017-03-03T06:14:24+00:00",
+  "bars": [
+    {
+      "entity_id": "imagine dragons - believer",
+      "canonical_key": "Unknown - Unknown",
+      "display_name": "Unknown Track - Unknown Artist",
+      "interpolated_y_pos": 0.0,
+      "interpolated_play_count": 1.0,
+      "bar_color": [
+        0.5,
+        0.5,
+        0.5,
+        1.0
+      ],
+      "is_new": false,
+      "current_rank": 0,
+      "entity_details": {
+        "name": "believer",
+        "track_uri": "spotify:track:05KfyCEE6otdlT1pp2VIjP",
+        "mbid": null,
+        "display_artist": "Imagine Dragons",
+        "display_track": "Believer"
+      },
+      "bar_color_rgba": [
+        0.5,
+        0.5,
+        0.5,
+        1.0
+      ]
+    }
+  ],
+  "rolling_stats": {
+    "top_7_day": {
+      "song_id": "imagine dragons - believer",
+      "plays": 2,
+      "original_artist": "Imagine Dragons",
+      "original_track": "Believer"
+    },
+    "top_30_day": {
+      "song_id": "imagine dragons - believer",
+      "plays": 2,
+      "original_artist": "Imagine Dragons",
+      "original_track": "Believer"
+    }
+  },
+  "nightingale_data": {},
+  "dynamic_x_axis_limit": 11.0,
+  "visualization_mode": "tracks"
+}

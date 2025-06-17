@@ -858,6 +858,137 @@ def generate_render_tasks(race_df_for_animation, n_bars_config, target_fps_confi
     print(f"Generated {len(render_tasks)} total render tasks (frames).")
     return render_tasks
 
+def make_json_serializable(obj):
+    """
+    Convert pandas/numpy types to JSON-serializable Python types.
+    """
+    import pandas as pd
+    import numpy as np
+    
+    if isinstance(obj, (pd.Timestamp, pd.DatetimeIndex)):
+        return obj.isoformat()
+    elif isinstance(obj, pd.Series):
+        return obj.to_dict()
+    elif isinstance(obj, np.integer):
+        return int(obj)
+    elif isinstance(obj, np.floating):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, dict):
+        return {k: make_json_serializable(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [make_json_serializable(v) for v in obj]
+    elif isinstance(obj, tuple):
+        return tuple(make_json_serializable(v) for v in obj)
+    else:
+        return obj
+
+
+def prepare_frame_spec(render_task, entity_id_to_canonical_name_map, entity_details_map,
+                       n_bars, dynamic_x_axis_limit, rolling_window_info, nightingale_info,
+                       visualization_mode):
+    """
+    Prepare all data needed for rendering a single frame.
+    Returns a dictionary containing only primitive/serializable data.
+    """
+    # Convert timestamp to string for JSON serialization
+    display_timestamp = render_task['display_timestamp']
+    if hasattr(display_timestamp, 'isoformat'):
+        display_timestamp_str = display_timestamp.isoformat()
+    else:
+        display_timestamp_str = str(display_timestamp)
+    
+    frame_spec = {
+        'frame_index': render_task['overall_frame_index'],
+        'display_timestamp': display_timestamp_str,
+        'bars': [],
+        'rolling_stats': make_json_serializable(rolling_window_info),
+        'nightingale_data': make_json_serializable(nightingale_info),
+        'dynamic_x_axis_limit': dynamic_x_axis_limit,
+        'visualization_mode': visualization_mode
+    }
+    
+    # Pre-process bar data
+    for bar_data in render_task['bar_render_data_list']:
+        entity_id = bar_data['entity_id']
+        canonical_key = entity_id_to_canonical_name_map.get(entity_id, entity_id)
+        entity_details = entity_details_map.get(entity_id, {})
+        
+        # Get display name based on mode
+        if visualization_mode == "artists":
+            display_name = entity_details.get('original_artist', 'Unknown Artist')
+        else:
+            artist_name = entity_details.get('original_artist', 'Unknown Artist')
+            track_name = entity_details.get('original_track', 'Unknown Track')
+            display_name = f"{track_name} - {artist_name}"
+        
+        bar_spec = {
+            'entity_id': entity_id,
+            'canonical_key': canonical_key,
+            'display_name': display_name,
+            'interpolated_y_pos': bar_data.get('interpolated_y_position', 0.0),
+            'interpolated_play_count': bar_data.get('interpolated_play_count', 0.0),
+            'bar_color': bar_data.get('bar_color', (0.5, 0.5, 0.5, 1.0)),
+            'is_new': bar_data.get('is_new', False),
+            'current_rank': bar_data.get('current_rank', -1),
+            'entity_details': entity_details
+        }
+        frame_spec['bars'].append(bar_spec)
+    
+    return frame_spec
+
+
+def prepare_all_frame_specs(all_render_tasks, entity_id_to_canonical_name_map, 
+                           entity_details_map, album_bar_colors, n_bars, 
+                           max_play_count_overall, visualization_mode):
+    """
+    Pre-compute all frame specifications for the entire animation.
+    This separates data preparation from rendering.
+    """
+    all_frame_specs = []
+    
+    for render_task in all_render_tasks:
+        # Calculate dynamic x-axis limit for this frame
+        current_frame_max_play_count = 0
+        if render_task['bar_render_data_list']:
+            visible_play_counts = [
+                item['interpolated_play_count'] 
+                for item in render_task['bar_render_data_list'] 
+                if item['interpolated_play_count'] > 0.1
+            ]
+            if visible_play_counts:
+                current_frame_max_play_count = max(visible_play_counts)
+        
+        dynamic_x_axis_limit = max(10, current_frame_max_play_count) * 1.10
+        
+        # Get rolling stats and nightingale data
+        rolling_window_info = render_task.get('rolling_window_info', {'top_7_day': None, 'top_30_day': None})
+        nightingale_info = render_task.get('nightingale_info', {})
+        
+        # Create frame spec
+        frame_spec = prepare_frame_spec(
+            render_task,
+            entity_id_to_canonical_name_map,
+            entity_details_map,
+            n_bars,
+            dynamic_x_axis_limit,
+            rolling_window_info,
+            nightingale_info,
+            visualization_mode
+        )
+        
+        # Add pre-fetched colors to frame spec
+        for bar in frame_spec['bars']:
+            canonical_key = bar['canonical_key']
+            if canonical_key in album_bar_colors:
+                bar['bar_color_rgba'] = album_bar_colors[canonical_key]
+        
+        all_frame_specs.append(frame_spec)
+    
+    return all_frame_specs
+
+
 def draw_and_save_single_frame(args):
     # Unpack arguments
     # The first argument is now the 'render_task' dictionary
@@ -1541,6 +1672,19 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
     print(f"Total output frames to render (including transitions): {num_total_output_frames}")
 
 
+    # --- NEW: Pre-compute all frame specifications ---
+    print(f"\n--- Pre-computing Frame Specifications ---")
+    all_frame_specs = prepare_all_frame_specs(
+        all_render_tasks,
+        entity_id_to_animator_key_map,
+        entity_details_map,
+        album_bar_colors,
+        N_BARS,
+        raw_max_play_count_overall,
+        VISUALIZATION_MODE
+    )
+    print(f"Pre-computed {len(all_frame_specs)} frame specifications")
+    
     print(f"\n--- Starting Parallel Frame Generation ---")
     print(f"Total output frames to render: {num_total_output_frames}")
     print(f"Using up to {MAX_PARALLEL_WORKERS} worker processes.")

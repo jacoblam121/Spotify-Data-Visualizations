@@ -1,0 +1,12 @@
+{
+  "test_id": "spotify",
+  "data_load_time": 1.742309331893921,
+  "race_prep_time": 37.27583837509155,
+  "rolling_time": 0.2814023494720459,
+  "nightingale_time": 0.028067588806152344,
+  "render_task_time": 0.005600929260253906,
+  "frame_spec_time": 0.18549752235412598,
+  "total_frames": 41,
+  "json_size_bytes": 1669,
+  "frames_per_second": 221.02721092807118
+}

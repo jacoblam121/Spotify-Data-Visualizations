@@ -1,0 +1,12 @@
+{
+  "test_id": "lastfm",
+  "data_load_time": 0.11560392379760742,
+  "race_prep_time": 1.9555752277374268,
+  "rolling_time": 0.08527517318725586,
+  "nightingale_time": 0.013767242431640625,
+  "render_task_time": 0.0027441978454589844,
+  "frame_spec_time": 0.02714991569519043,
+  "total_frames": 41,
+  "json_size_bytes": 1647,
+  "frames_per_second": 1510.1336026344677
+}
