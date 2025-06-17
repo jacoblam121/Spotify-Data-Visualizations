@@ -66,6 +66,11 @@ ANIMATION_TRANSITION_DURATION_SECONDS = 0.3 # Default, will be loaded from confi
 ENABLE_OVERTAKE_ANIMATIONS_CONFIG = True # Default, will be loaded from config
 SONG_TEXT_RIGHT_GAP_FRACTION = 0.1  # Fraction of x-axis width to leave as a gap after song text
 
+# New debug and progress display options
+SHOW_WORKER_PROGRESS = False # Default, will be loaded from config
+SHOW_PROGRESS_BAR = True # Default, will be loaded from config  
+DEBUG_NIGHTINGALE_CONFIG = False # Default, will be loaded from config
+
 # --- Global Dictionaries for Caching Art Paths and Colors within the animator ---
 album_art_image_objects = {}
 album_bar_colors = {}
@@ -310,6 +315,11 @@ def load_configuration():
     USE_FRAME_SPEC_GENERATOR = config.get_bool('AnimationOutput', 'USE_FRAME_SPEC_GENERATOR', True)
     PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = config.get_int('Debugging', 'PARALLEL_LOG_COMPLETION_INTERVAL', 50)
     LOG_PARALLEL_PROCESS_START_CONFIG = config.get_bool('Debugging', 'LOG_PARALLEL_PROCESS_START', True)
+    
+    # New debug and progress display options
+    SHOW_WORKER_PROGRESS = config.get_bool('Debugging', 'SHOW_WORKER_PROGRESS', False)
+    SHOW_PROGRESS_BAR = config.get_bool('Debugging', 'SHOW_PROGRESS_BAR', True)
+    DEBUG_NIGHTINGALE_CONFIG = config.get_bool('Debugging', 'DEBUG_NIGHTINGALE_CONFIG', False)
 
     ROLLING_PANEL_AREA_LEFT_FIG = config.get_float('RollingStatsDisplay', 'PANEL_AREA_LEFT_FIG', ROLLING_PANEL_AREA_LEFT_FIG)
     ROLLING_PANEL_AREA_RIGHT_FIG = config.get_float('RollingStatsDisplay', 'PANEL_AREA_RIGHT_FIG', ROLLING_PANEL_AREA_RIGHT_FIG)

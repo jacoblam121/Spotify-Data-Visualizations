@@ -11,6 +11,7 @@ import sys
 import time
 from typing import Dict, Any, Tuple
 import traceback
+from progress_tracker import create_progress_tracker
 
 # Add project directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -42,9 +43,17 @@ def init_enhanced_worker(enhanced_globals: Dict[str, Any]):
         setattr(main_animator, key, value)
     
     worker_pid = os.getpid()
-    print(f"[WORKER {worker_pid}] Enhanced worker initialized with {len(enhanced_globals)} globals")
-    print(f"[WORKER {worker_pid}] NIGHTINGALE_TITLE_FONT_SIZE = {enhanced_globals.get('NIGHTINGALE_TITLE_FONT_SIZE', 'MISSING')}")
-    print(f"[WORKER {worker_pid}] Injected into main_animator module namespace: {hasattr(main_animator, 'NIGHTINGALE_TITLE_FONT_SIZE')}")
+    
+    # Respect configuration flags for debug output
+    show_worker_progress = enhanced_globals.get('SHOW_WORKER_PROGRESS', False)
+    debug_nightingale = enhanced_globals.get('DEBUG_NIGHTINGALE_CONFIG', False)
+    
+    if show_worker_progress:
+        print(f"[WORKER {worker_pid}] Enhanced worker initialized with {len(enhanced_globals)} globals")
+        
+    if debug_nightingale:
+        print(f"[WORKER {worker_pid}] NIGHTINGALE_TITLE_FONT_SIZE = {enhanced_globals.get('NIGHTINGALE_TITLE_FONT_SIZE', 'MISSING')}")
+        print(f"[WORKER {worker_pid}] Injected into main_animator module namespace: {hasattr(main_animator, 'NIGHTINGALE_TITLE_FONT_SIZE')}")
 
 def draw_and_save_single_frame_ENHANCED(frame_data: Dict[str, Any]) -> Tuple[int, float, int]:
     """
@@ -124,16 +133,24 @@ def draw_and_save_single_frame_ENHANCED(frame_data: Dict[str, Any]) -> Tuple[int
             raise RuntimeError(f"Frame file was not created: {output_image_path}")
         
         render_time = time.time() - start_time
-        print(f"[WORKER {worker_pid}] Frame {frame_index} SUCCESS: {output_image_path} in {render_time:.3f}s")
+        
+        # Respect configuration flag for worker progress output
+        show_worker_progress = ENHANCED_WORKER_CONTEXT.get('SHOW_WORKER_PROGRESS', False)
+        if show_worker_progress:
+            print(f"[WORKER {worker_pid}] Frame {frame_index} SUCCESS: {output_image_path} in {render_time:.3f}s")
         
         return result
         
     except Exception as e:
         render_time = time.time() - start_time
         error_info = f"Worker {worker_pid}: Frame {frame_index} FAILED after {render_time:.3f}s: {e}"
-        print(f"[WORKER {worker_pid}] ERROR: {error_info}")
-        print(f"[WORKER {worker_pid}] TRACEBACK:")
-        traceback.print_exc()
+        
+        # Respect configuration flag for worker progress output (errors are always shown if worker progress is enabled)
+        show_worker_progress = ENHANCED_WORKER_CONTEXT.get('SHOW_WORKER_PROGRESS', False)
+        if show_worker_progress:
+            print(f"[WORKER {worker_pid}] ERROR: {error_info}")
+            print(f"[WORKER {worker_pid}] TRACEBACK:")
+            traceback.print_exc()
         
         # Return an error result instead of letting it fail silently
         return (frame_index, render_time, worker_pid, f"ERROR: {e}")
@@ -192,11 +209,15 @@ def capture_all_globals_plus_config():
         'NIGHTINGALE_ANIMATION_EASING_FUNCTION': 'cubic'  # From configurations.txt
     }
     
+    # Check if debug output is enabled for Nightingale config
+    debug_nightingale = relevant_globals.get('DEBUG_NIGHTINGALE_CONFIG', False)
+    
     # Add missing variables to the context
     for var_name, var_value in missing_nightingale_vars.items():
         if var_name not in relevant_globals:
             relevant_globals[var_name] = var_value
-            print(f"📦 Added missing config variable: {var_name} = {var_value}")
+            if debug_nightingale:
+                print(f"📦 Added missing config variable: {var_name} = {var_value}")
         else:
             # FORCE OVERRIDE critical variables to restore original layout/fonts (user's request)
             critical_vars = [
@@ -208,7 +229,8 @@ def capture_all_globals_plus_config():
             if var_name in critical_vars:
                 old_value = relevant_globals[var_name]
                 relevant_globals[var_name] = var_value  # Override with correct value
-                print(f"📦 RESTORED original setting: {var_name} = {var_value} (was {old_value})")
+                if debug_nightingale:
+                    print(f"📦 RESTORED original setting: {var_name} = {var_value} (was {old_value})")
     
     return relevant_globals
 
@@ -289,9 +311,11 @@ def replace_broken_parallel_processing_ENHANCED(
         'VISUALIZATION_MODE': VISUALIZATION_MODE
     })
     
-    print(f"📦 Enhanced context captured: {len(enhanced_context)} variables")
-    print(f"📦 Includes: ALL NIGHTINGALE vars (including missing config), ROLLING vars, constants")
-    print(f"📦 NIGHTINGALE_TITLE_FONT_SIZE = {enhanced_context.get('NIGHTINGALE_TITLE_FONT_SIZE', 'MISSING')}")
+    debug_nightingale = enhanced_context.get('DEBUG_NIGHTINGALE_CONFIG', False)
+    if debug_nightingale:
+        print(f"📦 Enhanced context captured: {len(enhanced_context)} variables")
+        print(f"📦 Includes: ALL NIGHTINGALE vars (including missing config), ROLLING vars, constants")
+        print(f"📦 NIGHTINGALE_TITLE_FONT_SIZE = {enhanced_context.get('NIGHTINGALE_TITLE_FONT_SIZE', 'MISSING')}")
     
     # STEP 3: Create optimized frame tasks
     frame_tasks = []
@@ -325,62 +349,74 @@ def replace_broken_parallel_processing_ENHANCED(
     failed_frames = []
     successful_frames = []
     
-    # ENHANCED PARALLEL PROCESSING WITH FULL ERROR HANDLING
-    with create_rendering_executor(
-        executor_render_config,
-        max_workers=MAX_PARALLEL_WORKERS,
-        initializer_func=init_enhanced_worker,
-        initializer_args=(enhanced_context,)
-    ) as executor:
-        
-        # Submit tasks
-        futures = {
-            executor.submit(draw_and_save_single_frame_ENHANCED, frame_data): frame_data
-            for frame_data in frame_tasks
-        }
-        
-        # Process results with explicit error handling
-        for future in concurrent.futures.as_completed(futures):
-            frame_data = futures[future]
+    # Progress tracking configuration
+    show_progress_bar = enhanced_context.get('SHOW_PROGRESS_BAR', True)
+    show_worker_progress = enhanced_context.get('SHOW_WORKER_PROGRESS', False)
+    
+    # ENHANCED PARALLEL PROCESSING WITH PROGRESS BAR
+    with create_progress_tracker(
+        total_frames=num_total_output_frames,
+        show_progress=show_progress_bar
+    ) as progress:
+        with create_rendering_executor(
+            executor_render_config,
+            max_workers=MAX_PARALLEL_WORKERS,
+            initializer_func=init_enhanced_worker,
+            initializer_args=(enhanced_context,)
+        ) as executor:
             
-            try:
-                result = future.result()
+            # Submit tasks
+            futures = {
+                executor.submit(draw_and_save_single_frame_ENHANCED, frame_data): frame_data
+                for frame_data in frame_tasks
+            }
+            
+            # Process results with explicit error handling
+            for future in concurrent.futures.as_completed(futures):
+                frame_data = futures[future]
                 
-                # Check if this was an error result
-                if len(result) == 4:  # Error result includes error message
-                    frame_idx, render_time, pid, error_msg = result
-                    failed_frames.append({'frame': frame_idx, 'error': error_msg, 'time': render_time})
-                    print(f"❌ Frame {frame_idx} failed: {error_msg}")
-                else:
-                    frame_idx, render_time, pid = result
-                    successful_frames.append({'frame': frame_idx, 'time': render_time, 'pid': pid})
+                try:
+                    result = future.result()
                     
-                    # Log worker startup (once per worker)
-                    if LOG_PARALLEL_PROCESS_START_CONFIG:
-                        if pid not in reported_pids:
-                            print(f"--- Worker process with PID {pid} has started and is processing frames. ---")
-                            reported_pids.add(pid)
+                    # Check if this was an error result
+                    if len(result) == 4:  # Error result includes error message
+                        frame_idx, render_time, pid, error_msg = result
+                        failed_frames.append({'frame': frame_idx, 'error': error_msg, 'time': render_time})
+                        print(f"❌ Frame {frame_idx} failed: {error_msg}")
+                    else:
+                        frame_idx, render_time, pid = result
+                        successful_frames.append({'frame': frame_idx, 'time': render_time, 'pid': pid})
+                        
+                        # Log worker startup (once per worker) - only if debug enabled
+                        if show_worker_progress and LOG_PARALLEL_PROCESS_START_CONFIG:
+                            if pid not in reported_pids:
+                                print(f"--- Worker process with PID {pid} has started and is processing frames. ---")
+                                reported_pids.add(pid)
+                        
+                        completed_frames += 1
+                        
+                        # Update progress bar
+                        progress.update(1)
+                        
+                        # Log completion - only if worker progress is enabled
+                        if show_worker_progress:
+                            should_log_completion = False
+                            if PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG > 0:
+                                if completed_frames == 1 or completed_frames == num_total_output_frames or \
+                                   (completed_frames % PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0):
+                                    should_log_completion = True
+                            elif PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0:
+                                if completed_frames == 1 or completed_frames == num_total_output_frames:
+                                    should_log_completion = True
+                            
+                            if should_log_completion:
+                                print(f"Frame {frame_idx + 1}/{num_total_output_frames} completed by PID {pid} in {render_time:.2f}s. ({completed_frames}/{num_total_output_frames} total done)")
                     
-                    completed_frames += 1
-                    
-                    # Log completion
-                    should_log_completion = False
-                    if PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG > 0:
-                        if completed_frames == 1 or completed_frames == num_total_output_frames or \
-                           (completed_frames % PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0):
-                            should_log_completion = True
-                    elif PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0:
-                        if completed_frames == 1 or completed_frames == num_total_output_frames:
-                            should_log_completion = True
-                    
-                    if should_log_completion:
-                        print(f"Frame {frame_idx + 1}/{num_total_output_frames} completed by PID {pid} in {render_time:.2f}s. ({completed_frames}/{num_total_output_frames} total done)")
-                
-            except Exception as exc:
-                frame_task = frame_data['task']
-                frame_idx = frame_task.get('overall_frame_index', 'unknown')
-                failed_frames.append({'frame': frame_idx, 'error': str(exc), 'time': 0})
-                print(f"❌ Frame {frame_idx} generation failed: {exc}")
+                except Exception as exc:
+                    frame_task = frame_data['task']
+                    frame_idx = frame_task.get('overall_frame_index', 'unknown')
+                    failed_frames.append({'frame': frame_idx, 'error': str(exc), 'time': 0})
+                    print(f"❌ Frame {frame_idx} generation failed: {exc}")
     
     # Performance summary
     overall_drawing_end_time = time.time()

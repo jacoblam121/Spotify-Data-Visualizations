@@ -43,7 +43,7 @@ N_BARS = 10
 TARGET_FPS = 30
 USE_NVENC_IF_AVAILABLE = True
 # MAX_FRAMES_FOR_TEST_RENDER: Max frames for a quick test render. Set to 0 or -1 for full render.
-MAX_FRAMES_FOR_TEST_RENDER = 1000
+MAX_FRAMES_FOR_TEST_RENDER = 300
 # ANIMATION_TRANSITION_DURATION_SECONDS: Duration of the overtake animation in seconds.
 ANIMATION_TRANSITION_DURATION_SECONDS = 0.2
 # ENABLE_OVERTAKE_ANIMATIONS: Set to True to enable smooth overtake animations, False for static transitions.
@@ -104,7 +104,16 @@ DEBUG_CACHE_ALBUM_ART_UTILS = False
 # DEBUG_ALBUM_ART_LOGIC_ANIMATOR: Enables verbose logging for art pre-fetch and drawing in main_animator.py
 DEBUG_ALBUM_ART_LOGIC_ANIMATOR = False
 # LOG_FRAME_TIMES: Enables detailed frame-by-frame rendering time and summary.
-LOG_FRAME_TIMES = True
+LOG_FRAME_TIMES = False
+# SHOW_WORKER_PROGRESS: Show individual worker frame completion messages (verbose)
+# Set to False to use clean progress bar instead
+SHOW_WORKER_PROGRESS = False
+# SHOW_PROGRESS_BAR: Show clean progress bar with frame count and FPS
+# Set to True for clean output, False for verbose worker messages
+SHOW_PROGRESS_BAR = True
+# DEBUG_NIGHTINGALE_CONFIG: Show detailed Nightingale configuration restoration messages
+# Useful for troubleshooting layout/font issues
+DEBUG_NIGHTINGALE_CONFIG = False
 # PARALLEL_LOG_COMPLETION_INTERVAL: How often to log frame completion during parallel processing (e.g., 1 = every frame, 50 = every 50th frame).
 # Set to 0 to only log the first and last completed frame. First/last always logged if interval > 0.
 PARALLEL_LOG_COMPLETION_INTERVAL = 100
