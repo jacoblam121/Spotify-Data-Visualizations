@@ -8,7 +8,7 @@ PYTHONIOENCODING_WARNING = True
 # --- Data Source ---
 [DataSource]
 # SOURCE: "lastfm" or "spotify"
-SOURCE = spotify
+SOURCE = lastfm
 INPUT_FILENAME_LASTFM = lastfm_data.csv
 # INPUT_FILENAME_SPOTIFY: Path to your Spotify JSON data (e.g., "StreamingHistory0.json")
 # Or use a pattern like "StreamingHistory*.json" if you have multiple files.

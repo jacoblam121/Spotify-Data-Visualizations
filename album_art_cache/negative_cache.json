@@ -2,5 +2,9 @@
   "spotify_search_bad habit_ed sheeran_subtract": {
     "timestamp": 1749772827.41949,
     "reason": "no_spotify_results_after_1_search_attempts"
+  },
+  "neg_mb_album_nan": {
+    "timestamp": 1750159228.8366072,
+    "reason": "mb_http_error_400"
   }
 }

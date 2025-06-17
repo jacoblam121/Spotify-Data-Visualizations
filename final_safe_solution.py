@@ -36,12 +36,12 @@ def safe_render_with_config(frame_spec_and_config):
     
     # Normal processing - call the real render function
     # This preserves ALL existing visual configurations
-    from stateless_renderer import render_frame_from_spec
+    from rendering_utils.stateless_renderer import render_frame_from_spec
     return render_frame_from_spec(frame_spec)
 
 def safe_worker_init(render_config_dict):
     """Safe worker initializer that preserves all visual settings"""
-    from stateless_renderer import initialize_render_worker
+    from rendering_utils.stateless_renderer import initialize_render_worker
     return initialize_render_worker(render_config_dict)
 
 def test_safe_error_injection():

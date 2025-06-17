@@ -27,12 +27,12 @@ import concurrent.futures
 from datetime import datetime
 
 # Import existing modules
-from stateless_renderer import (
+from rendering_utils.stateless_renderer import (
     RenderConfig, 
     initialize_render_worker, 
     render_frame_from_spec
 )
-from frame_spec_generator import FrameSpecGenerator
+from rendering_utils.frame_spec_generator import FrameSpecGenerator
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -362,7 +362,7 @@ class ParallelRenderManager:
                     submission_time=time.time()
                 )
                 # Use unified render function - test logic handled in worker initialization
-                from test_worker_helpers import top_level_test_render_function
+                from worker_utilities import top_level_test_render_function
                 future = executor.submit(top_level_test_render_function, frame_spec)
                 task_context.future = future
                 self._pending_tasks[future] = task_context
@@ -383,7 +383,7 @@ class ParallelRenderManager:
                 submission_time=time.time()
             )
             # Use unified render function - test logic handled in worker initialization
-            from test_worker_helpers import top_level_test_render_function
+            from worker_utilities import top_level_test_render_function
             future = executor.submit(top_level_test_render_function, frame_spec)
             task_context.future = future
             self._pending_tasks[future] = task_context
@@ -464,7 +464,7 @@ class ParallelRenderManager:
         
         # Use unified render function - test logic handled in worker initialization
         frame_spec = task_context.frame_spec
-        from test_worker_helpers import top_level_test_render_function
+        from worker_utilities import top_level_test_render_function
         future = executor.submit(top_level_test_render_function, frame_spec)
         retry_context.future = future
         self._pending_tasks[future] = retry_context

@@ -25,7 +25,7 @@ import psutil
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from test_mock_components import MockFrameSpecGenerator, MockConfig, TestDataFactory
-from test_worker_helpers import top_level_test_render_function
+from rendering_utils.worker_utilities import top_level_test_render_function
 from stateless_renderer import RenderConfig
 from executor_factory import create_rendering_executor
 

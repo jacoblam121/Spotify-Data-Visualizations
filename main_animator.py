@@ -32,8 +32,8 @@ from text_utils import truncate_to_fit  # Helper for dynamic truncation
 # Import the config loader
 from config_loader import AppConfig
 
-# PRODUCTION FIX: Import optimized parallel processing
-from main_animator_ENHANCED_FIX import replace_broken_parallel_processing_ENHANCED
+# Import optimized parallel processing
+from rendering_utils import render_frames_in_parallel
 
 # --- Configuration (will be loaded from file) ---
 config = None # Global config object
@@ -1774,8 +1774,8 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
 
     completed_frames = 0
     reported_pids = set()
-    # PRODUCTION FIX: Replace broken ProcessPoolExecutor with optimized version
-    success = replace_broken_parallel_processing_ENHANCED(
+    # Render frames using optimized parallel processing
+    success = render_frames_in_parallel(
         all_render_tasks, num_total_output_frames,
         entity_id_to_animator_key_map, entity_details_map,
         album_art_image_objects, album_art_image_objects_highres, album_bar_colors,

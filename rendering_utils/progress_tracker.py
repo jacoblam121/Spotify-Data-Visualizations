@@ -63,7 +63,7 @@ class ProgressTracker:
         if self.show_progress:
             self.pbar = tqdm(
                 total=total_frames,
-                desc="🎬 Rendering frames",
+                desc="Rendering frames",
                 unit="frames",
                 ncols=140,
                 bar_format="{l_bar}{bar}| {n_fmt}/{total_fmt} [{rate_fmt}] Elapsed: {elapsed} ETA: {remaining}",
@@ -92,7 +92,7 @@ class ProgressTracker:
             # Print summary
             elapsed = time.time() - self.start_time
             fps = self.completed_frames / elapsed if elapsed > 0 else 0
-            print(f"✅ Frame generation complete: {self.completed_frames}/{self.total_frames} frames in {elapsed:.1f}s ({fps:.1f} fps)")
+            print(f"Frame generation complete: {self.completed_frames}/{self.total_frames} frames in {elapsed:.1f}s ({fps:.1f} fps)")
     
     def get_stats(self) -> dict:
         """Get current progress statistics."""

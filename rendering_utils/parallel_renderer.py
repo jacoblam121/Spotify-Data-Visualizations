@@ -11,14 +11,11 @@ import sys
 import time
 from typing import Dict, Any, Tuple
 import traceback
-from progress_tracker import create_progress_tracker
-
-# Add project directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from .progress_tracker import create_progress_tracker
 
 # Import our optimization components
-from executor_factory import create_rendering_executor
-from stateless_renderer import RenderConfig
+from .executor_factory import create_rendering_executor
+from .stateless_renderer import RenderConfig
 
 # Global worker context
 ENHANCED_WORKER_CONTEXT = None
@@ -217,7 +214,7 @@ def capture_all_globals_plus_config():
         if var_name not in relevant_globals:
             relevant_globals[var_name] = var_value
             if debug_nightingale:
-                print(f"📦 Added missing config variable: {var_name} = {var_value}")
+                print(f"Added missing config variable: {var_name} = {var_value}")
         else:
             # FORCE OVERRIDE critical variables to restore original layout/fonts (user's request)
             critical_vars = [
@@ -230,11 +227,11 @@ def capture_all_globals_plus_config():
                 old_value = relevant_globals[var_name]
                 relevant_globals[var_name] = var_value  # Override with correct value
                 if debug_nightingale:
-                    print(f"📦 RESTORED original setting: {var_name} = {var_value} (was {old_value})")
+                    print(f"RESTORED original setting: {var_name} = {var_value} (was {old_value})")
     
     return relevant_globals
 
-def replace_broken_parallel_processing_ENHANCED(
+def render_frames_in_parallel(
     all_render_tasks,
     num_total_output_frames,
     entity_id_to_animator_key_map,
@@ -263,7 +260,7 @@ def replace_broken_parallel_processing_ENHANCED(
     """
     import concurrent.futures
     
-    print(f"\n🎯 ENHANCED PARALLEL PROCESSING FIX")
+    # print(f"\nPARALLEL PROCESSING FIX")
     print("=" * 60)
     print(f"Rendering {num_total_output_frames} frames with ALL globals + missing config vars")
     print(f"Workers: {MAX_PARALLEL_WORKERS}, Logging interval: {PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG}")
@@ -313,9 +310,9 @@ def replace_broken_parallel_processing_ENHANCED(
     
     debug_nightingale = enhanced_context.get('DEBUG_NIGHTINGALE_CONFIG', False)
     if debug_nightingale:
-        print(f"📦 Enhanced context captured: {len(enhanced_context)} variables")
-        print(f"📦 Includes: ALL NIGHTINGALE vars (including missing config), ROLLING vars, constants")
-        print(f"📦 NIGHTINGALE_TITLE_FONT_SIZE = {enhanced_context.get('NIGHTINGALE_TITLE_FONT_SIZE', 'MISSING')}")
+        print(f"Enhanced context captured: {len(enhanced_context)} variables")
+        print(f"Includes: ALL NIGHTINGALE vars (including missing config), ROLLING vars, constants")
+        print(f"NIGHTINGALE_TITLE_FONT_SIZE = {enhanced_context.get('NIGHTINGALE_TITLE_FONT_SIZE', 'MISSING')}")
     
     # STEP 3: Create optimized frame tasks
     frame_tasks = []
@@ -382,7 +379,7 @@ def replace_broken_parallel_processing_ENHANCED(
                     if len(result) == 4:  # Error result includes error message
                         frame_idx, render_time, pid, error_msg = result
                         failed_frames.append({'frame': frame_idx, 'error': error_msg, 'time': render_time})
-                        print(f"❌ Frame {frame_idx} failed: {error_msg}")
+                        print(f"Frame {frame_idx} failed: {error_msg}")
                     else:
                         frame_idx, render_time, pid = result
                         successful_frames.append({'frame': frame_idx, 'time': render_time, 'pid': pid})
@@ -416,7 +413,7 @@ def replace_broken_parallel_processing_ENHANCED(
                     frame_task = frame_data['task']
                     frame_idx = frame_task.get('overall_frame_index', 'unknown')
                     failed_frames.append({'frame': frame_idx, 'error': str(exc), 'time': 0})
-                    print(f"❌ Frame {frame_idx} generation failed: {exc}")
+                    print(f"Frame {frame_idx} generation failed: {exc}")
     
     # Performance summary
     overall_drawing_end_time = time.time()
@@ -424,27 +421,26 @@ def replace_broken_parallel_processing_ENHANCED(
     success_count = len(successful_frames)
     failure_count = len(failed_frames)
     
-    print(f"\n🎯 ENHANCED PARALLEL PROCESSING RESULTS")
+    print(f"\nENHANCED PARALLEL PROCESSING RESULTS")
     print("=" * 60)
-    print(f"✅ Successful frames: {success_count}/{num_total_output_frames}")
-    print(f"❌ Failed frames: {failure_count}/{num_total_output_frames}")
-    print(f"⚡ Worker processes used: {len(reported_pids)}")
-    print(f"⏱️  Total wall-clock time: {total_wall_time:.2f} seconds")
+    print(f"Successful frames: {success_count}/{num_total_output_frames}")
+    print(f"Failed frames: {failure_count}/{num_total_output_frames}")
+    print(f"Worker processes used: {len(reported_pids)}")
+    print(f"Total wall-clock time: {total_wall_time:.2f} seconds")
     
     if successful_frames:
         avg_time = sum(f['time'] for f in successful_frames) / len(successful_frames)
         fps = success_count / total_wall_time if total_wall_time > 0 else 0
-        print(f"📊 Average time per frame: {avg_time:.3f} seconds")
-        print(f"🎬 Effective FPS: {fps:.1f} frames/second")
+        print(f"Average time per frame: {avg_time:.3f} seconds")
+        print(f"Effective FPS: {fps:.1f} frames/second")
     
     if failed_frames:
-        print(f"\n❌ FAILED FRAMES:")
+        print(f"\nFAILED FRAMES:")
         for failure in failed_frames[:5]:  # Show first 5 failures
             print(f"   Frame {failure['frame']}: {failure['error']}")
         if len(failed_frames) > 5:
             print(f"   ... and {len(failed_frames) - 5} more failures")
         return False
     else:
-        print(f"\n🎉 ALL FRAMES GENERATED SUCCESSFULLY!")
-        print(f"🎬 Ready for video compilation!")
+        print(f"Ready for video compilation")
         return True

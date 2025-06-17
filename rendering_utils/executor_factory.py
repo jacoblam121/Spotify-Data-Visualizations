@@ -23,8 +23,8 @@ from typing import Optional, Dict, Any
 # Add project directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from test_worker_helpers import top_level_test_worker_initializer
-from stateless_renderer import RenderConfig
+from .worker_utilities import top_level_test_worker_initializer
+from .stateless_renderer import RenderConfig
 
 
 def create_rendering_executor(

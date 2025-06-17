@@ -726,5 +726,244 @@
     ],
     "album_type": "album",
     "source": "spotify (uri_lookup)"
+  },
+  "spotify_search_iu_eight(prod.&feat. suga of bts)_eight": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273c63be04ae902b1da7a54d247",
+    "canonical_album_name": "eight",
+    "spotify_album_id": "5vJNAlQeTf9lsulO1YlmSt",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU",
+      "0ebNdVaOfp6N0oZ1guIxM8"
+    ],
+    "source": "spotify (Precise Search (Artist: iu))"
+  },
+  "spotify_search_the killers_mr. brightside_hot fuss": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273ccdddd46119a4ff53eaf1f5d",
+    "canonical_album_name": "Hot Fuss",
+    "spotify_album_id": "4piJq7R3gjUOxnYs6lDCTg",
+    "spotify_artist_ids": [
+      "0C0XlULifJtAgn6ZNCW2eu"
+    ],
+    "source": "spotify (Precise Search (Artist: the killers))"
+  },
+  "spotify_search_awkwafina_the scuttlebutt_the little mermaid (original motion picture soundtrack)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27391eee92ba7620a88de647ade",
+    "canonical_album_name": "The Little Mermaid (Original Motion Picture Soundtrack)",
+    "spotify_album_id": "40tsP3taBOC9HqNaLCZZKP",
+    "spotify_artist_ids": [
+      "3SmyWs7ou3udD8gtM0Z6Vx",
+      "3twuAojvYNrlWZpMkxLm3P",
+      "3xvaSlT4xsyk6lY1ESOspO"
+    ],
+    "source": "spotify (Precise Search (Artist: awkwafina))"
+  },
+  "spotify_search_ariana grande_bloodline_thank u, next": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27356ac7b86e090f307e218e9c8",
+    "canonical_album_name": "thank u, next",
+    "spotify_album_id": "2fYhqwDWXjbpjaIJPEfKFw",
+    "spotify_artist_ids": [
+      "66CXWjxzNUsdJxJ2JdwvnR"
+    ],
+    "source": "spotify (Precise Search (Artist: ariana grande))"
+  },
+  "spotify_search_league of legends_gods_gods": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e4179b3fb74beaf0cdfa7a13",
+    "canonical_album_name": "GODS",
+    "spotify_album_id": "0rAaP1OBxVCn2cIUZNjGRs",
+    "spotify_artist_ids": [
+      "47mIJdHORyRerp4os813jD",
+      "6HvZYsbFfjnjFrWF950C9d"
+    ],
+    "source": "spotify (Precise Search (Artist: league of legends))"
+  },
+  "spotify_search_stray kids_megaverse_\u6a02-star": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732bca95a658fdf653a35a3710",
+    "canonical_album_name": "ROCK-STAR",
+    "spotify_album_id": "0aJnGEZWIc1VCYlZOXv05a",
+    "spotify_artist_ids": [
+      "2dIgFjalVxs4ThymZ67YCE"
+    ],
+    "source": "spotify (Precise Search (Artist: stray kids))"
+  },
+  "spotify_search_j.tajor_like i do_like i do": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e649cde12610c45e05a10d44",
+    "canonical_album_name": "Like I Do",
+    "spotify_album_id": "4AT7V0zZ0B3xWDef7sPCyJ",
+    "spotify_artist_ids": [
+      "0VpMOC5IZU06u29fWjv3qJ"
+    ],
+    "source": "spotify (Precise Search (Artist: j.tajor))"
+  },
+  "spotify_search_justine skye_collide (feat. tyga)_collide (feat. tyga)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273adadb86bf3555eb27a383c76",
+    "canonical_album_name": "Collide (feat. Tyga)",
+    "spotify_album_id": "2LbrGt2oc08xV8IDJvLzYi",
+    "spotify_artist_ids": [
+      "0jUQSUOcM7lxVn5eVGTkzQ",
+      "5LHRHt1k9lMyONurDHEdrp"
+    ],
+    "source": "spotify (Precise Search (Artist: justine skye))"
+  },
+  "spotify_search_tonight alive_lonely girl_the other side": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732bfa74be7288986e88513fa9",
+    "canonical_album_name": "The Other Side",
+    "spotify_album_id": "0jWzcec3ugHZoQpogj6PrD",
+    "spotify_artist_ids": [
+      "5pjCYG6hPLBO3y4swxu3dh"
+    ],
+    "source": "spotify (Precise Search (Artist: tonight alive))"
+  },
+  "spotify_search_le sserafim_perfect night_perfect night": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e352f6eccf8cb96d0b247cc",
+    "canonical_album_name": "Perfect Night",
+    "spotify_album_id": "6Msc3BwzKZ5f5FXmKuUSu6",
+    "spotify_artist_ids": [
+      "4SpbR6yFEvexJuaBpgAU5p"
+    ],
+    "source": "spotify (Precise Search (Artist: le sserafim))"
+  },
+  "spotify_search_twice_i got you_i got you": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273d6a4458287c74322874a3d70",
+    "canonical_album_name": "I GOT YOU",
+    "spotify_album_id": "6RZHj6L3NqrvcKeiBHQbjL",
+    "spotify_artist_ids": [
+      "7n2Ycct7Beij7Dj7meI4X0"
+    ],
+    "source": "spotify (Precise Search (Artist: twice))"
+  },
+  "spotify_search_taylor swift_is it over now? (taylor's version) (from the vault)_1989 (taylor\u2019s version)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273904445d70d04eb24d6bb79ac",
+    "canonical_album_name": "1989 (Taylor's Version)",
+    "spotify_album_id": "64LU4c1nfjz1t4VnGhagcg",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "source": "spotify (Precise Search (Artist: taylor swift))"
+  },
+  "spotify_search_iu_lilac_iu 5th album 'lilac'": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2734ed058b71650a6ca2c04adff",
+    "canonical_album_name": "IU 5th Album 'LILAC'",
+    "spotify_album_id": "01dPJcwyht77brL4JQiR8R",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "source": "spotify (Precise Search (Artist: iu))"
+  },
+  "spotify_search_tate mcrae_greedy_greedy": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b27322fd802bc61db666c7c81aa8",
+    "canonical_album_name": "greedy",
+    "spotify_album_id": "3UOV8XvCwMKaATRNXrYCjN",
+    "spotify_artist_ids": [
+      "45dkTj5sMRSjrmBSBeiHym"
+    ],
+    "source": "spotify (Precise Search (Artist: tate mcrae))"
+  },
+  "spotify_search_iu_love wins all_love wins all": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273b79a12d47af18d1d83a5caf9",
+    "canonical_album_name": "Love wins all",
+    "spotify_album_id": "2bwwRhKbLeD3LvNDXauV2T",
+    "spotify_artist_ids": [
+      "3HqSLMAZ3g3d5poNaI7GOU"
+    ],
+    "source": "spotify (Precise Search (Artist: iu))"
+  },
+  "spotify_search_bol4_some_red diary page.1": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2732cfb66b63fe85ccfff4109b1",
+    "canonical_album_name": "Red Diary Page.1",
+    "spotify_album_id": "0d3mf5fBaIBbozCgeEI9AE",
+    "spotify_artist_ids": [
+      "4k5fFEYgkWYrYvtOK3zVBl"
+    ],
+    "source": "spotify (Precise Search (Artist: bol4))"
+  },
+  "spotify_search_jo yuri_love shhh!_op.22 y-waltz : in major": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273e24e844f2650c498fa703c91",
+    "canonical_album_name": "Op.22 Y-Waltz : in Major",
+    "spotify_album_id": "1EAzLUzatSBIs8tA047f5f",
+    "spotify_artist_ids": [
+      "3LFFf4EpKn2krneZ9vozyz"
+    ],
+    "source": "spotify (Precise Search (Artist: jo yuri))"
+  },
+  "spotify_search_pentagon_feelin' like_in:vite u": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273cb3a4d6a21750da497535b63",
+    "canonical_album_name": "IN:VITE U",
+    "spotify_album_id": "7MSCc28WQSEraudxraVmE1",
+    "spotify_artist_ids": [
+      "1wKpMkucynaTfG8lyPprYV"
+    ],
+    "source": "spotify (Precise Search (Artist: pentagon))"
+  },
+  "spotify_search_paramore_crushcrushcrush_riot!": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
+    "canonical_album_name": "Riot!",
+    "spotify_album_id": "71rziY9eLo1tA2dBMxrwhc",
+    "spotify_artist_ids": [
+      "74XFHRwlV6OrjEM0A2NCMF"
+    ],
+    "source": "spotify (Precise Search (Artist: paramore))"
+  },
+  "spotify_search_taylor swift_style_1989": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739abdf14e6058bd3903686148",
+    "canonical_album_name": "1989",
+    "spotify_album_id": "2QJmrSgbdM35R67eoGQo4j",
+    "spotify_artist_ids": [
+      "06HL4z0CvFAxyc27GXpf02"
+    ],
+    "source": "spotify (Precise Search (Artist: taylor swift))"
+  },
+  "spotify_search_paramore_that's what you get_riot!": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b273bee754528c08d5ff6799a1eb",
+    "canonical_album_name": "Riot!",
+    "spotify_album_id": "71rziY9eLo1tA2dBMxrwhc",
+    "spotify_artist_ids": [
+      "74XFHRwlV6OrjEM0A2NCMF"
+    ],
+    "source": "spotify (Precise Search (Artist: paramore))"
+  },
+  "spotify_search_jeon somi_fast forward_game plan": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2737da22ba88dfc26a18122ee2d",
+    "canonical_album_name": "GAME PLAN",
+    "spotify_album_id": "7xMXoWstClAzBIo5lOAASu",
+    "spotify_artist_ids": [
+      "7zYj9S9SdIunYCfSm7vzAR"
+    ],
+    "source": "spotify (Precise Search (Artist: jeon somi))"
+  },
+  "spotify_search_yorushika_\u6674\u308b_\u6674\u308b": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2735e763f5fcb87919a7ae96f8b",
+    "canonical_album_name": "\u6674\u308b",
+    "spotify_album_id": "4O53dhmIctih3p2suAAgga",
+    "spotify_artist_ids": [
+      "4UK2Lzi6fBfUi9rpDt6cik"
+    ],
+    "source": "spotify (Precise Search (Artist: yorushika))"
+  },
+  "spotify_search_\u300e\u30e6\u30a4\u30ab\u300f_\u904b\u547d\u306e\u4eba_\u904b\u547d\u306e\u4eba": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739bba46fb362df4d33a0a8b3f",
+    "canonical_album_name": "\u904b\u547d\u306e\u4eba",
+    "spotify_album_id": "0eNmYuy5xTFFwfdwfyGQLL",
+    "spotify_artist_ids": [
+      "2EqaSEa0WkE59Aca9iXSYj"
+    ],
+    "source": "spotify (Precise Search (Artist: \u300e\u30e6\u30a4\u30ab\u300f))"
+  },
+  "spotify_search_andreas waldetoft_end of the tour_hearts of iron 4 (original game soundtrack)": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739288676513aeb8244df573e5",
+    "canonical_album_name": "Hearts of Iron IV (Original Game Soundtrack)",
+    "spotify_album_id": "2EhDqRjaxd6HCdTu3PikCt",
+    "spotify_artist_ids": [
+      "7eyudpSl4KF7iXun4H2PSh"
+    ],
+    "source": "spotify (Precise Search (Artist: andreas waldetoft))"
+  },
+  "spotify_search_ive_love dive_love dive": {
+    "art_url": "https://i.scdn.co/image/ab67616d0000b2739016f58cc49e6473e1207093",
+    "canonical_album_name": "LOVE DIVE",
+    "spotify_album_id": "1AFVTHHm7kKoQ6Rgb25x3p",
+    "spotify_artist_ids": [
+      "6RHTUrRF63xao58xh9FXYJ"
+    ],
+    "source": "spotify (Precise Search (Artist: ive))"
   }
 }

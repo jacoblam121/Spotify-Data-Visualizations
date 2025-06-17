@@ -25,7 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from stateless_renderer import RenderConfig
 from test_mock_components import MockFrameSpecGenerator, MockConfig
-from test_worker_helpers import top_level_test_worker_initializer, top_level_test_render_function
+from rendering_utils.worker_utilities import top_level_test_worker_initializer, top_level_test_render_function
 
 
 def analyze_result_collection_failures():
