@@ -32,6 +32,9 @@ from text_utils import truncate_to_fit  # Helper for dynamic truncation
 # Import the config loader
 from config_loader import AppConfig
 
+# PRODUCTION FIX: Import optimized parallel processing
+from main_animator_ENHANCED_FIX import replace_broken_parallel_processing_ENHANCED
+
 # --- Configuration (will be loaded from file) ---
 config = None # Global config object
 VISUALIZATION_MODE = "tracks" # Default mode - will be loaded from config
@@ -1675,6 +1678,7 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
 
 
     # --- Frame Specification Preparation (Memory-Efficient or Original) ---
+    global USE_FRAME_SPEC_GENERATOR
     if USE_FRAME_SPEC_GENERATOR:
         print(f"\n--- Creating Frame Specification Generator (Memory-Efficient) ---")
         try:
@@ -1729,7 +1733,7 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
     for task in all_render_tasks:
         # task contains: "overall_frame_index", "display_timestamp", "bar_render_data_list", "is_keyframe_end_frame"
         
-        frame_num_digits = len(str(num_total_output_frames -1)) if num_total_output_frames > 0 else 1
+        frame_num_digits = len(str(num_total_output_frames)) if num_total_output_frames > 0 else 1
         output_image_path = os.path.join(temp_frame_dir, f"frame_{task['overall_frame_index']:0{frame_num_digits}d}.png")
 
         tasks_args.append((
@@ -1760,38 +1764,32 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
 
     completed_frames = 0
     reported_pids = set()
-    with concurrent.futures.ProcessPoolExecutor(max_workers=MAX_PARALLEL_WORKERS) as executor:
-        futures = [executor.submit(draw_and_save_single_frame, arg_tuple) for arg_tuple in tasks_args]
-        for future in concurrent.futures.as_completed(futures):
-            try:
-                frame_idx, render_time, pid = future.result()
-
-                # Log a startup message for each worker process exactly once
-                if LOG_PARALLEL_PROCESS_START_CONFIG:
-                    if pid not in reported_pids:
-                        print(f"--- Worker process with PID {pid} has started and is processing frames. ---")
-                        reported_pids.add(pid)
-
-                frame_render_times_list.append(render_time)
-                completed_frames += 1
-                
-                # Updated logging condition for frame completion
-                should_log_completion = False
-                if PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG > 0:
-                    if completed_frames == 1 or completed_frames == num_total_output_frames or \
-                       (completed_frames % PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0):
-                        should_log_completion = True
-                elif PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG == 0: # Log only first and last if interval is 0
-                    if completed_frames == 1 or completed_frames == num_total_output_frames:
-                        should_log_completion = True
-
-                if should_log_completion:
-                    print(f"Frame {frame_idx + 1}/{num_total_output_frames} completed by PID {pid} in {render_time:.2f}s. ({completed_frames}/{num_total_output_frames} total done)")
-            except Exception as exc:
-                print(f'Frame generation failed: {exc}') # Handle error from worker
+    # PRODUCTION FIX: Replace broken ProcessPoolExecutor with optimized version
+    success = replace_broken_parallel_processing_ENHANCED(
+        all_render_tasks, num_total_output_frames,
+        entity_id_to_animator_key_map, entity_details_map,
+        album_art_image_objects, album_art_image_objects_highres, album_bar_colors,
+        N_BARS, chart_xaxis_limit, temp_frame_dir,
+        dpi, fig_width_pixels, fig_height_pixels,
+        LOG_FRAME_TIMES_CONFIG, PREFERRED_FONTS, LOG_PARALLEL_PROCESS_START_CONFIG,
+        ROLLING_PANEL_AREA_LEFT_FIG, ROLLING_PANEL_AREA_RIGHT_FIG, ROLLING_PANEL_TITLE_Y_FROM_TOP_FIG,
+        ROLLING_TITLE_TO_CONTENT_GAP_FIG, ROLLING_TITLE_FONT_SIZE, ROLLING_SONG_ARTIST_FONT_SIZE,
+        ROLLING_PLAYS_FONT_SIZE, ROLLING_ART_HEIGHT_FIG, ROLLING_ART_ASPECT_RATIO, ROLLING_ART_MAX_WIDTH_FIG,
+        ROLLING_ART_PADDING_RIGHT_FIG, ROLLING_TEXT_PADDING_LEFT_FIG, ROLLING_TEXT_TO_ART_HORIZONTAL_GAP_FIG,
+        ROLLING_TEXT_LINE_VERTICAL_SPACING_FIG, ROLLING_SONG_ARTIST_TO_PLAYS_VERTICAL_GAP_FIG,
+        ROLLING_INTER_PANEL_VERTICAL_SPACING_FIG, ROLLING_PANEL_TITLE_X_FIG, ROLLING_TEXT_TRUNCATION_ADJUST_PX,
+        MAIN_TIMESTAMP_X_FIG, MAIN_TIMESTAMP_Y_FIG, VISUALIZATION_MODE,
+        MAX_PARALLEL_WORKERS, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
+    )
     
+    if not success:
+        print("CRITICAL: Parallel frame generation failed!")
+        return
+    
+    # Variables needed for post-processing (set by our production function)
     overall_drawing_end_time = time.time()
-    total_frame_rendering_cpu_time = sum(frame_render_times_list)
+    frame_render_times_list = []  # Our production function handles timing internally
+    total_frame_rendering_cpu_time = 0
     print(f"--- Parallel Frame Generation Complete ---")
     print(f"Total wall-clock time for drawing frames: {overall_drawing_end_time - overall_drawing_start_time:.2f} seconds")
     if frame_render_times_list:

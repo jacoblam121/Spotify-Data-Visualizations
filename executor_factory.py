@@ -30,7 +30,9 @@ from stateless_renderer import RenderConfig
 def create_rendering_executor(
     render_config: RenderConfig,
     max_workers: Optional[int] = None,
-    test_config: Optional[Dict[str, Any]] = None
+    test_config: Optional[Dict[str, Any]] = None,
+    initializer_func=None,
+    initializer_args=None
 ) -> ProcessPoolExecutor:
     """
     Creates and returns a ProcessPoolExecutor correctly initialized for rendering tasks.
@@ -42,6 +44,8 @@ def create_rendering_executor(
         render_config: The render configuration object containing settings for rendering
         max_workers: Maximum number of worker processes. If None, uses default logic
         test_config: Optional test configuration for mock/test scenarios
+        initializer_func: Optional custom initializer function. If None, uses default test initializer
+        initializer_args: Optional custom arguments for the initializer function
         
     Returns:
         ProcessPoolExecutor: Properly initialized executor ready for rendering tasks
@@ -69,11 +73,22 @@ def create_rendering_executor(
     if test_config is None:
         test_config = {}
     
+    # Use custom initializer if provided, otherwise default to test initializer
+    if initializer_func is None:
+        initializer_func = top_level_test_worker_initializer
+        init_args = (render_config.to_dict(), test_config)
+    else:
+        # For custom initializers, use provided args or default to render config dict
+        if initializer_args is not None:
+            init_args = initializer_args
+        else:
+            init_args = (render_config.to_dict(),)
+    
     # Create the executor with proper initialization
     return ProcessPoolExecutor(
         max_workers=max_workers,
-        initializer=top_level_test_worker_initializer,
-        initargs=(render_config.to_dict(), test_config)
+        initializer=initializer_func,
+        initargs=init_args
     )
 
 

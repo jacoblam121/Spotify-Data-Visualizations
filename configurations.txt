@@ -31,7 +31,7 @@ END_DATE = 2024-12-31
 # tracks: Show top tracks over time with album covers
 # artists: Show top artists over time with artist profile photos  
 # both: Generate both track and artist visualizations (comprehensive mode for long renders)
-MODE = artists
+MODE = tracks
 
 # --- Animation Output ---
 [AnimationOutput]
@@ -43,7 +43,7 @@ N_BARS = 10
 TARGET_FPS = 30
 USE_NVENC_IF_AVAILABLE = True
 # MAX_FRAMES_FOR_TEST_RENDER: Max frames for a quick test render. Set to 0 or -1 for full render.
-MAX_FRAMES_FOR_TEST_RENDER = 0
+MAX_FRAMES_FOR_TEST_RENDER = 1000
 # ANIMATION_TRANSITION_DURATION_SECONDS: Duration of the overtake animation in seconds.
 ANIMATION_TRANSITION_DURATION_SECONDS = 0.2
 # ENABLE_OVERTAKE_ANIMATIONS: Set to True to enable smooth overtake animations, False for static transitions.
@@ -53,13 +53,13 @@ ENABLE_OVERTAKE_ANIMATIONS = False
 # 'event' (one frame per play event - original behavior)
 # 'S' (second), '15T' (15 minutes), '30T' (30 minutes), 'H' (hourly), '12H' (12-hourly), 'D' (daily), 'W' (weekly), 'M' (monthly)
 # Using larger periods (D, W, M) drastically reduces frames for long histories.
-FRAME_AGGREGATION_PERIOD = M
+FRAME_AGGREGATION_PERIOD = H
 # MAX_PARALLEL_WORKERS: Number of worker processes for parallel frame generation.
 # Defaults to the number of CPU cores if not set or set to 0.
 MAX_PARALLEL_WORKERS = 0
 # CLEANUP_INTERMEDIATE_FRAMES: Whether to delete individual frame images after video compilation.
 # Set to False for debugging frame generation.
-CLEANUP_INTERMEDIATE_FRAMES = True
+CLEANUP_INTERMEDIATE_FRAMES = False
 # USE_FRAME_SPEC_GENERATOR: Use memory-efficient generator for frame specifications (Task 2).
 # True: Stream frame specs one at a time (low memory usage)
 # False: Pre-compute all frame specs (original method, high memory usage)
