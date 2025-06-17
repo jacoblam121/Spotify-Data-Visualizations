@@ -60,6 +60,10 @@ MAX_PARALLEL_WORKERS = 0
 # CLEANUP_INTERMEDIATE_FRAMES: Whether to delete individual frame images after video compilation.
 # Set to False for debugging frame generation.
 CLEANUP_INTERMEDIATE_FRAMES = True
+# USE_FRAME_SPEC_GENERATOR: Use memory-efficient generator for frame specifications (Task 2).
+# True: Stream frame specs one at a time (low memory usage)
+# False: Pre-compute all frame specs (original method, high memory usage)
+USE_FRAME_SPEC_GENERATOR = True
 
 # --- Album Art & Artist Photos & Spotify API ---
 [AlbumArtSpotify]

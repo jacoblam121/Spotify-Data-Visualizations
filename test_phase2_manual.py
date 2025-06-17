@@ -2,7 +2,9 @@
 """
 Phase 2 Manual Test Suite - Interactive Menu
 
-Comprehensive manual testing for the stateless parallel frame renderer.
+Comprehensive manual testing for Phase 2 parallel processing implementation:
+- Task 1: Stateless parallel frame renderer (completed)
+- Task 2: Memory-efficient frame specification generator
 Provides an interactive menu for testing different aspects of the implementation.
 """
 
@@ -30,6 +32,15 @@ from config_loader import AppConfig
 from data_processor import clean_and_filter_data, prepare_data_for_bar_chart_race
 from rolling_stats import calculate_rolling_window_stats
 import album_art_utils
+
+# Task 2 imports
+try:
+    from frame_spec_generator import create_frame_spec_generator, FrameSpecGenerator
+    from main_animator import prepare_all_frame_specs
+    TASK2_AVAILABLE = True
+except ImportError as e:
+    TASK2_AVAILABLE = False
+    print(f"Warning: Task 2 imports not available: {e}")
 
 
 class Phase2ManualTester:
@@ -729,6 +740,427 @@ class Phase2ManualTester:
                 print("No frame files to clean up")
         else:
             print("No frames directory found")
+    
+    # ========================================
+    # TASK 2 - FRAME SPEC GENERATOR TESTS  
+    # ========================================
+    
+    def test_generator_equivalence(self):
+        """Test that generator produces identical output to original method"""
+        if not TASK2_AVAILABLE:
+            self.log("Task 2 generator not available", "WARNING")
+            return False
+            
+        self.log("Testing Generator vs Original Equivalence")
+        print("=" * 50)
+        
+        try:
+            # Create test data
+            render_tasks, entity_map, entity_details, colors = self._create_test_render_tasks(20)
+            
+            print("Running original method...")
+            original_specs = prepare_all_frame_specs(
+                render_tasks, entity_map, entity_details, colors, 5, 1000.0, "tracks"
+            )
+            
+            print("Running generator...")
+            generator = create_frame_spec_generator(
+                render_tasks, entity_map, entity_details, colors, 5, 1000.0, "tracks"
+            )
+            generator_specs = list(generator)
+            
+            print(f"Comparing {len(original_specs)} vs {len(generator_specs)} specs...")
+            
+            if len(original_specs) != len(generator_specs):
+                self.log(f"Length mismatch: {len(original_specs)} != {len(generator_specs)}", "ERROR")
+                return False
+            
+            mismatches = 0
+            for i, (orig, gen) in enumerate(zip(original_specs, generator_specs)):
+                if not self._specs_equal(orig, gen):
+                    mismatches += 1
+                    if mismatches <= 3:
+                        self.log(f"Mismatch at frame {i}", "WARNING")
+            
+            if mismatches == 0:
+                self.log("All specs match perfectly!", "SUCCESS")
+                return True
+            else:
+                self.log(f"Found {mismatches} mismatches", "ERROR")
+                return False
+                
+        except Exception as e:
+            self.log(f"Error in equivalence test: {e}", "ERROR")
+            return False
+    
+    def test_memory_comparison(self):
+        """Test memory usage comparison between methods"""
+        if not TASK2_AVAILABLE:
+            self.log("Task 2 generator not available", "WARNING") 
+            return False
+            
+        self.log("Testing Memory Usage Comparison")
+        print("=" * 50)
+        
+        try:
+            import psutil
+            process = psutil.Process()
+        except ImportError:
+            self.log("psutil not available, using basic comparison", "WARNING")
+            return self._test_memory_basic()
+        
+        try:
+            render_tasks, entity_map, entity_details, colors = self._create_test_render_tasks(100)
+            
+            # Test original method memory
+            import gc
+            gc.collect()
+            mem_before = process.memory_info().rss
+            original_specs = prepare_all_frame_specs(
+                render_tasks, entity_map, entity_details, colors, 10, 5000.0, "tracks"
+            )
+            mem_after = process.memory_info().rss
+            original_memory = mem_after - mem_before
+            
+            del original_specs
+            gc.collect()
+            
+            # Test generator memory
+            mem_before_gen = process.memory_info().rss
+            generator = create_frame_spec_generator(
+                render_tasks, entity_map, entity_details, colors, 10, 5000.0, "tracks"
+            )
+            
+            max_memory = mem_before_gen
+            for i, spec in enumerate(generator):
+                current_mem = process.memory_info().rss
+                max_memory = max(max_memory, current_mem)
+                del spec
+                if i >= 50:  # Test first 50
+                    break
+            
+            generator_memory = max_memory - mem_before_gen
+            
+            print(f"Original method: {original_memory:,} bytes")
+            print(f"Generator method: {generator_memory:,} bytes")
+            
+            if original_memory > 0:
+                ratio = original_memory / max(generator_memory, 1)
+                print(f"Memory reduction ratio: {ratio:.2f}x")
+                success = ratio > 1.2  # At least 20% improvement
+                if success:
+                    self.log(f"Memory efficiency achieved: {ratio:.2f}x reduction", "SUCCESS")
+                else:
+                    self.log(f"Insufficient memory improvement: {ratio:.2f}x", "WARNING")
+                return success
+            
+            return True
+            
+        except Exception as e:
+            self.log(f"Error in memory test: {e}", "ERROR")
+            return False
+    
+    def test_large_dataset_memory(self):
+        """Test memory usage with large dataset"""
+        if not TASK2_AVAILABLE:
+            self.log("Task 2 generator not available", "WARNING")
+            return False
+            
+        self.log("Testing Large Dataset Memory Usage")
+        print("=" * 50)
+        
+        try:
+            render_tasks, entity_map, entity_details, colors = self._create_test_render_tasks(500)
+            
+            generator = create_frame_spec_generator(
+                render_tasks, entity_map, entity_details, colors, 10, 5000.0, "tracks"
+            )
+            
+            memory_readings = []
+            for i, spec in enumerate(generator):
+                memory_info = generator.get_memory_info()
+                memory_readings.append(memory_info['generator_size_bytes'])
+                del spec
+                
+                if i % 100 == 0:
+                    print(f"Frame {i}: Generator memory = {memory_readings[-1]} bytes")
+                
+                if i >= 200:  # Test first 200
+                    break
+            
+            initial_memory = memory_readings[10]  # Skip initial frames
+            final_memory = memory_readings[-1]
+            growth = final_memory - initial_memory
+            
+            print(f"Memory growth: {growth} bytes ({growth/initial_memory*100:.1f}%)")
+            
+            # Allow up to 50% growth
+            success = abs(growth) < initial_memory * 0.5
+            if success:
+                self.log("Memory growth within acceptable limits", "SUCCESS")
+            else:
+                self.log("Excessive memory growth detected", "WARNING")
+            
+            return success
+            
+        except Exception as e:
+            self.log(f"Error in large dataset test: {e}", "ERROR")
+            return False
+    
+    def test_mode_testing(self):
+        """Test tracks and artists modes"""
+        if not TASK2_AVAILABLE:
+            self.log("Task 2 generator not available", "WARNING")
+            return False
+            
+        self.log("Testing Tracks and Artists Modes")
+        print("=" * 50)
+        
+        try:
+            # Test tracks mode
+            print("Testing tracks mode...")
+            render_tasks, entity_map, entity_details, colors = self._create_test_render_tasks(5)
+            
+            generator = create_frame_spec_generator(
+                render_tasks, entity_map, entity_details, colors, 5, 1000.0, "tracks"
+            )
+            
+            specs = list(generator)
+            
+            # Check tracks mode display names
+            for spec in specs[:2]:
+                for bar in spec['bars']:
+                    display_name = bar['display_name']
+                    if ' - ' not in display_name:
+                        self.log(f"Invalid tracks mode display: {display_name}", "ERROR")
+                        return False
+            
+            # Test artists mode
+            print("Testing artists mode...")
+            artist_tasks, artist_map, artist_details, artist_colors = self._create_artist_test_data()
+            
+            generator = create_frame_spec_generator(
+                artist_tasks, artist_map, artist_details, artist_colors, 5, 1000.0, "artists"
+            )
+            
+            specs = list(generator)
+            
+            # Check artists mode display names
+            for spec in specs[:2]:
+                for bar in spec['bars']:
+                    display_name = bar['display_name']
+                    if not display_name.startswith('Artist '):
+                        self.log(f"Invalid artists mode display: {display_name}", "ERROR")
+                        return False
+            
+            self.log("Both modes working correctly", "SUCCESS")
+            return True
+            
+        except Exception as e:
+            self.log(f"Error in mode testing: {e}", "ERROR")
+            return False
+    
+    def test_generator_performance(self):
+        """Test generator performance vs original"""
+        if not TASK2_AVAILABLE:
+            self.log("Task 2 generator not available", "WARNING")
+            return False
+            
+        self.log("Testing Generator Performance")
+        print("=" * 50)
+        
+        try:
+            render_tasks, entity_map, entity_details, colors = self._create_test_render_tasks(100)
+            
+            # Benchmark original method
+            print("Benchmarking original method...")
+            orig_times = []
+            for _ in range(3):
+                start = time.time()
+                original_specs = prepare_all_frame_specs(
+                    render_tasks, entity_map, entity_details, colors, 10, 5000.0, "tracks"
+                )
+                orig_times.append(time.time() - start)
+                del original_specs
+            
+            orig_avg = sum(orig_times) / len(orig_times)
+            
+            # Benchmark generator
+            print("Benchmarking generator...")
+            gen_times = []
+            for _ in range(3):
+                start = time.time()
+                generator = create_frame_spec_generator(
+                    render_tasks, entity_map, entity_details, colors, 10, 5000.0, "tracks"
+                )
+                list(generator)  # Consume generator
+                gen_times.append(time.time() - start)
+            
+            gen_avg = sum(gen_times) / len(gen_times)
+            
+            print(f"Original average: {orig_avg:.3f}s")
+            print(f"Generator average: {gen_avg:.3f}s")
+            print(f"Performance ratio: {orig_avg/gen_avg:.2f}x")
+            
+            # Generator should be within 50% of original performance
+            success = gen_avg <= orig_avg * 1.5
+            if success:
+                self.log("Generator performance acceptable", "SUCCESS")
+            else:
+                self.log("Generator performance needs improvement", "WARNING")
+            
+            return success
+            
+        except Exception as e:
+            self.log(f"Error in performance test: {e}", "ERROR")
+            return False
+    
+    def _create_test_render_tasks(self, num_frames: int = 10):
+        """Create test render tasks for Task 2 testing"""
+        from datetime import datetime, timedelta
+        
+        base_time = datetime(2024, 1, 1, 12, 0, 0)
+        render_tasks = []
+        
+        for i in range(num_frames):
+            timestamp = base_time + timedelta(minutes=i * 30)
+            
+            num_bars = min(5, max(1, 5 - i // 3))
+            bar_data = []
+            
+            for j in range(num_bars):
+                bar_data.append({
+                    'entity_id': f"song_{j}",
+                    'interpolated_play_count': float(100 - i * 2 - j * 5),
+                    'interpolated_y_position': float(j),
+                    'current_rank': j,
+                    'is_new': (i + j) % 7 == 0,
+                    'bar_color': (0.5 + j * 0.1, 0.3, 0.7, 1.0)
+                })
+            
+            task = {
+                'overall_frame_index': i,
+                'display_timestamp': timestamp,
+                'bar_render_data_list': bar_data,
+                'rolling_window_info': {
+                    'top_7_day': {'song_id': f"song_{i % 3}", 'plays': 50 + i} if i % 2 == 0 else None,
+                    'top_30_day': {'song_id': f"song_{(i + 1) % 3}", 'plays': 200 + i * 2}
+                },
+                'nightingale_info': {
+                    'period_data': [{'period': 'morning', 'value': 10 + i}] if i % 3 == 0 else {}
+                }
+            }
+            render_tasks.append(task)
+        
+        entity_map = {f"song_{i}": f"canonical_song_{i}" for i in range(10)}
+        entity_details = {
+            f"song_{i}": {
+                'original_artist': f"Artist {i}",
+                'original_track': f"Track {i}",
+                'album': f"Album {i}",
+                'spotify_track_uri': f"spotify:track:uri_{i}"
+            }
+            for i in range(10)
+        }
+        colors = {f"canonical_song_{i}": (0.1 * i, 0.2, 0.3, 1.0) for i in range(10)}
+        
+        return render_tasks, entity_map, entity_details, colors
+    
+    def _create_artist_test_data(self):
+        """Create test data for artists mode"""
+        from datetime import datetime, timedelta
+        
+        render_tasks = []
+        for i in range(5):
+            task = {
+                'overall_frame_index': i,
+                'display_timestamp': datetime(2024, 1, 1) + timedelta(hours=i),
+                'bar_render_data_list': [
+                    {
+                        'entity_id': f"artist_{j}",
+                        'interpolated_play_count': float(100 - j * 10),
+                        'interpolated_y_position': float(j),
+                        'current_rank': j,
+                        'is_new': False,
+                        'bar_color': (0.5, 0.3, 0.7, 1.0)
+                    }
+                    for j in range(3)
+                ],
+                'rolling_window_info': {'top_7_day': None, 'top_30_day': None},
+                'nightingale_info': {}
+            }
+            render_tasks.append(task)
+        
+        entity_map = {f"artist_{i}": f"canonical_artist_{i}" for i in range(5)}
+        entity_details = {
+            f"artist_{i}": {
+                'original_artist': f"Artist {i}",
+                'normalized_artist': f"artist_{i}"
+            }
+            for i in range(5)
+        }
+        colors = {f"canonical_artist_{i}": (0.1, 0.2, 0.3, 1.0) for i in range(5)}
+        
+        return render_tasks, entity_map, entity_details, colors
+    
+    def _specs_equal(self, spec1: dict, spec2: dict) -> bool:
+        """Check if two specs are equal with float tolerance"""
+        if spec1.keys() != spec2.keys():
+            return False
+        
+        for key in spec1.keys():
+            if key == 'bars':
+                if len(spec1['bars']) != len(spec2['bars']):
+                    return False
+                for b1, b2 in zip(spec1['bars'], spec2['bars']):
+                    if not self._bars_equal(b1, b2):
+                        return False
+            elif isinstance(spec1[key], float) and isinstance(spec2[key], float):
+                if abs(spec1[key] - spec2[key]) > 1e-6:
+                    return False
+            elif spec1[key] != spec2[key]:
+                return False
+        return True
+    
+    def _bars_equal(self, bar1: dict, bar2: dict) -> bool:
+        """Check if two bar specs are equal"""
+        if bar1.keys() != bar2.keys():
+            return False
+        
+        for key in bar1.keys():
+            if key in ['interpolated_y_pos', 'interpolated_play_count']:
+                if abs(bar1[key] - bar2[key]) > 1e-6:
+                    return False
+            elif key in ['bar_color', 'bar_color_rgba']:
+                c1, c2 = bar1[key], bar2[key]
+                if len(c1) != len(c2):
+                    return False
+                if any(abs(a - b) > 1e-6 for a, b in zip(c1, c2)):
+                    return False
+            elif bar1[key] != bar2[key]:
+                return False
+        return True
+    
+    def _test_memory_basic(self):
+        """Basic memory test using sys.getsizeof"""
+        import sys
+        
+        render_tasks, entity_map, entity_details, colors = self._create_test_render_tasks(50)
+        
+        original_specs = prepare_all_frame_specs(
+            render_tasks, entity_map, entity_details, colors, 10, 5000.0, "tracks"
+        )
+        original_size = sys.getsizeof(original_specs)
+        
+        generator = create_frame_spec_generator(
+            render_tasks, entity_map, entity_details, colors, 10, 5000.0, "tracks"
+        )
+        generator_size = sys.getsizeof(generator)
+        
+        print(f"Original specs size: {original_size:,} bytes")
+        print(f"Generator size: {generator_size:,} bytes")
+        
+        return original_size > generator_size
 
 
 def show_main_menu():
@@ -736,31 +1168,38 @@ def show_main_menu():
     while True:
         print("\n" + "=" * 60)
         print("🧪 PHASE 2 MANUAL TEST SUITE")
-        print("Stateless Parallel Frame Renderer Testing")
+        print("Parallel Processing Implementation Testing")
         print("=" * 60)
         print()
         print("Setup & Information:")
         print("  [1] 🔧 Setup Test Environment")
         print("  [2] ⚙️  Show Configuration Info")
         print()
-        print("Core Functionality Tests:")
+        print("Task 1 - Stateless Renderer Tests:")
         print("  [3] 🎨 Single Frame Rendering Test")
         print("  [4] 🎬 Multiple Frames Sequential Test")
         print("  [5] 🚀 Multiprocess Simulation Test")
         print("  [6] 📊 Real Data Integration Test")
-        print()
-        print("Advanced Tests:")
         print("  [7] 🔒 Security Validation Test")
         print("  [8] ⚠️  Error Handling Test")
         print("  [9] 🏃 Performance Benchmark")
         print()
+        if TASK2_AVAILABLE:
+            print("Task 2 - Frame Spec Generator Tests:")
+            print("  [11] 🔄 Generator vs Original Equivalence")
+            print("  [12] 💾 Memory Usage Comparison")
+            print("  [13] 📈 Large Dataset Memory Test")
+            print("  [14] 🎭 Mode Testing (Tracks/Artists)")
+            print("  [15] ⚡ Generator Performance Test")
+            print()
         print("Utilities:")
         print("  [10] 🧹 Clean Up Test Files")
         print("  [0] 🚪 Exit")
         print()
         
         try:
-            choice = input("Select test [0-10]: ").strip()
+            max_choice = 15 if TASK2_AVAILABLE else 10
+            choice = input(f"Select test [0-{max_choice}]: ").strip()
             
             if choice == '0':
                 print("\n👋 Testing complete. Goodbye!")
@@ -822,8 +1261,29 @@ def show_main_menu():
             elif choice == '10':
                 tester.cleanup_test_files()
             
+            elif TASK2_AVAILABLE and choice == '11':
+                result = tester.test_generator_equivalence()
+                print(f"\n{'✅ Test PASSED' if result else '❌ Test FAILED'}")
+            
+            elif TASK2_AVAILABLE and choice == '12':
+                result = tester.test_memory_comparison()
+                print(f"\n{'✅ Test PASSED' if result else '❌ Test FAILED'}")
+            
+            elif TASK2_AVAILABLE and choice == '13':
+                result = tester.test_large_dataset_memory()
+                print(f"\n{'✅ Test PASSED' if result else '❌ Test FAILED'}")
+            
+            elif TASK2_AVAILABLE and choice == '14':
+                result = tester.test_mode_testing()
+                print(f"\n{'✅ Test PASSED' if result else '❌ Test FAILED'}")
+            
+            elif TASK2_AVAILABLE and choice == '15':
+                result = tester.test_generator_performance()
+                print(f"\n{'✅ Test PASSED' if result else '❌ Test FAILED'}")
+            
             else:
-                print("❌ Invalid choice. Please enter a number from 0-10.")
+                max_choice = 15 if TASK2_AVAILABLE else 10
+                print(f"❌ Invalid choice. Please enter a number from 0-{max_choice}.")
                 continue
             
             input("\nPress Enter to continue...")

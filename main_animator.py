@@ -56,6 +56,7 @@ MAX_FRAMES_FOR_TEST_RENDER = 0 # 0 or -1 for full render
 LOG_FRAME_TIMES_CONFIG = False # Will be loaded from config
 MAX_PARALLEL_WORKERS = os.cpu_count() # Default to number of CPU cores, will be loaded from config
 CLEANUP_INTERMEDIATE_FRAMES = True # Will be loaded from config
+USE_FRAME_SPEC_GENERATOR = True # Use memory-efficient generator by default, will be loaded from config
 PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = 50 # Default, will be loaded from config
 LOG_PARALLEL_PROCESS_START_CONFIG = True # Default, will be loaded from config
 ANIMATION_TRANSITION_DURATION_SECONDS = 0.3 # Default, will be loaded from config
@@ -229,7 +230,7 @@ def load_configuration():
     global config, VISUALIZATION_MODE, N_BARS, TARGET_FPS, OUTPUT_FILENAME_BASE, DEBUG_ALBUM_ART_LOGIC
     global ALBUM_ART_VISIBILITY_THRESHOLD_FACTOR, USE_NVENC_IF_AVAILABLE, PREFERRED_FONTS
     global MAX_FRAMES_FOR_TEST_RENDER, LOG_FRAME_TIMES_CONFIG
-    global MAX_PARALLEL_WORKERS, CLEANUP_INTERMEDIATE_FRAMES, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
+    global MAX_PARALLEL_WORKERS, CLEANUP_INTERMEDIATE_FRAMES, USE_FRAME_SPEC_GENERATOR, PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG
     global LOG_PARALLEL_PROCESS_START_CONFIG, ANIMATION_TRANSITION_DURATION_SECONDS
     global ENABLE_OVERTAKE_ANIMATIONS_CONFIG, SONG_TEXT_RIGHT_GAP_FRACTION
     # Rolling Stats Display Globals
@@ -303,6 +304,7 @@ def load_configuration():
         MAX_PARALLEL_WORKERS = workers_from_config
         
     CLEANUP_INTERMEDIATE_FRAMES = config.get_bool('AnimationOutput', 'CLEANUP_INTERMEDIATE_FRAMES', True)
+    USE_FRAME_SPEC_GENERATOR = config.get_bool('AnimationOutput', 'USE_FRAME_SPEC_GENERATOR', True)
     PARALLEL_LOG_COMPLETION_INTERVAL_CONFIG = config.get_int('Debugging', 'PARALLEL_LOG_COMPLETION_INTERVAL', 50)
     LOG_PARALLEL_PROCESS_START_CONFIG = config.get_bool('Debugging', 'LOG_PARALLEL_PROCESS_START', True)
 
@@ -1672,18 +1674,48 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
     print(f"Total output frames to render (including transitions): {num_total_output_frames}")
 
 
-    # --- NEW: Pre-compute all frame specifications ---
-    print(f"\n--- Pre-computing Frame Specifications ---")
-    all_frame_specs = prepare_all_frame_specs(
-        all_render_tasks,
-        entity_id_to_animator_key_map,
-        entity_details_map,
-        album_bar_colors,
-        N_BARS,
-        raw_max_play_count_overall,
-        VISUALIZATION_MODE
-    )
-    print(f"Pre-computed {len(all_frame_specs)} frame specifications")
+    # --- Frame Specification Preparation (Memory-Efficient or Original) ---
+    if USE_FRAME_SPEC_GENERATOR:
+        print(f"\n--- Creating Frame Specification Generator (Memory-Efficient) ---")
+        try:
+            from frame_spec_generator import create_frame_spec_generator
+            frame_spec_source = create_frame_spec_generator(
+                all_render_tasks,
+                entity_id_to_animator_key_map,
+                entity_details_map,
+                album_bar_colors,
+                N_BARS,
+                raw_max_play_count_overall,
+                VISUALIZATION_MODE
+            )
+            print(f"Created generator for {len(all_render_tasks)} frame specifications")
+            is_generator_mode = True
+        except ImportError as e:
+            print(f"Warning: Could not import frame_spec_generator: {e}")
+            print("Falling back to original pre-compute method...")
+            USE_FRAME_SPEC_GENERATOR = False  # Fallback
+            is_generator_mode = False
+    
+    if not USE_FRAME_SPEC_GENERATOR:
+        print(f"\n--- Pre-computing Frame Specifications (Original Method) ---")
+        frame_spec_source = prepare_all_frame_specs(
+            all_render_tasks,
+            entity_id_to_animator_key_map,
+            entity_details_map,
+            album_bar_colors,
+            N_BARS,
+            raw_max_play_count_overall,
+            VISUALIZATION_MODE
+        )
+        print(f"Pre-computed {len(frame_spec_source)} frame specifications")
+        is_generator_mode = False
+    
+    # For Task 2: If using generator mode, we still need to work with the existing 
+    # parallel processing infrastructure that expects render tasks, not frame specs.
+    # In Task 3, we'll implement true producer-consumer pattern with frame specs.
+    if is_generator_mode:
+        print("Note: Generator mode active but still using render task-based parallel processing.")
+        print("Full generator pipeline will be implemented in Task 3.")
     
     print(f"\n--- Starting Parallel Frame Generation ---")
     print(f"Total output frames to render: {num_total_output_frames}")
