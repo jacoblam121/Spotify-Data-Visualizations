@@ -166,9 +166,24 @@ def capture_all_globals_plus_config():
     # CRITICAL: Add missing NIGHTINGALE configuration variables manually
     # These should be loaded from configuration but aren't captured by introspection
     missing_nightingale_vars = {
+        # POSITIONING - CRITICAL for restoring original layout (user's request)
+        'NIGHTINGALE_CENTER_X_FIG': 0.145,  # From configurations.txt CHART_X = 0.145
+        'NIGHTINGALE_CENTER_Y_FIG': 0.29,   # From configurations.txt CHART_Y = 0.29
+        'NIGHTINGALE_RADIUS_FIG': 0.17,     # From configurations.txt CHART_RADIUS = 0.17
+        
+        # FONT SIZES - CRITICAL for restoring original font sizing (user's request)
+        'NIGHTINGALE_LABEL_FONT_SIZE': 16,  # From configurations.txt MONTH_LABEL_FONT_SIZE = 16
+        'NIGHTINGALE_HIGH_LOW_FONT_SIZE': 20,  # From configurations.txt HIGH_LOW_FONT_SIZE = 20
+        
+        # HIGH/LOW PANEL POSITIONING - CRITICAL for correct placement (user's request)
+        'NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG': 0.06,  # From configurations.txt HIGH_LOW_POSITION_BELOW_CHART = 0.06
+        'NIGHTINGALE_HIGH_LOW_SPACING_FIG': 0.025,  # From configurations.txt HIGH_LOW_SPACING = 0.025
+        
+        # TITLE & APPEARANCE
         'NIGHTINGALE_TITLE_FONT_SIZE': 22,  # From configurations.txt TITLE_FONT_SIZE = 22
         'NIGHTINGALE_TITLE_FONT_WEIGHT': 'normal',  # From configurations.txt TITLE_FONT_WEIGHT = normal  
         'NIGHTINGALE_TITLE_COLOR': 'black',  # From configurations.txt TITLE_COLOR = black
+        'NIGHTINGALE_TITLE_POSITION_ABOVE_CHART': 0.06,  # From configurations.txt TITLE_POSITION_ABOVE_CHART = 0.06
         'NIGHTINGALE_HIGH_PERIOD_COLOR': 'darkgreen',  # From configurations.txt
         'NIGHTINGALE_LOW_PERIOD_COLOR': 'darkred',  # From configurations.txt
         'NIGHTINGALE_OUTER_CIRCLE_COLOR': 'gray',  # From configurations.txt
@@ -182,6 +197,18 @@ def capture_all_globals_plus_config():
         if var_name not in relevant_globals:
             relevant_globals[var_name] = var_value
             print(f"📦 Added missing config variable: {var_name} = {var_value}")
+        else:
+            # FORCE OVERRIDE critical variables to restore original layout/fonts (user's request)
+            critical_vars = [
+                'NIGHTINGALE_CENTER_X_FIG', 'NIGHTINGALE_CENTER_Y_FIG', 'NIGHTINGALE_RADIUS_FIG',  # Positioning
+                'NIGHTINGALE_LABEL_FONT_SIZE', 'NIGHTINGALE_HIGH_LOW_FONT_SIZE',  # Font sizes
+                'NIGHTINGALE_HIGH_LOW_Y_OFFSET_FIG', 'NIGHTINGALE_HIGH_LOW_SPACING_FIG',  # High/Low panel
+                'NIGHTINGALE_TITLE_POSITION_ABOVE_CHART'  # Title positioning
+            ]
+            if var_name in critical_vars:
+                old_value = relevant_globals[var_name]
+                relevant_globals[var_name] = var_value  # Override with correct value
+                print(f"📦 RESTORED original setting: {var_name} = {var_value} (was {old_value})")
     
     return relevant_globals
 
