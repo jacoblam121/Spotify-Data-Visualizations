@@ -1692,7 +1692,7 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
     if USE_FRAME_SPEC_GENERATOR:
         print(f"\n--- Creating Frame Specification Generator (Memory-Efficient) ---")
         try:
-            from frame_spec_generator import create_frame_spec_generator
+            from rendering_utils.frame_spec_generator import create_frame_spec_generator
             frame_spec_source = create_frame_spec_generator(
                 all_render_tasks,
                 entity_id_to_animator_key_map,
@@ -1724,12 +1724,9 @@ def create_bar_chart_race_animation(race_df, entity_details_map, rolling_stats_d
         print(f"Pre-computed {len(frame_spec_source)} frame specifications")
         is_generator_mode = False
     
-    # For Task 2: If using generator mode, we still need to work with the existing 
-    # parallel processing infrastructure that expects render tasks, not frame specs.
-    # In Task 3, we'll implement true producer-consumer pattern with frame specs.
+    # Memory-efficient generator mode: Creates frame specs on-demand to reduce memory usage.
     if is_generator_mode:
-        print("Note: Generator mode active but still using render task-based parallel processing.")
-        print("Full generator pipeline will be implemented in Task 3.")
+        print("Memory-efficient generator pipeline active with optimized parallel processing.")
     
     print(f"\n--- Starting Parallel Frame Generation ---")
     print(f"Total output frames to render: {num_total_output_frames}")

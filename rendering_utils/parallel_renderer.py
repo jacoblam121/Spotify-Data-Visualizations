@@ -7,7 +7,6 @@ NIGHTINGALE configuration variables that weren't loaded during global capture.
 """
 
 import os
-import sys
 import time
 from typing import Dict, Any, Tuple
 import traceback
