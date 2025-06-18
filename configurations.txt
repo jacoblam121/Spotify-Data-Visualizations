@@ -305,7 +305,7 @@ ENABLE_SECONDARY_GENRES = True
 # --- Caching System ---
 [CachingSystem]
 # Master cache control - disables ALL caching when True
-DISABLE_ALL_CACHING = True
+DISABLE_ALL_CACHING = False
 
 # Cache directories
 CACHE_ROOT = .cache

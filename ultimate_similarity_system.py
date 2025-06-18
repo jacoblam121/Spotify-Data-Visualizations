@@ -54,7 +54,8 @@ class UltimateSimilaritySystem:
             self.lastfm_api = LastfmAPI(
                 self.lastfm_config['api_key'],
                 self.lastfm_config['api_secret'],
-                self.lastfm_config['cache_dir']
+                self.lastfm_config['cache_dir'],
+                config  # Pass config for cache control
             )
         
         # Initialize Deezer API (always available, no auth required)

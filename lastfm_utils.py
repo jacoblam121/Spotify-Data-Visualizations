@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class LastfmAPI:
     """Handler for Last.fm API interactions with caching support."""
     
-    def __init__(self, api_key: str, api_secret: str, cache_dir: str = "lastfm_cache"):
+    def __init__(self, api_key: str, api_secret: str, cache_dir: str = "lastfm_cache", config=None):
         """
         Initialize Last.fm API handler.
         
@@ -28,6 +28,7 @@ class LastfmAPI:
             api_key: Last.fm API key
             api_secret: Last.fm API secret (for future authenticated endpoints)
             cache_dir: Directory to store cache files
+            config: Optional config object for cache control
         """
         self.api_key = api_key
         self.api_secret = api_secret
@@ -35,6 +36,7 @@ class LastfmAPI:
         self.cache_dir = cache_dir
         self.cache_file = os.path.join(cache_dir, "lastfm_cache.json")
         self.cache_expiry_days = 30
+        self.config = config
         
         # Create cache directory if it doesn't exist
         if not os.path.exists(cache_dir):
@@ -46,6 +48,19 @@ class LastfmAPI:
         # Rate limiting
         self.last_request_time = 0
         self.min_request_interval = 0.2  # 200ms between requests
+    
+    def _is_caching_disabled(self) -> bool:
+        """Check if caching is disabled via configuration."""
+        if not self.config:
+            return False
+        
+        try:
+            # Check both global and specific disable flags
+            global_disable = self.config.get_bool('CachingSystem', 'DISABLE_ALL_CACHING', False)
+            lastfm_disable = self.config.get_bool('CachingSystem', 'DISABLE_LASTFM_CACHE', False)
+            return global_disable or lastfm_disable
+        except:
+            return False
         
     def _load_cache(self) -> Dict:
         """Load cache from disk."""
@@ -104,11 +119,12 @@ class LastfmAPI:
     
     def _make_request(self, method: str, params: Dict) -> Optional[Dict]:
         """Make a request to the Last.fm API."""
-        # Check cache first
-        cache_key = self._get_cache_key(method, params)
-        if cache_key in self.cache:
-            logger.debug(f"Cache hit for {method} with params {params}")
-            return self.cache[cache_key]['data']
+        # Check cache first (unless disabled)
+        if not self._is_caching_disabled():
+            cache_key = self._get_cache_key(method, params)
+            if cache_key in self.cache:
+                logger.debug(f"Cache hit for {method} with params {params}")
+                return self.cache[cache_key]['data']
         
         # Add required parameters
         params['method'] = method
@@ -135,12 +151,13 @@ class LastfmAPI:
                     logger.error(f"Last.fm API error {error_code}: {error_message}")
                 return None
             
-            # Cache successful response
-            self.cache[cache_key] = {
-                'data': data,
-                'timestamp': datetime.now().isoformat()
-            }
-            self._save_cache()
+            # Cache successful response (unless disabled)
+            if not self._is_caching_disabled():
+                self.cache[cache_key] = {
+                    'data': data,
+                    'timestamp': datetime.now().isoformat()
+                }
+                self._save_cache()
             
             return data
             

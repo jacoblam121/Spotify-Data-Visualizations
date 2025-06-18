@@ -31,6 +31,7 @@ from dataclasses import dataclass
 sys.path.insert(0, str(Path(__file__).parent))
 
 from config_loader import AppConfig
+from cache_manager import cache_result
 
 logger = logging.getLogger(__name__)
 
@@ -397,6 +398,70 @@ class ComprehensiveEdgeWeighter:
             'fusion_method': fusion_method
         }
     
+    def _create_similarities_hash(self, all_similarities: Dict[str, Dict[str, List[Dict]]]) -> str:
+        """Create a stable hash of the similarities data for caching."""
+        import hashlib
+        import json
+        
+        # Create a simplified representation for hashing
+        hash_data = {}
+        for source_artist, targets in all_similarities.items():
+            hash_data[source_artist] = {}
+            for target_artist, sources in targets.items():
+                # Hash the essential parts of each source entry
+                source_hashes = []
+                for source in sources:
+                    # Create hash from key fields that affect edge weighting
+                    key_fields = {
+                        'name': source.get('name', ''),
+                        'match': source.get('match', 0),
+                        'source': source.get('source', ''),
+                        'relationship_type': source.get('relationship_type', 'similarity')
+                    }
+                    source_hashes.append(json.dumps(key_fields, sort_keys=True))
+                hash_data[source_artist][target_artist] = sorted(source_hashes)
+        
+        # Create hash of the simplified structure
+        data_string = json.dumps(hash_data, sort_keys=True)
+        return hashlib.md5(data_string.encode()).hexdigest()[:16]
+    
+    @cache_result
+    def _create_network_edges_cached(self, similarities_hash: str, config_hash: str, 
+                                    all_similarities: Dict[str, Dict[str, List[Dict]]]) -> List[Dict]:
+        """Cached version of network edge creation that returns serializable dicts."""
+        print(f"🔄 Creating weighted edges (cache key: {similarities_hash}...)")
+        
+        # Call the actual implementation
+        weighted_edges = self._create_network_edges_impl(all_similarities)
+        
+        # Convert to serializable format for caching
+        serializable_edges = []
+        for edge in weighted_edges:
+            edge_dict = {
+                'source_artist': edge.source_artist,
+                'target_artist': edge.target_artist,
+                'similarity': edge.similarity,
+                'distance': edge.distance,
+                'confidence': edge.confidence,
+                'is_factual': edge.is_factual,
+                'fusion_method': edge.fusion_method,
+                'contributions': [
+                    {
+                        'source': c.source,
+                        'relationship_type': c.relationship_type,
+                        'raw_value': c.raw_value,
+                        'normalized_similarity': c.normalized_similarity,
+                        'normalized_distance': c.normalized_distance,
+                        'is_factual': c.is_factual,
+                        'confidence': c.confidence
+                    }
+                    for c in edge.contributions
+                ]
+            }
+            serializable_edges.append(edge_dict)
+        
+        return serializable_edges
+    
     def create_network_edges(self, all_similarities: Dict[str, Dict[str, List[Dict]]]) -> List[WeightedEdge]:
         """Create all weighted edges for the network.
         
@@ -406,6 +471,65 @@ class ComprehensiveEdgeWeighter:
         Returns:
             List of WeightedEdge objects
         """
+        # Check cache first
+        try:
+            from cache_manager import get_cache_manager
+            cache_manager = get_cache_manager()
+            
+            if cache_manager.is_enabled:
+                # Create cache keys
+                similarities_hash = self._create_similarities_hash(all_similarities)
+                config_hash = str(hash(str(self.config.__dict__)))[:8]
+                
+                print(f"📦 Edge weighting cache key: {similarities_hash[:8]}...")
+                
+                # Try cached version first
+                cached_edges = self._create_network_edges_cached(
+                    similarities_hash, config_hash, all_similarities
+                )
+                
+                # Convert cached dicts back to WeightedEdge objects
+                edges = []
+                for edge_dict in cached_edges:
+                    # Recreate EdgeContribution objects
+                    contributions = []
+                    for contrib_dict in edge_dict['contributions']:
+                        contribution = EdgeContribution(
+                            source=contrib_dict['source'],
+                            relationship_type=contrib_dict['relationship_type'],
+                            raw_value=contrib_dict['raw_value'],
+                            normalized_similarity=contrib_dict['normalized_similarity'],
+                            normalized_distance=contrib_dict['normalized_distance'],
+                            is_factual=contrib_dict['is_factual'],
+                            confidence=contrib_dict['confidence']
+                        )
+                        contributions.append(contribution)
+                    
+                    # Recreate WeightedEdge object
+                    edge = WeightedEdge(
+                        source_artist=edge_dict['source_artist'],
+                        target_artist=edge_dict['target_artist'],
+                        similarity=edge_dict['similarity'],
+                        distance=edge_dict['distance'],
+                        confidence=edge_dict['confidence'],
+                        is_factual=edge_dict['is_factual'],
+                        contributions=contributions,
+                        fusion_method=edge_dict['fusion_method']
+                    )
+                    edges.append(edge)
+                
+                print(f"🎯 Edge weighting cache HIT! Loaded {len(edges)} weighted edges")
+                return edges
+                
+        except Exception as e:
+            print(f"⚠️  Edge weighting cache failed: {e}")
+        
+        # Cache miss or disabled - create edges normally
+        print(f"🔄 Creating weighted edges...")
+        return self._create_network_edges_impl(all_similarities)
+    
+    def _create_network_edges_impl(self, all_similarities: Dict[str, Dict[str, List[Dict]]]) -> List[WeightedEdge]:
+        """Implementation of edge creation (extracted for caching)."""
         edges = []
         
         for source_artist, targets in all_similarities.items():

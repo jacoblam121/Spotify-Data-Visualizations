@@ -77,7 +77,8 @@ class ArtistNetworkAnalyzer:
             self.lastfm_api = LastfmAPI(
                 self.lastfm_config['api_key'],
                 self.lastfm_config['api_secret'],
-                self.lastfm_config['cache_dir']
+                self.lastfm_config['cache_dir'],
+                config  # Pass config for cache control
             )
         
         # Initialize enhanced artist data fetcher
@@ -387,85 +388,57 @@ class ArtistNetworkAnalyzer:
         
         return all_similarities
     
+    def _safe_datetime_format(self, value) -> str:
+        """Safely format a datetime value, handling various types."""
+        if value is None:
+            return None
+        
+        # Check if it has isoformat method (datetime objects)
+        if hasattr(value, 'isoformat'):
+            return value.isoformat()
+        
+        # Check if it's a pandas Timestamp
+        if hasattr(value, 'strftime'):
+            return value.strftime('%Y-%m-%d %H:%M:%S')
+        
+        # Fallback to string representation
+        return str(value)
+    
     def _create_data_hash(self, df: pd.DataFrame) -> str:
-        """Create a hash of the DataFrame for caching purposes."""
+        """Create a stable hash of the DataFrame for caching purposes."""
         import hashlib
         
-        # Create a hash from artist play counts (the core data for network generation)
-        artist_plays = df.groupby('artist').size().sort_values(ascending=False)
-        
-        # Convert to string and hash
-        data_string = str(sorted(artist_plays.items()))
-        return hashlib.md5(data_string.encode()).hexdigest()[:16]
-    
-    @cache_result
-    def _create_network_data_cached(self, data_hash: str, artist_list: list, 
-                                   top_n_artists: int, min_plays_threshold: int,
-                                   min_similarity_threshold: float) -> Dict:
-        """
-        Cached version of network creation that works with hashable parameters.
-        
-        Args:
-            data_hash: Hash of the source data
-            artist_list: List of tuples (artist_name, play_count)
-            top_n_artists: Number of top artists to include
-            min_plays_threshold: Minimum plays to include artist
-            min_similarity_threshold: Minimum similarity to include edge
+        try:
+            # Method 1: Use pandas' built-in hashing (most robust)
+            # This properly handles all pandas dtypes including datetime64[ns]
+            hash_values = pd.util.hash_pandas_object(df, index=False)
+            combined_hash = str(hash_values.sum())
             
-        Returns:
-            Enhanced network data dict
-        """
-        print(f"🔄 Creating network data (cache key: {data_hash[:8]}...)")
-        
-        # Recreate the data structures needed for processing
-        artist_plays = pd.Series({artist: count for artist, count in artist_list})
-        
-        # Continue with the actual network generation logic...
-        return self._create_network_from_artist_data(
-            artist_plays, top_n_artists, min_plays_threshold, min_similarity_threshold
-        )
-    
-    def _create_network_from_artist_data(self, artist_plays: pd.Series,
-                                        top_n_artists: int, min_plays_threshold: int,
-                                        min_similarity_threshold: float) -> Dict:
-        """
-        Core network generation logic extracted for caching.
-        """
-        # Filter by minimum threshold
-        artist_plays_filtered = artist_plays[artist_plays >= min_plays_threshold]
-        top_artists = artist_plays_filtered.head(top_n_artists)
-        
-        print(f"✅ Selected {len(top_artists)} artists (min {min_plays_threshold} plays)")
-        
-        # Fetch enhanced artist data for node creation
-        print(f"🔍 Step 1/3: Fetching enhanced artist data...")
-        artist_list = list(top_artists.index)
-        
-        def progress_callback(current, total, artist_name):
-            if current % 5 == 0 or current == total:
-                print(f"      📋 {current}/{total}: {artist_name}")
-        
-        enhanced_data = self.artist_fetcher.batch_fetch_artist_data(
-            artist_list, 
-            include_similar=False,  # We'll get similarities separately with comprehensive system
-            progress_callback=progress_callback
-        )
-        
-        # Continue with the rest of the network generation...
-        # (This would contain the rest of the original method logic)
-        # For now, return a placeholder to test caching
-        return {
-            'nodes': [],
-            'edges': [],
-            'metadata': {
-                'total_artists': len(top_artists),
-                'parameters': {
-                    'top_n_artists': top_n_artists,
-                    'min_plays_threshold': min_plays_threshold,
-                    'min_similarity_threshold': min_similarity_threshold
-                }
-            }
-        }
+            # Create a shorter, more readable hash
+            return hashlib.md5(combined_hash.encode()).hexdigest()[:16]
+            
+        except Exception as e:
+            # Fallback method: hash the essential data manually with proper type handling
+            print(f"⚠️  Primary hashing failed ({e}), using fallback method")
+            
+            # Create a hash from artist play counts with defensive type checking
+            artist_plays = df.groupby('artist').size().sort_values(ascending=False)
+            
+            # Normalize data for consistent hashing
+            normalized_data = []
+            for artist, count in sorted(artist_plays.items()):
+                # Ensure consistent string representation
+                artist_str = str(artist) if artist is not None else 'unknown'
+                count_str = str(int(count))
+                normalized_data.append(f"{artist_str}:{count_str}")
+            
+            # Include DataFrame shape and column info for extra specificity
+            shape_info = f"shape:{df.shape[0]}x{df.shape[1]}"
+            columns_info = f"cols:{':'.join(sorted(df.columns))}"
+            
+            # Combine all information
+            data_string = f"{shape_info}|{columns_info}|{'|'.join(normalized_data)}"
+            return hashlib.md5(data_string.encode()).hexdigest()[:16]
     
     def create_network_data(self, df: pd.DataFrame, 
                           top_n_artists: int = None,
@@ -499,6 +472,36 @@ class ArtistNetworkAnalyzer:
         if df.empty or 'artist' not in df.columns:
             print("❌ No artist data available")
             return {'nodes': [], 'edges': [], 'metadata': {}}
+        
+        # Check cache first
+        try:
+            from cache_manager import get_cache_manager
+            cache_manager = get_cache_manager()
+            
+            if cache_manager.is_enabled:
+                # Create cache-friendly representation of the data
+                data_hash = self._create_data_hash(df)
+                print(f"📦 Cache key: {data_hash[:8]}... (checking cache)")
+                
+                # Create versioned cache key
+                import pickle
+                CACHE_VERSION = "v2"  # Increment when hashing logic changes
+                cache_key = f"network_{CACHE_VERSION}_{data_hash}_{top_n_artists}_{min_plays_threshold}_{min_similarity_threshold}"
+                cache_file = cache_manager.cache_config['joblib_cache_dir'] / f"{cache_key}.pkl"
+                
+                if cache_file.exists():
+                    try:
+                        with open(cache_file, 'rb') as f:
+                            cached_result = pickle.load(f)
+                        print(f"🎯 Cache HIT! Loading cached network data")
+                        return cached_result
+                    except Exception as e:
+                        print(f"⚠️  Cache file corrupted, regenerating: {e}")
+                        cache_file.unlink(missing_ok=True)
+                        
+                print(f"🔄 Cache MISS - generating network data...")
+        except Exception as e:
+            print(f"⚠️  Cache check failed: {e}")
         
         # Get top artists by play count
         artist_plays = df.groupby('artist').size().sort_values(ascending=False)
@@ -648,8 +651,8 @@ class ArtistNetworkAnalyzer:
             'artists_with_api_data': successful_artists,
             'total_plays': len(df),
             'date_range': {
-                'start': df.index.min().isoformat() if hasattr(df.index, 'min') else None,
-                'end': df.index.max().isoformat() if hasattr(df.index, 'max') else None
+                'start': self._safe_datetime_format(df.index.min()) if hasattr(df.index, 'min') else None,
+                'end': self._safe_datetime_format(df.index.max()) if hasattr(df.index, 'max') else None
             },
             'genre_distribution': dict(genre_distribution),
             'unique_genres': list(genre_distribution.keys()),
@@ -686,11 +689,60 @@ class ArtistNetworkAnalyzer:
             'metadata': metadata
         }
         
+        # Phase 1.1: Multi-Genre Artist Support Enhancement
+        if self.network_config.get('enable_secondary_genres', True):
+            try:
+                from multi_genre_solution import generate_d3_multi_genre_nodes
+                print(f"🎨 Phase 1.1: Enhancing network with multi-genre support...")
+                
+                # Enhance nodes with multi-genre styling and positioning data
+                enhanced_network_data = generate_d3_multi_genre_nodes(
+                    network_data,
+                    enable_secondary_genres=True,
+                    max_secondary_genres=3
+                )
+                
+                # Update the network data with enhancements
+                network_data = enhanced_network_data
+                print(f"   ✨ Multi-genre enhancement complete")
+                print(f"   🎯 Genre centers: {len(network_data['metadata'].get('genre_centers', {}))}")
+                print(f"   🖌️  Multi-genre nodes: {sum(1 for n in nodes if n.get('is_multi_genre', False))}")
+                
+            except ImportError as e:
+                print(f"⚠️  Multi-genre enhancement unavailable: {e}")
+                print(f"   📦 Install missing dependency or check multi_genre_solution.py")
+            except Exception as e:
+                print(f"⚠️  Multi-genre enhancement failed: {e}")
+                print(f"   🔄 Continuing with basic network data")
+        else:
+            print(f"🎨 Multi-genre support disabled in configuration")
+        
         print(f"🌟 COMPREHENSIVE network complete:")
         print(f"   📊 {len(nodes)} nodes, {len(edges)} edges")
         print(f"   🎨 {len(genre_distribution)} genres: {list(genre_distribution.keys())}")
         print(f"   ⚖️  Multi-source fusion with confidence scoring")
         print(f"   ✅ Ready for D3.js visualization with genre clustering")
+        
+        # Save to cache
+        try:
+            from cache_manager import get_cache_manager
+            cache_manager = get_cache_manager()
+            
+            if cache_manager.is_enabled:
+                # Create same versioned cache key as used for loading
+                data_hash = self._create_data_hash(df)
+                CACHE_VERSION = "v2"  # Must match the loading version
+                cache_key = f"network_{CACHE_VERSION}_{data_hash}_{top_n_artists}_{min_plays_threshold}_{min_similarity_threshold}"
+                cache_file = cache_manager.cache_config['joblib_cache_dir'] / f"{cache_key}.pkl"
+                
+                # Save to cache
+                import pickle
+                with open(cache_file, 'wb') as f:
+                    pickle.dump(network_data, f)
+                print(f"💾 Network data cached: {cache_key[:16]}...")
+                
+        except Exception as e:
+            print(f"⚠️  Cache save failed: {e}")
         
         return network_data
     
