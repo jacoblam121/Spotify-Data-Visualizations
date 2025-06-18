@@ -236,4 +236,286 @@ class ComprehensiveEdgeWeighter:
     
     def _create_contribution(self, source_name: str, data: Dict) -> Optional[EdgeContribution]:
         """Convert source data to EdgeContribution."""
-        try:\n            if source_name == 'musicbrainz':\n                return self._create_musicbrainz_contribution(data)\n            elif source_name in ['lastfm', 'deezer']:\n                return self._create_algorithmic_contribution(source_name, data)\n            elif source_name == 'manual':\n                return self._create_manual_contribution(data)\n            else:\n                logger.warning(f\"Unknown source: {source_name}\")\n                return None\n                \n        except Exception as e:\n            logger.error(f\"Error creating contribution from {source_name}: {e}\")\n            return None\n    \n    def _create_musicbrainz_contribution(self, data: Dict) -> Optional[EdgeContribution]:\n        \"\"\"Create contribution from MusicBrainz relationship data.\"\"\"\n        relationship_type = data.get('musicbrainz_relationship', '').lower()\n        \n        if relationship_type not in self.config.musicbrainz_relationships:\n            # Handle unknown relationship types with fallback scoring\n            if 'member' in relationship_type or 'band' in relationship_type:\n                similarity = 0.9\n                distance = 2.0\n            elif 'collab' in relationship_type:\n                similarity = 0.8\n                distance = 3.0\n            else:\n                similarity = 0.5\n                distance = 10.0\n            \n            is_factual = True\n        else:\n            rel_config = self.config.musicbrainz_relationships[relationship_type]\n            similarity = rel_config['similarity']\n            distance = rel_config['distance']\n            is_factual = rel_config['is_factual']\n        \n        return EdgeContribution(\n            source='musicbrainz',\n            relationship_type=f'musicbrainz_{relationship_type.replace(\" \", \"_\")}',\n            raw_value=similarity,\n            normalized_similarity=similarity,\n            normalized_distance=distance,\n            is_factual=is_factual,\n            confidence=self.config.source_reliability['musicbrainz']\n        )\n    \n    def _create_algorithmic_contribution(self, source_name: str, data: Dict) -> Optional[EdgeContribution]:\n        \"\"\"Create contribution from algorithmic similarity data (Last.fm/Deezer).\"\"\"\n        raw_similarity = data.get('match', 0.0)\n        \n        # Apply power scaling to emphasize high similarities\n        power_factor = self.config.similarity_scaling['power_factor']\n        scaled_similarity = math.pow(raw_similarity, power_factor)\n        \n        # Convert similarity to distance (non-linear)\n        distance_constant = self.config.similarity_scaling['distance_constant']\n        distance = distance_constant / (scaled_similarity + 0.01)\n        \n        # Confidence based on source reliability and similarity strength\n        base_confidence = self.config.source_reliability[source_name]\n        similarity_confidence = scaled_similarity  # Higher similarity = higher confidence\n        confidence = (base_confidence + similarity_confidence) / 2.0\n        \n        return EdgeContribution(\n            source=source_name,\n            relationship_type=f'{source_name}_similarity',\n            raw_value=raw_similarity,\n            normalized_similarity=scaled_similarity,\n            normalized_distance=distance,\n            is_factual=False,\n            confidence=confidence\n        )\n    \n    def _create_manual_contribution(self, data: Dict) -> Optional[EdgeContribution]:\n        \"\"\"Create contribution from manual connection data.\"\"\"\n        similarity = data.get('match', 1.0)\n        \n        return EdgeContribution(\n            source='manual',\n            relationship_type=data.get('relationship_type', 'manual_connection'),\n            raw_value=similarity,\n            normalized_similarity=similarity,\n            normalized_distance=1.0,  # Manual connections are \"close\"\n            is_factual=True,\n            confidence=self.config.source_reliability['manual']\n        )\n    \n    def _fuse_contributions(self, contributions: List[EdgeContribution]) -> Dict:\n        \"\"\"Fuse multiple contributions into final edge attributes.\"\"\"\n        # Separate factual vs algorithmic contributions\n        factual_contributions = [c for c in contributions if c.is_factual]\n        algorithmic_contributions = [c for c in contributions if not c.is_factual]\n        \n        # Primary similarity calculation\n        if factual_contributions:\n            # If any factual relationships exist, use the strongest one as base\n            primary_similarity = max(c.normalized_similarity for c in factual_contributions)\n            fusion_method = 'factual_primary'\n        else:\n            # Pure algorithmic - use weighted average\n            weighted_sum = sum(c.normalized_similarity * c.confidence for c in algorithmic_contributions)\n            weight_sum = sum(c.confidence for c in algorithmic_contributions)\n            primary_similarity = weighted_sum / weight_sum if weight_sum > 0 else 0.0\n            fusion_method = 'algorithmic_weighted'\n        \n        # Apply factual boost if both types present\n        if factual_contributions and algorithmic_contributions:\n            factual_boost = self.config.fusion_config['factual_boost']\n            primary_similarity = min(1.0, primary_similarity * factual_boost)\n            fusion_method = 'hybrid_boosted'\n        \n        # Multi-source agreement bonus\n        unique_sources = set(c.source for c in contributions)\n        if len(unique_sources) > 1:\n            agreement_bonus = self.config.fusion_config['agreement_bonus']\n            primary_similarity = min(1.0, primary_similarity + agreement_bonus)\n            fusion_method += '_multi_source'\n        \n        # Distance calculation (use minimum distance from any source)\n        primary_distance = min(c.normalized_distance for c in contributions)\n        \n        # Confidence calculation\n        avg_confidence = sum(c.confidence for c in contributions) / len(contributions)\n        \n        # Penalize high variance between sources (indicates conflict)\n        similarities = [c.normalized_similarity for c in contributions]\n        if len(similarities) > 1:\n            variance = sum((s - primary_similarity) ** 2 for s in similarities) / len(similarities)\n            conflict_penalty = self.config.fusion_config['conflict_penalty'] * variance\n            avg_confidence = max(0.0, avg_confidence - conflict_penalty)\n        \n        return {\n            'similarity': min(1.0, max(0.0, primary_similarity)),\n            'distance': max(0.5, primary_distance),\n            'confidence': min(1.0, max(0.0, avg_confidence)),\n            'is_factual': len(factual_contributions) > 0,\n            'fusion_method': fusion_method\n        }\n    \n    def create_network_edges(self, all_similarities: Dict[str, Dict[str, List[Dict]]]) -> List[WeightedEdge]:\n        \"\"\"Create all weighted edges for the network.\n        \n        Args:\n            all_similarities: Nested dict of artist -> target_artist -> [source_data]\n                            \n        Returns:\n            List of WeightedEdge objects\n        \"\"\"\n        edges = []\n        \n        for source_artist, targets in all_similarities.items():\n            for target_artist, source_data_list in targets.items():\n                if source_artist == target_artist:\n                    continue  # Skip self-connections\n                \n                # Group source data by source name\n                grouped_data = {}\n                for source_data in source_data_list:\n                    source_name = source_data.get('source', 'unknown')\n                    if source_name not in grouped_data:\n                        grouped_data[source_name] = []\n                    grouped_data[source_name].append(source_data)\n                \n                # Create weighted edge\n                edge = self.create_weighted_edge(source_artist, target_artist, grouped_data)\n                if edge:\n                    edges.append(edge)\n        \n        logger.info(f\"Created {len(edges)} weighted edges\")\n        \n        # Log fusion method statistics\n        fusion_stats = {}\n        for edge in edges:\n            method = edge.fusion_method\n            if method not in fusion_stats:\n                fusion_stats[method] = 0\n            fusion_stats[method] += 1\n        \n        logger.info(f\"Fusion method breakdown: {fusion_stats}\")\n        \n        return edges\n\ndef test_edge_weighting_system():\n    \"\"\"Test the comprehensive edge weighting system.\"\"\"\n    print(\"🧪 Testing Comprehensive Edge Weighting System\")\n    print(\"=\" * 55)\n    \n    # Create test configuration\n    config = EdgeWeightingConfig()\n    weighter = ComprehensiveEdgeWeighter(config)\n    \n    # Test case 1: Multi-source agreement (should get high weight)\n    print(\"\\n1️⃣ Testing Multi-Source Agreement\")\n    print(\"-\" * 35)\n    \n    source_data = {\n        'lastfm': [{'match': 0.8, 'source': 'lastfm'}],\n        'deezer': [{'match': 0.75, 'source': 'deezer'}],\n        'musicbrainz': [{\n            'musicbrainz_relationship': 'collaboration',\n            'source': 'musicbrainz'\n        }]\n    }\n    \n    edge = weighter.create_weighted_edge(\"Artist A\", \"Artist B\", source_data)\n    if edge:\n        print(f\"Multi-source edge:\")\n        print(f\"   Similarity: {edge.similarity:.3f}\")\n        print(f\"   Distance: {edge.distance:.1f}\")\n        print(f\"   Confidence: {edge.confidence:.3f}\")\n        print(f\"   Is factual: {edge.is_factual}\")\n        print(f\"   Fusion method: {edge.fusion_method}\")\n        print(f\"   Sources: {[c.source for c in edge.contributions]}\")\n    \n    # Test case 2: Factual relationship (should get very high weight)\n    print(\"\\n2️⃣ Testing Factual Relationship\")\n    print(\"-\" * 32)\n    \n    source_data = {\n        'musicbrainz': [{\n            'musicbrainz_relationship': 'member of band',\n            'source': 'musicbrainz'\n        }]\n    }\n    \n    edge = weighter.create_weighted_edge(\"John Lennon\", \"The Beatles\", source_data)\n    if edge:\n        print(f\"Factual edge:\")\n        print(f\"   Similarity: {edge.similarity:.3f}\")\n        print(f\"   Distance: {edge.distance:.1f}\")\n        print(f\"   Confidence: {edge.confidence:.3f}\")\n        print(f\"   Is factual: {edge.is_factual}\")\n    \n    # Test case 3: Low algorithmic similarity (should be filtered or low weight)\n    print(\"\\n3️⃣ Testing Low Algorithmic Similarity\")\n    print(\"-\" * 37)\n    \n    source_data = {\n        'lastfm': [{'match': 0.15, 'source': 'lastfm'}]\n    }\n    \n    edge = weighter.create_weighted_edge(\"Artist X\", \"Artist Y\", source_data)\n    if edge:\n        print(f\"Low similarity edge:\")\n        print(f\"   Similarity: {edge.similarity:.3f}\")\n        print(f\"   Confidence: {edge.confidence:.3f}\")\n    else:\n        print(\"   ✅ Edge filtered out (below confidence threshold)\")\n    \n    # Test case 4: D3.js format conversion\n    print(\"\\n4️⃣ Testing D3.js Format Conversion\")\n    print(\"-\" * 34)\n    \n    if edge:\n        d3_format = edge.to_d3_format()\n        print(f\"D3.js format:\")\n        for key, value in d3_format.items():\n            print(f\"   {key}: {value}\")\n\nif __name__ == \"__main__\":\n    test_edge_weighting_system()
+        try:
+            if source_name == 'musicbrainz':
+                return self._create_musicbrainz_contribution(data)
+            elif source_name in ['lastfm', 'deezer', 'lastfm_bidirectional']:
+                # Handle bidirectional lastfm as regular lastfm
+                normalized_source = 'lastfm' if 'lastfm' in source_name else source_name
+                return self._create_algorithmic_contribution(normalized_source, data)
+            elif source_name == 'manual':
+                return self._create_manual_contribution(data)
+            elif source_name == 'multi_source':
+                # Multi-source is already a fusion result, treat as high-confidence algorithmic
+                return self._create_multi_source_contribution(data)
+            else:
+                logger.warning(f"Unknown source: {source_name}")
+                return None
+                
+        except Exception as e:
+            logger.error(f"Error creating contribution from {source_name}: {e}")
+            return None
+    
+    def _create_musicbrainz_contribution(self, data: Dict) -> Optional[EdgeContribution]:
+        """Create contribution from MusicBrainz relationship data."""
+        relationship_type = data.get('musicbrainz_relationship', '').lower()
+        
+        if relationship_type not in self.config.musicbrainz_relationships:
+            # Handle unknown relationship types with fallback scoring
+            if 'member' in relationship_type or 'band' in relationship_type:
+                similarity = 0.9
+                distance = 2.0
+            elif 'collab' in relationship_type:
+                similarity = 0.8
+                distance = 3.0
+            else:
+                similarity = 0.5
+                distance = 10.0
+            
+            is_factual = True
+        else:
+            rel_config = self.config.musicbrainz_relationships[relationship_type]
+            similarity = rel_config['similarity']
+            distance = rel_config['distance']
+            is_factual = rel_config['is_factual']
+        
+        return EdgeContribution(
+            source='musicbrainz',
+            relationship_type=f'musicbrainz_{relationship_type.replace(" ", "_")}',
+            raw_value=similarity,
+            normalized_similarity=similarity,
+            normalized_distance=distance,
+            is_factual=is_factual,
+            confidence=self.config.source_reliability['musicbrainz']
+        )
+    
+    def _create_algorithmic_contribution(self, source_name: str, data: Dict) -> Optional[EdgeContribution]:
+        """Create contribution from algorithmic similarity data (Last.fm/Deezer)."""
+        raw_similarity = data.get('match', 0.0)
+        
+        # Apply power scaling to emphasize high similarities
+        power_factor = self.config.similarity_scaling['power_factor']
+        scaled_similarity = math.pow(raw_similarity, power_factor)
+        
+        # Convert similarity to distance (non-linear)
+        distance_constant = self.config.similarity_scaling['distance_constant']
+        distance = distance_constant / (scaled_similarity + 0.01)
+        
+        # Confidence based on source reliability and similarity strength
+        base_confidence = self.config.source_reliability[source_name]
+        similarity_confidence = scaled_similarity  # Higher similarity = higher confidence
+        confidence = (base_confidence + similarity_confidence) / 2.0
+        
+        return EdgeContribution(
+            source=source_name,
+            relationship_type=f'{source_name}_similarity',
+            raw_value=raw_similarity,
+            normalized_similarity=scaled_similarity,
+            normalized_distance=distance,
+            is_factual=False,
+            confidence=confidence
+        )
+    
+    def _create_manual_contribution(self, data: Dict) -> Optional[EdgeContribution]:
+        """Create contribution from manual connection data."""
+        similarity = data.get('match', 1.0)
+        
+        return EdgeContribution(
+            source='manual',
+            relationship_type=data.get('relationship_type', 'manual_connection'),
+            raw_value=similarity,
+            normalized_similarity=similarity,
+            normalized_distance=1.0,  # Manual connections are "close"
+            is_factual=True,
+            confidence=self.config.source_reliability['manual']
+        )
+    
+    def _create_multi_source_contribution(self, data: Dict) -> Optional[EdgeContribution]:
+        """Create contribution from pre-fused multi-source data."""
+        similarity = data.get('match', 0.0)
+        
+        # Multi-source entries have already been through fusion, so treat with high confidence
+        return EdgeContribution(
+            source='multi_source',
+            relationship_type=data.get('relationship_type', 'multi_source_fusion'),
+            raw_value=similarity,
+            normalized_similarity=similarity,
+            normalized_distance=2.0,  # Multi-source connections are reliable
+            is_factual=False,  # Still algorithmic, just high-confidence
+            confidence=0.95  # Very high confidence for multi-source agreements
+        )
+    
+    def _fuse_contributions(self, contributions: List[EdgeContribution]) -> Dict:
+        """Fuse multiple contributions into final edge attributes."""
+        # Separate factual vs algorithmic contributions
+        factual_contributions = [c for c in contributions if c.is_factual]
+        algorithmic_contributions = [c for c in contributions if not c.is_factual]
+        
+        # Primary similarity calculation
+        if factual_contributions:
+            # If any factual relationships exist, use the strongest one as base
+            primary_similarity = max(c.normalized_similarity for c in factual_contributions)
+            fusion_method = 'factual_primary'
+        else:
+            # Pure algorithmic - use weighted average
+            weighted_sum = sum(c.normalized_similarity * c.confidence for c in algorithmic_contributions)
+            weight_sum = sum(c.confidence for c in algorithmic_contributions)
+            primary_similarity = weighted_sum / weight_sum if weight_sum > 0 else 0.0
+            fusion_method = 'algorithmic_weighted'
+        
+        # Apply factual boost if both types present
+        if factual_contributions and algorithmic_contributions:
+            factual_boost = self.config.fusion_config['factual_boost']
+            primary_similarity = min(1.0, primary_similarity * factual_boost)
+            fusion_method = 'hybrid_boosted'
+        
+        # Multi-source agreement bonus
+        unique_sources = set(c.source for c in contributions)
+        if len(unique_sources) > 1:
+            agreement_bonus = self.config.fusion_config['agreement_bonus']
+            primary_similarity = min(1.0, primary_similarity + agreement_bonus)
+            fusion_method += '_multi_source'
+        
+        # Distance calculation (use minimum distance from any source)
+        primary_distance = min(c.normalized_distance for c in contributions)
+        
+        # Confidence calculation
+        avg_confidence = sum(c.confidence for c in contributions) / len(contributions)
+        
+        # Penalize high variance between sources (indicates conflict)
+        similarities = [c.normalized_similarity for c in contributions]
+        if len(similarities) > 1:
+            variance = sum((s - primary_similarity) ** 2 for s in similarities) / len(similarities)
+            conflict_penalty = self.config.fusion_config['conflict_penalty'] * variance
+            avg_confidence = max(0.0, avg_confidence - conflict_penalty)
+        
+        return {
+            'similarity': min(1.0, max(0.0, primary_similarity)),
+            'distance': max(0.5, primary_distance),
+            'confidence': min(1.0, max(0.0, avg_confidence)),
+            'is_factual': len(factual_contributions) > 0,
+            'fusion_method': fusion_method
+        }
+    
+    def create_network_edges(self, all_similarities: Dict[str, Dict[str, List[Dict]]]) -> List[WeightedEdge]:
+        """Create all weighted edges for the network.
+        
+        Args:
+            all_similarities: Nested dict of artist -> target_artist -> [source_data]
+                            
+        Returns:
+            List of WeightedEdge objects
+        """
+        edges = []
+        
+        for source_artist, targets in all_similarities.items():
+            for target_artist, source_data_list in targets.items():
+                if source_artist == target_artist:
+                    continue  # Skip self-connections
+                
+                # Group source data by source name
+                grouped_data = {}
+                for source_data in source_data_list:
+                    source_name = source_data.get('source', 'unknown')
+                    if source_name not in grouped_data:
+                        grouped_data[source_name] = []
+                    grouped_data[source_name].append(source_data)
+                
+                # Create weighted edge
+                edge = self.create_weighted_edge(source_artist, target_artist, grouped_data)
+                if edge:
+                    edges.append(edge)
+        
+        logger.info(f"Created {len(edges)} weighted edges")
+        
+        # Log fusion method statistics
+        fusion_stats = {}
+        for edge in edges:
+            method = edge.fusion_method
+            if method not in fusion_stats:
+                fusion_stats[method] = 0
+            fusion_stats[method] += 1
+        
+        logger.info(f"Fusion method breakdown: {fusion_stats}")
+        
+        return edges
+
+def test_edge_weighting_system():
+    """Test the comprehensive edge weighting system."""
+    print("🧪 Testing Comprehensive Edge Weighting System")
+    print("=" * 55)
+    
+    # Create test configuration
+    config = EdgeWeightingConfig()
+    weighter = ComprehensiveEdgeWeighter(config)
+    
+    # Test case 1: Multi-source agreement (should get high weight)
+    print("\n1️⃣ Testing Multi-Source Agreement")
+    print("-" * 35)
+    
+    source_data = {
+        'lastfm': [{'match': 0.8, 'source': 'lastfm'}],
+        'deezer': [{'match': 0.75, 'source': 'deezer'}],
+        'musicbrainz': [{
+            'musicbrainz_relationship': 'collaboration',
+            'source': 'musicbrainz'
+        }]
+    }
+    
+    edge = weighter.create_weighted_edge("Artist A", "Artist B", source_data)
+    if edge:
+        print(f"Multi-source edge:")
+        print(f"   Similarity: {edge.similarity:.3f}")
+        print(f"   Distance: {edge.distance:.1f}")
+        print(f"   Confidence: {edge.confidence:.3f}")
+        print(f"   Is factual: {edge.is_factual}")
+        print(f"   Fusion method: {edge.fusion_method}")
+        print(f"   Sources: {[c.source for c in edge.contributions]}")
+    
+    # Test case 2: Factual relationship (should get very high weight)
+    print("\n2️⃣ Testing Factual Relationship")
+    print("-" * 32)
+    
+    source_data = {
+        'musicbrainz': [{
+            'musicbrainz_relationship': 'member of band',
+            'source': 'musicbrainz'
+        }]
+    }
+    
+    edge = weighter.create_weighted_edge("John Lennon", "The Beatles", source_data)
+    if edge:
+        print(f"Factual edge:")
+        print(f"   Similarity: {edge.similarity:.3f}")
+        print(f"   Distance: {edge.distance:.1f}")
+        print(f"   Confidence: {edge.confidence:.3f}")
+        print(f"   Is factual: {edge.is_factual}")
+    
+    # Test case 3: Low algorithmic similarity (should be filtered or low weight)
+    print("\n3️⃣ Testing Low Algorithmic Similarity")
+    print("-" * 37)
+    
+    source_data = {
+        'lastfm': [{'match': 0.15, 'source': 'lastfm'}]
+    }
+    
+    edge = weighter.create_weighted_edge("Artist X", "Artist Y", source_data)
+    if edge:
+        print(f"Low similarity edge:")
+        print(f"   Similarity: {edge.similarity:.3f}")
+        print(f"   Confidence: {edge.confidence:.3f}")
+    else:
+        print("   ✅ Edge filtered out (below confidence threshold)")
+    
+    # Test case 4: D3.js format conversion
+    print("\n4️⃣ Testing D3.js Format Conversion")
+    print("-" * 34)
+    
+    if edge:
+        d3_format = edge.to_d3_format()
+        print(f"D3.js format:")
+        for key, value in d3_format.items():
+            print(f"   {key}: {value}")
+
+if __name__ == "__main__":
+    test_edge_weighting_system()

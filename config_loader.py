@@ -112,7 +112,8 @@ class AppConfig:
             'spotify_popularity_boost': self.get_float('NetworkVisualization', 'SPOTIFY_POPULARITY_BOOST', 1.5),
             'top_n_artists': self.get_int('NetworkVisualization', 'TOP_N_ARTISTS', 100),
             'min_similarity_threshold': self.get_float('NetworkVisualization', 'MIN_SIMILARITY_THRESHOLD', 0.2),
-            'min_plays_threshold': self.get_int('NetworkVisualization', 'MIN_PLAYS_THRESHOLD', 5)
+            'min_plays_threshold': self.get_int('NetworkVisualization', 'MIN_PLAYS_THRESHOLD', 5),
+            'enable_secondary_genres': self.get_bool('NetworkVisualization', 'ENABLE_SECONDARY_GENRES', True)
         }
 
     def validate_visualization_mode(self):

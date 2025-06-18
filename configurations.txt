@@ -296,6 +296,29 @@ MIN_SIMILARITY_THRESHOLD = 0.2
 # Minimum play count for an artist to be included in network
 MIN_PLAYS_THRESHOLD = 5
 
+# Genre classification settings
+# ENABLE_SECONDARY_GENRES: Include secondary genres for multi-genre artists
+# True = Rich multi-genre visualization with multi-stroke borders
+# False = Clean single-genre approach, each artist assigned to primary genre only
+ENABLE_SECONDARY_GENRES = True
+
+# --- Caching System ---
+[CachingSystem]
+# Master cache control - disables ALL caching when True
+DISABLE_ALL_CACHING = True
+
+# Cache directories
+CACHE_ROOT = .cache
+JOBLIB_CACHE_DIR = .cache/joblib
+
+# Cache verbosity (0=quiet, 1=info, 2=debug)
+CACHE_VERBOSITY = 0
+
+# Individual cache controls (for existing JSON caches)
+DISABLE_LASTFM_CACHE = False
+DISABLE_SPOTIFY_CACHE = False
+DISABLE_NETWORK_CACHE = False
+
 # --- Glow Effect Configuration ---
 [GlowEffects]
 # Global Mode: Glow percentage for user's most played artists

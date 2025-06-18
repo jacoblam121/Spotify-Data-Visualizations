@@ -8,3 +8,4 @@ networkx>=3.0
 python-dotenv>=1.0.0
 requests-cache>=1.0.0
 tenacity>=8.0.0
+joblib>=1.0.0
