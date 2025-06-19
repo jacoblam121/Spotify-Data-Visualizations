@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Artist Network - Phase 2.1a</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            background: #000000; /* Twitch Atlas black background */
+            color: white;
+            overflow: hidden;
+        }
+        .container { 
+            display: flex; 
+            height: 100vh; 
+        }
+        .sidebar { 
+            width: 320px; 
+            background: rgba(20, 20, 20, 0.95); 
+            padding: 20px; 
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            overflow-y: auto;
+        }
+        .main { 
+            flex: 1; 
+            position: relative; 
+            background: #000000;
+        }
+        h1 { 
+            margin: 0 0 20px 0; 
+            font-size: 24px; 
+            font-weight: 300; 
+            color: #FFEB3B; /* Pop genre color for title */
+        }
+        
+        /* Renderer Selector */
+        .renderer-selector {
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .renderer-selector legend {
+            padding: 0 10px;
+            font-weight: bold;
+            color: #64b5f6;
+        }
+        .renderer-option {
+            display: block;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+        .renderer-option input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        /* Controls */
+        .controls { 
+            margin: 20px 0; 
+        }
+        .control-group { 
+            margin: 15px 0; 
+        }
+        label { 
+            display: block; 
+            margin-bottom: 5px; 
+            font-size: 14px; 
+        }
+        input[type="range"] { 
+            width: 100%; 
+            margin: 5px 0; 
+        }
+        
+        /* Canvas styles */
+        canvas { 
+            width: 100%; 
+            height: 100%;
+            cursor: move; /* Show it's draggable */
+        }
+        
+        .stats { 
+            margin-top: 20px; 
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        .stat-item { 
+            display: flex; 
+            justify-content: space-between; 
+            margin: 8px 0; 
+            font-size: 13px;
+        }
+        
+        /* Loading state */
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            z-index: 100;
+            color: #FFEB3B;
+        }
+        
+        /* Debug info */
+        .debug-info {
+            margin-top: 20px;
+            padding: 10px;
+            background: rgba(76, 175, 80, 0.2);
+            border-radius: 6px;
+            font-size: 12px;
+            border-left: 3px solid #4caf50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>Enhanced Network Visualization</h1>
+            <p style="font-size: 12px; opacity: 0.8;">Phase 2.1a - Canvas Foundation</p>
+            
+            <!-- Renderer Selector -->
+            <fieldset class="renderer-selector">
+                <legend>Renderer Engine</legend>
+                <label class="renderer-option">
+                    <input type="radio" name="renderer" value="canvas" checked>
+                    <strong>Canvas</strong> - High Performance (Phase 2)
+                </label>
+                <label class="renderer-option">
+                    <input type="radio" name="renderer" value="svg">
+                    <strong>SVG</strong> - Legacy Fallback
+                </label>
+            </fieldset>
+            
+            <!-- Controls -->
+            <div class="controls">
+                <div class="control-group">
+                    <label>Force Strength</label>
+                    <input type="range" id="forceStrength" min="50" max="800" value="300">
+                    <span id="forceStrengthValue">300</span>
+                </div>
+                <div class="control-group">
+                    <label>Zoom Sensitivity</label>
+                    <input type="range" id="zoomSensitivity" min="0.1" max="2" step="0.1" value="1">
+                    <span id="zoomSensitivityValue">1.0</span>
+                </div>
+            </div>
+            
+            <!-- Network Stats -->
+            <div class="stats">
+                <h3 style="margin-top: 0;">Network Stats</h3>
+                <div class="stat-item">
+                    <span>Renderer:</span>
+                    <span id="currentRenderer">Canvas</span>
+                </div>
+                <div class="stat-item">
+                    <span>Nodes:</span>
+                    <span id="nodeCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>Edges:</span>
+                    <span id="edgeCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span>FPS:</span>
+                    <span id="fps">--</span>
+                </div>
+            </div>
+            
+            <!-- Debug Info -->
+            <div class="debug-info">
+                <h4 style="margin-top: 0;">Subphase 2.1a Goals:</h4>
+                <ul style="margin: 5px 0; padding-left: 20px; font-size: 11px;">
+                    <li>✅ Canvas rendering with genre colors</li>
+                    <li>✅ Black background (Twitch Atlas style)</li>
+                    <li>✅ Renderer abstraction (Canvas/SVG toggle)</li>
+                    <li>✅ D3 zoom/pan integration</li>
+                    <li>⏳ HiDPI support</li>
+                    <li>⏳ Performance monitoring</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="main">
+            <div class="loading" id="loadingIndicator">Loading network data...</div>
+            <!-- Canvas and SVG containers will be created dynamically -->
+        </div>
+    </div>
+    
+    <script src="js/genre_colors.js"></script>
+    <script src="js/renderers/base_renderer.js"></script>
+    <script src="js/renderers/canvas_renderer.js"></script>
+    <script src="js/renderers/svg_renderer.js"></script>
+    <script src="js/network_enhanced_fixed.js"></script>
+</body>
+</html>

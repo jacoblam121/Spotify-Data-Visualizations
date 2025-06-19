@@ -1,109 +1,163 @@
 #!/usr/bin/env python3
 """
-Debug Genre Classification
-==========================
-Quick test to diagnose why genre classification is failing.
+Debug Genre Classification Issues
+
+This script helps debug why artists are getting incorrect genre classifications.
 """
 
-import sys
-from pathlib import Path
-
-# Add project modules
-sys.path.insert(0, str(Path(__file__).parent))
-
-from artist_data_fetcher import EnhancedArtistDataFetcher
-from config_loader import AppConfig
-
-def test_artist_data_fetcher():
-    """Test the artist data fetcher directly to see why success=False."""
-    print("🔍 Testing Artist Data Fetcher")
-    print("=" * 32)
+def debug_genre_matching():
+    """Debug the bidirectional substring matching issue."""
     
-    # Initialize
-    config = AppConfig("configurations.txt")
-    fetcher = EnhancedArtistDataFetcher(config)
+    # Import the current problematic logic
+    from simplified_genre_colors import GENRE_MAPPINGS
     
-    # Test with a few well-known artists
-    test_artists = ["Taylor Swift", "Paramore", "IVE"]
+    print("🐛 DEBUGGING GENRE CLASSIFICATION ISSUES")
+    print("=" * 60)
     
-    print(f"📋 Testing {len(test_artists)} artists...")
+    # Test problematic tags that might appear for Taylor Swift
+    test_tags = [
+        "pop",
+        "country", 
+        "folk",
+        "seen live in asia 2024",  # This could trigger 'asian'
+        "electronic remix version",  # This could trigger 'electronic'
+        "alternative country",  # This might trigger multiple genres
+        "not country music",  # Negative mention still triggers
+        "taylor swift",
+        "album",
+        "popular",
+        "music"
+    ]
     
-    for artist in test_artists:
-        print(f"\n🎯 Testing: {artist}")
+    print("\n🔍 Testing current bidirectional matching logic:")
+    print("if keyword in genre_lower or genre_lower in keyword:")
+    print("-" * 50)
+    
+    for tag in test_tags:
+        print(f"\nTesting tag: '{tag}'")
+        tag_lower = tag.lower().strip()
         
-        try:
-            enhanced_data = fetcher.fetch_artist_data(artist)
-            
-            print(f"   Success: {enhanced_data.get('success', 'Unknown')}")
-            print(f"   Error: {enhanced_data.get('error', 'None')}")
-            print(f"   Canonical name: {enhanced_data.get('canonical_name', 'Missing')}")
-            
-            # Check data sources
-            has_lastfm = bool(enhanced_data.get('lastfm_data'))
-            has_spotify = bool(enhanced_data.get('spotify_data'))
-            
-            print(f"   Last.fm data: {'✅' if has_lastfm else '❌'}")
-            print(f"   Spotify data: {'✅' if has_spotify else '❌'}")
-            
-            if has_lastfm:
-                lastfm_data = enhanced_data['lastfm_data']
-                tags = lastfm_data.get('tags', [])
-                print(f"   Last.fm tags: {[tag.get('name', 'no-name') for tag in tags[:3]]}")
-                print(f"   Listeners: {lastfm_data.get('listeners', 0)}")
-            
-            if has_spotify:
-                spotify_data = enhanced_data['spotify_data']
-                genres = spotify_data.get('genres', [])
-                print(f"   Spotify genres: {genres[:3]}")
-                print(f"   Followers: {spotify_data.get('followers', 0)}")
-            
-            # Test genre classification if data is available
-            if enhanced_data.get('success'):
-                from network_utils import ArtistNetworkAnalyzer
-                analyzer = ArtistNetworkAnalyzer(config)
-                primary_genre, all_genres = analyzer.classify_artist_genre(enhanced_data)
-                print(f"   🎨 Classified genre: {primary_genre}")
-                print(f"   🎨 All genres: {all_genres[:3]}")
-            
-        except Exception as e:
-            print(f"   ❌ Error: {e}")
-            import traceback
-            traceback.print_exc()
+        matched_genres = []
+        for category, keywords in GENRE_MAPPINGS.items():
+            for keyword in keywords:
+                # Current problematic logic
+                if keyword in tag_lower or tag_lower in keyword:
+                    matched_genres.append(f"{category} (matched '{keyword}')")
+                    break
+        
+        if matched_genres:
+            print(f"  ❌ Matches: {matched_genres}")
+        else:
+            print(f"  ✅ No matches")
+    
+    print("\n" + "=" * 60)
+    print("🔧 PROPOSED FIX: Use exact and careful substring matching")
+    print("-" * 50)
+    
+    for tag in test_tags:
+        print(f"\nTesting tag: '{tag}' with improved logic")
+        tag_lower = tag.lower().strip()
+        
+        matched_genres = []
+        for category, keywords in GENRE_MAPPINGS.items():
+            for keyword in keywords:
+                # Improved logic: only match if keyword is in tag, not vice versa
+                # And require word boundaries for short keywords
+                if len(keyword) <= 3:
+                    # Short keywords need exact match or word boundaries
+                    import re
+                    pattern = r'\b' + re.escape(keyword) + r'\b'
+                    if re.search(pattern, tag_lower):
+                        matched_genres.append(f"{category} (exact match '{keyword}')")
+                        break
+                else:
+                    # Longer keywords can use substring matching
+                    if keyword in tag_lower:
+                        matched_genres.append(f"{category} (substring '{keyword}')")
+                        break
+        
+        if matched_genres:
+            print(f"  ✅ Improved matches: {matched_genres}")
+        else:
+            print(f"  ✅ No matches")
 
-def test_genre_classification_directly():
-    """Test genre classification with mock data."""
-    print(f"\n🧪 Testing Genre Classification Logic")
-    print("=" * 37)
+def debug_specific_artists():
+    """Debug specific problematic artists."""
+    print("\n🎤 DEBUGGING SPECIFIC ARTISTS")
+    print("=" * 60)
     
-    from network_utils import ArtistNetworkAnalyzer
-    config = AppConfig("configurations.txt")
-    analyzer = ArtistNetworkAnalyzer(config)
-    
-    # Mock enhanced data for testing
-    mock_data = {
-        'success': True,
-        'lastfm_data': {
-            'tags': [
-                {'name': 'k-pop', 'count': 100},
-                {'name': 'pop', 'count': 90},
-                {'name': 'korean', 'count': 80}
-            ]
+    # Test with mock data that might cause issues
+    problematic_cases = {
+        "Taylor Swift": {
+            "lastfm_tags": ["pop", "country", "folk", "female vocalists", "seen live", "2000s"],
+            "spotify_genres": ["pop", "country pop"]
         },
-        'spotify_data': {
-            'genres': ['k-pop', 'korean pop']
+        "Paramore": {
+            "lastfm_tags": ["rock", "alternative rock", "pop punk", "emo", "alternative"],
+            "spotify_genres": ["pop punk", "alternative rock", "emo"]
+        },
+        "IU": {
+            "lastfm_tags": ["k-pop", "korean", "pop", "female vocalists", "asian"],
+            "spotify_genres": ["k-pop", "korean pop"]
         }
     }
     
-    print("🎯 Testing with mock K-pop data:")
-    primary_genre, all_genres = analyzer.classify_artist_genre(mock_data)
-    print(f"   Primary genre: {primary_genre}")
-    print(f"   All genres: {all_genres}")
+    from simplified_genre_colors import classify_artist_genre, get_multi_genres
     
-    if primary_genre == 'asian':  # K-pop now maps to 'asian' in simplified system
-        print("   ✅ Genre classification logic is working!")
-    else:
-        print("   ❌ Genre classification logic is broken!")
+    for artist, data in problematic_cases.items():
+        print(f"\n🔍 Testing: {artist}")
+        
+        # Create mock artist data
+        mock_data = {
+            'lastfm_data': {
+                'tags': [{'name': tag} for tag in data['lastfm_tags']]
+            },
+            'spotify_data': {
+                'genres': data['spotify_genres']
+            }
+        }
+        
+        primary_genre = classify_artist_genre(mock_data)
+        multi_genres = get_multi_genres(mock_data, max_genres=4)
+        
+        print(f"  📊 Input tags: {data['lastfm_tags'] + data['spotify_genres']}")
+        print(f"  🎯 Primary genre: {primary_genre}")
+        print(f"  🌈 Multi-genres: {multi_genres}")
+
+def test_specific_problem_cases():
+    """Test the specific problematic substring matches."""
+    print("\n🚨 TESTING SPECIFIC PROBLEM CASES")
+    print("=" * 60)
+    
+    from simplified_genre_colors import GENRE_MAPPINGS
+    
+    # Test cases that should NOT match
+    problem_cases = [
+        ("asia tour 2024", "asian", "Should not match 'asian' just because 'asia' appears"),
+        ("not country", "country", "Should not match 'country' in negative context"),
+        ("alternative to country", "country", "Should not match 'country' in comparison"),
+        ("indie game soundtrack", "indie", "Should not match 'indie' for game soundtracks"),
+        ("electronic remix", "electronic", "Should match 'electronic' for remixes"),
+    ]
+    
+    for tag, genre_category, expected in problem_cases:
+        tag_lower = tag.lower()
+        keywords = GENRE_MAPPINGS.get(genre_category, [])
+        
+        matched = False
+        matched_keyword = None
+        for keyword in keywords:
+            if keyword in tag_lower or tag_lower in keyword:
+                matched = True
+                matched_keyword = keyword
+                break
+        
+        status = "❌ WRONG" if matched else "✅ CORRECT"
+        print(f"{status} '{tag}' -> {genre_category}: {expected}")
+        if matched:
+            print(f"    Matched keyword: '{matched_keyword}'")
 
 if __name__ == "__main__":
-    test_artist_data_fetcher()
-    test_genre_classification_directly()
+    debug_genre_matching()
+    debug_specific_artists() 
+    test_specific_problem_cases()

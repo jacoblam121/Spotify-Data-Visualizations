@@ -30,7 +30,9 @@
       "mcp__gemini__codereview",
       "Bash(tree:*)",
       "Bash(sed:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(touch:*)",
+      "Bash(pkill:*)"
     ],
     "deny": []
   }

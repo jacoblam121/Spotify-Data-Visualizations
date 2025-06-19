@@ -81,7 +81,7 @@ GENRE_MAPPINGS = {
 
 def classify_artist_genre(artist_data) -> str:
     """
-    Classify artist into one of the 12 simplified genres.
+    Classify artist into one of the 12 simplified genres with improved prioritization.
     
     Args:
         artist_data: Enhanced artist data with lastfm_data and spotify_data
@@ -89,25 +89,72 @@ def classify_artist_genre(artist_data) -> str:
     Returns:
         Primary genre string (one of the 12 core genres)
     """
-    all_genres = []
+    # Collect genres from sources with weights
+    source_data = []
     
-    # Collect genres from all sources
-    if artist_data.get('lastfm_data') and artist_data['lastfm_data'].get('tags'):
-        lastfm_genres = [tag['name'].lower() for tag in artist_data['lastfm_data']['tags'][:5]]
-        all_genres.extend(lastfm_genres)
-    
+    # Spotify genres (higher authority)
     if artist_data.get('spotify_data') and artist_data['spotify_data'].get('genres'):
         spotify_genres = [genre.lower() for genre in artist_data['spotify_data']['genres'][:5]]
-        all_genres.extend(spotify_genres)
+        for genre in spotify_genres:
+            source_data.append({'tag': genre, 'source': 'spotify', 'weight': 2.0})
     
-    # Score each genre category
+    # Last.fm tags (lower authority)
+    if artist_data.get('lastfm_data') and artist_data['lastfm_data'].get('tags'):
+        lastfm_genres = [tag['name'].lower() for tag in artist_data['lastfm_data']['tags'][:5]]
+        for genre in lastfm_genres:
+            source_data.append({'tag': genre, 'source': 'lastfm', 'weight': 1.0})
+    
+    # Extract all tags for context-aware rules
+    all_tags = [item['tag'] for item in source_data]
+    
+    # Context-aware rules for crossover artists (fixes Taylor Swift case)
+    if 'pop' in all_tags and 'country' in all_tags:
+        # When both pop and country present, prefer pop (modern mainstream appeal)
+        return 'pop'
+    
+    # Exclusive keywords that immediately determine genre (fixes IVE case)
+    EXCLUSIVE_KEYWORDS = {
+        'asian': ['k-pop', 'kpop', 'j-pop', 'jpop', 'korean pop', 'chinese pop'],
+        'latin': ['reggaeton', 'bachata', 'latin pop', 'spanish pop'],
+    }
+    
+    for category, keywords in EXCLUSIVE_KEYWORDS.items():
+        for item in source_data:
+            tag = item['tag']
+            for keyword in keywords:
+                if keyword in tag:
+                    return category
+    
+    # Priority keywords for specific genres
+    PRIORITY_KEYWORDS = {
+        'asian': ['k-pop', 'kpop', 'j-pop', 'jpop', 'korean', 'japanese', 'chinese', 'c-pop'],
+        'pop': ['pop', 'dance pop', 'electropop', 'teen pop'],
+        'country': ['country', 'americana', 'bluegrass', 'country pop'], 
+        'electronic': ['electronic', 'edm', 'house', 'techno', 'dubstep'],
+        'rock': ['rock', 'alternative rock', 'indie rock', 'hard rock']
+    }
+    
+    # Score each genre category with weighted and priority scoring
     genre_scores = {}
-    for genre in all_genres:
-        genre_lower = genre.lower().strip()
+    for item in source_data:
+        tag = item['tag'].strip()
+        source_weight = item['weight']
+        
         for category, keywords in GENRE_MAPPINGS.items():
             for keyword in keywords:
-                if keyword in genre_lower or genre_lower in keyword:
-                    genre_scores[category] = genre_scores.get(category, 0) + 1
+                if keyword in tag:
+                    # Base score with source weighting
+                    score = source_weight
+                    
+                    # Priority boost for highly specific keywords
+                    if category in PRIORITY_KEYWORDS and keyword in PRIORITY_KEYWORDS[category]:
+                        score *= 2.0  # Double score for priority keywords
+                    
+                    # Exact match bonus
+                    if keyword == tag:
+                        score *= 1.5
+                    
+                    genre_scores[category] = genre_scores.get(category, 0) + score
                     break  # Only count once per category
     
     # Return the highest scoring genre or 'other'
@@ -117,44 +164,97 @@ def classify_artist_genre(artist_data) -> str:
     
     return 'other'
 
-def get_multi_genres(artist_data, max_genres: int = 3) -> list:
+def get_multi_genres(artist_data, max_genres: int = 2) -> list:
     """
-    Get up to max_genres for multi-genre artists (for Gemini's border approach).
+    Get up to max_genres for multi-genre artists with improved prioritization.
     
     Args:
         artist_data: Enhanced artist data
-        max_genres: Maximum number of genres to return
+        max_genres: Maximum number of genres to return (default 2 for simplicity)
         
     Returns:
         List of genre strings, primary first
     """
-    all_genres = []
+    # Use the same logic as classify_artist_genre for consistency
+    primary_genre = classify_artist_genre(artist_data)
     
-    # Collect genres from all sources
-    if artist_data.get('lastfm_data') and artist_data['lastfm_data'].get('tags'):
-        lastfm_genres = [tag['name'].lower() for tag in artist_data['lastfm_data']['tags'][:5]]
-        all_genres.extend(lastfm_genres)
+    if max_genres <= 1:
+        return [primary_genre]
     
+    # Collect genres from sources with weights (same logic as classify_artist_genre)
+    source_data = []
+    
+    # Spotify genres (higher authority)
     if artist_data.get('spotify_data') and artist_data['spotify_data'].get('genres'):
         spotify_genres = [genre.lower() for genre in artist_data['spotify_data']['genres'][:5]]
-        all_genres.extend(spotify_genres)
+        for genre in spotify_genres:
+            source_data.append({'tag': genre, 'source': 'spotify', 'weight': 2.0})
     
-    # Score each genre category
+    # Last.fm tags (lower authority)
+    if artist_data.get('lastfm_data') and artist_data['lastfm_data'].get('tags'):
+        lastfm_genres = [tag['name'].lower() for tag in artist_data['lastfm_data']['tags'][:5]]
+        for genre in lastfm_genres:
+            source_data.append({'tag': genre, 'source': 'lastfm', 'weight': 1.0})
+    
+    # Extract all tags for context-aware rules
+    all_tags = [item['tag'] for item in source_data]
+    
+    # Special handling for known multi-genre cases
+    if primary_genre == 'pop' and 'country' in all_tags:
+        return ['pop', 'country'][:max_genres]
+    if primary_genre == 'asian' and 'pop' in all_tags:
+        return ['asian', 'pop'][:max_genres]
+    
+    # Priority keywords for specific genres (same as primary classification)
+    PRIORITY_KEYWORDS = {
+        'asian': ['k-pop', 'kpop', 'j-pop', 'jpop', 'korean', 'japanese', 'chinese', 'c-pop'],
+        'pop': ['pop', 'dance pop', 'electropop', 'teen pop'],
+        'country': ['country', 'americana', 'bluegrass', 'country pop'], 
+        'electronic': ['electronic', 'edm', 'house', 'techno', 'dubstep'],
+        'rock': ['rock', 'alternative rock', 'indie rock', 'hard rock']
+    }
+    
+    # Score each genre category with weighted and priority scoring
     genre_scores = {}
-    for genre in all_genres:
-        genre_lower = genre.lower().strip()
+    for item in source_data:
+        tag = item['tag'].strip()
+        source_weight = item['weight']
+        
         for category, keywords in GENRE_MAPPINGS.items():
             for keyword in keywords:
-                if keyword in genre_lower or genre_lower in keyword:
-                    genre_scores[category] = genre_scores.get(category, 0) + 1
+                if keyword in tag:
+                    # Base score with source weighting
+                    score = source_weight
+                    
+                    # Priority boost for highly specific keywords
+                    if category in PRIORITY_KEYWORDS and keyword in PRIORITY_KEYWORDS[category]:
+                        score *= 2.0  # Double score for priority keywords
+                    
+                    # Exact match bonus
+                    if keyword == tag:
+                        score *= 1.5
+                    
+                    genre_scores[category] = genre_scores.get(category, 0) + score
                     break
     
-    # Return top scoring genres
+    # Return top scoring genres with confidence-based capping
     if genre_scores:
         sorted_genres = sorted(genre_scores.items(), key=lambda x: x[1], reverse=True)
-        return [genre for genre, score in sorted_genres[:max_genres]]
+        
+        # Start with primary genre (may have been determined by context rules)
+        result = [primary_genre]
+        
+        # Add secondary genres that are different from primary
+        for genre, score in sorted_genres:
+            if genre != primary_genre and len(result) < max_genres:
+                # Only include secondary if it's at least 30% of top score
+                top_score = sorted_genres[0][1]
+                if score >= (top_score * 0.3):
+                    result.append(genre)
+        
+        return result[:max_genres]
     
-    return ['other']
+    return [primary_genre]
 
 def get_genre_color(genre: str) -> str:
     """Get hex color for a genre."""

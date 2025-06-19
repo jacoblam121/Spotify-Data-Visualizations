@@ -266,8 +266,8 @@ class ArtistNetworkAnalyzer:
         
         # Check configuration for secondary genres
         if self.network_config.get('enable_secondary_genres', True):
-            # Rich multi-genre approach for complex visualizations
-            all_genres = get_multi_genres(enhanced_data, max_genres=5)
+            # Multi-genre approach limited to 2 genres for simplicity
+            all_genres = get_multi_genres(enhanced_data, max_genres=2)
         else:
             # Clean single-genre approach - only return primary genre
             all_genres = [primary_genre] if primary_genre != 'other' else []

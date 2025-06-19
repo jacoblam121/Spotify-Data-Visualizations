@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTF-8 Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #000; color: #fff; }
+        .test-item { margin: 10px 0; padding: 10px; background: #333; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>UTF-8 Character Test</h1>
+    
+    <div class="test-item">
+        <h3>Japanese Characters (Direct HTML)</h3>
+        <p>ヨルシカ (Yorushika)</p>
+        <p>YOASOBI</p>
+        <p>いきものがかり</p>
+    </div>
+    
+    <div class="test-item">
+        <h3>Korean Characters (Direct HTML)</h3>
+        <p>방탄소년단 (BTS)</p>
+        <p>TWICE</p>
+        <p>IVE</p>
+    </div>
+    
+    <div class="test-item">
+        <h3>JavaScript Generated</h3>
+        <div id="js-test"></div>
+    </div>
+    
+    <div class="test-item">
+        <h3>Canvas Test</h3>
+        <canvas id="canvas-test" width="400" height="100" style="border: 1px solid #666;"></canvas>
+    </div>
+    
+    <div class="test-item">
+        <h3>Character Code Analysis</h3>
+        <div id="char-analysis"></div>
+    </div>
+
+    <script>
+        console.log('🧪 UTF-8 Test page loaded');
+        
+        // Test JavaScript string handling
+        const testStrings = [
+            'ヨルシカ',
+            'YOASOBI', 
+            '방탄소년단',
+            'TWICE'
+        ];
+        
+        const jsTestDiv = document.getElementById('js-test');
+        testStrings.forEach(str => {
+            const p = document.createElement('p');
+            p.textContent = str;
+            jsTestDiv.appendChild(p);
+        });
+        
+        // Test Canvas rendering
+        const canvas = document.getElementById('canvas-test');
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.font = '16px -apple-system, "Yu Gothic UI", "Meiryo", "Hiragino Sans", sans-serif';
+        
+        testStrings.forEach((str, i) => {
+            ctx.fillText(str, 10, 25 + (i * 20));
+        });
+        
+        // Character code analysis
+        const charAnalysisDiv = document.getElementById('char-analysis');
+        testStrings.forEach(str => {
+            const codes = str.split('').map(c => c.charCodeAt(0));
+            const p = document.createElement('p');
+            p.innerHTML = `<strong>${str}</strong>: ${JSON.stringify(str)} → [${codes.join(', ')}]`;
+            charAnalysisDiv.appendChild(p);
+        });
+        
+        console.log('✅ UTF-8 test completed');
+    </script>
+</body>
+</html>
