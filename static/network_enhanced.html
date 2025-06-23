@@ -124,6 +124,28 @@
             <h1>Enhanced Network Visualization</h1>
             <p style="font-size: 12px; opacity: 0.8;">Phase 2.1a - Canvas Foundation</p>
             
+            <!-- Visualization Mode Selector -->
+            <fieldset class="renderer-selector">
+                <legend>Visualization Mode</legend>
+                <label class="renderer-option">
+                    <input type="radio" name="mode" value="global" checked>
+                    <strong>Global</strong> - Popularity View
+                </label>
+                <label class="renderer-option">
+                    <input type="radio" name="mode" value="personal">
+                    <strong>Personal</strong> - Your Listening
+                </label>
+                <label class="renderer-option">
+                    <input type="radio" name="mode" value="hybrid">
+                    <strong>Hybrid</strong> - Combined View
+                </label>
+            </fieldset>
+            
+            <!-- Dynamic Mode Description -->
+            <div class="debug-info" id="modeDescription">
+                Node size shows global popularity. Your top artists glow.
+            </div>
+            
             <!-- Renderer Selector -->
             <fieldset class="renderer-selector">
                 <legend>Renderer Engine</legend>

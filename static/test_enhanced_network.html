@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Enhanced Network Fixes</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f0f0f0;
+        }
+        .test-section { 
+            border: 1px solid #ccc; 
+            margin: 20px 0; 
+            padding: 15px;
+            background: white;
+        }
+        .test-section h3 { 
+            margin-top: 0; 
+            color: #333;
+        }
+        .status { 
+            font-weight: bold; 
+        }
+        .status.pass { 
+            color: green; 
+        }
+        .status.fail { 
+            color: red; 
+        }
+        .test-description {
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Enhanced Network Visualization - Bug Fix Test</h1>
+    <p>This page summarizes the bugs that were identified and fixed:</p>
+    
+    <div class="test-section">
+        <h3>Issue #1: Tri-mode System Not Working</h3>
+        <div class="test-description">
+            Radio buttons for Global/Personal/Hybrid modes were visible but didn't change node sizing when clicked.
+        </div>
+        <p><strong>Root Cause:</strong> Canvas renderer was overriding node radius values calculated by the tri-mode system in its <code>processNodesForRendering()</code> method.</p>
+        <p><strong>Fix Applied:</strong> Modified Canvas renderer to check if node radius is already set before calculating its own value.</p>
+        <p><strong>Files Modified:</strong></p>
+        <ul>
+            <li><code>/static/js/renderers/canvas_renderer.js</code> - Lines 162-172, 174-179</li>
+        </ul>
+        <p class="status pass">STATUS: FIXED</p>
+    </div>
+    
+    <div class="test-section">
+        <h3>Issue #2: Force Strength Slider Behaving Incorrectly</h3>
+        <div class="test-description">
+            Moving the slider in either direction (higher or lower values) increased node distance instead of having opposite effects.
+        </div>
+        <p><strong>Root Cause:</strong> The slider semantics were backwards from user expectation. Higher slider values created more negative force strength, increasing repulsion.</p>
+        <p><strong>Fix Applied:</strong> Inverted the calculation so higher slider values create stronger attraction (less negative force).</p>
+        <p><strong>Files Modified:</strong></p>
+        <ul>
+            <li><code>/static/js/network_enhanced_fixed.js</code> - Lines 101-113</li>
+        </ul>
+        <p class="status pass">STATUS: FIXED</p>
+    </div>
+    
+    <div class="test-section">
+        <h3>Issue #3: Zoom Sensitivity Slider Does Nothing</h3>
+        <div class="test-description">
+            The zoom sensitivity control didn't have any effect on the visualization.
+        </div>
+        <p><strong>Root Cause:</strong> The zoom sensitivity event listener only updated the display value but contained a TODO for actual implementation.</p>
+        <p><strong>Fix Applied:</strong> Implemented zoom sensitivity by modifying D3 zoom behavior's filter function to adjust wheel delta based on sensitivity value.</p>
+        <p><strong>Files Modified:</strong></p>
+        <ul>
+            <li><code>/static/js/network_enhanced_fixed.js</code> - Lines 27, 122-125, 362-426, 446</li>
+        </ul>
+        <p class="status pass">STATUS: FIXED</p>
+    </div>
+    
+    <div class="test-section">
+        <h3>Technical Implementation Details</h3>
+        <h4>Tri-mode System Fix:</h4>
+        <ul>
+            <li>Added conditional check: <code>if (!node.radius || node.radius === undefined)</code></li>
+            <li>Prevents Canvas renderer from overwriting radius values set by mode switching</li>
+            <li>Also respects <code>glowIntensity</code> values from tri-mode system</li>
+        </ul>
+        
+        <h4>Force Strength Fix:</h4>
+        <ul>
+            <li>Original: <code>this.config.forceStrength = -parseFloat(e.target.value);</code></li>
+            <li>Fixed: <code>this.config.forceStrength = -(maxSlider + minSlider - sliderValue);</code></li>
+            <li>Slider range 50-800 now maps to force range -800 to -50</li>
+            <li>Higher slider values = stronger attraction (less repulsion)</li>
+        </ul>
+        
+        <h4>Zoom Sensitivity Fix:</h4>
+        <ul>
+            <li>Added <code>zoomSensitivity: 1.0</code> to config</li>
+            <li>Modified D3 zoom filter to adjust <code>event.deltaY *= (1 / sensitivity)</code></li>
+            <li>Created <code>updateZoomBehavior()</code> and <code>applyZoomToRenderer()</code> methods</li>
+            <li>Higher sensitivity = faster zoom response</li>
+        </ul>
+    </div>
+    
+    <div class="test-section">
+        <h3>Testing Instructions</h3>
+        <p>To verify the fixes work:</p>
+        <ol>
+            <li><strong>Tri-mode System:</strong> Open <code>network_enhanced.html</code> and switch between Global/Personal/Hybrid radio buttons. Node sizes should visibly change.</li>
+            <li><strong>Force Strength:</strong> Move the Force Strength slider. Higher values should pull nodes closer together, lower values should spread them apart.</li>
+            <li><strong>Zoom Sensitivity:</strong> Adjust the Zoom Sensitivity slider and test mouse wheel zooming. Higher values should make zooming more responsive.</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h3>Browser Console Debugging</h3>
+        <p>Added console logging to help verify fixes:</p>
+        <ul>
+            <li>Tri-mode changes: Look for "Updated visualization for [mode] mode" with sample node details</li>
+            <li>Force strength changes: Simulation restarts logged</li>
+            <li>Zoom sensitivity: "Zoom sensitivity updated to [value]" messages</li>
+        </ul>
+    </div>
+    
+    <p><a href="network_enhanced.html">← Back to Enhanced Network Visualization</a></p>
+</body>
+</html>

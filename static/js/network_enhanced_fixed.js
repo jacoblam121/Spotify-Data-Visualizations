@@ -11,8 +11,10 @@ class EnhancedNetworkVisualization {
         
         this.renderer = null;
         this.currentRendererType = 'canvas';
+        this.currentMode = 'global'; // Add tri-mode support
         this.data = { nodes: [], links: [] };
         this.simulation = null;
+        this.scales = {}; // Add scales for different modes
         
         // Configuration
         this.config = {
@@ -21,7 +23,8 @@ class EnhancedNetworkVisualization {
             centerForce: 0.1,
             collisionPadding: 8,
             alphaDecay: 0.0228, // D3 default
-            velocityDecay: 0.4   // D3 default
+            velocityDecay: 0.4,  // D3 default
+            zoomSensitivity: 1.0 // Zoom sensitivity multiplier
         };
         
         // Get main container
@@ -41,9 +44,47 @@ class EnhancedNetworkVisualization {
     }
     
     /**
+     * Mode configurations (tri-mode system from original architecture)
+     */
+    get modeConfigs() {
+        return {
+            global: {
+                name: 'Global',
+                description: 'Node size shows global popularity. Your top artists glow.',
+                radius: d => this.scales.global ? this.scales.global(d.listener_count || d.listeners || 1) : 10,
+                shouldGlow: d => d.isTopPersonal || false,
+                tooltipContent: d => this.generateTooltip(d, 'global')
+            },
+            personal: {
+                name: 'Personal', 
+                description: 'Node size shows your play count. Popular artists glow.',
+                radius: d => this.scales.personal ? this.scales.personal(d.play_count || 1) : 10,
+                shouldGlow: d => d.isTopGlobal || false,
+                tooltipContent: d => this.generateTooltip(d, 'personal')
+            },
+            hybrid: {
+                name: 'Hybrid',
+                description: 'Combined view. Artists both popular and personal glow.',
+                radius: d => this.scales.hybrid ? this.scales.hybrid(d.listener_count || d.listeners || 1, d.play_count || 1) : 10,
+                shouldGlow: d => (d.isTopPersonal && d.isTopGlobal) || false,
+                tooltipContent: d => this.generateTooltip(d, 'hybrid')
+            }
+        };
+    }
+    
+    /**
      * Setup UI event listeners
      */
     setupEventListeners() {
+        // Mode switching (tri-mode system)
+        document.querySelectorAll('input[name="mode"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    this.setMode(e.target.value);
+                }
+            });
+        });
+        
         // Renderer switching
         document.querySelectorAll('input[name="renderer"]').forEach(radio => {
             radio.addEventListener('change', (e) => {
@@ -58,7 +99,16 @@ class EnhancedNetworkVisualization {
         const forceStrengthValue = document.getElementById('forceStrengthValue');
         
         forceStrengthSlider.addEventListener('input', (e) => {
-            this.config.forceStrength = -parseFloat(e.target.value);
+            // Invert the slider value: higher slider = stronger attraction (less negative)
+            // Slider range 50-800 becomes force range -800 to -50
+            const sliderValue = parseFloat(e.target.value);
+            const maxSlider = parseFloat(forceStrengthSlider.max);
+            const minSlider = parseFloat(forceStrengthSlider.min);
+            
+            // Invert: min slider value (50) -> max force magnitude (-800)
+            // max slider value (800) -> min force magnitude (-50)
+            this.config.forceStrength = -(maxSlider + minSlider - sliderValue);
+            
             forceStrengthValue.textContent = e.target.value;
             this.updateSimulationForces();
         });
@@ -69,8 +119,9 @@ class EnhancedNetworkVisualization {
         
         zoomSensitivitySlider.addEventListener('input', (e) => {
             const value = parseFloat(e.target.value);
+            this.config.zoomSensitivity = value;
             zoomSensitivityValue.textContent = value.toFixed(1);
-            // TODO: Apply to zoom behavior
+            this.updateZoomBehavior();
         });
     }
     
@@ -91,7 +142,7 @@ class EnhancedNetworkVisualization {
             
             console.log('📊 Processing network data...');
             loadingIndicator.textContent = 'Processing data...';
-            this.processData(networkData);
+            await this.processData(networkData);
             
             console.log('🎨 Initializing visualization...');
             loadingIndicator.textContent = 'Initializing visualization...';
@@ -112,7 +163,7 @@ class EnhancedNetworkVisualization {
      * Process loaded network data
      * @param {Object} networkData - Raw network data
      */
-    processData(networkData) {
+    async processData(networkData) {
         // Handle different data formats
         this.data.nodes = networkData.nodes || [];
         this.data.links = networkData.edges || networkData.links || [];
@@ -144,8 +195,151 @@ class EnhancedNetworkVisualization {
         
         console.log(`Processed ${this.data.nodes.length} nodes and ${this.data.links.length} links`);
         
+        // Preprocess nodes for tri-mode system
+        this.preprocessNodesForModes();
+        
+        // Create scales for different modes
+        this.createScales();
+        
+        // Preload artist images if available
+        await this.preloadArtistImages();
+        
         // Update UI stats
         this.updateStats();
+    }
+    
+    /**
+     * Preprocess nodes for tri-mode system (from original architecture)
+     */
+    preprocessNodesForModes() {
+        // Calculate thresholds for "top" artists (top 20% approach)
+        const listeners = this.data.nodes.map(d => d.listener_count || d.listeners || 0);
+        const playCounts = this.data.nodes.map(d => d.play_count || 0);
+        
+        const globalThreshold = d3.quantile(listeners.sort(d3.descending), 0.8); // Top 20%
+        const personalThreshold = d3.quantile(playCounts.filter(d => d > 0).sort(d3.descending), 0.8);
+        
+        console.log(`📊 Mode thresholds - Global: ${globalThreshold}, Personal: ${personalThreshold}`);
+        
+        // Preprocess each node with boolean flags for performance
+        this.data.nodes.forEach(d => {
+            // Normalize data structure
+            d.listeners = d.listener_count || d.listeners || 0;
+            d.play_count = d.play_count || 0;
+            
+            // Pre-calculate boolean flags (massive performance improvement)
+            d.isTopGlobal = d.listeners >= (globalThreshold || 0);
+            d.isTopPersonal = d.play_count >= (personalThreshold || 0);
+            
+            // Ensure we have valid data for scales (handle 0 values)
+            d.listeners = Math.max(d.listeners, 1);
+            d.play_count = Math.max(d.play_count, 1);
+            
+            if (d.isTopGlobal || d.isTopPersonal) {
+                console.log(`⭐ Special artist: ${d.name} (Global: ${d.isTopGlobal}, Personal: ${d.isTopPersonal})`);
+            }
+        });
+    }
+    
+    /**
+     * Create scales for different visualization modes
+     */
+    createScales() {
+        // Use square root scales for better visual perception
+        const listeners = this.data.nodes.map(d => d.listeners);
+        const playCounts = this.data.nodes.map(d => d.play_count);
+        
+        this.scales.global = d3.scaleSqrt()
+            .domain(d3.extent(listeners))
+            .range([8, 30]);
+            
+        this.scales.personal = d3.scaleSqrt()
+            .domain(d3.extent(playCounts))
+            .range([8, 30]);
+            
+        // Hybrid scale: weighted combination
+        this.scales.hybrid = (listeners, playCount) => {
+            const normalizedListeners = this.scales.global(listeners);
+            const normalizedPlays = this.scales.personal(playCount);
+            return (normalizedListeners * 0.6) + (normalizedPlays * 0.4); // Weight towards global
+        };
+        
+        console.log('📏 Scales created for tri-mode system');
+    }
+    
+    /**
+     * Preload artist profile images asynchronously
+     */
+    async preloadArtistImages() {
+        console.log('🖼️ Starting artist image preloading...');
+        
+        const nodesWithImages = this.data.nodes.filter(node => node.photo_url);
+        console.log(`📊 Found ${nodesWithImages.length} nodes with photo URLs`);
+        
+        if (nodesWithImages.length === 0) {
+            console.log('⚠️ No photo URLs found in data');
+            return;
+        }
+        
+        const imagePromises = nodesWithImages.map(node => this.loadSingleImage(node));
+        
+        try {
+            const results = await Promise.allSettled(imagePromises);
+            
+            let successCount = 0;
+            let failCount = 0;
+            
+            results.forEach((result, index) => {
+                const node = nodesWithImages[index];
+                if (result.status === 'fulfilled') {
+                    node.imageObj = result.value;
+                    node.imageLoaded = true;
+                    successCount++;
+                    console.log(`✅ Loaded image for ${node.name}`);
+                } else {
+                    node.imageObj = null;
+                    node.imageLoaded = false;
+                    failCount++;
+                    console.warn(`❌ Failed to load image for ${node.name}:`, result.reason);
+                }
+            });
+            
+            console.log(`🎯 Image preloading complete: ${successCount} success, ${failCount} failed`);
+            
+        } catch (error) {
+            console.error('💥 Error during image preloading:', error);
+        }
+    }
+    
+    /**
+     * Load a single image with timeout and error handling
+     * @param {Object} node - Node object with photo_url
+     * @returns {Promise<HTMLImageElement>} Promise that resolves to loaded image
+     */
+    loadSingleImage(node) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous'; // Required for Canvas operations with external images
+            
+            // Set up timeout (5 seconds)
+            const timeout = setTimeout(() => {
+                reject(new Error(`Image load timeout after 5000ms: ${node.photo_url}`));
+            }, 5000);
+            
+            img.onload = () => {
+                clearTimeout(timeout);
+                console.log(`🎨 Successfully loaded image for ${node.name}`);
+                resolve(img);
+            };
+            
+            img.onerror = () => {
+                clearTimeout(timeout);
+                reject(new Error(`Image load error: ${node.photo_url}`));
+            };
+            
+            // Start loading
+            img.src = node.photo_url;
+        });
     }
     
     /**
@@ -160,6 +354,10 @@ class EnhancedNetworkVisualization {
         
         // Setup zoom and pan
         this.setupZoomBehavior();
+        
+        // Apply initial mode
+        this.updateModeDescription();
+        this.updateRendererWithMode();
         
         console.log('Enhanced Network Visualization initialized');
     }
@@ -240,30 +438,69 @@ class EnhancedNetworkVisualization {
      * Setup D3 zoom and pan behavior
      */
     setupZoomBehavior() {
-        const zoom = d3.zoom()
+        this.zoom = d3.zoom()
             .scaleExtent([0.1, 10])
+            .filter((event) => {
+                // Apply zoom sensitivity to wheel events
+                if (event.type === 'wheel') {
+                    // Modify the wheel delta based on sensitivity
+                    const sensitivity = this.config.zoomSensitivity;
+                    event.deltaY *= (1 / sensitivity); // Invert because higher sensitivity should zoom faster
+                }
+                return true;
+            })
             .on('zoom', (event) => {
                 if (this.renderer) {
                     this.renderer.updateTransform(event.transform);
                 }
             });
         
+        this.applyZoomToRenderer();
+        
+        console.log('Zoom behavior setup complete');
+    }
+    
+    /**
+     * Apply zoom behavior to current renderer element
+     */
+    applyZoomToRenderer() {
+        if (!this.zoom) return;
+        
         // Apply zoom to container or renderer surface
         if (this.currentRendererType === 'canvas') {
             // For Canvas, apply zoom to the canvas element
             const canvas = this.container.querySelector('canvas');
             if (canvas) {
-                d3.select(canvas).call(zoom);
+                d3.select(canvas).call(this.zoom);
             }
         } else {
             // For SVG, apply zoom to the SVG element
             const svg = this.container.querySelector('svg');
             if (svg) {
-                d3.select(svg).call(zoom);
+                d3.select(svg).call(this.zoom);
             }
         }
-        
-        console.log('Zoom behavior setup complete');
+    }
+    
+    /**
+     * Update zoom behavior with new sensitivity
+     */
+    updateZoomBehavior() {
+        if (this.zoom) {
+            // Update the filter function with new sensitivity
+            this.zoom.filter((event) => {
+                if (event.type === 'wheel') {
+                    const sensitivity = this.config.zoomSensitivity;
+                    event.deltaY *= (1 / sensitivity);
+                }
+                return true;
+            });
+            
+            // Reapply to renderer
+            this.applyZoomToRenderer();
+            
+            console.log(`Zoom sensitivity updated to ${this.config.zoomSensitivity}`);
+        }
     }
     
     /**
@@ -284,7 +521,7 @@ class EnhancedNetworkVisualization {
         
         // Reinitialize with new renderer
         this.initializeRenderer();
-        this.setupZoomBehavior();
+        this.applyZoomToRenderer();
         
         // Restart simulation
         if (this.simulation) {
@@ -294,6 +531,67 @@ class EnhancedNetworkVisualization {
         // Update UI
         document.getElementById('currentRenderer').textContent = 
             rendererType.charAt(0).toUpperCase() + rendererType.slice(1);
+    }
+    
+    /**
+     * Set visualization mode (tri-mode system)
+     * @param {string} newMode - 'global', 'personal', or 'hybrid'
+     */
+    setMode(newMode) {
+        if (newMode === this.currentMode) return;
+        
+        console.log(`🎭 Switching mode from ${this.currentMode} to ${newMode}`);
+        
+        this.currentMode = newMode;
+        
+        // Update mode description
+        this.updateModeDescription();
+        
+        // Trigger re-rendering with new mode
+        if (this.renderer) {
+            // Re-process nodes with new mode
+            this.updateRendererWithMode();
+        }
+    }
+    
+    /**
+     * Update mode description in UI
+     */
+    updateModeDescription() {
+        const config = this.modeConfigs[this.currentMode];
+        const descElement = document.getElementById('modeDescription');
+        if (descElement) {
+            descElement.textContent = config.description;
+        }
+    }
+    
+    /**
+     * Update renderer with current mode settings
+     */
+    updateRendererWithMode() {
+        if (!this.renderer) return;
+        
+        // Re-process nodes with current mode configuration
+        const config = this.modeConfigs[this.currentMode];
+        
+        this.data.nodes.forEach(node => {
+            // Update radius based on current mode
+            node.radius = config.radius(node);
+            
+            // Update glow intensity based on current mode
+            node.shouldGlow = config.shouldGlow(node);
+            node.glowIntensity = node.shouldGlow ? 1.0 : 0.0;
+        });
+        
+        // Update renderer data
+        this.renderer.updateData(this.data.nodes, this.data.links);
+        
+        // Debug tri-mode system
+        const sampleNode = this.data.nodes[0];
+        if (sampleNode) {
+            console.log(`✨ Updated visualization for ${this.currentMode} mode`);
+            console.log(`  Sample node "${sampleNode.name}": radius=${sampleNode.radius}, shouldGlow=${sampleNode.shouldGlow}`);
+        }
     }
     
     /**
@@ -314,24 +612,57 @@ class EnhancedNetworkVisualization {
         document.getElementById('edgeCount').textContent = this.data.links.length;
         document.getElementById('currentRenderer').textContent = 
             this.currentRendererType.charAt(0).toUpperCase() + this.currentRendererType.slice(1);
+        
+        // Update mode-specific statistics
+        const config = this.modeConfigs[this.currentMode];
+        const glowingNodes = this.data.nodes.filter(config.shouldGlow);
+        
+        // Update FPS display if available
+        const fpsElement = document.getElementById('fps');
+        if (fpsElement && this.renderer && this.renderer.fps) {
+            fpsElement.textContent = Math.round(this.renderer.fps);
+        }
+        
+        console.log(`📊 Stats updated - Mode: ${this.currentMode}, Glowing nodes: ${glowingNodes.length}`);
+    }
+    
+    /**
+     * Generate tooltip content for different modes
+     */
+    generateTooltip(d, mode) {
+        const modeSpecific = {
+            global: `<strong>Global Rank:</strong> ${d.isTopGlobal ? 'Top 20%' : 'Lower tier'}<br/>`,
+            personal: `<strong>Your Plays:</strong> ${d.play_count.toLocaleString()}<br/>`,
+            hybrid: `<strong>Combined Score:</strong> ${this.scales.hybrid(d.listeners, d.play_count).toFixed(1)}<br/>`
+        };
+        
+        return `
+            <div style="border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 10px; margin-bottom: 10px;">
+                <strong style="font-size: 16px;">${d.name}</strong><br/>
+                <em>${d.canonical || d.name}</em>
+            </div>
+            <div style="margin: 5px 0;"><strong>Global Listeners:</strong> ${d.listeners.toLocaleString()}</div>
+            ${modeSpecific[mode]}
+            <div style="margin: 5px 0;"><strong>Status:</strong> ${this.modeConfigs[this.currentMode].shouldGlow(d) ? '✨ Glowing' : 'Normal'}</div>
+        `;
     }
     
     /**
      * Get sample data for testing
      */
     getSampleData() {
-        // Add Unicode debugging and normalization
+        // Using verified URLs from real dataset (phase1_test_results.json)
         const sampleNodes = [
-            {"id": "taylor-swift", "name": "Taylor Swift", "listener_count": 5160232, "play_count": 5216, "genres_lastfm": ["country", "pop"]},
-            {"id": "paramore", "name": "Paramore", "listener_count": 4779115, "play_count": 3460, "genres_lastfm": ["rock", "pop punk"]},
-            {"id": "iu", "name": "IU", "listener_count": 913058, "play_count": 2265, "genres_lastfm": ["k-pop", "korean"]},
-            {"id": "yorushika", "name": "ヨルシカ", "listener_count": 186967, "play_count": 1282, "genres_lastfm": ["j-pop", "japanese"]},
-            {"id": "twice", "name": "TWICE", "listener_count": 1388675, "play_count": 1057, "genres_lastfm": ["k-pop", "korean"]},
-            {"id": "ive", "name": "IVE", "listener_count": 837966, "play_count": 662, "genres_lastfm": ["k-pop", "korean"]},
-            {"id": "blackpink", "name": "BLACKPINK", "listener_count": 1558082, "play_count": 481, "genres_lastfm": ["k-pop", "korean"]},
-            {"id": "newjeans", "name": "NewJeans", "listener_count": 750000, "play_count": 320, "genres_lastfm": ["k-pop", "korean"]},
-            {"id": "aimer", "name": "Aimer", "listener_count": 389315, "play_count": 885, "genres_lastfm": ["j-pop", "japanese"]},
-            {"id": "yoasobi", "name": "YOASOBI", "listener_count": 425000, "play_count": 654, "genres_lastfm": ["j-pop", "japanese"]}
+            {"id": "taylor-swift", "name": "Taylor Swift", "listener_count": 5160232, "play_count": 5216, "genres_lastfm": ["country", "pop"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676"},
+            {"id": "paramore", "name": "Paramore", "listener_count": 4779115, "play_count": 3460, "genres_lastfm": ["rock", "pop punk"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb10c34546a4ca2d7faeb8865"},
+            {"id": "ive", "name": "Ive", "listener_count": 837966, "play_count": 662, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/0078316432cdfb6733c3bde0dc61754d45442d0f"},
+            {"id": "yorushika", "name": "Yorushika", "listener_count": 186967, "play_count": 1282, "genres_lastfm": ["j-pop", "japanese"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab"},
+            {"id": "iu", "name": "IU", "listener_count": 913058, "play_count": 2265, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb789f38042e5ef8911fc3826b"},
+            {"id": "aimer", "name": "Aimer", "listener_count": 389315, "play_count": 885, "genres_lastfm": ["j-pop", "japanese"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8"},
+            {"id": "luna", "name": "*LUNA", "listener_count": 450000, "play_count": 720, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb45d443b065a66c92d166f598"},
+            {"id": "rose", "name": "Rosé", "listener_count": 380000, "play_count": 590, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebcfb4350222919670128ff2dc"},
+            {"id": "younha", "name": "Younha", "listener_count": 320000, "play_count": 480, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf5e315e40a6d4ffd36c10d94"},
+            {"id": "yoasobi", "name": "yoasobi", "listener_count": 425000, "play_count": 654, "genres_lastfm": ["j-pop", "japanese"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb507349709ae19263301a62f7"}
         ];
         
         // Unicode debugging and normalization (Gemini's recommendation)

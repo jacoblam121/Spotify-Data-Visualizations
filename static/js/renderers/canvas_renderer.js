@@ -13,6 +13,11 @@ class CanvasRenderer extends BaseRenderer {
         this.animationFrameId = null;
         this.needsRedraw = true;
         
+        // FPS tracking
+        this.fps = 0;
+        this.frameCount = 0;
+        this.lastTime = performance.now();
+        
         // Node rendering options
         this.nodeOptions = {
             minRadius: 4,
@@ -154,19 +159,24 @@ class CanvasRenderer extends BaseRenderer {
             node.genre = genre;
             node.color = getGenreColor(genre);
             
-            // Calculate radius based on listener count
-            const listeners = node.listener_count || node.listeners || 1;
-            const maxListeners = Math.max(...this.nodes.map(n => n.listener_count || n.listeners || 1));
-            const minListeners = Math.min(...this.nodes.map(n => n.listener_count || n.listeners || 1));
+            // Only calculate radius if not already set by tri-mode system
+            if (!node.radius || node.radius === undefined) {
+                // Calculate radius based on listener count
+                const listeners = node.listener_count || node.listeners || 1;
+                const maxListeners = Math.max(...this.nodes.map(n => n.listener_count || n.listeners || 1));
+                const minListeners = Math.min(...this.nodes.map(n => n.listener_count || n.listeners || 1));
+                
+                // Use square root scale for better visual perception
+                const normalizedSize = Math.sqrt(listeners) / Math.sqrt(maxListeners);
+                node.radius = this.lerp(this.nodeOptions.minRadius, this.nodeOptions.maxRadius, normalizedSize);
+            }
             
-            // Use square root scale for better visual perception
-            const normalizedSize = Math.sqrt(listeners) / Math.sqrt(maxListeners);
-            node.radius = this.lerp(this.nodeOptions.minRadius, this.nodeOptions.maxRadius, normalizedSize);
-            
-            // Add glow intensity based on personal play count
-            const playCount = node.play_count || 0;
-            const maxPlayCount = Math.max(...this.nodes.map(n => n.play_count || 0));
-            node.glowIntensity = maxPlayCount > 0 ? (playCount / maxPlayCount) : 0;
+            // Add glow intensity based on personal play count (but respect tri-mode settings)
+            if (node.glowIntensity === undefined) {
+                const playCount = node.play_count || 0;
+                const maxPlayCount = Math.max(...this.nodes.map(n => n.play_count || 0));
+                node.glowIntensity = maxPlayCount > 0 ? (playCount / maxPlayCount) : 0;
+            }
             
             if (this.options.debug && Math.random() < 0.1) { // Debug 10% of nodes
                 console.log(`Node ${node.name}: genre=${genre}, color=${node.color}, radius=${node.radius.toFixed(1)}`);
@@ -275,9 +285,9 @@ class CanvasRenderer extends BaseRenderer {
             const radius = node.radius || this.nodeOptions.minRadius;
             const color = node.color || this.nodeOptions.defaultColor;
             
-            // Apply glow effect if node has high personal play count
-            if (node.glowIntensity > 0.5) {
-                ctx.shadowBlur = node.glowIntensity * 15;
+            // Apply glow effect based on tri-mode system
+            if (node.shouldGlow && node.glowIntensity > 0) {
+                ctx.shadowBlur = node.glowIntensity * 20;
                 ctx.shadowColor = color;
             } else {
                 ctx.shadowBlur = 0;
@@ -289,11 +299,11 @@ class CanvasRenderer extends BaseRenderer {
             ctx.fillStyle = color;
             ctx.fill();
             
-            // Draw border
+            // Draw border (enhanced for glowing nodes)
             ctx.beginPath();
             ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-            ctx.strokeStyle = this.nodeOptions.strokeColor;
-            ctx.lineWidth = this.nodeOptions.strokeWidth;
+            ctx.strokeStyle = node.shouldGlow ? '#ffeb3b' : this.nodeOptions.strokeColor;
+            ctx.lineWidth = node.shouldGlow ? 3 : this.nodeOptions.strokeWidth;
             ctx.stroke();
             
             // Reset shadow
@@ -367,6 +377,20 @@ class CanvasRenderer extends BaseRenderer {
         }
         
         return null;
+    }
+    
+    /**
+     * Update FPS calculation
+     */
+    updateFPS() {
+        this.frameCount++;
+        const currentTime = performance.now();
+        
+        if (currentTime - this.lastTime >= 1000) { // Update FPS every second
+            this.fps = this.frameCount * 1000 / (currentTime - this.lastTime);
+            this.frameCount = 0;
+            this.lastTime = currentTime;
+        }
     }
     
     /**
