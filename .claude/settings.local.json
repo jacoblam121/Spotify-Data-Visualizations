@@ -39,7 +39,8 @@
       "mcp__zen__planner",
       "mcp__zen__codereview",
       "mcp__zen__consensus",
-      "Bash(ss:*)"
+      "Bash(ss:*)",
+      "mcp__zen__debug"
     ],
     "deny": []
   }

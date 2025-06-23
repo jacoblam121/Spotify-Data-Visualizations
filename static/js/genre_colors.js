@@ -176,3 +176,10 @@ if (typeof module !== 'undefined' && module.exports) {
         getAllGenreColors
     };
 }
+
+// Make functions globally available for browser use
+if (typeof window !== 'undefined') {
+    window.getGenreColor = getGenreColor;
+    window.classifyArtistGenre = classifyArtistGenre;
+    window.getAllGenreColors = getAllGenreColors;
+}

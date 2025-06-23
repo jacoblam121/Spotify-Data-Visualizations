@@ -9,3 +9,8 @@ python-dotenv>=1.0.0
 requests-cache>=1.0.0
 tenacity>=8.0.0
 joblib>=1.0.0
+
+# Development server dependencies
+Flask>=2.3.0
+Flask-CORS>=4.0.0
+Werkzeug>=2.3.0

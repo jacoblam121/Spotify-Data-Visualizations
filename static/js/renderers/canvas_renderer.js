@@ -16,7 +16,7 @@ class CanvasRenderer extends BaseRenderer {
         // FPS tracking
         this.fps = 0;
         this.frameCount = 0;
-        this.lastTime = performance.now();
+        this.lastTime = Date.now();
         
         // Node rendering options
         this.nodeOptions = {
@@ -154,10 +154,12 @@ class CanvasRenderer extends BaseRenderer {
      */
     processNodesForRendering() {
         this.nodes.forEach(node => {
-            // Classify genre and get color
-            const genre = classifyArtistGenre(node);
-            node.genre = genre;
-            node.color = getGenreColor(genre);
+            // Classify genre and get color (skip if genre already set for test data)
+            if (!node.genre) {
+                const genre = classifyArtistGenre(node);
+                node.genre = genre;
+            }
+            node.color = getGenreColor(node.genre);
             
             // Only calculate radius if not already set by tri-mode system
             if (!node.radius || node.radius === undefined) {
@@ -179,7 +181,32 @@ class CanvasRenderer extends BaseRenderer {
             }
             
             if (this.options.debug && Math.random() < 0.1) { // Debug 10% of nodes
-                console.log(`Node ${node.name}: genre=${genre}, color=${node.color}, radius=${node.radius.toFixed(1)}`);
+                console.log(`Node ${node.name}: genre=${node.genre}, color=${node.color}, radius=${node.radius.toFixed(1)}`);
+            }
+            
+            // Handle image loading for circular artist images
+            if (node.image && typeof node.imageLoaded === 'undefined') {
+                node.imageLoaded = false;
+                node.imageObj = new Image();
+                node.imageObj.crossOrigin = "Anonymous"; // Enable CORS
+                
+                node.imageObj.onload = () => {
+                    if (this.options.debug) {
+                        console.log(`Image loaded for ${node.name}`);
+                    }
+                    node.imageLoaded = true;
+                    this.needsRedraw = true; // Trigger redraw when image loads
+                };
+                
+                node.imageObj.onerror = () => {
+                    if (this.options.debug) {
+                        console.log(`Failed to load image for ${node.name}`);
+                    }
+                    node.imageLoaded = false;
+                    // Fallback to colored circle will be used
+                };
+                
+                node.imageObj.src = node.image;
             }
         });
     }
@@ -275,39 +302,120 @@ class CanvasRenderer extends BaseRenderer {
     }
     
     /**
-     * Render all nodes
+     * Render all nodes with support for circular artist images
      * @param {CanvasRenderingContext2D} ctx - Canvas rendering context
      */
     renderNodes(ctx) {
+        // Calculate viewport bounds in world coordinates for performance culling
+        const view = {
+            x: -this.transform.x / this.transform.k,
+            y: -this.transform.y / this.transform.k,
+            width: this.options.width / this.transform.k,
+            height: this.options.height / this.transform.k
+        };
+
         this.nodes.forEach(node => {
             if (!node.x || !node.y) return; // Skip nodes without positions
             
             const radius = node.radius || this.nodeOptions.minRadius;
             const color = node.color || this.nodeOptions.defaultColor;
             
-            // Apply glow effect based on tri-mode system
-            if (node.shouldGlow && node.glowIntensity > 0) {
-                ctx.shadowBlur = node.glowIntensity * 20;
-                ctx.shadowColor = color;
-            } else {
-                ctx.shadowBlur = 0;
+            // Viewport culling: skip nodes outside visible area for performance
+            if (node.x + radius < view.x ||
+                node.x - radius > view.x + view.width ||
+                node.y + radius < view.y ||
+                node.y - radius > view.y + view.height) {
+                return;
             }
             
-            // Draw node
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-            ctx.fillStyle = color;
-            ctx.fill();
+            // Save context to isolate clipping and shadow effects
+            ctx.save();
             
-            // Draw border (enhanced for glowing nodes)
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-            ctx.strokeStyle = node.shouldGlow ? '#ffeb3b' : this.nodeOptions.strokeColor;
-            ctx.lineWidth = node.shouldGlow ? 3 : this.nodeOptions.strokeWidth;
-            ctx.stroke();
+            // Get genre color for consistent theming
+            const genreColor = this.getNodeGenreColor(node);
             
-            // Reset shadow
-            ctx.shadowBlur = 0;
+            // Render circular image or fallback to colored circle
+            if (node.imageLoaded && node.imageObj) {
+                // Save state before clipping to preserve glow for border
+                ctx.save();
+                
+                // Create circular clipping path
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+                ctx.closePath();
+                ctx.clip();
+                
+                // Calculate aspect-ratio-correct dimensions to cover the circle
+                const nodeDiameter = radius * 2;
+                const imgAspectRatio = node.imageObj.height ? (node.imageObj.width / node.imageObj.height) : 1;
+                let drawWidth, drawHeight, offsetX, offsetY;
+                
+                if (imgAspectRatio > 1) { // Image is wider than tall
+                    drawHeight = nodeDiameter;
+                    drawWidth = drawHeight * imgAspectRatio;
+                    offsetX = (drawWidth - nodeDiameter) / -2;
+                    offsetY = 0;
+                } else { // Image is taller than wide, or square
+                    drawWidth = nodeDiameter;
+                    drawHeight = drawWidth / imgAspectRatio;
+                    offsetX = 0;
+                    offsetY = (drawHeight - nodeDiameter) / -2;
+                }
+                
+                // Draw the image, centered and scaled to cover the circle
+                ctx.drawImage(
+                    node.imageObj,
+                    node.x - radius + offsetX,
+                    node.y - radius + offsetY,
+                    drawWidth,
+                    drawHeight
+                );
+                
+                // Restore context to remove clipping but keep glow active
+                ctx.restore();
+                
+                // Add genre-colored border ring around image with optional glow
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+                
+                // Apply extended glow effect to the border
+                if (node.shouldGlow && node.glowIntensity > 0) {
+                    ctx.shadowBlur = node.glowIntensity * 25;
+                    ctx.shadowColor = genreColor;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+                
+                ctx.strokeStyle = genreColor;
+                ctx.lineWidth = 3; // Always show prominent genre ring
+                ctx.stroke();
+                
+            } else {
+                // Fallback to existing colored circle logic
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+                ctx.fillStyle = color;
+                ctx.fill();
+                
+                // Draw genre-colored border ring with optional glow
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+                
+                // Apply extended glow effect to the border
+                if (node.shouldGlow && node.glowIntensity > 0) {
+                    ctx.shadowBlur = node.glowIntensity * 25;
+                    ctx.shadowColor = genreColor;
+                } else {
+                    ctx.shadowBlur = 0;
+                }
+                
+                ctx.strokeStyle = genreColor;
+                ctx.lineWidth = 3; // Always show prominent genre ring
+                ctx.stroke();
+            }
+            
+            // Restore context to remove shadow/glow for the next node
+            ctx.restore();
         });
     }
     
@@ -339,9 +447,14 @@ class CanvasRenderer extends BaseRenderer {
             const apparentRadius = (node.radius || this.nodeOptions.minRadius) * this.transform.k;
             if (apparentRadius < 8) return; // Skip labels for very small nodes
             
-            // Render artist name
+            // Position text below the node with padding
+            const radius = node.radius || this.nodeOptions.minRadius;
+            const yOffset = radius + 8; // Padding below node
+            
+            // Render artist name below the node
             const label = node.name || node.id;
-            ctx.fillText(label, node.x, node.y);
+            ctx.textBaseline = 'top'; // Change from 'middle' to position text below
+            ctx.fillText(label, node.x, node.y + yOffset);
         });
         
         // Reset shadow
@@ -349,6 +462,31 @@ class CanvasRenderer extends BaseRenderer {
         ctx.shadowBlur = 0;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
+    }
+    
+    /**
+     * Get genre color for a node
+     * @param {Object} node - Node object
+     * @returns {string} Genre color hex code
+     */
+    getNodeGenreColor(node) {
+        // Try multiple ways to get genre information
+        if (node.genre) {
+            return getGenreColor(node.genre);
+        }
+        
+        // Check if genres array exists and use first genre
+        if (node.genres && node.genres.length > 0) {
+            return getGenreColor(node.genres[0]);
+        }
+        
+        // Fallback based on node name for test data
+        if (node.name === 'IU') {
+            return getGenreColor('asian'); // Pink for K-pop
+        }
+        
+        // Default fallback
+        return getGenreColor('other'); // Silver
     }
     
     /**
@@ -384,7 +522,7 @@ class CanvasRenderer extends BaseRenderer {
      */
     updateFPS() {
         this.frameCount++;
-        const currentTime = performance.now();
+        const currentTime = Date.now();
         
         if (currentTime - this.lastTime >= 1000) { // Update FPS every second
             this.fps = this.frameCount * 1000 / (currentTime - this.lastTime);

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug Constructor Hang</title>
+    <style>
+        body { background: #1a1a1a; color: white; font-family: monospace; padding: 20px; }
+        .container { width: 400px; height: 300px; border: 1px solid #333; }
+    </style>
+</head>
+<body>
+    <h1>Debug Constructor Hang</h1>
+    <div class="container" id="testContainer"></div>
+    <div id="output"></div>
+
+    <script>
+        const output = document.getElementById('output');
+        function log(msg) {
+            console.log(msg);
+            output.innerHTML += msg + '<br>';
+        }
+
+        log('1. Starting debug test...');
+        
+        const container = document.getElementById('testContainer');
+        log('2. Container found: ' + !!container);
+
+        log('3. About to test BaseRenderer...');
+        
+        // First test: Can we create the BaseRenderer class definition?
+        try {
+            log('4. Defining BaseRenderer class...');
+            
+            class TestBaseRenderer {
+                constructor(container, options = {}) {
+                    log('5. Inside BaseRenderer constructor...');
+                    this.container = container;
+                    log('6. Set container...');
+                    
+                    this.options = {
+                        width: 800,
+                        height: 600,
+                        devicePixelRatio: window.devicePixelRatio || 1,
+                        enableHiDPI: true,
+                        debug: false,
+                        ...options
+                    };
+                    log('7. Set options...');
+                    
+                    this.nodes = [];
+                    this.links = [];
+                    this.transform = { k: 1, x: 0, y: 0 };
+                    log('8. Set basic properties...');
+                    
+                    this.frameCount = 0;
+                    this.lastFPSUpdate = Date.now();
+                    this.currentFPS = 0;
+                    log('9. Set performance tracking...');
+                    
+                    this.isInitialized = false;
+                    log('10. BaseRenderer constructor complete');
+                }
+            }
+            
+            log('11. BaseRenderer class defined successfully');
+            
+            log('12. About to test CanvasRenderer...');
+            
+            class TestCanvasRenderer extends TestBaseRenderer {
+                constructor(container, options = {}) {
+                    log('13. Inside CanvasRenderer constructor...');
+                    
+                    super(container, options);
+                    log('14. Super call complete...');
+                    
+                    this.layers = {};
+                    log('15. Set layers...');
+                    
+                    this.animationFrameId = null;
+                    log('16. Set animationFrameId...');
+                    
+                    this.needsRedraw = true;
+                    log('17. Set needsRedraw...');
+                    
+                    this.fps = 0;
+                    this.frameCount = 0;
+                    log('18. Set FPS tracking...');
+                    
+                    log('19. About to call performance.now()...');
+                    this.lastTime = performance.now();
+                    log('20. performance.now() complete: ' + this.lastTime);
+                    
+                    this.nodeOptions = {
+                        minRadius: 4,
+                        maxRadius: 25,
+                        strokeWidth: 2,
+                        strokeColor: 'rgba(255, 255, 255, 0.8)',
+                        defaultColor: '#C0C0C0',
+                        ...options.nodeOptions
+                    };
+                    log('21. Set nodeOptions...');
+                    
+                    log('22. CanvasRenderer constructor complete!');
+                }
+            }
+            
+            log('23. CanvasRenderer class defined successfully');
+            
+            log('24. About to instantiate CanvasRenderer...');
+            const renderer = new TestCanvasRenderer(container, {
+                debug: true,
+                enableHiDPI: true,
+                width: 800,
+                height: 600
+            });
+            
+            log('25. SUCCESS! CanvasRenderer created: ' + !!renderer);
+            
+        } catch (error) {
+            log('ERROR: ' + error.message);
+            log('Stack: ' + error.stack);
+        }
+    </script>
+</body>
+</html>

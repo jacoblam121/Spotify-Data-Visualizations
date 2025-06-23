@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 2.1 Manual Test - Circular Artist Images</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        
+        .test-header {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #2d2d2d;
+            border-radius: 8px;
+        }
+        
+        .test-info {
+            background: #0d47a1;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .test-container {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .expected-results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1b5e20;
+            border-radius: 8px;
+        }
+        
+        .checklist {
+            margin-top: 15px;
+        }
+        
+        .checklist label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+        
+        .checklist input[type="checkbox"] {
+            margin-right: 8px;
+        }
+        
+        .test-status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #424242;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🎨 Phase 2.1 Manual Test: Circular Artist Images</h1>
+        <div class="test-info">
+            <strong>Test Purpose:</strong> Verify that artist nodes now display as circular images with names positioned below the nodes, while maintaining fallback behavior for missing images.
+        </div>
+    </div>
+
+    <div class="test-container" id="networkContainer">
+        <!-- Canvas renderer will be inserted here -->
+    </div>
+
+    <div class="expected-results">
+        <h3>✅ Expected Results:</h3>
+        <div class="checklist">
+            <label><input type="checkbox"> Artist images appear as circular photos (not colored circles)</label>
+            <label><input type="checkbox"> Images are properly centered and scaled within circular boundaries</label>
+            <label><input type="checkbox"> Artist names appear BELOW the circular images (not centered on them)</label>
+            <label><input type="checkbox"> Names have good contrast with dark background</label>
+            <label><input type="checkbox"> White borders around circular images are visible</label>
+            <label><input type="checkbox"> Zoom and pan still work smoothly</label>
+            <label><input type="checkbox"> Performance is acceptable (no significant lag)</label>
+            <label><input type="checkbox"> Fallback colored circles appear for artists without images</label>
+            <label><input type="checkbox"> Glow effects still work for nodes with shouldGlow=true</label>
+            <label><input type="checkbox"> No visual artifacts or clipping errors</label>
+        </div>
+        
+        <div class="test-status">
+            <strong>Test Status:</strong> <span id="testStatus">Ready to test</span><br>
+            <strong>Notes:</strong> <input type="text" id="testNotes" placeholder="Add your observations here..." style="width: 300px; margin-top: 5px;">
+        </div>
+    </div>
+
+    <!-- Load the network visualization scripts -->
+    <script src="../js/genre_colors.js"></script>
+    <script src="../js/base_renderer.js"></script>
+    <script src="../js/renderers/canvas_renderer.js"></script>
+    <script src="../js/network_enhanced_fixed.js"></script>
+    
+    <script>
+        // Initialize the test
+        console.log('🧪 Phase 2.1 Manual Test Starting...');
+        
+        // Mock small test dataset with verified image URLs
+        const testData = {
+            nodes: [
+                {
+                    id: "IU",
+                    name: "IU",
+                    x: 200,
+                    y: 150,
+                    radius: 30,
+                    color: "#FF6B6B",
+                    photo_url: "https://i.scdn.co/image/ab6761610000e5eb1baa898925a8fcd70767fd5b",
+                    imageLoaded: false,
+                    shouldGlow: true,
+                    glowIntensity: 0.8
+                },
+                {
+                    id: "TWICE",
+                    name: "TWICE", 
+                    x: 400,
+                    y: 200,
+                    radius: 25,
+                    color: "#4ECDC4",
+                    photo_url: "https://i.scdn.co/image/ab6761610000e5eb02a49a32cf2d7b6bff7f7e7e",
+                    imageLoaded: false,
+                    shouldGlow: false,
+                    glowIntensity: 0.3
+                },
+                {
+                    id: "BTS",
+                    name: "BTS",
+                    x: 300,
+                    y: 350,
+                    radius: 35,
+                    color: "#45B7D1",
+                    photo_url: "https://i.scdn.co/image/ab6761610000e5eb579e83b2bcc3d43b38e2a269",
+                    imageLoaded: false,
+                    shouldGlow: true,
+                    glowIntensity: 1.0
+                },
+                {
+                    id: "NO_IMAGE",
+                    name: "No Image Artist",
+                    x: 500,
+                    y: 300,
+                    radius: 20,
+                    color: "#96CEB4",
+                    photo_url: null, // No image - should show colored circle
+                    imageLoaded: false,
+                    shouldGlow: false,
+                    glowIntensity: 0
+                }
+            ],
+            links: [
+                { source: "IU", target: "TWICE", weight: 0.5 },
+                { source: "TWICE", target: "BTS", weight: 0.7 },
+                { source: "BTS", target: "NO_IMAGE", weight: 0.3 }
+            ]
+        };
+
+        // Initialize the network visualization
+        const container = document.getElementById('networkContainer');
+        const renderer = new CanvasRenderer(container, {
+            debug: true,
+            enableHiDPI: true,
+            devicePixelRatio: window.devicePixelRatio || 1
+        });
+
+        // Initialize and start
+        renderer.initialize();
+        
+        // Preload images first (like in Phase 1.1)
+        async function preloadArtistImages(nodes) {
+            console.log('🖼️ Preloading artist images...');
+            const loadPromises = nodes.map(node => {
+                if (node.photo_url) {
+                    return new Promise((resolve) => {
+                        const img = new Image();
+                        img.crossOrigin = 'anonymous';
+                        img.onload = () => {
+                            console.log(`✅ Loaded image for ${node.name}`);
+                            node.imageObj = img;
+                            node.imageLoaded = true;
+                            resolve();
+                        };
+                        img.onerror = () => {
+                            console.warn(`❌ Failed to load image for ${node.name}`);
+                            node.imageLoaded = false;
+                            resolve();
+                        };
+                        img.src = node.photo_url;
+                    });
+                }
+                return Promise.resolve();
+            });
+            
+            await Promise.all(loadPromises);
+            console.log('🖼️ Image preloading complete');
+        }
+
+        // Load data and start visualization
+        preloadArtistImages(testData.nodes).then(() => {
+            renderer.updateData(testData.nodes, testData.links);
+            renderer.startRenderLoop();
+            
+            // Update test status
+            document.getElementById('testStatus').textContent = 'Images loaded - Testing in progress';
+            console.log('🎨 Phase 2.1 test visualization started');
+            
+            // Force an immediate redraw
+            renderer.invalidate();
+        });
+
+        // Add some interactive feedback
+        let checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        let completed = 0;
+        
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    completed++;
+                } else {
+                    completed--;
+                }
+                
+                if (completed === checkboxes.length) {
+                    document.getElementById('testStatus').textContent = 'All tests passed! ✅';
+                    document.getElementById('testStatus').style.background = '#1b5e20';
+                } else if (completed > 0) {
+                    document.getElementById('testStatus').textContent = `${completed}/${checkboxes.length} tests passed`;
+                    document.getElementById('testStatus').style.background = '#f57c00';
+                } else {
+                    document.getElementById('testStatus').textContent = 'Testing in progress';
+                    document.getElementById('testStatus').style.background = '#424242';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

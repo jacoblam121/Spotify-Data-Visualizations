@@ -3,7 +3,7 @@
 ## 🔍 Diagnostic Steps
 
 ### Step 1: Check Console Logs
-1. **Restart server**: `python test_server.py` (with UTF-8 headers)
+1. **Restart server**: `python ../dev_server.py` (with UTF-8 headers)
 2. **Refresh browser** and open DevTools → Console
 3. **Look for**: "🎌 Yorushika name check:" with Unicode debug info
 

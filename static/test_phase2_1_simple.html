@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phase 2.1 Simple Test - Circular Artist Images</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        
+        .test-header {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #2d2d2d;
+            border-radius: 8px;
+        }
+        
+        .test-container {
+            width: 800px;
+            height: 600px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+            margin: 0 auto;
+        }
+        
+        .debug-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: #2d2d2d;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-header">
+        <h1>🎨 Phase 2.1 Simple Test: Canvas Renderer Only</h1>
+        <p>Direct test of canvas renderer with circular images - no external dependencies</p>
+    </div>
+
+    <div class="test-container" id="networkContainer">
+        <!-- Canvas will be inserted here -->
+    </div>
+
+    <div class="debug-info" id="debugInfo">
+        <strong>Debug Info:</strong><br>
+        <div id="debugOutput">Initializing...</div>
+    </div>
+
+    <!-- Load only essential scripts -->
+    <script src="/static/js/genre_colors.js?v=2.5"></script>
+    <script src="/static/js/renderers/base_renderer.js?v=2.5"></script>
+    <script src="/static/js/renderers/canvas_renderer.js?v=2.5"></script>
+    
+    <script>
+        const debugOut = document.getElementById('debugOutput');
+        function log(msg) {
+            console.log(msg);
+            debugOut.innerHTML += msg + '<br>';
+        }
+
+        log('🧪 Starting simple Phase 2.1 test...');
+        
+        // Simple test data
+        const testData = {
+            nodes: [
+                {
+                    id: "test1",
+                    name: "IU", 
+                    x: 200,
+                    y: 150,
+                    radius: 30,
+                    color: "#FF6B6B",
+                    genre: "asian", // K-pop -> pink border and glow
+                    image: "https://via.placeholder.com/200x200/FF69B4/FFFFFF?text=IU",
+                    imageLoaded: false,
+                    shouldGlow: true,
+                    glowIntensity: 1.2
+                },
+                {
+                    id: "test2", 
+                    name: "TWICE",
+                    x: 400,
+                    y: 200,
+                    radius: 25,
+                    color: "#4ECDC4",
+                    genre: "asian", // K-pop -> pink border
+                    image: "https://via.placeholder.com/200x200/FF69B4/FFFFFF?text=TWICE",
+                    imageLoaded: false,
+                    shouldGlow: false,
+                    glowIntensity: 0.3
+                },
+                {
+                    id: "test3",
+                    name: "Rock Artist",
+                    x: 300,
+                    y: 350,
+                    radius: 20,
+                    color: "#96CEB4",
+                    genre: "rock", // Rock -> red border
+                    image: null,
+                    imageLoaded: false,
+                    shouldGlow: false,
+                    glowIntensity: 0
+                }
+            ],
+            links: []
+        };
+
+        log('📦 Test data prepared with ' + testData.nodes.length + ' nodes');
+
+        // Initialize canvas renderer
+        const container = document.getElementById('networkContainer');
+        log('🎯 Container found: ' + !!container);
+        
+        const renderer = new CanvasRenderer(container, {
+            debug: true,
+            enableHiDPI: true,
+            width: 800,
+            height: 600
+        });
+        
+        log('🎨 CanvasRenderer created');
+        
+        // Initialize
+        try {
+            renderer.initialize();
+            log('✅ Renderer initialized successfully');
+        } catch (error) {
+            log('❌ Renderer initialization failed: ' + error.message);
+        }
+        
+        // Preload images
+        async function preloadImages(nodes) {
+            log('🖼️ Starting image preload...');
+            const promises = nodes.map(node => {
+                if (!node.image) {
+                    log('⚪ Skipping image for ' + node.name + ' (no URL)');
+                    return Promise.resolve();
+                }
+                
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.crossOrigin = 'anonymous';
+                    img.onload = () => {
+                        log('✅ Loaded image for ' + node.name);
+                        node.imageObj = img;
+                        node.imageLoaded = true;
+                        resolve();
+                    };
+                    img.onerror = () => {
+                        log('❌ Failed to load image for ' + node.name);
+                        node.imageLoaded = false;
+                        resolve();
+                    };
+                    img.src = node.image;
+                });
+            });
+            
+            await Promise.all(promises);
+            log('🖼️ All images processed');
+        }
+        
+        // Load and render
+        preloadImages(testData.nodes).then(() => {
+            log('📊 Updating renderer data...');
+            renderer.updateData(testData.nodes, testData.links);
+            
+            log('🔄 Starting render loop...');
+            renderer.startRenderLoop();
+            
+            log('⚡ Forcing immediate render...');
+            renderer.invalidate();
+            
+            log('🎉 Test setup complete!');
+            
+            // Check if canvas was created
+            const canvas = container.querySelector('canvas');
+            log('🎨 Canvas element found: ' + !!canvas);
+            if (canvas) {
+                log('📐 Canvas size: ' + canvas.width + 'x' + canvas.height);
+                log('💻 Canvas style: ' + canvas.style.width + 'x' + canvas.style.height);
+            }
+            
+            // Debug renderer state
+            log('🔍 Renderer nodes: ' + renderer.nodes.length);
+            log('🔍 Renderer initialized: ' + renderer.isInitialized);
+            log('🔍 Renderer needsRedraw: ' + renderer.needsRedraw);
+        }).catch(error => {
+            log('💥 Error during setup: ' + error.message);
+        });
+    </script>
+</body>
+</html>

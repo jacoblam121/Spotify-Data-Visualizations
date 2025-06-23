@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug: Class Definition Sanity Check</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f0f0f0; color: #333; }
+        h1, p { text-align: center; }
+        #console-output {
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            height: 400px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <h1>Class Definition Sanity Check</h1>
+    <p>Checking script loading and class availability. See verbose logs below and in the browser console.</p>
+    <div id="console-output"></div>
+
+    <script>
+        const logToPage = (message, level = 'log') => {
+            const outputDiv = document.getElementById('console-output');
+            const line = document.createElement('div');
+            line.textContent = `[${new Date().toISOString()}] ${message}`;
+            if (level === 'error') {
+                line.style.color = '#f48771';
+                console.error(message);
+            } else if (level === 'success') {
+                line.style.color = '#83d483';
+                console.log(message);
+            } else {
+                 console.log(message);
+            }
+            outputDiv.appendChild(line);
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        };
+
+        function loadScript(src) {
+            return new Promise((resolve, reject) => {
+                logToPage(`Attempting to load script: ${src}`);
+                const script = document.createElement('script');
+                script.src = src + '?t=' + new Date().getTime(); // Cache busting
+                script.onload = () => {
+                    logToPage(`SUCCESS: Script loaded: ${src}`, 'success');
+                    resolve();
+                };
+                script.onerror = () => {
+                    const errorMsg = `FAIL: Script failed to load: ${src}. Check path and server.`;
+                    logToPage(errorMsg, 'error');
+                    reject(new Error(errorMsg));
+                };
+                document.head.appendChild(script);
+            });
+        }
+
+        async function runTest() {
+            try {
+                logToPage('--- Starting Sanity Check ---');
+
+                await loadScript('js/genre_colors.js');
+                logToPage(`Type of GENRE_COLORS object: ${typeof GENRE_COLORS}`);
+
+                await loadScript('js/renderers/base_renderer.js');
+                logToPage('Checking BaseRenderer...');
+                if (typeof BaseRenderer === 'function') {
+                    logToPage('SUCCESS: BaseRenderer is defined as a function.', 'success');
+                } else {
+                    logToPage(`FAIL: BaseRenderer is NOT a function. Type is: ${typeof BaseRenderer}`, 'error');
+                    return;
+                }
+
+                await loadScript('js/renderers/canvas_renderer.js');
+                logToPage('Checking CanvasRenderer...');
+                if (typeof CanvasRenderer === 'function') {
+                    logToPage('SUCCESS: CanvasRenderer is defined as a function.', 'success');
+                } else {
+                    logToPage(`FAIL: CanvasRenderer is NOT a function. Type is: ${typeof CanvasRenderer}`, 'error');
+                    return;
+                }
+                
+                logToPage('--- Test Complete: Both classes appear to be defined correctly. ---', 'success');
+                logToPage('The issue is likely not with script loading or class definition, but with instantiation logic.');
+
+                // Try to instantiate if classes are defined
+                logToPage('--- Testing Instantiation ---');
+                const container = document.createElement('div');
+                const renderer = new CanvasRenderer(container, { debug: true });
+                logToPage('SUCCESS: CanvasRenderer instantiated successfully!', 'success');
+
+            } catch (error) {
+                logToPage(`--- Test Failed due to a critical script loading error ---`, 'error');
+                logToPage(error.message, 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', runTest);
+    </script>
+</body>
+</html>

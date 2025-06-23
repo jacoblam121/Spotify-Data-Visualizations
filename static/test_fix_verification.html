@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fix Verification Test</title>
+    <style>
+        body { background: #1a1a1a; color: white; font-family: monospace; padding: 20px; }
+        .container { width: 600px; height: 400px; border: 2px solid #333; margin: 20px 0; }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Performance.now() Fix Verification</h1>
+    <div class="container" id="testContainer"></div>
+    <div id="output"></div>
+
+    <!-- Load scripts -->
+    <script src="js/genre_colors.js"></script>
+    <script src="js/renderers/base_renderer.js"></script>
+    <script src="js/renderers/canvas_renderer.js"></script>
+    
+    <script>
+        const output = document.getElementById('output');
+        function log(msg, type = 'info') {
+            console.log(msg);
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            output.innerHTML += `<div class="${className}">${msg}</div>`;
+        }
+
+        log('🧪 Testing performance.now() fix...', 'info');
+        
+        try {
+            log('1. Testing container element...', 'info');
+            const container = document.getElementById('testContainer');
+            log('✅ Container found: ' + !!container, 'success');
+
+            log('2. Testing CanvasRenderer constructor...', 'info');
+            const startTime = Date.now();
+            
+            const renderer = new CanvasRenderer(container, {
+                debug: true,
+                enableHiDPI: true,
+                width: 600,
+                height: 400
+            });
+            
+            const constructTime = Date.now() - startTime;
+            log(`✅ CanvasRenderer created successfully in ${constructTime}ms`, 'success');
+
+            log('3. Testing initialization...', 'info');
+            renderer.initialize();
+            log('✅ Renderer initialized successfully', 'success');
+
+            log('4. Testing basic rendering...', 'info');
+            const testNodes = [
+                { id: '1', name: 'Test Node', x: 300, y: 200, radius: 20, color: '#FF6B6B' }
+            ];
+            
+            renderer.updateData(testNodes, []);
+            log('✅ Data updated successfully', 'success');
+            
+            renderer.startRenderLoop();
+            log('✅ Render loop started successfully', 'success');
+            
+            log('🎉 ALL TESTS PASSED! The fix is working.', 'success');
+            
+        } catch (error) {
+            log('❌ ERROR: ' + error.message, 'error');
+            log('Stack trace: ' + error.stack, 'error');
+        }
+    </script>
+</body>
+</html>

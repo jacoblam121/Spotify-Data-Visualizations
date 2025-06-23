@@ -1,0 +1,41 @@
+{
+  "test_name": "Phase 1B Server Cleanup",
+  "timestamp": "2025-06-23T00:39:05.425821",
+  "tests": [
+    {
+      "name": "Deprecated directory exists",
+      "status": "PASS",
+      "message": "_deprecated directory exists at /home/jacob/Spotify-Data-Visualizations/_deprecated"
+    },
+    {
+      "name": "Legacy scripts moved to _deprecated",
+      "status": "PASS",
+      "message": "All 8 legacy scripts moved to _deprecated"
+    },
+    {
+      "name": "Legacy scripts removed from original locations",
+      "status": "PASS",
+      "message": "All legacy scripts removed from original locations"
+    },
+    {
+      "name": "dev_server.py still exists and compiles",
+      "status": "PASS",
+      "message": "dev_server.py exists and compiles successfully"
+    },
+    {
+      "name": "Deprecation README exists",
+      "status": "PASS",
+      "message": "Deprecation README exists with proper content"
+    },
+    {
+      "name": "Documentation updated",
+      "status": "PASS",
+      "message": "UTF8_DEBUG_TEST.md updated to use dev_server.py"
+    }
+  ],
+  "summary": {
+    "passed": 6,
+    "failed": 0,
+    "total": 6
+  }
+}

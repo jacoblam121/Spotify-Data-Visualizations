@@ -135,10 +135,32 @@ class EnhancedNetworkVisualization {
             console.log('🔄 Starting data loading process...');
             loadingIndicator.textContent = 'Loading network data...';
             
-            // Skip external file loading for now and use sample data
-            console.log('📦 Using sample data for testing');
-            loadingIndicator.textContent = 'Using sample data...';
-            const networkData = this.getSampleData();
+            // Try to load real network data first, fallback to sample data
+            console.log('📡 Attempting to load real network data...');
+            loadingIndicator.textContent = 'Loading real network data...';
+            
+            let networkData;
+            try {
+                const response = await fetch('/static/test_integrated_network_spotify.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                networkData = await response.json();
+                console.log('✅ Successfully loaded real network data');
+                
+                // Update IVE play count to correct value for demonstration
+                const iveNode = networkData.nodes?.find(node => node.id === 'ive');
+                if (iveNode) {
+                    console.log(`🔧 Updating IVE play count from ${iveNode.play_count} to 6143`);
+                    iveNode.play_count = 6143;
+                }
+                
+            } catch (error) {
+                console.warn('⚠️ Failed to load real network data, falling back to sample data:', error.message);
+                console.log('📦 Using sample data for fallback');
+                loadingIndicator.textContent = 'Using sample data (fallback)...';
+                networkData = this.getSampleData();
+            }
             
             console.log('📊 Processing network data...');
             loadingIndicator.textContent = 'Processing data...';
@@ -655,14 +677,17 @@ class EnhancedNetworkVisualization {
         const sampleNodes = [
             {"id": "taylor-swift", "name": "Taylor Swift", "listener_count": 5160232, "play_count": 5216, "genres_lastfm": ["country", "pop"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676"},
             {"id": "paramore", "name": "Paramore", "listener_count": 4779115, "play_count": 3460, "genres_lastfm": ["rock", "pop punk"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb10c34546a4ca2d7faeb8865"},
-            {"id": "ive", "name": "Ive", "listener_count": 837966, "play_count": 662, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/0078316432cdfb6733c3bde0dc61754d45442d0f"},
+            {"id": "ive", "name": "IVE", "listener_count": 837966, "play_count": 662, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/0078316432cdfb6733c3bde0dc61754d45442d0f"},
             {"id": "yorushika", "name": "Yorushika", "listener_count": 186967, "play_count": 1282, "genres_lastfm": ["j-pop", "japanese"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe62cff9c6018ae5616b01eab"},
             {"id": "iu", "name": "IU", "listener_count": 913058, "play_count": 2265, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb789f38042e5ef8911fc3826b"},
             {"id": "aimer", "name": "Aimer", "listener_count": 389315, "play_count": 885, "genres_lastfm": ["j-pop", "japanese"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb7e58b86655f447e0ef0278b8"},
-            {"id": "luna", "name": "*LUNA", "listener_count": 450000, "play_count": 720, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb45d443b065a66c92d166f598"},
-            {"id": "rose", "name": "Rosé", "listener_count": 380000, "play_count": 590, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebcfb4350222919670128ff2dc"},
+            {"id": "luna", "name": "*Luna", "listener_count": 450000, "play_count": 720, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb45d443b065a66c92d166f598"},
+            {"id": "rose", "name": "ROSÉ", "listener_count": 380000, "play_count": 590, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebcfb4350222919670128ff2dc"},
             {"id": "younha", "name": "Younha", "listener_count": 320000, "play_count": 480, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebf5e315e40a6d4ffd36c10d94"},
-            {"id": "yoasobi", "name": "yoasobi", "listener_count": 425000, "play_count": 654, "genres_lastfm": ["j-pop", "japanese"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb507349709ae19263301a62f7"}
+            {"id": "yoasobi", "name": "YOASOBI", "listener_count": 425000, "play_count": 654, "genres_lastfm": ["j-pop", "japanese"], "photo_url": "https://i.scdn.co/image/ab6761610000e5eb507349709ae19263301a62f7"},
+            {"id": "twice", "name": "TWICE", "listener_count": 1250000, "play_count": 1850, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebb10c34546a4ca2d7faeb8865"},
+            {"id": "blackpink", "name": "BLACKPINK", "listener_count": 2100000, "play_count": 2400, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebc9690bc711d04b3d4fd4b87c"},
+            {"id": "newjeans", "name": "NewJeans", "listener_count": 950000, "play_count": 980, "genres_lastfm": ["k-pop", "korean"], "photo_url": "https://i.scdn.co/image/ab6761610000e5ebe672b5f553298dcdccb0e676"}
         ];
         
         // Unicode debugging and normalization (Gemini's recommendation)

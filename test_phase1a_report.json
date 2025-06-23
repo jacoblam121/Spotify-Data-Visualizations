@@ -1,0 +1,108 @@
+{
+  "timestamp": 1750662971.0312495,
+  "base_url": "http://localhost:8000",
+  "summary": {
+    "total": 16,
+    "passed": 16,
+    "failed": 0,
+    "success_rate": 1.0
+  },
+  "results": [
+    {
+      "name": "Server Health Check",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Status: 200"
+    },
+    {
+      "name": "Health Endpoint JSON",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Response: healthy"
+    },
+    {
+      "name": "Cache-Control Header",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Cache-Control: no-cache, no-store, must-revalidate, max-age=0"
+    },
+    {
+      "name": "Pragma Header",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Pragma: no-cache"
+    },
+    {
+      "name": "Expires Header",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Expires: 0"
+    },
+    {
+      "name": "CORS Access-Control-Allow-Origin",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Access-Control-Allow-Origin: *"
+    },
+    {
+      "name": "Static file: /static/js/genre_colors.js",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Status: 200, Content-Type: text/javascript; charset=utf-8"
+    },
+    {
+      "name": "Cache headers on /static/js/genre_colors.js",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Cache-Control: no-cache, no-store, must-revalidate, max-age=0"
+    },
+    {
+      "name": "Static file: /static/js/renderers/canvas_renderer.js",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Status: 200, Content-Type: text/javascript; charset=utf-8"
+    },
+    {
+      "name": "Cache headers on /static/js/renderers/canvas_renderer.js",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Cache-Control: no-cache, no-store, must-revalidate, max-age=0"
+    },
+    {
+      "name": "Static file: /static/js/renderers/base_renderer.js",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Status: 200, Content-Type: text/javascript; charset=utf-8"
+    },
+    {
+      "name": "Cache headers on /static/js/renderers/base_renderer.js",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Cache-Control: no-cache, no-store, must-revalidate, max-age=0"
+    },
+    {
+      "name": "Route / (Main page)",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Status: 200, Content-Type: text/html; charset=utf-8"
+    },
+    {
+      "name": "Route /test (Test page)",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Status: 200, Content-Type: text/html; charset=utf-8"
+    },
+    {
+      "name": "Response Consistency",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "First: 200, Second: 200"
+    },
+    {
+      "name": "JSON Response Consistency",
+      "status": "\u2705 PASS",
+      "passed": true,
+      "details": "Both responses have status: healthy"
+    }
+  ]
+}

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Port Behavior Diagnostic</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+            margin: 0;
+        }
+        .test-result {
+            background: #2a2a2a;
+            border: 1px solid #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .pass { border-color: #4caf50; }
+        .fail { border-color: #f44336; }
+        .info { border-color: #2196f3; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Port Behavior Diagnostic Tool</h1>
+    <p>This page will help identify why you're experiencing port redirection issues.</p>
+
+    <div id="results"></div>
+
+    <script>
+        const results = document.getElementById('results');
+
+        function addResult(title, content, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `<strong>${title}</strong><br>${content}`;
+            results.appendChild(div);
+        }
+
+        // Test 1: Current page info
+        addResult('Current Page Info', `
+            URL: ${window.location.href}<br>
+            Protocol: ${window.location.protocol}<br>
+            Host: ${window.location.host}<br>
+            Port: ${window.location.port}<br>
+            Pathname: ${window.location.pathname}
+        `);
+
+        // Test 2: Browser info
+        addResult('Browser Info', `
+            User Agent: ${navigator.userAgent}<br>
+            Referrer: ${document.referrer || 'None'}<br>
+            Cookie enabled: ${navigator.cookieEnabled}
+        `);
+
+        // Test 3: Test ports directly
+        const testPorts = [8000, 8001, 8002];
+        
+        function testPort(port) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                const timeout = setTimeout(() => {
+                    resolve({ port, status: 'timeout', error: 'Timeout after 3s' });
+                }, 3000);
+                
+                img.onload = () => {
+                    clearTimeout(timeout);
+                    resolve({ port, status: 'success', error: null });
+                };
+                
+                img.onerror = () => {
+                    clearTimeout(timeout);
+                    resolve({ port, status: 'error', error: 'Failed to load' });
+                };
+                
+                // Try to load a known static file from each port
+                img.src = `http://localhost:${port}/static/js/genre_colors.js?_test=${Date.now()}`;
+            });
+        }
+
+        async function runPortTests() {
+            addResult('Port Accessibility Test', 'Testing ports 8000, 8001, 8002...', 'info');
+            
+            for (const port of testPorts) {
+                try {
+                    const result = await testPort(port);
+                    const type = result.status === 'success' ? 'pass' : 'fail';
+                    addResult(`Port ${port}`, `
+                        Status: ${result.status}<br>
+                        ${result.error ? `Error: ${result.error}` : 'Successfully loaded static file'}
+                    `, type);
+                } catch (error) {
+                    addResult(`Port ${port}`, `Exception: ${error.message}`, 'fail');
+                }
+            }
+        }
+
+        // Test 4: Network requests
+        function testNetworkRequests() {
+            addResult('Network Request Test', 'Testing fetch to current server...', 'info');
+            
+            fetch('/health')
+                .then(response => response.json())
+                .then(data => {
+                    addResult('Health Check', `
+                        Status: ${data.status}<br>
+                        Server: ${data.server}<br>
+                        Routes: ${data.routes.join(', ')}
+                    `, 'pass');
+                })
+                .catch(error => {
+                    addResult('Health Check', `Error: ${error.message}`, 'fail');
+                });
+        }
+
+        // Test 5: Check for redirect headers
+        function testRedirects() {
+            addResult('Redirect Test', 'Checking for HTTP redirects...', 'info');
+            
+            fetch('/', { redirect: 'manual' })
+                .then(response => {
+                    if (response.type === 'opaqueredirect') {
+                        addResult('Redirect Detection', 'HTTP redirect detected!', 'fail');
+                    } else {
+                        addResult('Redirect Detection', `No redirect. Status: ${response.status}`, 'pass');
+                    }
+                })
+                .catch(error => {
+                    addResult('Redirect Detection', `Error: ${error.message}`, 'fail');
+                });
+        }
+
+        // Run all tests
+        addResult('Test Status', 'Running diagnostic tests...', 'info');
+        runPortTests();
+        testNetworkRequests();
+        testRedirects();
+
+        // Add timestamp
+        setTimeout(() => {
+            addResult('Test Complete', `Completed at ${new Date().toLocaleTimeString()}`, 'info');
+        }, 5000);
+    </script>
+</body>
+</html>

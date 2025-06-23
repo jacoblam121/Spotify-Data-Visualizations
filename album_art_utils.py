@@ -1985,3 +1985,59 @@ if __name__ == "__main__":
     print("New files should include: spotify_artist_cache.json and artist profile photos.")
     print("Review console output for [CACHE DEBUG], [SPOTIFY AUTH DEBUG], [SPOTIFY_ARTIST_TRACE], etc., messages.")
     print("Ensure these messages respect the DEBUG_CACHE_ALBUM_ART_UTILS setting in configurations.txt.")
+
+
+def get_artist_photo_path(artist_name):
+    """
+    Get local cached artist photo path, downloading from Spotify API if needed.
+    
+    This function integrates with the existing Spotify API and caching infrastructure
+    to provide locally cached artist photos for network visualizations. It eliminates
+    CORS issues by serving images through Flask static files instead of external CDNs.
+    
+    Args:
+        artist_name (str): The artist name to get photo for
+        
+    Returns:
+        str or None: Local file path relative to static directory, e.g.:
+                    "artist_art_cache/artist_taylor_swift_artist.jpg"
+                    Returns None if artist not found or no photo available.
+    """
+    if DEBUG_CACHE: 
+        print(f"[ARTIST_PHOTO_PATH] Getting photo path for: '{artist_name}'")
+    
+    # Get artist info from Spotify API (with caching)
+    artist_info = get_spotify_artist_info(artist_name)
+    if not artist_info:
+        if DEBUG_CACHE: 
+            print(f"[ARTIST_PHOTO_PATH] No Spotify artist info found for: '{artist_name}'")
+        return None
+    
+    photo_url = artist_info.get("photo_url")
+    if not photo_url:
+        if DEBUG_CACHE: 
+            print(f"[ARTIST_PHOTO_PATH] No photo URL in artist info for: '{artist_name}'")
+        return None
+    
+    # Use canonical name from Spotify for consistent filename
+    canonical_name = artist_info.get("canonical_artist_name", artist_name)
+    
+    # Download and cache the image locally
+    local_path = download_artist_image_to_cache(photo_url, canonical_name)
+    if not local_path:
+        if DEBUG_CACHE: 
+            print(f"[ARTIST_PHOTO_PATH] Failed to download/cache image for: '{artist_name}'")
+        return None
+    
+    # Convert absolute path to relative path for static serving
+    # local_path will be something like: /full/path/artist_art_cache/artist_taylor_swift_artist.jpg
+    # We need to return: artist_art_cache/artist_taylor_swift_artist.jpg
+    try:
+        relative_path = os.path.relpath(local_path, start=".")
+        if DEBUG_CACHE: 
+            print(f"[ARTIST_PHOTO_PATH] SUCCESS! Local path: '{relative_path}' for artist: '{artist_name}'")
+        return relative_path
+    except Exception as e:
+        if DEBUG_CACHE: 
+            print(f"[ARTIST_PHOTO_PATH] Error converting to relative path: {e}")
+        return None
